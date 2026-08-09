@@ -110,3 +110,8 @@ make check
   `{{< param pigsty_version >}}` is the embedded Pigsty version, and
   `{{< param pgext_count >}}` is the packaged extension count. Keep them in
   sync with `internal/config/config.go` in the `pig` repository.
+
+## License
+
+The website content in this repository is licensed under the
+[Creative Commons Attribution 4.0 International License](LICENSE) (CC BY 4.0).
