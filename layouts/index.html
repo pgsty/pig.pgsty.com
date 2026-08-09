@@ -1,0 +1,574 @@
+{{- $zh := eq .Site.Language.Lang "zh" -}}
+{{- $description := .Description | default .Site.Params.description -}}
+{{- $locale := default .Site.Language.Lang .Site.Language.Locale -}}
+{{- $metrics := hugo.Data.home.metrics -}}
+{{- $socialImage := "img/pig-social-card.png" | absURL -}}
+{{- $socialAlt := cond $zh "PIG — Packager Index Gateway，PostgreSQL 扩展包管理器" "PIG — Packager Index Gateway, the PostgreSQL extension package manager" -}}
+{{- $ext := cond $zh "https://pigsty.cc/ext" "https://pigsty.io/ext" -}}
+{{- $pigsty := cond $zh "https://pigsty.cc" "https://pigsty.io" -}}
+{{- $install := cond $zh "curl -fsSL https://repo.pigsty.cc/pig | bash" "curl -fsSL https://repo.pigsty.io/pig | bash" -}}
+<!DOCTYPE html>
+<html lang="{{ $locale }}" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>{{ .Title }}</title>
+  <meta name="description" content="{{ $description }}">
+  {{ if hugo.IsProduction -}}
+  <meta name="robots" content="index, follow">
+  {{ else -}}
+  <meta name="robots" content="noindex, nofollow">
+  {{ end -}}
+  <meta name="author" content="Pigsty and PIG contributors">
+  <meta name="application-name" content="PIG">
+  <meta name="theme-color" content="#0b1119">
+  <meta name="color-scheme" content="dark light">
+
+  <link rel="icon" type="image/svg+xml" href="{{ "img/pig.svg" | relURL }}">
+  <link rel="icon" href="{{ "favicon.ico" | relURL }}" sizes="any">
+  <link rel="canonical" href="{{ .Permalink }}">
+  {{ range .AllTranslations -}}
+  <link rel="alternate" hreflang="{{ .Language.Locale | default .Language.Lang }}" href="{{ .Permalink }}">
+  {{ end -}}
+  {{ range where .AllTranslations "Language.Lang" "en" -}}
+  <link rel="alternate" hreflang="x-default" href="{{ .Permalink }}">
+  {{ end -}}
+  {{ with .OutputFormats.Get "rss" -}}
+  <link rel="alternate" type="{{ .MediaType.Type }}" title="{{ $.Site.Title }} RSS" href="{{ .Permalink }}">
+  {{ end }}
+
+  <meta property="og:title" content="{{ .Title }}">
+  <meta property="og:description" content="{{ $description }}">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{ .Permalink }}">
+  <meta property="og:site_name" content="PIG">
+  <meta property="og:locale" content="{{ replace $locale "-" "_" }}">
+  {{ range .Translations -}}
+  <meta property="og:locale:alternate" content="{{ replace (.Language.Locale | default .Language.Lang) "-" "_" }}">
+  {{ end -}}
+  <meta property="og:image" content="{{ $socialImage }}">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="{{ $socialAlt }}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ .Title }}">
+  <meta name="twitter:description" content="{{ $description }}">
+  <meta name="twitter:image" content="{{ $socialImage }}">
+  <meta name="twitter:image:alt" content="{{ $socialAlt }}">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "PIG — Packager Index Gateway",
+    "alternateName": "pig",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Linux, macOS",
+    "url": {{ .Site.BaseURL | jsonify | safeJS }},
+    "image": {{ $socialImage | jsonify | safeJS }},
+    "inLanguage": {{ $locale | jsonify | safeJS }},
+    "downloadUrl": "https://github.com/pgsty/pig/releases",
+    "codeRepository": "https://github.com/pgsty/pig",
+    "softwareVersion": {{ .Site.Params.version | jsonify | safeJS }},
+    "isAccessibleForFree": true,
+    "maintainer": {
+      "@type": "Organization",
+      "name": "Pigsty",
+      "url": "https://pigsty.io/"
+    },
+    "sameAs": [
+      "https://github.com/pgsty/pig"
+    ],
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "description": {{ $description | jsonify | safeJS }}
+  }
+  </script>
+
+  <script>
+    (function () {
+      var theme = null;
+      try { theme = window.localStorage.getItem('pig-landing-theme'); } catch (error) {}
+      if (theme !== 'light' && theme !== 'dark') {
+        theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      }
+      document.documentElement.setAttribute('data-theme', theme);
+      document.documentElement.classList.remove('no-js');
+      document.documentElement.classList.add('js');
+    })();
+  </script>
+
+  <link rel="stylesheet" href="{{ "fonts/fonts.css" | relURL }}">
+  <link rel="stylesheet" href="{{ "vendor/fontawesome/css/all.min.css" | relURL }}">
+  {{/* Content hash in the query string: static/ assets are served with long cache
+       lifetimes, so an edited stylesheet must change its URL to be picked up. */}}
+  {{- range slice "css/landing-v3.css" "css/pig-v3.css" "css/download.css" "css/pig-footer.css" }}
+  <link rel="stylesheet" href="{{ . | relURL }}?v={{ substr (md5 (readFile (path.Join "static" .))) 0 8 }}">
+  {{- end }}
+  {{- $searchCss := resources.Get "scss/landing-search.scss" | toCSS | minify | fingerprint }}
+  <link rel="stylesheet" href="{{ $searchCss.RelPermalink }}" integrity="{{ $searchCss.Data.Integrity }}">
+  {{ if hugo.IsProduction }}{{ partial "google_analytics.html" . }}{{ end }}
+</head>
+<body class="landing-page">
+  <a class="skip-link" href="#main">{{ if $zh }}跳到正文{{ else }}Skip to content{{ end }}</a>
+
+  <header class="landing-header" data-header>
+    <div class="landing-container">
+      <nav class="landing-nav" aria-label="{{ if $zh }}主导航{{ else }}Main navigation{{ end }}">
+        <a href="{{ relLangURL "" }}" class="nav-brand" aria-label="{{ if $zh }}PIG 首页{{ else }}PIG home{{ end }}">
+          <img src="{{ "img/pig.svg" | relURL }}" alt="" class="nav-logo">
+          <span class="nav-title">PIG</span>
+        </a>
+
+        <div class="nav-links">
+          <a href="{{ relLangURL "docs/" }}" class="nav-link">{{ if $zh }}文档{{ else }}Docs{{ end }}</a>
+          <a href="{{ relLangURL "blog/" }}" class="nav-link">{{ if $zh }}博客{{ else }}Blog{{ end }}</a>
+          <div class="nav-utils">
+            <button type="button" class="nav-util" data-pig-search-open title="{{ if $zh }}搜索（⌘K）{{ else }}Search (⌘K){{ end }}" aria-label="{{ if $zh }}搜索{{ else }}Search{{ end }}">
+              {{- partialCached "shell/icon.html" "search" "search" -}}
+            </button>
+            <button type="button" class="nav-util" data-theme-toggle title="{{ if $zh }}切换深浅主题{{ else }}Switch light / dark mode{{ end }}" aria-label="{{ if $zh }}切换深浅主题{{ else }}Switch light / dark mode{{ end }}">
+              {{- partialCached "shell/icon.html" "moon" "moon" -}}
+              {{- partialCached "shell/icon.html" "sun" "sun" -}}
+            </button>
+            {{ range .Translations }}
+            <a href="{{ .RelPermalink }}" class="nav-util" title="{{ .Language.Label }}" aria-label="{{ .Language.Label }}">{{ partialCached "shell/icon.html" "languages" "languages" }}</a>
+            {{ end }}
+            <a href="https://github.com/pgsty/pig" class="nav-github" target="_blank" rel="noopener" title="GitHub" aria-label="GitHub">
+              {{ partialCached "shell/icon.html" "github" "github" }}
+            </a>
+          </div>
+        </div>
+
+        <button class="mobile-menu-toggle" type="button" aria-label="{{ if $zh }}打开菜单{{ else }}Open menu{{ end }}" aria-expanded="false" data-menu-toggle>
+          <span></span><span></span><span></span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <div class="mobile-menu" data-mobile-menu>
+    <a href="{{ relLangURL "docs/" }}" class="mobile-menu-link">{{ if $zh }}文档{{ else }}Docs{{ end }}</a>
+    <a href="{{ relLangURL "blog/" }}" class="mobile-menu-link">{{ if $zh }}博客{{ else }}Blog{{ end }}</a>
+    <a href="{{ relLangURL "install/" }}" class="mobile-menu-link"><i class="fas fa-download" aria-hidden="true"></i> {{ if $zh }}下载安装{{ else }}Download &amp; Install{{ end }}</a>
+    <button type="button" class="mobile-menu-link mobile-menu-link--btn" data-pig-search-open><i class="fas fa-search" aria-hidden="true"></i> {{ if $zh }}搜索{{ else }}Search{{ end }}</button>
+    {{ range .Translations }}<a href="{{ .RelPermalink }}" class="mobile-menu-link"><i class="fas fa-language" aria-hidden="true"></i> {{ .Language.Label }}</a>{{ end }}
+    <button type="button" class="mobile-menu-link mobile-menu-link--btn" data-theme-toggle><i class="fas fa-moon" aria-hidden="true"></i> {{ if $zh }}浅色 / 深色{{ else }}Light / Dark{{ end }}</button>
+    <a href="https://github.com/pgsty/pig" class="mobile-menu-link" target="_blank" rel="noopener"><i class="fab fa-github" aria-hidden="true"></i> GitHub</a>
+  </div>
+
+  <main id="main">
+    {{/* ---------------------------------------------------------------- HERO
+         单栏品牌声明：P / I / G 对应 Packager / Index / Gateway，
+         用一句定位、一组行动入口和一条真命令完成首屏。 */}}
+    <section class="hero" id="hero">
+      <div class="hero-bg" aria-hidden="true"></div>
+      <div class="landing-container">
+        <div class="hero-grid">
+          <div class="hero-copy" id="about">
+            <p class="hero-eyebrow anim" style="--d:0">
+              <span class="eyebrow-mark" aria-hidden="true"></span>
+              <span class="eyebrow-en">{{ if $zh }}PostgreSQL 扩展包管理器{{ else }}THE POSTGRESQL EXTENSION PACKAGE MANAGER{{ end }}</span>
+            </p>
+
+            <h1 class="hero-title pig-hero-title anim" style="--d:1" aria-label="PIG — Packager Index Gateway">
+              <span class="hero-title-line"><b class="ini ini-p">P</b>ackager</span>
+              <span class="hero-title-line"><b class="ini ini-i">I</b>ndex</span>
+              <span class="hero-title-line"><b class="ini ini-g">G</b>ateway</span>
+            </h1>
+
+            <p class="hero-tagline anim" style="--d:2">
+              <strong>{{ if $zh }}PostgreSQL 扩展包的统一入口。{{ else }}One gateway to PostgreSQL extension packages.{{ end }}</strong>
+              <span>{{ if $zh }}{{ $metrics.packaged_extensions }} 个目录条目 · PostgreSQL 14-18 · EL / Debian / Ubuntu{{ else }}{{ $metrics.packaged_extensions }} catalog entries · PostgreSQL 14-18 · EL / Debian / Ubuntu{{ end }}</span>
+            </p>
+
+            <p class="hero-sub anim" style="--d:3">
+              {{ if $zh }}一个 CLI 检索目录、配置仓库并安装原生 RPM / DEB；具体可用性以目标矩阵为准。{{ else }}One CLI to search the catalog, configure repositories, and install native RPM / DEB. Availability is target-specific.{{ end }}
+            </p>
+
+            <div class="hero-actions anim" style="--d:4">
+              <div class="hero-ctas">
+                <a href="{{ relLangURL "start/" }}" class="btn btn-primary"><i class="fas fa-rocket" aria-hidden="true"></i> {{ if $zh }}快速上手{{ else }}Get Started{{ end }}</a>
+                <a href="{{ relLangURL "docs/" }}" class="btn btn-ghost"><i class="fas fa-book-open" aria-hidden="true"></i> {{ if $zh }}浏览文档{{ else }}Documentation{{ end }}</a>
+              </div>
+              <div class="command-box">
+                <span class="command-prompt">$</span>
+                <code class="command-text">pig install pg_duckdb -v 18</code>
+                <button class="command-copy" data-copy-text="pig install pg_duckdb -v 18" title="{{ if $zh }}复制命令{{ else }}Copy command{{ end }}" aria-label="{{ if $zh }}复制命令{{ else }}Copy command{{ end }}">
+                  <i class="fas fa-copy" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {{/* ------------------------------------------------------------- METRICS */}}
+    <section class="landing-section key-metrics" id="coverage" aria-labelledby="coverage-title">
+      <div class="landing-container">
+        <div class="section-head section-head--compact" data-reveal>
+          <p class="section-eyebrow"><span class="silkscreen">COVERAGE</span><span class="eyebrow-trace" aria-hidden="true"></span></p>
+          <h2 class="section-title section-title--sm" id="coverage-title">{{ if $zh }}{{ $metrics.packaged_extensions }} 个扩展条目，按目标查询{{ else }}{{ $metrics.packaged_extensions }} Extension Entries, Indexed by Target{{ end }}</h2>
+        </div>
+
+        <div class="stats-grid" data-reveal>
+          <a href="{{ $ext }}/list/" class="stat-item" target="_blank" rel="noopener">
+            <span class="stat-value" data-count="{{ $metrics.packaged_extensions }}">{{ lang.FormatNumber 0 $metrics.packaged_extensions }}</span>
+            <span class="stat-label">{{ if $zh }}目录扩展{{ else }}Cataloged Extensions{{ end }}</span>
+          </a>
+          <a href="{{ relLangURL "intro/" }}" class="stat-item">
+            <span class="stat-value" data-count="{{ $metrics.pg_majors }}">{{ lang.FormatNumber 0 $metrics.pg_majors }}</span>
+            <span class="stat-label">{{ if $zh }}PostgreSQL 大版本（14-18）{{ else }}PostgreSQL Majors (14-18){{ end }}</span>
+          </a>
+          <a href="{{ relLangURL "intro/" }}" class="stat-item">
+            <span class="stat-value" data-count="{{ $metrics.linux_distros }}">{{ lang.FormatNumber 0 $metrics.linux_distros }}</span>
+            <span class="stat-label">{{ if $zh }}Linux 发行版大版本 × 双架构{{ else }}Linux Distro Majors × 2 Arches{{ end }}</span>
+          </a>
+          <a href="{{ relLangURL "install/" }}" class="stat-item">
+            <span class="stat-value" data-count="{{ $metrics.database_runtime_deps }}">{{ lang.FormatNumber 0 $metrics.database_runtime_deps }}</span>
+            <span class="stat-label">{{ if $zh }}数据库运行时依赖{{ else }}Database Runtime Dependencies{{ end }}</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    {{/* --------------------------------------------------------- QUICK START
+         三步都是能直接粘贴执行的真命令，第一张卡按命令宽度定宽。 */}}
+    <section class="landing-section" id="quickstart">
+      <div class="landing-container">
+        <div class="section-head" data-reveal>
+          <p class="section-eyebrow"><span class="silkscreen">QUICK START</span><span class="eyebrow-trace" aria-hidden="true"></span></p>
+          <h2 class="section-title">{{ if $zh }}三条命令，装好 PostgreSQL 与扩展{{ else }}PostgreSQL and Extensions in Three Commands{{ end }}</h2>
+          <p class="section-subtitle">{{ if $zh }}从裸机到 PostgreSQL 18 与扩展软件包；数据库内启用扩展是独立步骤。{{ else }}From a bare host to PostgreSQL 18 and extension packages. Enabling extensions inside a database is a separate step.{{ end }}</p>
+        </div>
+
+        {{/* pig-steps：把 flex 排改成 2fr/1fr/1fr 栅格，长命令折行而不是被裁掉。 */}}
+        <div class="steps-rail pig-steps" data-reveal>
+          <div class="step-card">
+            <div class="step-head">
+              <span class="step-num">1</span>
+              <a href="{{ relLangURL "install/" }}" class="step-title">{{ if $zh }}装上 pig{{ else }}Install pig{{ end }}</a>
+            </div>
+            <div class="step-cmd">
+              <code class="step-cmd-text" data-copy="{{ $install }}">{{ $install }}</code>
+              <button class="step-cmd-copy" title="{{ if $zh }}复制命令{{ else }}Copy command{{ end }}" aria-label="{{ if $zh }}复制命令{{ else }}Copy command{{ end }}"><i class="fas fa-copy" aria-hidden="true"></i></button>
+            </div>
+          </div>
+          <div class="step-card">
+            <div class="step-head">
+              <span class="step-num">2</span>
+              <a href="{{ relLangURL "repo/" }}" class="step-title">{{ if $zh }}配好仓库{{ else }}Set up repos{{ end }}</a>
+            </div>
+            <div class="step-cmd">
+              <code class="step-cmd-text" data-copy="pig repo set">pig repo set</code>
+              <button class="step-cmd-copy" title="{{ if $zh }}复制命令{{ else }}Copy command{{ end }}" aria-label="{{ if $zh }}复制命令{{ else }}Copy command{{ end }}"><i class="fas fa-copy" aria-hidden="true"></i></button>
+            </div>
+          </div>
+          <div class="step-card">
+            <div class="step-head">
+              <span class="step-num">3</span>
+              <a href="{{ relLangURL "ext/" }}" class="step-title">{{ if $zh }}装内核与扩展{{ else }}Install what you need{{ end }}</a>
+            </div>
+            <div class="step-cmd">
+              <code class="step-cmd-text" data-copy="pig install -y pg18 pg_duckdb vector">pig install -y pg18 pg_duckdb vector</code>
+              <button class="step-cmd-copy" title="{{ if $zh }}复制命令{{ else }}Copy command{{ end }}" aria-label="{{ if $zh }}复制命令{{ else }}Copy command{{ end }}"><i class="fas fa-copy" aria-hidden="true"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <p class="platforms silkscreen" data-reveal>
+          {{ if $zh }}当前目标：EL 8 / 9 / 10 · Debian 12 / 13 · Ubuntu 22 / 24 / 26 · x86_64 与 aarch64 · PostgreSQL 14 - 18；扩展可用性因组合而异{{ else }}Current targets: EL 8 / 9 / 10 · Debian 12 / 13 · Ubuntu 22 / 24 / 26 · x86_64 and aarch64 · PostgreSQL 14 - 18; extension availability varies{{ end }}
+        </p>
+      </div>
+    </section>
+
+    {{/* ------------------------------------------------------------------ WHY
+         核心价值：把「装一个扩展」原本要做的事，和 pig 之后要做的事并排放。 */}}
+    <section class="landing-section promise" id="why">
+      <div class="landing-container">
+        <div class="section-head" data-reveal>
+          <p class="section-eyebrow"><span class="silkscreen">{{ if $zh }}为什么需要它{{ else }}WHY IT EXISTS{{ end }}</span><span class="eyebrow-trace" aria-hidden="true"></span></p>
+          <h2 class="section-title">{{ if $zh }}安装扩展，不该变成一个项目{{ else }}Installing an Extension Shouldn't Be a Project{{ end }}</h2>
+          <p class="section-subtitle">{{ if $zh }}难点不在扩展本身，而在跨版本、系统与架构的可靠分发。{{ else }}The hard part is not the extension—it is reliable delivery across versions, systems, and architectures.{{ end }}</p>
+        </div>
+        <div class="promise-grid" data-reveal>
+          <article class="promise-card promise-card--no">
+            <p class="silkscreen">{{ if $zh }}没有 pig 的时候{{ else }}WITHOUT PIG{{ end }}</p>
+            <h3>{{ if $zh }}每一层都要手工处理{{ else }}Manual at Every Layer{{ end }}</h3>
+            <ul>
+              <li>{{ if $zh }}寻找正确的仓库、包名或源码{{ else }}Find the right repository, package, or source{{ end }}</li>
+              <li>{{ if $zh }}逐一匹配 PG 大版本、系统与架构{{ else }}Match the PG major, OS release, and architecture{{ end }}</li>
+              <li>{{ if $zh }}没有二进制包时自行准备工具链与构建流程{{ else }}Own the toolchain and build when no binary exists{{ end }}</li>
+              <li>{{ if $zh }}换主机或升级大版本后重新执行{{ else }}Repeat the process for every host and major upgrade{{ end }}</li>
+            </ul>
+          </article>
+          <article class="promise-card">
+            <p class="silkscreen">{{ if $zh }}用 pig 之后{{ else }}WITH PIG{{ end }}</p>
+            <h3>{{ if $zh }}一套一致的工作流{{ else }}One Consistent Workflow{{ end }}</h3>
+            <ul>
+              <li>{{ if $zh }}<code>repo set</code> 生成按地域选择的 apt / dnf 配置{{ else }}<code>repo set</code> writes region-aware apt / dnf configuration{{ end }}</li>
+              <li>{{ if $zh }}<code>install</code> 解析名称、PG 版本、系统与架构{{ else }}<code>install</code> resolves names, PG majors, systems, and architectures{{ end }}</li>
+              <li>{{ if $zh }}<code>build</code> 为缺包目标提供基于规格的构建路径{{ else }}<code>build</code> provides a spec-driven path when no package exists{{ end }}</li>
+              <li>{{ if $zh }}最终仍是原生 RPM / DEB，不引入数据库运行时依赖{{ else }}The result stays native RPM / DEB, with no database runtime dependency{{ end }}</li>
+            </ul>
+          </article>
+        </div>
+        <p class="section-subtitle" data-reveal style="text-align:center">
+          {{ if $zh }}PIG 始终是可选工具：<a href="{{ $ext }}/repo/" target="_blank" rel="noopener">Pigsty 仓库</a> 可直接由 apt / dnf 使用，也不会成为数据库运行时依赖。{{ else }}PIG remains optional: the <a href="{{ $ext }}/repo/" target="_blank" rel="noopener">Pigsty repositories</a> work with plain apt and dnf, and PIG never becomes a database runtime dependency.{{ end }}
+        </p>
+      </div>
+    </section>
+
+    {{/* --------------------------------------------------------- CAPABILITIES */}}
+    <section class="landing-section modules" id="capabilities">
+      <div class="landing-container">
+        <div class="section-head" data-reveal>
+          <p class="section-eyebrow"><span class="silkscreen">{{ if $zh }}它究竟做了什么{{ else }}CAPABILITIES{{ end }}</span><span class="eyebrow-trace" aria-hidden="true"></span></p>
+          <h2 class="section-title">{{ if $zh }}目录、仓库、构建与运维{{ else }}Catalog, Repositories, Builds, Operations{{ end }}</h2>
+          <p class="section-subtitle">{{ if $zh }}四组聚焦的工作流，从安装软件包延伸到本机数据库运维。{{ else }}Four focused workflows, from package delivery to local database operations.{{ end }}</p>
+        </div>
+
+        <div class="module-row" data-reveal>
+          <div class="module-content">
+            <p class="module-ref silkscreen">01 · {{ if $zh }}扩展目录{{ else }}THE CATALOG{{ end }}</p>
+            <h3 class="module-title"><a href="{{ relLangURL "ext/" }}">{{ if $zh }}{{ $metrics.packaged_extensions }} 个扩展，统一查询{{ else }}{{ $metrics.packaged_extensions }} Extensions, One Catalog{{ end }}</a></h3>
+            <p class="module-motto"><span aria-hidden="true">◇</span> {{ if $zh }}先找到扩展，再找到正确的软件包{{ else }}Find the extension, then the right package{{ end }}</p>
+            <ul class="module-list">
+              <li>{{ if $zh }}按名称、分类与 PG 大版本检索，按需查看详情{{ else }}Search by name, category, and PG major; inspect details on demand{{ end }}</li>
+              <li>{{ if $zh }}扩展名与包名均可识别，例如 <code>vector</code> 与 <code>pgvector</code>{{ else }}Use either extension or package names, such as <code>vector</code> or <code>pgvector</code>{{ end }}</li>
+              <li>{{ if $zh }}扫描主机控制文件与共享库，不混同数据库内启用状态{{ else }}Scan host control files and libraries without conflating database state{{ end }}</li>
+              <li>{{ if $zh }}目录内置于二进制，也可独立刷新{{ else }}Use the built-in catalog or refresh it independently{{ end }}</li>
+            </ul>
+            <p class="module-value">{{ if $zh }}目标存在软件包时，扩展交付就是一次原生安装{{ else }}When a target package exists, delivery is a native install{{ end }}</p>
+          </div>
+          <div class="module-visual">
+            <a href="{{ relLangURL "start/" }}" class="code-plate">
+              <span class="code-plate-head"><span class="code-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="code-file">find-and-install.sh</span></span>
+              <pre class="code-body"><span class="c"># search the catalog</span>
+<span class="k">pig</span> <span class="s">ext</span> list <span class="v">duck</span>
+
+<span class="c"># install for a given PG major</span>
+<span class="k">pig</span> <span class="s">install</span> <span class="v">pg_duckdb</span> -v 18
+
+<span class="c"># what is on this host?</span>
+<span class="k">pig</span> <span class="s">ext</span> status -v 18</pre>
+            </a>
+          </div>
+        </div>
+
+        <div class="module-row module-row--reverse" data-reveal>
+          <div class="module-content">
+            <p class="module-ref silkscreen">02 · {{ if $zh }}软件仓库{{ else }}REPOSITORIES{{ end }}</p>
+            <h3 class="module-title"><a href="{{ relLangURL "repo/" }}">{{ if $zh }}仓库配置，不再手工拼接{{ else }}Repository Setup Without Hand Editing{{ end }}</a></h3>
+            <p class="module-motto"><span aria-hidden="true">↔</span> {{ if $zh }}一条命令生成所选的 APT / YUM 配置{{ else }}Generate the selected APT / YUM setup in one command{{ end }}</p>
+            <ul class="module-list">
+              <li>{{ if $zh }}一次配置操作系统、PGDG 与 Pigsty 仓库{{ else }}Configure OS, PGDG, and Pigsty repositories together{{ end }}</li>
+              <li>{{ if $zh }}按地域选择可达镜像，中国大陆使用 <code>repo.pigsty.cc</code>{{ else }}Select reachable mirrors by region, including <code>repo.pigsty.cc</code> for China{{ end }}</li>
+              <li>{{ if $zh }}按模块添加、移除并检查当前状态{{ else }}Add, remove, and inspect repositories by module{{ end }}</li>
+              <li>{{ if $zh }}分别审查软件包来源、签名与维护策略{{ else }}Review package provenance, signatures, and maintenance separately{{ end }}</li>
+            </ul>
+            <p class="module-value">{{ if $zh }}状态可查，替换前备份，并可纳入既有配置管理{{ else }}Inspectable state, backups before replacement, compatible with configuration management{{ end }}</p>
+          </div>
+          <div class="module-visual">
+            <a href="{{ relLangURL "repo/" }}" class="code-plate compatibility-plate">
+              <span class="code-plate-head"><span class="code-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="code-file">repo.status</span></span>
+              <pre class="code-body"><span class="c"># what pig manages for you</span>
+<span class="k">/etc/yum.repos.d</span>/ <span class="s">pigsty-*.repo</span>
+<span class="k">/etc/apt/sources.list.d</span>/ <span class="s">pigsty.list</span>
+<span class="k">modules</span>: <span class="v">node pgsql infra</span>
+<span class="k">region</span>: <span class="s">default | china</span></pre>
+            </a>
+          </div>
+        </div>
+
+        <div class="module-row" id="build" data-reveal>
+          <div class="module-content">
+            <p class="module-ref silkscreen">03 · {{ if $zh }}源码构建{{ else }}BUILD FROM SOURCE{{ end }}</p>
+            <h3 class="module-title"><a href="{{ relLangURL "build/" }}">{{ if $zh }}没有现成包，按规格构建{{ else }}No Package? Build from a Spec{{ end }}</a></h3>
+            <p class="module-motto"><span aria-hidden="true">▦</span> {{ if $zh }}用命令准备环境，用规格定义产物{{ else }}Commands prepare the environment; specs define the package{{ end }}</p>
+            <ul class="module-list">
+              <li>{{ if $zh }}准备 PGXS、Rust 与 pgrx 工具链{{ else }}Prepare PGXS, Rust, and pgrx toolchains{{ end }}</li>
+              <li>{{ if $zh }}获取项目维护的 RPM / DEB 构建规格{{ else }}Fetch project-maintained RPM / DEB build specs{{ end }}</li>
+              <li>{{ if $zh }}在进入内网仓库前完成测试、签名与审计{{ else }}Test, sign, and review artifacts before internal distribution{{ end }}</li>
+            </ul>
+            <p class="module-value">{{ if $zh }}这是矩阵之外的构建路径，不是成功或支持保证{{ else }}A path beyond the package matrix—not a success or support guarantee{{ end }}</p>
+          </div>
+          <div class="module-visual">
+            <a href="{{ relLangURL "build/" }}" class="artifact-plate" aria-label="{{ if $zh }}查看构建文档{{ else }}Read the build guide{{ end }}">
+              <span class="artifact-plate-head"><b>PIG // BUILD SURFACE</b><small>SPEC-DRIVEN · TARGET-SENSITIVE</small></span>
+              <span class="artifact-grid">
+                <i><b>RPM</b><small>el8 · el9 · el10</small></i>
+                <i><b>DEB</b><small>bookworm · trixie</small></i>
+                <i><b>PGRX</b><small>rust extensions</small></i>
+                <i><b>PGXS</b><small>c extensions</small></i>
+                <i><b>SPEC</b><small>build recipes</small></i>
+                <i><b>REPO</b><small>local package feed</small></i>
+              </span>
+              <span class="artifact-plate-foot"><i></i> {{ if $zh }}使用项目维护的构建规格{{ else }}PROJECT-MAINTAINED BUILD SPECS{{ end }} <b>→</b></span>
+            </a>
+          </div>
+        </div>
+
+        <div class="module-row module-row--reverse" data-reveal>
+          <div class="module-content">
+            <p class="module-ref silkscreen">04 · {{ if $zh }}装完之后{{ else }}DAY TWO{{ end }}</p>
+            <h3 class="module-title"><a href="{{ relLangURL "pg/" }}">{{ if $zh }}从本机管理到时间点恢复{{ else }}From Local Control to Point-in-Time Recovery{{ end }}</a></h3>
+            <p class="module-motto"><span aria-hidden="true">＋</span> {{ if $zh }}包管理之外，也是一套本机数据库工具{{ else }}Beyond packages, a focused local database toolbox{{ end }}</p>
+            <ul class="module-list">
+              <li>{{ if $zh }}<a href="{{ relLangURL "pg/" }}"><code>pig pg</code></a> 管理本机 PostgreSQL；<a href="{{ relLangURL "pt/" }}"><code>pig pt</code></a> 透传 <code>patronictl</code>{{ else }}<a href="{{ relLangURL "pg/" }}"><code>pig pg</code></a> manages local PostgreSQL; <a href="{{ relLangURL "pt/" }}"><code>pig pt</code></a> passes through to <code>patronictl</code>{{ end }}</li>
+              <li>{{ if $zh }}<a href="{{ relLangURL "pb/" }}"><code>pig pb</code></a> 管理备份；<a href="{{ relLangURL "pitr/" }}"><code>pig pitr</code></a> 编排保守的时间点恢复{{ else }}<a href="{{ relLangURL "pb/" }}"><code>pig pb</code></a> manages backups; <a href="{{ relLangURL "pitr/" }}"><code>pig pitr</code></a> orchestrates conservative point-in-time recovery{{ end }}</li>
+              <li>{{ if $zh }}<a href="{{ relLangURL "inventory/" }}"><code>pig inventory</code></a> 无损编辑 <code>pigsty.yml</code>{{ else }}<a href="{{ relLangURL "inventory/" }}"><code>pig inventory</code></a> edits <code>pigsty.yml</code> without losing structure or comments{{ end }}</li>
+              <li>{{ if $zh }}<a href="{{ relLangURL "sty/" }}"><code>pig sty</code></a> 安装并管理 <a href="{{ $pigsty }}" target="_blank" rel="noopener">Pigsty</a>{{ else }}<a href="{{ relLangURL "sty/" }}"><code>pig sty</code></a> installs and controls <a href="{{ $pigsty }}" target="_blank" rel="noopener">Pigsty</a>{{ end }}</li>
+            </ul>
+            <p class="module-value">{{ if $zh }}原生高风险工作流提供计划与确认；透传命令保留上游语义{{ else }}Native risk-sensitive workflows expose plans and confirmation; passthrough keeps upstream semantics{{ end }}</p>
+          </div>
+          <div class="module-visual">
+            <a href="{{ relLangURL "pitr/" }}" class="code-plate security-plate">
+              <span class="code-plate-head"><span class="code-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="code-file">pig pitr --plan</span></span>
+              <pre class="code-body"><span class="c"># conservative by default</span>
+<span class="k">precheck</span>: <span class="s">repo, cluster, pgdata</span>
+<span class="k">stop</span>: <span class="s">patroni, then postgres</span>
+<span class="k">restore</span>: <span class="s">pgbackrest --target</span>
+<span class="k">start</span>: <span class="v">only when asked</span>
+
+<span class="c"># patroni stays down until you say so</span></pre>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {{/* ------------------------------------------------------- COMMAND SURFACE */}}
+    <section class="landing-section ecosystem" id="commands">
+      <div class="landing-container">
+        <div class="section-head" data-reveal>
+          <p class="section-eyebrow"><span class="silkscreen">COMMAND SURFACE</span><span class="eyebrow-trace" aria-hidden="true"></span></p>
+          <h2 class="section-title">{{ if $zh }}一套 CLI，贯穿完整生命周期{{ else }}One CLI Across the Lifecycle{{ end }}</h2>
+          <p class="section-subtitle">{{ if $zh }}所有命令均可通过 <code>pig help</code> 发现；机器读取时使用命令明确支持的结构化输出。{{ else }}Every command is discoverable through <code>pig help</code>; machine consumers use structured output where supported.{{ end }}</p>
+          <div class="section-links">
+            <a href="{{ relLangURL "cmd/" }}">{{ if $zh }}命令参考{{ else }}Command Reference{{ end }} →</a>
+            <a href="{{ relLangURL "install/" }}">{{ if $zh }}安装{{ else }}Installation{{ end }} →</a>
+            <a href="{{ relLangURL "release/" }}">{{ if $zh }}发布注记{{ else }}Release Notes{{ end }} →</a>
+          </div>
+        </div>
+
+        <div class="kernel-grid interface-grid" data-reveal>
+          <a href="{{ relLangURL "repo/" }}" class="kernel-card"><span class="kernel-icon interface-glyph">RP</span><span class="kernel-name">repo</span><span class="kernel-desc">{{ if $zh }}APT / YUM 仓库{{ else }}APT / YUM repos{{ end }}</span></a>
+          <a href="{{ relLangURL "ext/" }}" class="kernel-card"><span class="kernel-icon interface-glyph">EX</span><span class="kernel-name">ext</span><span class="kernel-desc">{{ if $zh }}扩展目录{{ else }}Extension catalog{{ end }}</span></a>
+          <a href="{{ relLangURL "cmd/" }}" class="kernel-card"><span class="kernel-icon interface-glyph">IN</span><span class="kernel-name">install</span><span class="kernel-desc">{{ if $zh }}原生包安装{{ else }}Native package install{{ end }}</span></a>
+          <a href="{{ relLangURL "build/" }}" class="kernel-card"><span class="kernel-icon interface-glyph">BD</span><span class="kernel-name">build</span><span class="kernel-desc">{{ if $zh }}源码构建{{ else }}Build from source{{ end }}</span></a>
+          <a href="{{ relLangURL "pg/" }}" class="kernel-card"><span class="kernel-icon interface-glyph">PG</span><span class="kernel-name">postgres</span><span class="kernel-desc">{{ if $zh }}本地 PostgreSQL{{ else }}Local PostgreSQL{{ end }}</span></a>
+          <a href="{{ relLangURL "pt/" }}" class="kernel-card"><span class="kernel-icon interface-glyph">PT</span><span class="kernel-name">patroni</span><span class="kernel-desc">{{ if $zh }}patronictl 透传{{ else }}patronictl passthrough{{ end }}</span></a>
+          <a href="{{ relLangURL "pb/" }}" class="kernel-card"><span class="kernel-icon interface-glyph">PB</span><span class="kernel-name">pgbackrest</span><span class="kernel-desc">{{ if $zh }}备份与恢复{{ else }}Backup and restore{{ end }}</span></a>
+          <a href="{{ relLangURL "pitr/" }}" class="kernel-card"><span class="kernel-icon interface-glyph">PI</span><span class="kernel-name">pitr</span><span class="kernel-desc">{{ if $zh }}时间点恢复{{ else }}Point-in-time recovery{{ end }}</span></a>
+          <a href="{{ relLangURL "sty/" }}" class="kernel-card"><span class="kernel-icon interface-glyph">ST</span><span class="kernel-name">sty</span><span class="kernel-desc">{{ if $zh }}Pigsty 安装管控{{ else }}Pigsty control{{ end }}</span></a>
+          <a href="{{ relLangURL "inventory/" }}" class="kernel-card"><span class="kernel-icon interface-glyph">IV</span><span class="kernel-name">inventory</span><span class="kernel-desc">{{ if $zh }}配置清单{{ else }}Config inventory{{ end }}</span></a>
+        </div>
+
+        <div class="extbus-head" data-reveal><span class="silkscreen">{{ if $zh }}一行命令即可装上{{ else }}ONE COMMAND AWAY{{ end }}</span></div>
+        <div class="extensions-marquee" data-reveal aria-label="{{ if $zh }}热门扩展{{ else }}Popular extensions{{ end }}">
+          <div class="marquee-row" data-direction="left"><div class="marquee-content">
+            {{- range slice "postgis" "vector" "timescaledb" "citus" "pg_duckdb" "pg_search" "documentdb" "pg_cron" -}}
+            <a href="{{ $ext }}/e/{{ . }}" class="ext-pill" target="_blank" rel="noopener">{{ . }}</a>
+            {{- end -}}
+            {{- range slice "postgis" "vector" "timescaledb" "citus" "pg_duckdb" "pg_search" "documentdb" "pg_cron" -}}
+            <a href="{{ $ext }}/e/{{ . }}" class="ext-pill" target="_blank" rel="noopener">{{ . }}</a>
+            {{- end -}}
+          </div></div>
+          <div class="marquee-row" data-direction="right"><div class="marquee-content">
+            {{- range slice "pg_partman" "pgaudit" "pg_repack" "pgrouting" "plv8" "pg_graphql" "pgmq" "vchord" -}}
+            <a href="{{ $ext }}/e/{{ . }}" class="ext-pill" target="_blank" rel="noopener">{{ . }}</a>
+            {{- end -}}
+            {{- range slice "pg_partman" "pgaudit" "pg_repack" "pgrouting" "plv8" "pg_graphql" "pgmq" "vchord" -}}
+            <a href="{{ $ext }}/e/{{ . }}" class="ext-pill" target="_blank" rel="noopener">{{ . }}</a>
+            {{- end -}}
+          </div></div>
+        </div>
+        <div class="extbus-cta" data-reveal><a href="{{ $ext }}/list/" class="btn btn-line" target="_blank" rel="noopener">{{ if $zh }}浏览全部 {{ $metrics.packaged_extensions }} 个扩展{{ else }}Browse all {{ $metrics.packaged_extensions }} extensions{{ end }} →</a></div>
+      </div>
+    </section>
+
+    {{/* ------------------------------------------------------------ AUTOMATION */}}
+    <section class="landing-section" id="automation">
+      <div class="landing-container">
+        <div class="section-head" data-reveal>
+          <p class="section-eyebrow"><span class="silkscreen">AUTOMATION</span><span class="eyebrow-trace" aria-hidden="true"></span></p>
+          <h2 class="section-title">{{ if $zh }}为脚本保留清晰边界{{ else }}Clear Boundaries for Automation{{ end }}</h2>
+          <p class="section-subtitle">{{ if $zh }}原生命令按需提供结构化输出、执行计划与退出码；透传命令保留上游语义。{{ else }}Native commands expose structured output, plans, and exit codes where supported; passthrough keeps upstream semantics.{{ end }}</p>
+        </div>
+        <div class="install-options" data-reveal>
+          <a href="{{ relLangURL "cmd/" }}" class="install-option">
+            <span class="install-option-icon"><i class="fas fa-code" aria-hidden="true"></i></span>
+            <span class="install-option-text"><b>-o json | yaml</b><i>{{ if $zh }}受支持时，stdout 仅输出结构化结果{{ else }}Structured results only on stdout, where supported{{ end }}</i></span>
+          </a>
+          <a href="{{ relLangURL "pitr/" }}" class="install-option">
+            <span class="install-option-icon"><i class="fas fa-list-check" aria-hidden="true"></i></span>
+            <span class="install-option-text"><b>--plan</b><i>{{ if $zh }}先预览高风险步骤，确认后再执行{{ else }}Preview risk-sensitive steps before execution{{ end }}</i></span>
+          </a>
+          <a href="{{ relLangURL "release/" }}" class="install-option">
+            <span class="install-option-icon"><i class="fas fa-circle-check" aria-hidden="true"></i></span>
+            <span class="install-option-text"><b>{{ if $zh }}明确的退出码{{ else }}Defined exit codes{{ end }}</b><i>{{ if $zh }}脚本可区分用法错误与缺少确认{{ else }}Scripts can distinguish usage errors from missing confirmation{{ end }}</i></span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    {{/* -------------------------------------------------------------- DOWNLOAD */}}
+    <section class="landing-section download" id="download">
+      <div class="landing-container">
+        <div class="section-head" data-reveal>
+          <p class="section-eyebrow"><span class="silkscreen">DOWNLOAD</span><span class="eyebrow-trace" aria-hidden="true"></span></p>
+          <h2 class="section-title">{{ if $zh }}获取 PIG{{ else }}Get PIG{{ end }}</h2>
+          <p class="section-subtitle">{{ if $zh }}使用一行安装脚本、系统包管理器，或直接下载二进制。{{ else }}Use the one-line installer, your system package manager, or the release binary.{{ end }}</p>
+        </div>
+
+        <div class="product-choice-grid" aria-label="{{ if $zh }}选择安装方式{{ else }}Choose an install path{{ end }}">
+          <a class="product-choice-card product-choice-card--server" href="{{ relLangURL "install/" }}" data-reveal>
+            <div class="product-choice-top">
+              <div>
+                <p class="silkscreen">{{ if $zh }}安装脚本{{ else }}INSTALL SCRIPT{{ end }}</p>
+                <h2>{{ if $zh }}一行装好{{ else }}One Line{{ end }}</h2>
+              </div>
+              <span class="product-choice-icon"><i class="fas fa-download" aria-hidden="true"></i></span>
+            </div>
+            <p><code>{{ $install }}</code></p>
+            <p>{{ if $zh }}脚本识别系统与架构，取回对应的 RPM / DEB，交给 <code>rpm</code> 或 <code>dpkg</code> 安装。{{ else }}The script detects your OS and architecture, fetches the matching RPM / DEB, and hands it to <code>rpm</code> or <code>dpkg</code>.{{ end }}</p>
+            <div class="product-platforms"><span>EL 8/9/10</span><span>Debian 12/13</span><span>Ubuntu 22/24/26</span><span>amd64 · arm64</span></div>
+            <strong>{{ if $zh }}阅读安装文档{{ else }}Read the install guide{{ end }} <i aria-hidden="true">↗</i></strong>
+          </a>
+
+          <a class="product-choice-card product-choice-card--client" href="{{ relLangURL "install/" }}" data-reveal>
+            <div class="product-choice-top">
+              <div>
+                <p class="silkscreen">{{ if $zh }}包管理器与二进制{{ else }}PACKAGE OR BINARY{{ end }}</p>
+                <h2>apt / dnf</h2>
+              </div>
+              <span class="product-choice-icon"><i class="fas fa-box-archive" aria-hidden="true"></i></span>
+            </div>
+            <p>{{ if $zh }}把 Pigsty Infra 仓库加进系统，之后 <code>apt install pig</code> / <code>dnf install pig</code> 就能装和升；也可以直接取发布压缩包里的二进制丢进 PATH。{{ else }}Add the Pigsty Infra repository, then <code>apt install pig</code> or <code>dnf install pig</code>. Or just take the binary out of the release tarball and drop it on your PATH.{{ end }}</p>
+            <div class="product-platforms"><span>rpm</span><span>deb</span><span>tarball</span><span>macOS</span></div>
+            <strong>{{ if $zh }}查看发布产物{{ else }}See the release artifacts{{ end }} <i aria-hidden="true">↗</i></strong>
+          </a>
+        </div>
+
+        <div class="final-cta" data-reveal>
+          <a href="{{ relLangURL "start/" }}" class="btn btn-primary btn-lg"><i class="fas fa-rocket" aria-hidden="true"></i> {{ if $zh }}从快速上手开始{{ else }}Start with the tutorial{{ end }}</a>
+          <a href="https://github.com/pgsty/pig" class="btn btn-ghost btn-lg" target="_blank" rel="noopener"><i class="fab fa-github" aria-hidden="true"></i> {{ if $zh }}在 GitHub 上查看源码{{ else }}Read the source on GitHub{{ end }}</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  {{ partial "pig/landing-footer.html" . }}
+
+  <script src="{{ "js/landing-v3.js" | relURL }}?v={{ substr (md5 (readFile "static/js/landing-v3.js")) 0 8 }}"></script>
+  {{ partial "pig/search-dialog.html" . }}
+  {{- $searchJs := slice (resources.Get "js/third_party/lunr.min.js") (resources.Get "js/pig-search.js")
+        | resources.Concat "js/landing-search-bundle.js" | minify | fingerprint }}
+  <script src="{{ $searchJs.RelPermalink }}" integrity="{{ $searchJs.Data.Integrity }}" defer></script>
+</body>
+</html>

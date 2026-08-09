@@ -1,0 +1,17 @@
+# Landing page counters. These are product facts, not adoption numbers — every
+# value must stay verifiable against the documentation page the stat links to.
+
+# Extensions packaged by Pigsty and installable through `pig install`.
+# Keep in sync with params.pgext_count in hugo.yaml.
+packaged_extensions: 572
+
+# PostgreSQL major versions covered by the repositories: 14, 15, 16, 17, 18.
+pg_majors: 5
+
+# Linux distro majors in the current package matrix on /intro/:
+# EL 8 / 9 / 10, Debian 12 / 13, Ubuntu 22 / 24 / 26.
+linux_distros: 8
+
+# pig is not linked into PostgreSQL and is not needed after packages are installed.
+# Individual commands still invoke system tools such as apt, dnf, patronictl, or pgbackrest.
+database_runtime_deps: 0

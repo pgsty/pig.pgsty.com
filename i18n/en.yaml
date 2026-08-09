@@ -1,0 +1,7 @@
+# PIG landing-page strings. Documentation chrome strings come from OINK.
+pig_search_nav: to navigate
+pig_search_open: to select
+pig_search_close: to close
+pig_search_empty: No results found
+pig_search_loading: Loading search index…
+pig_footer_author: Ruohang Feng
