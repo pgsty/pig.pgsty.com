@@ -351,7 +351,7 @@ Leaving Patroni stopped after managed data-directory recovery is intentional. It
 
 - `pig pitr` calls pgBackRest restore and handles local Patroni/PostgreSQL stop and optional start.
 - `pig pitr` is not a cluster recovery controller. It does not handle Patroni failover, rejoin, VIP, or application traffic switching.
-- Use [`pig pb restore`](/pb/#pb-restore/) when you need lower-level restore semantics or fine-grained scripting control.
+- Use [`pig pb restore`](/pb/#pb-restore) when you need lower-level restore semantics or fine-grained scripting control.
 - Use [`pig pt switchover CLUSTER`](/pt/) or [`pig pt failover CLUSTER --candidate MEMBER`](/pt/) when you need manual Patroni cluster switching (native patronictl passthrough since v1.6.0; the cluster name is required).
 
 **Privilege execution:**

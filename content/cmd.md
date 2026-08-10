@@ -155,7 +155,7 @@ pig sty boot                     # install Ansible prerequisites
 pig sty conf                     # generate configuration
 pig sty deploy                   # run deployment playbook
 pig sty list                     # list available Pigsty releases
-pig sty get 4.4.0                # download a Pigsty release
+pig sty get {{< param pigsty_version >}}                # download the embedded Pigsty release
 pig sty grafana list             # manage Grafana dashboards (info/list/boot/load/init/dump/clean/lang/style)
 ```
 
@@ -276,7 +276,7 @@ pig status                       # show current environment status
 pig status -o json               # structured status output
 pig update                       # upgrade pig itself to the latest version
 pig update -m                    # upgrade using the pigsty.cc mirror
-pig update -v 1.6.0              # upgrade to a selected version
+pig update -v {{< param version >}}              # upgrade to the documented version
 pig version                      # show pig version information
 pig version -o json              # structured version output
 ```

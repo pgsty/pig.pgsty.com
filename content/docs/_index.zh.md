@@ -25,31 +25,43 @@ PIG 包管理器并非重新发明的土鳖轮子，而是 **依托** （PiggyBa
 
 ## 快速上手
 
-使用以下命令即可在您的系统上 [**安装**](/zh/install/) PIG 包管理器：
+{{% steps %}}
 
-**默认安装**（Cloudflare CDN）：
+### 安装 pig
+
+使用默认的 Cloudflare 加速安装入口：
 
 ```bash
 curl -fsSL https://repo.pigsty.io/pig | bash
 ```
 
-**中国镜像**：
+中国大陆可改用镜像入口：
 
 ```bash
 curl -fsSL https://repo.pigsty.cc/pig | bash
 ```
 
-安装完成后，几行命令即可 [**快速开始**](/zh/start/)。例如，若需安装 PG 18 与相应的 [**`pg_duckdb`**](https://pigsty.cc/ext/e/pg_duckdb) 扩展：
+软件包、发布压缩包、升级与卸载方式详见 [安装](/zh/install/)。
+
+### 配置软件仓库
+
+在 Linux 上一次性注册 Pigsty 与 PGDG 仓库；该命令会覆盖对应配置，请先检查生成结果：
 
 ```bash
-$ pig repo set                        # 一次性设置好 Linux, Pigsty + PGDG 仓库（覆盖式！）
-$ pig install pg18                    # 安装 PostgreSQL 18 内核（原生 PGDG 包）
-$ pig install pg_duckdb -v 18         # 安装 pg_duckdb 扩展（针对当前 pg 18）
-$ pig install -y postgis timescaledb  # 针对当前活跃PG版本，安装多个扩展
-$ pig install -y vector               # 您可以使用扩展名称（vector）或者扩展包名称（pgvector）来安装扩展！
+pig repo set
 ```
 
-这些命令安装的是主机软件包。请用 `pig ext info NAME` 配合扩展自身文档，在每个目标数据库中完成预加载、重启、`CREATE EXTENSION` 与 SQL 升级步骤。
+### 安装 PostgreSQL 与扩展
+
+安装 PostgreSQL 18 内核，以及 [`pg_duckdb`](https://pigsty.cc/ext/e/pg_duckdb) 与 `vector` 扩展软件包：
+
+```bash
+pig install -y pg18 pg_duckdb vector
+```
+
+{{% /steps %}}
+
+这些命令安装的是主机软件包。请用 `pig ext info NAME` 配合各扩展文档，在每个目标数据库中完成预加载、重启、`CREATE EXTENSION` 与 SQL 升级步骤。目录查询、别名解析与安装后检查详见完整的 [上手教程](/zh/start/)。
 
 ## 命令参考
 

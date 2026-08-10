@@ -155,7 +155,7 @@ pig sty boot                     # 安装 Ansible 依赖
 pig sty conf                     # 生成配置
 pig sty deploy                   # 运行部署 playbook
 pig sty list                     # 列出可用 Pigsty 版本
-pig sty get 4.4.0                # 下载指定 Pigsty 版本
+pig sty get {{< param pigsty_version >}}                # 下载内置的 Pigsty 版本
 pig sty grafana list             # 管理 Grafana 仪表盘（info/list/boot/load/init/dump/clean/lang/style）
 ```
 
@@ -275,7 +275,7 @@ pig status                       # 显示当前环境状态
 pig status -o json               # 结构化状态输出
 pig update                       # 将 pig 自身升级到最新版
 pig update -m                    # 使用 pigsty.cc 镜像升级
-pig update -v 1.6.0              # 升级到指定版本
+pig update -v {{< param version >}}              # 升级到文档对应版本
 pig version                      # 显示 pig 版本信息
 pig version -o json              # 结构化版本输出
 ```

@@ -25,31 +25,43 @@ Please note: for extension installation, **pig is not a mandatory component**. Y
 
 ## Quick Start
 
-Use the following command to [**install**](/install/) PIG on your system:
+{{% steps %}}
 
-**Default Installation** (Cloudflare CDN):
+### Install pig
+
+Use the default Cloudflare-backed installer:
 
 ```bash
 curl -fsSL https://repo.pigsty.io/pig | bash
 ```
 
-**China Mirror**:
+In mainland China, use the mirror endpoint:
 
 ```bash
 curl -fsSL https://repo.pigsty.cc/pig | bash
 ```
 
-After installation, you can [**get started**](/start/) with just a few commands. For example, to install PG 18 and the [**`pg_duckdb`**](https://pigsty.io/ext/e/pg_duckdb) extension:
+See [Installation](/install/) for packages, release archives, upgrades, and removal.
+
+### Configure package repositories
+
+On Linux, register the Pigsty and PGDG repositories once. Review the generated configuration before accepting the overwrite:
 
 ```bash
-$ pig repo set                        # One-time setup for Linux, Pigsty + PGDG repos (overwrites!)
-$ pig install pg18                    # Install PostgreSQL 18 kernel (native PGDG packages)
-$ pig install pg_duckdb -v 18         # Install pg_duckdb extension (for PG 18)
-$ pig install -y postgis timescaledb  # Install multiple extensions for current active PG version
-$ pig install -y vector               # You can use extension name (vector) or package name (pgvector)!
+pig repo set
 ```
 
-These commands install host packages. Use `pig ext info NAME` and the extension's own documentation to complete preload, restart, `CREATE EXTENSION`, and SQL upgrade steps in each intended database.
+### Install PostgreSQL and extensions
+
+Install the PostgreSQL 18 kernel plus the [`pg_duckdb`](https://pigsty.io/ext/e/pg_duckdb) and `vector` extension packages:
+
+```bash
+pig install -y pg18 pg_duckdb vector
+```
+
+{{% /steps %}}
+
+These commands install host packages. Use `pig ext info NAME` and each extension's documentation to complete preload, restart, `CREATE EXTENSION`, and SQL upgrade steps in every intended database. Continue with the full [Getting Started](/start/) tutorial for catalog, alias, and inspection workflows.
 
 ## Command Reference
 

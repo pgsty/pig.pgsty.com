@@ -180,7 +180,7 @@ This command scans PostgreSQL control files and related installation paths. It r
 
 ## ext add
 
-Install one or more PostgreSQL extensions. Same-level aliases for `pig ext add` include `pig ext install`, `pig ext ins`, and `pig ext a`. The top-level [`pig install`](/cmd/#install) command is a separate native package-manager wrapper that also supports PostgreSQL and extension alias translation.
+Install one or more PostgreSQL extensions. Same-level aliases for `pig ext add` include `pig ext install`, `pig ext ins`, and `pig ext a`. The top-level [`pig install`](/cmd/#pig-install) command is a separate native package-manager wrapper that also supports PostgreSQL and extension alias translation.
 
 ```bash
 pig ext add pg_duckdb            # install pg_duckdb
