@@ -130,9 +130,11 @@ markup:
 # Outputs
 #=======================================#
 outputs:
-  home: [HTML, RSS, JSON]
-  page: [HTML]
-  section: [HTML, RSS]
+  # OINK 0.2 supplies Markdown page copies, an AI-oriented llms.txt index,
+  # and printable section bundles. Keep JSON for the custom landing search.
+  home: [HTML, RSS, JSON, markdown, LLMS]
+  page: [HTML, markdown]
+  section: [HTML, RSS, print, markdown]
 
 #=======================================#
 # Services

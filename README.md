@@ -50,7 +50,7 @@ stay out of the docs sidebar tree via `toc_root: true` — `docs/` and
 
 ## Theme boundary
 
-OINK owns the documentation and blog layouts, navigation shell, search, table
+OINK 0.2.0 owns the documentation and blog layouts, navigation shell, search, table
 of contents, blocks and shortcodes, styles, scripts, fonts, and third-party
 runtimes. The site imports a pinned OINK commit as a Hugo Module.
 
@@ -58,6 +58,9 @@ The local layout surface is intentionally small:
 
 - `layouts/index.html` and its `pig/` partials preserve the custom PIG
   landing page.
+- `layouts/index.md` and `layouts/index.llms.txt` index PIG's intentionally
+  root-level documents; the generic OINK indexes assume documents live below
+  `/docs/`.
 - `layouts/_partials/shell/sidebar.html` keeps root-level documentation
   rooted at `Site.Home`; `/docs/` remains an overview rather than a content
   container.
@@ -75,22 +78,34 @@ keep local overrides limited to PIG-specific behavior.
 Install Hugo Extended 0.160.1 or newer, Go, and Git. OINK vendors its runtime
 assets, so this site does not require Node.js, npm, or a CDN.
 
+Debug against the latest sibling OINK checkout with an ignored Go workspace:
+
 ```bash
-make dev
+make d
 ```
 
-Build the static site with:
+Serve or build with the theme version pinned in `go.mod` using:
 
 ```bash
-make build
+make s
+make b
 ```
 
 Run module verification, the warning-strict production build, Markdown
 hygiene checks, and internal-link validation with:
 
 ```bash
-make check
+make c
 ```
+
+The corresponding long targets are `debug`, `serve`, `build`, and `check`;
+`make dev` retains the pinned-theme preview. Preview targets let Hugo choose an
+available port unless `PORT` is set explicitly.
+
+The production build also publishes Markdown copies for pages and sections,
+printable section bundles under `/_print/`, and bilingual `llms.txt` indexes.
+These outputs come from OINK; the landing-page JSON output remains the source
+for PIG's custom command-palette search.
 
 ## Writing conventions
 

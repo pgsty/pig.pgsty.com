@@ -14,12 +14,16 @@ outputs:
   - HTML
   - RSS
   - print
+  - markdown
 cascade:
   type: blog
   outputs:
     - HTML
     - print
+    - markdown
   params:
+    # 发布列表刻意采用 OINK 0.2 的纯文本卡片，不重复铺同一张默认图片。
+    default_featured: false
     ui:
       sidebar_menu_foldable: false
       sidebar_menu_compact: false

@@ -14,12 +14,16 @@ outputs:
   - HTML
   - RSS
   - print
+  - markdown
 cascade:
   type: blog
   outputs:
     - HTML
     - print
+    - markdown
   params:
+    # Release rows intentionally use OINK 0.2's clean text-only presentation.
+    default_featured: false
     ui:
       sidebar_menu_foldable: false
       sidebar_menu_compact: false

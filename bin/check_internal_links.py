@@ -20,6 +20,47 @@ import urllib.parse
 SITE_HOSTS = {"pig.pgsty.com", "www.pig.pgsty.com"}
 LINK_ATTRIBUTES = {"href", "src"}
 SKIP_SCHEMES = {"data", "javascript", "mailto", "tel", "blob"}
+MARKDOWN_LINK_RE = re.compile(r"(?<!!)\[[^\]\n]+\]\(([^)\s]+)(?:\s+[^)]*)?\)")
+ROOT_DOC_SLUGS = (
+    "start",
+    "intro",
+    "install",
+    "cmd",
+    "repo",
+    "ext",
+    "build",
+    "sty",
+    "inventory",
+    "pg",
+    "pt",
+    "pb",
+    "pitr",
+)
+REQUIRED_ROUTES = {
+    "/",
+    "/docs/",
+    "/blog/",
+    "/release/",
+    "/zh/",
+    "/zh/docs/",
+    "/zh/blog/",
+    "/zh/release/",
+    *(f"/{slug}/" for slug in ROOT_DOC_SLUGS),
+    *(f"/zh/{slug}/" for slug in ROOT_DOC_SLUGS),
+}
+FORBIDDEN_ROUTE_PREFIXES = ("/blog/release/", "/zh/blog/release/")
+REQUIRED_OUTPUTS = {
+    "index.md",
+    "llms.txt",
+    "docs/index.md",
+    "release/index.md",
+    "zh/index.md",
+    "zh/llms.txt",
+    "zh/docs/index.md",
+    "zh/release/index.md",
+    *(f"{slug}/index.md" for slug in ROOT_DOC_SLUGS),
+    *(f"zh/{slug}/index.md" for slug in ROOT_DOC_SLUGS),
+}
 
 
 class DocumentParser(html.parser.HTMLParser):
@@ -90,6 +131,11 @@ def resolve_internal_url(source_route: str, raw_url: str) -> tuple[str, str] | N
     return absolute.path or "/", urllib.parse.unquote(absolute.fragment)
 
 
+def rendered_markdown_links(path: pathlib.Path) -> list[str]:
+    source = path.read_text(encoding="utf-8", errors="replace")
+    return [match.group(1) for match in MARKDOWN_LINK_RE.finditer(source)]
+
+
 def main() -> int:
     argument_parser = argparse.ArgumentParser()
     argument_parser.add_argument("public", nargs="?", default="public", type=pathlib.Path)
@@ -104,6 +150,21 @@ def main() -> int:
     }
 
     failures: dict[str, list[str]] = collections.defaultdict(list)
+    rendered_routes = {route_for_file(public, path) for path in html_files}
+    for route in sorted(REQUIRED_ROUTES - rendered_routes):
+        failures[f"missing required route {route}"].append("site contract")
+    for route in sorted(rendered_routes):
+        if route in {
+            f"/docs/{slug}/" for slug in ROOT_DOC_SLUGS
+        } or route in {f"/zh/docs/{slug}/" for slug in ROOT_DOC_SLUGS}:
+            failures[f"forbidden /docs/ document route {route}"].append("site contract")
+        if route.startswith(FORBIDDEN_ROUTE_PREFIXES):
+            failures[f"forbidden /blog/ release route {route}"].append("site contract")
+
+    for relative in sorted(REQUIRED_OUTPUTS):
+        if not (public / relative).is_file():
+            failures[f"missing generated output /{relative}"].append("output contract")
+
     checked = 0
     for source_path, document in documents.items():
         source_route = route_for_file(public, source_path)
@@ -114,7 +175,7 @@ def main() -> int:
             checked += 1
             route, fragment = target
             candidates = target_candidates(public, route)
-            existing = next((candidate.resolve() for candidate in candidates if candidate.exists()), None)
+            existing = next((candidate.resolve() for candidate in candidates if candidate.is_file()), None)
             if existing is None:
                 failures[f"missing target {route}"].append(source_route)
                 continue
@@ -132,6 +193,21 @@ def main() -> int:
                 if fragment not in target_document.ids:
                     failures[f"missing fragment {route}#{fragment}"].append(source_route)
 
+    markdown_files = sorted(public.rglob("*.md"))
+    markdown_files.extend(sorted(public.rglob("llms.txt")))
+    markdown_checked = 0
+    for source_path in markdown_files:
+        source_route = "/" + source_path.relative_to(public).as_posix()
+        for raw_url in rendered_markdown_links(source_path):
+            target = resolve_internal_url(source_route, raw_url)
+            if target is None:
+                continue
+            markdown_checked += 1
+            route, _ = target
+            candidates = target_candidates(public, route)
+            if not any(candidate.is_file() for candidate in candidates):
+                failures[f"missing generated-content target {route}"].append(source_route)
+
     if failures:
         print(f"internal link check failed: {len(failures)} distinct target errors", file=sys.stderr)
         for problem, sources in sorted(failures.items()):
@@ -143,7 +219,11 @@ def main() -> int:
             print(f"- {problem} <- {sample}", file=sys.stderr)
         return 1
 
-    print(f"internal link check passed: {checked} rendered internal references across {len(html_files)} HTML files")
+    print(
+        "site link check passed: "
+        f"{checked} HTML and {markdown_checked} Markdown/LLMS internal references "
+        f"across {len(html_files)} HTML and {len(markdown_files)} generated text files"
+    )
     return 0
 
 
