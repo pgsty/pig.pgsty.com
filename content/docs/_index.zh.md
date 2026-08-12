@@ -2,6 +2,8 @@
 title: "PIG 文档"
 linkTitle: "文档"
 description: "使用 pig 命令行工具安装、管理、构建 PostgreSQL 与其扩展。"
+search_keywords: [pig, PostgreSQL, 扩展, 包管理器, 命令行]
+search_boost: 1.5
 weight: 1
 type: docs
 icon: fa-solid fa-book
@@ -18,6 +20,10 @@ PIG 包管理器并非重新发明的土鳖轮子，而是 **依托** （PiggyBa
 许多 PIG 原生工作流适合自动化：只有在具体命令文档明确支持时，才使用结构化输出、`--plan`、确认控制与结果码。透传、交互式和流式命令仍保留上游工具或终端自身的行为。
 
 请注意：对于扩展安装来说，**pig 并非必须组件**，您依然可以使用 apt / dnf 等包管理器直接访问 [**Pigsty PGSQL**](https://pigsty.cc/docs/repo/pgsql/) 仓库。
+
+按 {{< kbd "Ctrl" "K" >}}（macOS 为 {{< kbd "⌘" "K" >}}）打开搜索与页面操作，或按 {{< kbd "/" >}} 直接进入命令模式。
+
+AI 助手操作只会在您主动选择后打开 ChatGPT 或 Claude；届时会把当前页面的公开 URL 与阅读提示交给对应的第三方服务，PIG 不会自动发送页面正文。
 
 - [**简介**](/zh/intro/)：为什么需要专用的 PG 包管理器？
 - [**上手**](/zh/start/)：快速上手与样例

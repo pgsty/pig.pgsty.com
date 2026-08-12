@@ -1,12 +1,17 @@
 {{- $zh := eq .Site.Language.Lang "zh" -}}
+{{- $shell := partial "shell/config.html" . -}}
 <footer class="pig-footer d-print-none">
   <div class="pig-footer__container">
     <div class="pig-footer__grid">
       {{/* PIG landing-page footer; documentation pages use OINK's footer. */ -}}
       <div class="pig-footer__brand">
-        <a href="{{ relLangURL "" }}" class="pig-footer__logo">
+        <a href="{{ relLangURL "" }}" class="pig-footer__logo{{ if $shell.wordmarkURL }} pig-footer__logo--wordmark{{ end }}" aria-label="PIG">
+          {{- if $shell.wordmarkURL }}
+          <img src="{{ $shell.wordmarkURL }}" alt="" width="96" height="32">
+          {{- else }}
           <img src="{{ "img/pig.svg" | relURL }}" alt="" width="28" height="28">
           <span>PIG</span>
+          {{- end }}
         </a>
         <p class="pig-footer__tagline"><b class="ini ini-y">P</b>ostgres <b class="ini ini-g">I</b>nstall <b class="ini ini-i">G</b>enius<br>{{ if $zh }}<span class="pig-footer__tagline-zh">一行命令，装好扩展</span>{{ else }}One command. Extensions installed.{{ end }}</p>
         <p class="pig-footer__origin">{{ if $zh }}PostgreSQL 与扩展的命令行包管理器，由 <a href="https://pigsty.cc/" target="_blank" rel="noopener">PIGSTY</a> 社区构建与维护。{{ else }}A command-line package manager for PostgreSQL and its extensions, built and maintained by <a href="https://pigsty.io/" target="_blank" rel="noopener">PIGSTY</a>.{{ end }}</p>

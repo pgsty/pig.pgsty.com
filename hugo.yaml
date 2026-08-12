@@ -130,9 +130,10 @@ markup:
 # Outputs
 #=======================================#
 outputs:
-  # OINK 0.2 supplies Markdown page copies, an AI-oriented llms.txt index,
-  # and printable section bundles. Keep JSON for the custom landing search.
-  home: [HTML, RSS, JSON, markdown, LLMS]
+  # OINK supplies Markdown page copies, an AI-oriented llms.txt index,
+  # and printable section bundles. The 0.3 command palette uses its own
+  # language-local resource index, so the home page no longer needs JSON.
+  home: [HTML, RSS, markdown, LLMS]
   page: [HTML, markdown]
   section: [HTML, RSS, print, markdown]
 
@@ -155,6 +156,7 @@ params:
     - img/pig-social-card.png
   # OINK 文档 chrome 使用 PIG 的站点品牌图；静态路径会由主题自动解析。
   logo: img/pig.svg
+  wordmark: img/pig-word.svg
   version: 1.7.0            # pig 最新版本号（= internal/config.PigVersion），正文用 {{< param version >}}
   pigsty_version: 4.5.0     # pig 内置的 Pigsty 版本（= internal/config.PigstyVersion）
   pgext_count: 575          # Pigsty 已打包 PG 扩展数量，正文用 {{< param pgext_count >}}
@@ -175,9 +177,12 @@ params:
   github_project_repo: https://github.com/pgsty/pig
   github_branch: main
 
-  # 文档与博客使用 OINK 自带的本地 Lunr 搜索；首页保留独立外观，
-  # 但复用 OINK vendored Lunr，并从同一份内容生成语言索引。
+  # 文档、博客与定制首页统一使用 OINK 0.3 的本地命令面板；summary 在搜索
+  # 召回率与下载体积之间取平衡，关键词与 boost 仍可在页面 front matter 覆盖。
   offlineSearch: true
+  offlineSearchIndex: summary
+  offlineSearchSummaryLength: 100
+  offlineSearchMaxResults: 12
   prism_syntax_highlighting: false
 
   ui:
@@ -190,8 +195,14 @@ params:
     sidebar_menu_truncate: 2000
     sidebar_cache_limit: 1000
     sidebar_root_enabled: true
+    sidebar_icon_policy: groups
     ul_show: 2
     showLightDarkModeMenu: true
+    quick_links: [docs, blog]
+    page_context_menu:
+      # Activating these entries hands the current public URL to the selected
+      # assistant; the theme performs no handoff until the visitor chooses it.
+      assistant_links: true
     # OINK shell 自己维护目录状态，不启用 Bootstrap ScrollSpy。
     scrollSpy:
       disable: true

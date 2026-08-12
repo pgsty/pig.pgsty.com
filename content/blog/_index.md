@@ -22,7 +22,7 @@ cascade:
     - print
     - markdown
   params:
-    # Release rows intentionally use OINK 0.2's clean text-only presentation.
+    # Release rows intentionally use OINK's clean text-only presentation.
     default_featured: false
     ui:
       sidebar_menu_foldable: false

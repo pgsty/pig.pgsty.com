@@ -2,6 +2,8 @@
 title: "PIG Documentation"
 linkTitle: "Docs"
 description: "Install, manage, and build PostgreSQL and its extensions with the pig CLI."
+search_keywords: [pig, PostgreSQL, extension, package manager, CLI]
+search_boost: 1.5
 weight: 1
 type: docs
 icon: fa-solid fa-book
@@ -18,6 +20,10 @@ Its catalog maps operating systems, CPU architectures, and PostgreSQL majors to 
 Many PIG-native workflows are automation-friendly: when the specific command documents support, use structured output, `--plan`, confirmation controls, and defined result codes. Passthrough, interactive, and streaming commands retain their upstream or terminal-oriented behavior.
 
 Please note: for extension installation, **pig is not a mandatory component**. You can still use apt/dnf package managers to directly access the [**Pigsty PGSQL**](https://pigsty.io/docs/repo/pgsql/) repository.
+
+Open search and page actions with {{< kbd "Ctrl" "K" >}} ({{< kbd "⌘" "K" >}} on macOS), or press {{< kbd "/" >}} to jump straight to commands.
+
+Assistant actions open ChatGPT or Claude only when you select them. They pass the current page's public URL and a reading prompt to that third-party service; PIG does not send the page body automatically.
 
 - [**Introduction**](/intro/): Why do we need a dedicated PG package manager?
 - [**Getting Started**](/start/): Quick start guide and examples

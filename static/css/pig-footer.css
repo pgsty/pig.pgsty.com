@@ -62,6 +62,12 @@
   border-radius: 0.35rem;
 }
 
+.pig-footer__logo--wordmark img {
+  width: auto;
+  height: 34px;
+  border-radius: 0;
+}
+
 .pig-footer__logo span {
   font-family: 'Chakra Petch', var(--sf-sans);
   font-weight: 700;

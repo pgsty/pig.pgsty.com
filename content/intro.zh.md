@@ -2,6 +2,8 @@
 title: "简介"
 linkTitle: "简介"
 description: "PIG 管什么、解决什么，以及包管理能力止步于哪里"
+search_keywords: [概览, 架构, 职责边界, 软件包]
+search_boost: 1.25
 weight: 20
 icon: fas fa-lightbulb
 categories: [概念]

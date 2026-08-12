@@ -84,27 +84,30 @@ pig build pkg citus              # get + dep + ext
 
 ### 目录结构
 
-```text
-~/ext/                           # 真实工作目录
-├── pkg/                         # 构建产物输出目录
-├── src/                         # 源码 tarball 下载目录
-├── log/                         # 构建日志目录
-└── tmp/                         # 临时目录
+{{< filetree label="PIG 构建目录" >}}
+  {{< filetree/folder name="~/ext" open=true >}}
+    {{< filetree/folder name="pkg" >}}{{< /filetree/folder >}}
+    {{< filetree/folder name="src" >}}{{< /filetree/folder >}}
+    {{< filetree/folder name="log" >}}{{< /filetree/folder >}}
+    {{< filetree/folder name="tmp" >}}{{< /filetree/folder >}}
+  {{< /filetree/folder >}}
+  {{< filetree/folder name="~/rpmbuild" open=true >}}
+    {{< filetree/file name="RPMS -> ~/ext/pkg" >}}
+    {{< filetree/file name="SOURCES -> ~/ext/src" >}}
+    {{< filetree/folder name="SPECS" >}}{{< /filetree/folder >}}
+    {{< filetree/folder name="BUILD" >}}{{< /filetree/folder >}}
+    {{< filetree/folder name="BUILDROOT" >}}{{< /filetree/folder >}}
+    {{< filetree/folder name="SRPMS" >}}{{< /filetree/folder >}}
+  {{< /filetree/folder >}}
+  {{< filetree/folder name="~/debbuild" open=true >}}
+    {{< filetree/file name="DEBS -> ~/ext/pkg" >}}
+    {{< filetree/file name="SOURCES -> ~/ext/src" >}}
+    {{< filetree/folder name="SPECS" >}}{{< /filetree/folder >}}
+    {{< filetree/folder name="BUILD" >}}{{< /filetree/folder >}}
+  {{< /filetree/folder >}}
+{{< /filetree >}}
 
-~/rpmbuild/                      # EL 构建目录
-├── RPMS -> ~/ext/pkg            # RPM 产物软链接
-├── SOURCES -> ~/ext/src         # 源码软链接
-├── SPECS/
-├── BUILD/
-├── BUILDROOT/
-└── SRPMS/
-
-~/debbuild/                      # Debian / Ubuntu 构建目录
-├── DEBS -> ~/ext/pkg            # DEB 产物软链接
-├── SOURCES -> ~/ext/src         # 源码软链接
-├── SPECS/
-└── BUILD/
-```
+`~/ext/` 是真实工作目录：`pkg` 保存构建产物，`src` 保存源码压缩包，`log` / `tmp` 分别保存构建日志和临时文件；平台专用目录则把输出与源码位置链接回这里。
 
 **构建输出位置：**
 

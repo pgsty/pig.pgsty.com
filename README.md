@@ -50,9 +50,15 @@ stay out of the docs sidebar tree via `toc_root: true` — `docs/` and
 
 ## Theme boundary
 
-OINK 0.2.0 owns the documentation and blog layouts, navigation shell, search, table
+OINK 0.3.0 owns the documentation and blog layouts, navigation shell, search, table
 of contents, blocks and shortcodes, styles, scripts, fonts, and third-party
-runtimes. The site imports a pinned OINK commit as a Hugo Module.
+runtimes. The site imports the pinned OINK 0.3.0 release as a Hugo Module.
+
+The custom landing page keeps its visual design while reusing OINK 0.3's
+language-local command palette, action manifest, search ranking, and horizontal
+`wordmark`. Documentation uses the new search metadata, sidebar icon policy,
+content primitives, and assistant page actions; release rows remain text-only
+through `default_featured: false`.
 
 The local layout surface is intentionally small:
 
@@ -103,9 +109,8 @@ The corresponding long targets are `debug`, `serve`, `build`, and `check`;
 available port unless `PORT` is set explicitly.
 
 The production build also publishes Markdown copies for pages and sections,
-printable section bundles under `/_print/`, and bilingual `llms.txt` indexes.
-These outputs come from OINK; the landing-page JSON output remains the source
-for PIG's custom command-palette search.
+printable section bundles under `/_print/`, bilingual `llms.txt` indexes, and
+language-local search indexes consumed by the shared OINK command palette.
 
 ## Writing conventions
 

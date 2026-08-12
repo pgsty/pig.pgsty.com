@@ -8,7 +8,8 @@
 
   var DARK_THEME_COLOR = '#0b1119';
   var LIGHT_THEME_COLOR = '#f1f4f8';
-  var THEME_KEY = 'pig-landing-theme';
+  var THEME_KEY = 'td-color-theme';
+  var LEGACY_THEME_KEY = 'pig-landing-theme';
 
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -17,13 +18,21 @@
   // ============================================
   function getStoredTheme() {
     try {
-      var v = window.localStorage.getItem(THEME_KEY);
-      return v === 'light' || v === 'dark' ? v : null;
+      var v = window.localStorage.getItem(THEME_KEY) || window.localStorage.getItem(LEGACY_THEME_KEY);
+      return v === 'light' || v === 'dark' || v === 'auto' ? v : null;
     } catch (err) { return null; }
   }
 
   function setStoredTheme(theme) {
-    try { window.localStorage.setItem(THEME_KEY, theme); } catch (err) { /* ignore */ }
+    try {
+      window.localStorage.setItem(THEME_KEY, theme);
+      window.localStorage.removeItem(LEGACY_THEME_KEY);
+    } catch (err) { /* ignore */ }
+  }
+
+  function resolveTheme(theme) {
+    if (theme === 'light' || theme === 'dark') return theme;
+    return window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
   }
 
   function currentTheme() {
@@ -68,6 +77,28 @@
         setStoredTheme(next);
       });
     });
+
+    // OINK 0.3's command palette delegates the theme choice to the current
+    // surface. The landing page keeps its custom tokens but shares OINK's
+    // auto/light/dark preference with documentation pages.
+    if (window.OinkActions && window.OinkActions.get('switch_theme')) {
+      window.OinkActions.registerExecutor('switch_theme', function (context) {
+        var value = context && context.value;
+        var theme = typeof value === 'string' ? value : value && value.value;
+        if (theme !== 'auto' && theme !== 'light' && theme !== 'dark') {
+          return Promise.reject(new Error('Unsupported theme'));
+        }
+        setStoredTheme(theme);
+        applyTheme(resolveTheme(theme));
+        return { theme: theme };
+      });
+    }
+
+    if (window.matchMedia) {
+      window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', function () {
+        if (getStoredTheme() === 'auto') applyTheme(resolveTheme('auto'));
+      });
+    }
   }
 
   // ============================================
@@ -187,8 +218,8 @@
       toggle.setAttribute('aria-expanded', active ? 'true' : 'false');
     });
 
-    // 链接与搜索按钮点击后收起菜单（主题切换按钮除外，保持菜单打开）。
-    menu.querySelectorAll('a, [data-pig-search-open]').forEach(function (link) {
+    // 链接与命令面板按钮点击后收起菜单（主题切换按钮除外，保持菜单打开）。
+    menu.querySelectorAll('a, [data-td-shell-search-open]').forEach(function (link) {
       link.addEventListener('click', function () {
         menu.classList.remove('active');
         toggle.classList.remove('active');

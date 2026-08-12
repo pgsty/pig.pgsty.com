@@ -7,6 +7,7 @@
 {{- $ext := cond $zh "https://pigsty.cc/ext" "https://pigsty.io/ext" -}}
 {{- $pigsty := cond $zh "https://pigsty.cc" "https://pigsty.io" -}}
 {{- $install := cond $zh "curl -fsSL https://repo.pigsty.cc/pig | bash" "curl -fsSL https://repo.pigsty.io/pig | bash" -}}
+{{- $shell := partial "shell/config.html" . -}}
 <!DOCTYPE html>
 <html lang="{{ $locale }}" class="no-js">
 <head>
@@ -90,7 +91,11 @@
   <script>
     (function () {
       var theme = null;
-      try { theme = window.localStorage.getItem('pig-landing-theme'); } catch (error) {}
+      try {
+        theme = window.localStorage.getItem('td-color-theme') ||
+          window.localStorage.getItem('pig-landing-theme');
+      } catch (error) {}
+      if (theme === 'auto') theme = null;
       if (theme !== 'light' && theme !== 'dark') {
         theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
       }
@@ -118,15 +123,19 @@
     <div class="landing-container">
       <nav class="landing-nav" aria-label="{{ if $zh }}主导航{{ else }}Main navigation{{ end }}">
         <a href="{{ relLangURL "" }}" class="nav-brand" aria-label="{{ if $zh }}PIG 首页{{ else }}PIG home{{ end }}">
+          {{- if $shell.wordmarkURL }}
+          <img src="{{ $shell.wordmarkURL }}" alt="" class="nav-wordmark" width="96" height="32">
+          {{- else }}
           <img src="{{ "img/pig.svg" | relURL }}" alt="" class="nav-logo">
           <span class="nav-title">PIG</span>
+          {{- end }}
         </a>
 
         <div class="nav-links">
           <a href="{{ relLangURL "docs/" }}" class="nav-link">{{ if $zh }}文档{{ else }}Docs{{ end }}</a>
           <a href="{{ relLangURL "blog/" }}" class="nav-link">{{ if $zh }}博客{{ else }}Blog{{ end }}</a>
           <div class="nav-utils">
-            <button type="button" class="nav-util" data-pig-search-open title="{{ if $zh }}搜索（⌘K）{{ else }}Search (⌘K){{ end }}" aria-label="{{ if $zh }}搜索{{ else }}Search{{ end }}">
+            <button type="button" class="nav-util" data-td-shell-search-open title="{{ if $zh }}搜索与命令（⌘K）{{ else }}Search &amp; commands (⌘K){{ end }}" aria-label="{{ if $zh }}搜索与命令{{ else }}Search and commands{{ end }}" aria-controls="td-shell-search" aria-expanded="false">
               {{- partialCached "shell/icon.html" "search" "search" -}}
             </button>
             <button type="button" class="nav-util" data-theme-toggle title="{{ if $zh }}切换深浅主题{{ else }}Switch light / dark mode{{ end }}" aria-label="{{ if $zh }}切换深浅主题{{ else }}Switch light / dark mode{{ end }}">
@@ -153,7 +162,7 @@
     <a href="{{ relLangURL "docs/" }}" class="mobile-menu-link">{{ if $zh }}文档{{ else }}Docs{{ end }}</a>
     <a href="{{ relLangURL "blog/" }}" class="mobile-menu-link">{{ if $zh }}博客{{ else }}Blog{{ end }}</a>
     <a href="{{ relLangURL "install/" }}" class="mobile-menu-link"><i class="fas fa-download" aria-hidden="true"></i> {{ if $zh }}下载安装{{ else }}Download &amp; Install{{ end }}</a>
-    <button type="button" class="mobile-menu-link mobile-menu-link--btn" data-pig-search-open><i class="fas fa-search" aria-hidden="true"></i> {{ if $zh }}搜索{{ else }}Search{{ end }}</button>
+    <button type="button" class="mobile-menu-link mobile-menu-link--btn" data-td-shell-search-open aria-controls="td-shell-search" aria-expanded="false"><i class="fas fa-search" aria-hidden="true"></i> {{ if $zh }}搜索与命令{{ else }}Search &amp; Commands{{ end }}</button>
     {{ range .Translations }}<a href="{{ .RelPermalink }}" class="mobile-menu-link"><i class="fas fa-language" aria-hidden="true"></i> {{ .Language.Label }}</a>{{ end }}
     <button type="button" class="mobile-menu-link mobile-menu-link--btn" data-theme-toggle><i class="fas fa-moon" aria-hidden="true"></i> {{ if $zh }}浅色 / 深色{{ else }}Light / Dark{{ end }}</button>
     <a href="https://github.com/pgsty/pig" class="mobile-menu-link" target="_blank" rel="noopener"><i class="fab fa-github" aria-hidden="true"></i> GitHub</a>
@@ -250,7 +259,7 @@
           <p class="section-subtitle">{{ if $zh }}从查目录、配仓库到按需构建和原生安装；每一步都感知目标系统、架构与 PostgreSQL 大版本。{{ else }}From catalog lookup and repository setup to on-demand builds and native installation—every step is target-aware.{{ end }}</p>
         </div>
 
-        <div class="value-card-grid" data-reveal>
+        <nav class="value-card-grid" data-reveal aria-label="{{ if $zh }}PIG 包交付工作流{{ else }}PIG package delivery workflow{{ end }}">
           <a href="{{ relLangURL "ext/" }}" class="value-card value-card--catalog">
             <span class="value-card-top"><span class="value-card-ref">01 / INDEX</span><span class="value-card-icon"><i class="fas fa-magnifying-glass" aria-hidden="true"></i></span></span>
             <span class="value-card-body">
@@ -286,7 +295,7 @@
             </span>
             <span class="value-card-command"><code>pig install pg_duckdb -v 18</code><i class="fas fa-arrow-right" aria-hidden="true"></i></span>
           </a>
-        </div>
+        </nav>
       </div>
     </section>
 
@@ -304,7 +313,7 @@
           </div>
         </div>
 
-        <div class="kernel-grid interface-grid" data-reveal>
+        <nav class="kernel-grid interface-grid" data-reveal aria-label="{{ if $zh }}PIG 命令界面{{ else }}PIG command surface{{ end }}">
           <a href="{{ relLangURL "repo/" }}" class="kernel-card"><span class="kernel-icon interface-glyph">RP</span><span class="kernel-name">repo</span><span class="kernel-desc">{{ if $zh }}APT / YUM 仓库{{ else }}APT / YUM repos{{ end }}</span></a>
           <a href="{{ relLangURL "ext/" }}" class="kernel-card"><span class="kernel-icon interface-glyph">EX</span><span class="kernel-name">ext</span><span class="kernel-desc">{{ if $zh }}扩展目录{{ else }}Extension catalog{{ end }}</span></a>
           <a href="{{ relLangURL "cmd/" }}" class="kernel-card"><span class="kernel-icon interface-glyph">IN</span><span class="kernel-name">install</span><span class="kernel-desc">{{ if $zh }}原生包安装{{ else }}Native package install{{ end }}</span></a>
@@ -315,7 +324,7 @@
           <a href="{{ relLangURL "pitr/" }}" class="kernel-card"><span class="kernel-icon interface-glyph">PI</span><span class="kernel-name">pitr</span><span class="kernel-desc">{{ if $zh }}时间点恢复{{ else }}Point-in-time recovery{{ end }}</span></a>
           <a href="{{ relLangURL "sty/" }}" class="kernel-card"><span class="kernel-icon interface-glyph">ST</span><span class="kernel-name">sty</span><span class="kernel-desc">{{ if $zh }}Pigsty 安装管控{{ else }}Pigsty control{{ end }}</span></a>
           <a href="{{ relLangURL "inventory/" }}" class="kernel-card"><span class="kernel-icon interface-glyph">IV</span><span class="kernel-name">inventory</span><span class="kernel-desc">{{ if $zh }}配置清单{{ else }}Config inventory{{ end }}</span></a>
-        </div>
+        </nav>
 
         <div class="extbus-head" data-reveal><span class="silkscreen">{{ if $zh }}一行命令即可装上{{ else }}ONE COMMAND AWAY{{ end }}</span></div>
         <div class="extensions-marquee" data-reveal aria-label="{{ if $zh }}热门扩展{{ else }}Popular extensions{{ end }}">
@@ -456,9 +465,6 @@
   {{ partial "pig/landing-footer.html" . }}
 
   <script src="{{ "js/landing-v3.js" | relURL }}?v={{ substr (md5 (readFile "static/js/landing-v3.js")) 0 8 }}"></script>
-  {{ partial "pig/search-dialog.html" . }}
-  {{- $searchJs := slice (resources.Get "js/third_party/lunr.min.js") (resources.Get "js/pig-search.js")
-        | resources.Concat "js/landing-search-bundle.js" | minify | fingerprint }}
-  <script src="{{ $searchJs.RelPermalink }}" integrity="{{ $searchJs.Data.Integrity }}" defer></script>
+  {{ partial "pig/command-palette.html" . }}
 </body>
 </html>

@@ -2,6 +2,8 @@
 title: "Introduction"
 linkTitle: "Introduction"
 description: "What PIG manages, where it helps, and where its package-management boundary ends"
+search_keywords: [overview, architecture, scope, package boundary]
+search_boost: 1.25
 weight: 20
 icon: fas fa-lightbulb
 categories: [Concept]

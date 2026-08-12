@@ -84,27 +84,30 @@ pig build pkg citus              # get + dep + ext
 
 ### Directory Layout
 
-```text
-~/ext/                           # real working directory
-├── pkg/                         # built package output
-├── src/                         # source tarball downloads
-├── log/                         # build logs
-└── tmp/                         # temporary files
+{{< filetree label="PIG build directories" >}}
+  {{< filetree/folder name="~/ext" open=true >}}
+    {{< filetree/folder name="pkg" >}}{{< /filetree/folder >}}
+    {{< filetree/folder name="src" >}}{{< /filetree/folder >}}
+    {{< filetree/folder name="log" >}}{{< /filetree/folder >}}
+    {{< filetree/folder name="tmp" >}}{{< /filetree/folder >}}
+  {{< /filetree/folder >}}
+  {{< filetree/folder name="~/rpmbuild" open=true >}}
+    {{< filetree/file name="RPMS -> ~/ext/pkg" >}}
+    {{< filetree/file name="SOURCES -> ~/ext/src" >}}
+    {{< filetree/folder name="SPECS" >}}{{< /filetree/folder >}}
+    {{< filetree/folder name="BUILD" >}}{{< /filetree/folder >}}
+    {{< filetree/folder name="BUILDROOT" >}}{{< /filetree/folder >}}
+    {{< filetree/folder name="SRPMS" >}}{{< /filetree/folder >}}
+  {{< /filetree/folder >}}
+  {{< filetree/folder name="~/debbuild" open=true >}}
+    {{< filetree/file name="DEBS -> ~/ext/pkg" >}}
+    {{< filetree/file name="SOURCES -> ~/ext/src" >}}
+    {{< filetree/folder name="SPECS" >}}{{< /filetree/folder >}}
+    {{< filetree/folder name="BUILD" >}}{{< /filetree/folder >}}
+  {{< /filetree/folder >}}
+{{< /filetree >}}
 
-~/rpmbuild/                      # EL build directory
-├── RPMS -> ~/ext/pkg            # RPM output symlink
-├── SOURCES -> ~/ext/src         # source symlink
-├── SPECS/
-├── BUILD/
-├── BUILDROOT/
-└── SRPMS/
-
-~/debbuild/                      # Debian / Ubuntu build directory
-├── DEBS -> ~/ext/pkg            # DEB output symlink
-├── SOURCES -> ~/ext/src         # source symlink
-├── SPECS/
-└── BUILD/
-```
+`~/ext/` is the real working directory: `pkg` stores built packages, `src` stores source tarballs, and `log` / `tmp` hold build logs and temporary files. The platform-specific trees link their output and source directories back into it.
 
 **Build output locations:**
 

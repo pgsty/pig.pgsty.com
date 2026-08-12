@@ -1,23 +1,35 @@
 // ============================================================
-// landing-search —— 首页 ⌘K 搜索弹窗样式。
-// 复用文档站 pig/_search.scss 的全部规则，此处仅把它引用的
-// --bs-* / --pig-* 变量桥接到 landing-v3.css 的主题令牌上。
+// landing-search —— 首页 OINK 0.3 命令面板样式。
+// 复用主题 shell/search.scss，只把它引用的 Bootstrap / shell 变量
+// 桥接到 landing-v3.css 的首页主题令牌上。
 // ============================================================
 
 html[data-theme] {
   --bs-border-color: var(--line);
   --bs-body-bg: var(--bg);
   --bs-body-color: var(--ink);
-  --pig-popover: var(--bg-elev);
-  --pig-muted-fg: var(--ink-mute);
-  --pig-primary: var(--pg);
-  --pig-primary-dim: color-mix(in srgb, var(--pg) 11%, transparent);
-  --pig-shadow-lg: var(--shadow-md);
-  --pig-ease-dialog: cubic-bezier(0.16, 1, 0.3, 1);
+  --td-shell-popover: var(--bg-elev);
+  --td-shell-muted-fg: var(--ink-mute);
+  --td-shell-primary: var(--pg);
+  --td-shell-primary-dim: color-mix(in srgb, var(--pg) 11%, transparent);
+  --td-shell-shadow-lg: var(--shadow-md);
+  --td-shell-ease-dialog: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-html[data-pig-lock] {
+html[data-td-shell-lock] {
   overflow: hidden;
 }
 
-@import 'pig/search';
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+@import 'td/shell/search';
