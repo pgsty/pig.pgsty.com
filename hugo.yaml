@@ -155,7 +155,6 @@ params:
     - img/pig-social-card.png
   # OINK 文档 chrome 使用 PIG 的站点品牌图；静态路径会由主题自动解析。
   logo: img/pig.svg
-  wordmark: img/pig-word.svg
   version: 1.7.0            # pig 最新版本号（= internal/config.PigVersion），正文用 {{< param version >}}
   pigsty_version: 4.5.0     # pig 内置的 Pigsty 版本（= internal/config.PigstyVersion）
   pgext_count: 575          # Pigsty 已打包 PG 扩展数量，正文用 {{< param pgext_count >}}
