@@ -27,7 +27,7 @@ Examples:
   pig repo add node pgdg pigsty    # essential repo to install postgres packages
   pig repo add all                 # all = node + pgdg + pigsty
   pig repo add all extra           # extra module has non-free and some 3rd repo for certain extensions
-  pig repo add all -m              # use mirror/proxy for postgres repos
+  pig repo add all -m              # 优先使用内置的中国区域镜像
   pig repo update                  # update repo cache
   pig repo create                  # update local repo /www/pigsty meta
   pig repo boot                    # extract /tmp/pkg.tgz to /www/pigsty
@@ -63,7 +63,7 @@ pig repo add pgsql                    # 添加 PGDG 和 Pigsty PGSQL 仓库
 pig repo add pigsty --region=china    # 添加 Pigsty 仓库，指定使用中国区域
 pig repo add pgdg   --region=europe   # 添加 PGDG 仓库，指定使用欧洲区域
 pig repo add infra  --region=default  # 添加 INFRA 仓库 ，指定使用默认区域
-pig repo add all -m                   # 镜像模式，优先使用 pigsty.cc / 国内代理源
+pig repo add all -m                   # 明确选择内置的中国区域镜像
 
 # 如果上面没有-u|--update 选项一步到位，请额外执行此命令
 pig repo update                       # 更新系统包缓存
@@ -113,13 +113,13 @@ pig repo set          # 使用 set 替代 add 时，将清理备份现有仓库�
 
 Pigsty 中可用仓库的完整定义位于 [`cli/repo/assets/repo.yml`](https://github.com/pgsty/pig/blob/main/cli/repo/assets/repo.yml)。
 
-您可以创建 `~/.pig/repo.yml` 文件，显式修改并覆盖 pig 的仓库定义。在编辑仓库定义文件时，您可以在 `baseurl` 处添加额外的区域镜像，例如指定中国，欧洲地区的镜像仓库 URL。当 pig 使用 `--region` 参数指定特定的区域时，pig 会优先查找对应区域的仓库 URL，如果不存在，则会 Fallback 到 `default` 的仓库 URL。常用的 `-m|--mirror` 是镜像优先模式，用于快速选择 `pigsty.cc` 与国内 PostgreSQL 镜像/代理源。
+您可以创建 `~/.pig/repo.yml` 文件，显式修改并覆盖 pig 的仓库定义。在编辑仓库定义文件时，您可以在 `baseurl` 处添加额外的区域镜像，例如指定中国、欧洲地区的镜像仓库 URL。当 pig 使用 `--region` 参数指定特定区域时，会优先查找对应区域的仓库 URL，不存在时回退到 `default`。从 v1.7.0 起，`-m|--mirror` 会明确选择内置的 `china` 定义，包括 `pigsty.cc` 与维护中的国内镜像，不再在运行时将 PGDG URL 改写到代理端点。
 
 ### 信任策略与配置归属
 
 仓库操作会改变主机的软件供应链配置。可以先用 `pig repo info MODULE` 查看 PIG 将要渲染的定义。未指定 `--remove` 时，`repo add` 会保留无关文件；`repo set` 则一定会先备份再替换现有定义，并刷新元数据，因此可能与 Ansible、镜像构建或其他配置管理方发生冲突。
 
-为了兼容离线仓库与镜像，PIG 内置元数据在 EL 上默认使用 `gpgcheck=0`，在 Debian/Ubuntu 上默认使用 `trusted=yes`；这些设置不会强制校验软件包签名。安全敏感环境应安装可信密钥、修改生成的仓库元数据以启用签名校验、固定批准的软件源，并通过既有配置管理体系维护这些设置。
+为了兼容离线仓库与镜像，PIG 内置元数据在 EL 上默认使用 `gpgcheck=0`，在 Debian/Ubuntu 上默认使用 `trusted=yes`；这些设置不会强制校验软件包签名。从 v1.7.0 起，普通 EL 仓库保留 DNF 原生模块过滤；只有显式声明 `module_hotfixes=1` 的定义（主要是 Pigsty 与 PGDG 仓库）会覆盖模块流，渲染 EL7 YUM 配置时还会移除该键。安全敏感环境应安装可信密钥、修改生成的仓库元数据以启用签名校验、固定批准的软件源，并通过既有配置管理体系维护这些设置。
 
 ## repo list
 
@@ -160,14 +160,14 @@ pig repo add pigsty -u           # 添加并更新缓存
 pig repo add all -r              # 添加前移除现有仓库
 pig repo add all -ru             # 移除、添加并更新（完全重置）
 pig repo add pgdg --region=china # 使用中国镜像
-pig repo add pgsql -m            # 镜像模式，优先使用 pigsty.cc / 国内代理源
+pig repo add pgsql -m            # 明确选择中国区域镜像
 ```
 
 **选项：**
 
 - `-r|--remove`：添加新仓库前移除现有仓库
 - `-u|--update`：添加仓库后运行包缓存更新
-- `-m|--mirror`：使用镜像/代理模式，优先选择 `pigsty.cc` 与国内 PostgreSQL 镜像
+- `-m|--mirror`：明确选择内置的 `china` 仓库定义
 - `--region <region>`：使用区域镜像仓库（`default` / `china` / `europe`）
 
 |   平台   | 模块位置                                    |
@@ -184,7 +184,7 @@ pig repo add pgsql -m            # 镜像模式，优先使用 pigsty.cc / 国�
 pig repo set                     # 替换为默认仓库
 pig repo set pgdg pigsty         # 替换为特定仓库并更新
 pig repo set all --region=china  # 使用中国镜像
-pig repo set -m                  # 使用镜像/代理模式
+pig repo set -m                  # 明确选择中国区域镜像
 ```
 
 `repo set` 支持与 `repo add` 相同的 `--region` 与 `-m|--mirror` 区域选择；它始终是覆盖式语义，相当于 `repo add all --remove --update`。
@@ -224,7 +224,7 @@ pig repo update                  # 更新包缓存
 为离线安装创建本地包仓库。
 
 ```bash
-pig repo create                  # 在默认位置创建 (/www/pigsty)
+pig repo create                  # Linux：/www/pigsty；macOS：当前目录
 pig repo create /srv/repo        # 在自定义位置创建
 ```
 
@@ -234,7 +234,7 @@ pig repo create /srv/repo        # 在自定义位置创建
 sow create --pigsty --timeout 10m -- /absolute/repository/path
 ```
 
-如果没有安装 `sow`，EL 会回退到 `createrepo_c`，Debian/Ubuntu 会回退到 `dpkg-dev` 提供的 `dpkg-scanpackages`；首选后端与平台回退均不可用时，`pig repo create` 才会失败。SOW 一旦被选中，其执行错误会直接返回，不会再用旧后端重试。`10m` 只限制等待 SOW 目录锁的时间，并不限制仓库索引本身的执行时间。
+在 macOS 上必须安装 SOW，执行时不使用 `sudo`，默认目标为当前目录。Linux 上如果没有安装 `sow`，EL 会回退到 `createrepo_c`，Debian/Ubuntu 会回退到 `dpkg-dev` 提供的 `dpkg-scanpackages`；首选后端与平台回退均不可用时，`pig repo create` 才会失败。SOW 一旦被选中，其执行错误会直接返回，不会再用旧后端重试。`10m` 只限制等待 SOW 目录锁的时间，并不限制仓库索引本身的执行时间。
 
 SOW 的 `--pigsty` 事务会：
 

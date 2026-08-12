@@ -40,7 +40,7 @@ languages:
     weight: 1
     title: PIG
     params:
-      description: "PIG: the PostgreSQL extension package manager. Install PostgreSQL 14-18 and 572 cataloged extension packages with native APT/DNF workflows."
+      description: "PIG: the PostgreSQL extension package manager. Install PostgreSQL 14-18 and 575 cataloged extension packages with native APT/DNF workflows."
       time_format_blog: 'January 02, 2006'
     menu:
       main:
@@ -60,7 +60,7 @@ languages:
     weight: 2
     title: PIG
     params:
-      description: "PIG：PostgreSQL 扩展包管理器，通过原生 APT/DNF 工作流安装 PostgreSQL 14-18 与目录中的 572 个扩展包。"
+      description: "PIG：PostgreSQL 扩展包管理器，通过原生 APT/DNF 工作流安装 PostgreSQL 14-18 与目录中的 575 个扩展包。"
       time_format_blog: '2006年01月02日'
     menu:
       main:
@@ -155,9 +155,10 @@ params:
     - img/pig-social-card.png
   # OINK 文档 chrome 使用 PIG 的站点品牌图；静态路径会由主题自动解析。
   logo: img/pig.svg
-  version: 1.6.1            # pig 最新版本号（= internal/config.PigVersion），正文用 {{< param version >}}
+  wordmark: img/pig-word.svg
+  version: 1.7.0            # pig 最新版本号（= internal/config.PigVersion），正文用 {{< param version >}}
   pigsty_version: 4.5.0     # pig 内置的 Pigsty 版本（= internal/config.PigstyVersion）
-  pgext_count: 572          # Pigsty 已打包 PG 扩展数量，正文用 {{< param pgext_count >}}
+  pgext_count: 575          # Pigsty 已打包 PG 扩展数量，正文用 {{< param pgext_count >}}
   copyright:
     authors: PIGSTY & PIG Contributors
     from_year: 2025

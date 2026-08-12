@@ -35,25 +35,24 @@ curl -fsSL https://repo.pigsty.io/pig | bash
 curl -fsSL https://repo.pigsty.cc/pig | bash
 ```
 
-PIG is distributed as one self-contained executable. On Linux, the installation script selects the matching RPM or DEB package and installs the latest available version:
+PIG is distributed as one self-contained executable. On Linux, the installation script selects the matching RPM or DEB package and installs the latest version available on the selected mirror. In the example output below, `X.Y.Z` is that mirrored version:
 
 ```bash
 $ curl -fsSL https://repo.pigsty.io/pig | bash
 [INFO] kernel = Linux
 [INFO] machine = x86_64
 [INFO] package = deb
-[INFO] pkg_url = https://repo.pigsty.io/pkg/pig/v{{< param version >}}/pig_{{< param version >}}-1_amd64.deb
-[INFO] download = /tmp/pig_{{< param version >}}-1_amd64.deb
-[INFO] downloading pig v{{< param version >}}
-curl -fSL https://repo.pigsty.io/pkg/pig/v{{< param version >}}/pig_{{< param version >}}-1_amd64.deb -o /tmp/pig_{{< param version >}}-1_amd64.deb
+[INFO] pkg_url = https://repo.pigsty.io/pkg/pig/vX.Y.Z/pig_X.Y.Z-1_amd64.deb
+[INFO] download = /tmp/pig_X.Y.Z-1_amd64.deb
+[INFO] downloading pig vX.Y.Z
+curl -fSL https://repo.pigsty.io/pkg/pig/vX.Y.Z/pig_X.Y.Z-1_amd64.deb -o /tmp/pig_X.Y.Z-1_amd64.deb
 ######################################################################## 100.0%
-[INFO] md5sum = b14bfa4101391ac56eb6542cb50465e6
-[INFO] installing: dpkg -i /tmp/pig_{{< param version >}}-1_amd64.deb
+[INFO] installing: dpkg -i /tmp/pig_X.Y.Z-1_amd64.deb
 (Reading database ... 166001 files and directories currently installed.)
-Preparing to unpack /tmp/pig_{{< param version >}}-1_amd64.deb ...
-Unpacking pig ({{< param version >}}-1) ...
-Setting up pig ({{< param version >}}-1) ...
-[INFO] pig v{{< param version >}} installed successfully
+Preparing to unpack /tmp/pig_X.Y.Z-1_amd64.deb ...
+Unpacking pig (X.Y.Z-1) ...
+Setting up pig (X.Y.Z-1) ...
+[INFO] pig vX.Y.Z installed successfully
 check https://pgext.cloud for details
 ```
 
@@ -167,12 +166,12 @@ pig repo update              # Update cache: apt update / yum makecache
 ```
 
 PIG detects your network environment and chooses Cloudflare global CDN or China cloud CDN, but you can force a specific region with `--region`.
-In China network environments, you can also use `-m|--mirror` as a shortcut mirror mode, which prefers `pigsty.cc` and domestic PostgreSQL mirror/proxy sources:
+In China network environments, `-m|--mirror` explicitly selects the bundled `china` repository definitions, including `pigsty.cc` and maintained domestic mirrors:
 
 ```bash
 pig repo set      --region=china              # use China mirror for faster downloads
 pig repo add pgdg --region=default --update   # force PGDG upstream repo
-pig repo set -m                                # overwrite repositories with mirror/proxy mode
+pig repo set -m                                # overwrite repositories with China-region mirrors
 ```
 
 PIG cannot obtain missing packages from an air-gapped network by itself, but it does support a staged offline-repository workflow. On a connected host, use `pig ext import` to collect selected packages into a local repository, `pig repo create` (which prefers SOW and retains platform-specific legacy fallbacks) to index it, and `pig repo cache` to produce an offline tarball. Transfer that artifact through your approved channel, then use `pig repo boot` on the isolated side and point APT/DNF at the local repository. Package completeness, signatures, and transfer verification remain the operator's responsibility.

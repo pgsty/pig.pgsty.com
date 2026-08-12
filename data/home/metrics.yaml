@@ -3,7 +3,7 @@
 
 # Extensions packaged by Pigsty and installable through `pig install`.
 # Keep in sync with params.pgext_count in hugo.yaml.
-packaged_extensions: 572
+packaged_extensions: 575
 
 # PostgreSQL major versions covered by the repositories: 14, 15, 16, 17, 18.
 pg_majors: 5

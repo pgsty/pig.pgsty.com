@@ -28,26 +28,27 @@ Script installation targets Linux x86_64 / aarch64 RPM or DEB distributions. On 
 
 ## Specify Version
 
-You can specify a particular version to install by passing the version number as an argument:
+You can request a particular version that is already published on the selected mirror by passing the version number as an argument:
 
 **Default Installation** (Cloudflare CDN):
 
 ```bash
-curl -fsSL https://repo.pigsty.io/pig | bash -s {{< param version >}}
+curl -fsSL https://repo.pigsty.io/pig | bash -s X.Y.Z
 ```
 
 **China Mirror**:
 
 ```bash
-curl -fsSL https://repo.pigsty.cc/pig | bash -s {{< param version >}}
+curl -fsSL https://repo.pigsty.cc/pig | bash -s X.Y.Z
 ```
+
+Mirror publication can lag the GitHub release. For the exact current release, use the GitHub artifacts below.
 
 ## Download Release Artifacts
 
-You can also download `pig` installation packages (`RPM`/`DEB`/tarball) directly from the [current GitHub release](https://github.com/pgsty/pig/releases/tag/v{{< param version >}}) or the Pigsty software repositories. Release `v{{< param version >}}` uses the following direct-link format:
+Current `v{{< param version >}}` installation packages (`RPM`/`DEB`/tarball) are available from the [GitHub Release](https://github.com/pgsty/pig/releases/tag/v{{< param version >}}), with published hashes in [checksums.txt](https://github.com/pgsty/pig/releases/download/v{{< param version >}}/checksums.txt). Use the following direct URL pattern:
 
-- `https://repo.pigsty.io/pkg/pig/v{{< param version >}}/<filename>`
-- `https://repo.pigsty.cc/pkg/pig/v{{< param version >}}/<filename>`
+- `https://github.com/pgsty/pig/releases/download/v{{< param version >}}/<filename>`
 
 ```text
 v{{< param version >}}
@@ -62,6 +63,7 @@ v{{< param version >}}
 ```
 
 After extracting, place the binary file in your system PATH.
+The equivalent Pigsty mirror directory becomes available after repository synchronization; check the target URL before using a version-pinned installer command.
 
 ## Repository Installation
 
@@ -107,7 +109,7 @@ To upgrade an existing `pig` version to the latest available version, use the fo
 ```bash
 pig update            # upgrade pig itself to the latest version
 pig update -m         # upgrade using the pigsty.cc mirror
-pig update -v {{< param version >}}   # upgrade to a selected version
+pig update -v X.Y.Z   # upgrade to a version published by the configured repository
 ```
 
 To update the extension data of an existing `pig` to the latest available version, use the following command:

@@ -35,25 +35,24 @@ curl -fsSL https://repo.pigsty.cc/pig | bash
 curl -fsSL https://repo.pigsty.io/pig | bash
 ```
 
-PIG 以单个自包含可执行文件发布。在 Linux 上，安装脚本会选择匹配的 RPM 或 DEB 包，并安装最新可用版本：
+PIG 以单个自包含可执行文件发布。在 Linux 上，安装脚本会选择匹配的 RPM 或 DEB 包，并安装所选镜像中的最新可用版本。下方示例输出中的 `X.Y.Z` 代表该镜像版本：
 
 ```bash
 $ curl -fsSL https://repo.pigsty.cc/pig | bash
 [INFO] kernel = Linux
 [INFO] machine = x86_64
 [INFO] package = deb
-[INFO] pkg_url = https://repo.pigsty.cc/pkg/pig/v{{< param version >}}/pig_{{< param version >}}-1_amd64.deb
-[INFO] download = /tmp/pig_{{< param version >}}-1_amd64.deb
-[INFO] downloading pig v{{< param version >}}
-curl -fSL https://repo.pigsty.cc/pkg/pig/v{{< param version >}}/pig_{{< param version >}}-1_amd64.deb -o /tmp/pig_{{< param version >}}-1_amd64.deb
+[INFO] pkg_url = https://repo.pigsty.cc/pkg/pig/vX.Y.Z/pig_X.Y.Z-1_amd64.deb
+[INFO] download = /tmp/pig_X.Y.Z-1_amd64.deb
+[INFO] downloading pig vX.Y.Z
+curl -fSL https://repo.pigsty.cc/pkg/pig/vX.Y.Z/pig_X.Y.Z-1_amd64.deb -o /tmp/pig_X.Y.Z-1_amd64.deb
 ######################################################################## 100.0%
-[INFO] md5sum = b14bfa4101391ac56eb6542cb50465e6
-[INFO] installing: dpkg -i /tmp/pig_{{< param version >}}-1_amd64.deb
+[INFO] installing: dpkg -i /tmp/pig_X.Y.Z-1_amd64.deb
 (Reading database ... 166001 files and directories currently installed.)
-Preparing to unpack /tmp/pig_{{< param version >}}-1_amd64.deb ...
-Unpacking pig ({{< param version >}}-1) ...
-Setting up pig ({{< param version >}}-1) ...
-[INFO] pig v{{< param version >}} installed successfully
+Preparing to unpack /tmp/pig_X.Y.Z-1_amd64.deb ...
+Unpacking pig (X.Y.Z-1) ...
+Setting up pig (X.Y.Z-1) ...
+[INFO] pig vX.Y.Z installed successfully
 check https://pgext.cloud for details
 ```
 
@@ -166,12 +165,12 @@ pig repo update              # 更新缓存：apt update / yum makecache
 ```
 
 PIG 会检测您的网络环境，并选择使用 Cloudflare 全球 CDN，或者中国境内云 CDN，但您可以通过 `--region` 参数强制指定区域。
-在中国网络环境中，也可以使用 `-m|--mirror` 作为快捷镜像模式，优先选择 `pigsty.cc` 与国内 PostgreSQL 镜像/代理源。
+在中国网络环境中，`-m|--mirror` 会明确选择内置的 `china` 仓库定义，包括 `pigsty.cc` 与维护中的国内镜像。
 
 ```bash
 pig repo set      --region=china              # 使用中国区域镜像仓库加速下载
 pig repo add pgdg --region=default --update   # 强制指定使用 PGDG 上游仓库
-pig repo set -m                                # 使用镜像/代理模式覆盖式设置仓库
+pig repo set -m                                # 使用中国区域镜像覆盖式设置仓库
 ```
 
 PIG 无法凭空从隔离网络获取缺失软件包，但支持“先准备、再转运”的离线仓库工作流：在联网主机上用 `pig ext import` 将所选软件包收集到本地仓库，用 `pig repo create`（优先使用 SOW，并保留平台对应的旧后端回退）生成索引，再用 `pig repo cache` 打成离线压缩包；通过获批渠道转运后，在隔离侧执行 `pig repo boot`，并让 APT/DNF 指向本地仓库。软件包是否齐全、签名策略与转运校验仍由使用者负责。

@@ -276,7 +276,7 @@ pig status                       # show current environment status
 pig status -o json               # structured status output
 pig update                       # upgrade pig itself to the latest version
 pig update -m                    # upgrade using the pigsty.cc mirror
-pig update -v {{< param version >}}              # upgrade to the documented version
+pig update -v X.Y.Z              # upgrade to a version published by the configured repository
 pig version                      # show pig version information
 pig version -o json              # structured version output
 ```

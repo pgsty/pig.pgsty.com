@@ -237,7 +237,7 @@ pig ext update                   # no-op: explicit targets are required
 pig ext update pg_duckdb         # update one extension
 pig ext update postgis timescaledb  # update multiple extensions
 pig ext update pg_duckdb -y      # auto-confirm update
-pig ext update pg_duckdb -m      # use pigsty.cc mirror/proxy sources
+pig ext update pg_duckdb -m      # select the built-in China-region sources
 ```
 
 **Options:**

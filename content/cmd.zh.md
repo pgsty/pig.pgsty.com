@@ -275,7 +275,7 @@ pig status                       # 显示当前环境状态
 pig status -o json               # 结构化状态输出
 pig update                       # 将 pig 自身升级到最新版
 pig update -m                    # 使用 pigsty.cc 镜像升级
-pig update -v {{< param version >}}              # 升级到文档对应版本
+pig update -v X.Y.Z              # 升级到已发布在当前软件仓库中的指定版本
 pig version                      # 显示 pig 版本信息
 pig version -o json              # 结构化版本输出
 ```
