@@ -341,7 +341,9 @@ main { display: block; }
   color: var(--ink) !important;
 }
 .nav-logo { width: 22px; height: 22px; }
-.nav-wordmark { display: block; width: auto; height: 30px; }
+/* Scope the wordmark above .landing-page img so its intrinsic 384x128 size
+   cannot override the compact header dimensions. */
+.landing-page .nav-wordmark { display: block; width: 96px; height: 32px; }
 .nav-title {
   font-family: var(--font-display);
   font-weight: 700;
