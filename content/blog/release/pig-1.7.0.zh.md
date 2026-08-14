@@ -6,7 +6,7 @@ author: "冯若航"
 description: "更安全的 EL 模块处理、更新的中国镜像、精简的 EL7 兼容目录，以及 575 个已打包扩展。"
 categories: [release]
 tags: [Release, pig]
-weight: 1
+weight: 2
 ---
 
 Pig `v1.7.0` 是 [v1.6.2](/zh/release/pig-1.6.2/) 之上的仓库兼容性与目录更新版本：明确中国镜像选择语义，默认保留 DNF 原生模块过滤，恢复精简的 EL7 仓库目录，并将内置扩展快照从 572 个增加到 575 个。内置 Pigsty 版本仍为 `4.5.0`。

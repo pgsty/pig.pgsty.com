@@ -6,7 +6,7 @@ author: "Ruohang Feng"
 description: "Safer EL module handling, refreshed China mirrors, streamlined EL7 compatibility, and 575 packaged extensions."
 categories: [release]
 tags: [Release, pig]
-weight: 1
+weight: 2
 ---
 
 Pig `v1.7.0` is a repository compatibility and catalog release on top of [v1.6.2](/release/pig-1.6.2/). It makes China-mirror selection explicit, preserves native DNF module filtering by default, restores a streamlined EL7 repository catalog, and grows the bundled extension snapshot from 572 to 575. The embedded Pigsty version remains `4.5.0`.
