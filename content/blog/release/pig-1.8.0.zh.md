@@ -12,7 +12,7 @@ weight: 1
 Pig `v1.8.0` 将 Pigsty 控制节点的准备过程原生化。两条核心安装命令
 `pig sty boot` 与 `pig sty conf` 现在是具备完整失败处理能力的 Go 工作流，
 不再包装旧版 `bootstrap` 与 `configure` Shell 脚本。本版本继续以
-**575 个已打包 PostgreSQL 扩展**作为统一发布口径，内置 Pigsty `4.5.0`。
+**575 个已打包 PostgreSQL 扩展** 作为统一发布口径，内置 Pigsty `4.5.0`。
 
 ## 原生 `pig sty boot`
 
