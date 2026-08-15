@@ -177,7 +177,7 @@ params:
   github_project_repo: https://github.com/pgsty/pig
   github_branch: main
 
-  # 文档、博客与定制首页统一使用 OINK 0.3 的本地命令面板；summary 在搜索
+  # 文档、博客与定制首页统一使用 OINK 的本地命令面板；summary 在搜索
   # 召回率与下载体积之间取平衡，关键词与 boost 仍可在页面 front matter 覆盖。
   offlineSearch: true
   offlineSearchIndex: summary

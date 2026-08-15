@@ -50,11 +50,11 @@ stay out of the docs sidebar tree via `toc_root: true` — `docs/` and
 
 ## Theme boundary
 
-OINK 0.3.0 owns the documentation and blog layouts, navigation shell, search, table
+OINK 0.4.1 owns the documentation and blog layouts, navigation shell, search, table
 of contents, blocks and shortcodes, styles, scripts, fonts, and third-party
-runtimes. The site imports the pinned OINK 0.3.0 release as a Hugo Module.
+runtimes. The site imports the pinned OINK 0.4.1 release as a Hugo Module.
 
-The custom landing page keeps its visual design while reusing OINK 0.3's
+The custom landing page keeps its visual design while reusing OINK's
 language-local command palette, action manifest, search ranking, and horizontal
 `wordmark`. Documentation uses the new search metadata, sidebar icon policy,
 content primitives, and assistant page actions; release rows remain text-only
