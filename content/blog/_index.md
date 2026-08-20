@@ -22,12 +22,11 @@ cascade:
     - print
     - markdown
   params:
-    # Release rows intentionally use OINK's clean text-only presentation.
-    default_featured: false
-    ui:
-      sidebar_menu_foldable: false
-      sidebar_menu_compact: false
-      ul_show: 3
+    # No `images` cascade here on purpose: release rows keep OINK's clean
+    # text-only presentation. The site card still comes from params.images.
+    sidebar_menu_foldable: false
+    sidebar_menu_compact: false
+    sidebar_expand_levels: 3
 icon: fa-solid fa-blog
 ---
 

@@ -52,18 +52,17 @@ curl -fsSL https://repo.pigsty.cc/pig | bash -s X.Y.Z
 
 以下文件名模板中的 `X.Y.Z` 对应当前 {{< param version >}} 版本：
 
-{{< filetree label="当前版本发布产物" >}}
-  {{< filetree/folder name="vX.Y.Z" open=true >}}
-    {{< filetree/file name="pig_X.Y.Z-1_amd64.deb" >}}
-    {{< filetree/file name="pig_X.Y.Z-1_arm64.deb" >}}
-    {{< filetree/file name="pig-X.Y.Z-1.aarch64.rpm" >}}
-    {{< filetree/file name="pig-X.Y.Z-1.x86_64.rpm" >}}
-    {{< filetree/file name="pig-vX.Y.Z.linux-amd64.tar.gz" >}}
-    {{< filetree/file name="pig-vX.Y.Z.linux-arm64.tar.gz" >}}
-    {{< filetree/file name="pig-vX.Y.Z.darwin-amd64.tar.gz" >}}
-    {{< filetree/file name="pig-vX.Y.Z.darwin-arm64.tar.gz" >}}
-  {{< /filetree/folder >}}
-{{< /filetree >}}
+```filetree {title="当前版本发布产物"}
+- vX.Y.Z/
+  - pig_X.Y.Z-1_amd64.deb
+  - pig_X.Y.Z-1_arm64.deb
+  - pig-X.Y.Z-1.aarch64.rpm
+  - pig-X.Y.Z-1.x86_64.rpm
+  - pig-vX.Y.Z.linux-amd64.tar.gz
+  - pig-vX.Y.Z.linux-arm64.tar.gz
+  - pig-vX.Y.Z.darwin-amd64.tar.gz
+  - pig-vX.Y.Z.darwin-arm64.tar.gz
+```
 
 将其解压后，将二进制文件放入您的 PATH 系统路径中即可。
 对应的 Pigsty 镜像目录会在软件仓库同步后可用；使用锁定版本的安装命令前，请先检查目标 URL。
@@ -74,8 +73,16 @@ curl -fsSL https://repo.pigsty.cc/pig | bash -s X.Y.Z
 
 请按目标主机选择包管理器：
 
-{{< code-group id="install-pig-repository" persist=true label="选择包管理器" copy="all" >}}
-  {{< code-tab title="YUM / DNF（EL）" value="yum" lang="bash" >}}
+```bash {tab="APT（Debian / Ubuntu）" group="install-pig-repository" value="apt" copy="all"}
+sudo tee /etc/apt/sources.list.d/pigsty-infra.list > /dev/null <<EOF
+deb [trusted=yes] https://repo.pigsty.io/apt/infra generic main
+EOF
+
+sudo apt update
+sudo apt install -y pig
+```
+
+```bash {tab="YUM / DNF（EL）" value="yum" copy="all"}
 sudo tee /etc/yum.repos.d/pigsty-infra.repo > /dev/null <<-'EOF'
 [pigsty-infra]
 name=Pigsty Infra for $basearch
@@ -87,16 +94,7 @@ EOF
 
 sudo yum makecache
 sudo yum install -y pig
-  {{< /code-tab >}}
-  {{< code-tab title="APT（Debian / Ubuntu）" value="apt" lang="bash" selected=true >}}
-sudo tee /etc/apt/sources.list.d/pigsty-infra.list > /dev/null <<EOF
-deb [trusted=yes] https://repo.pigsty.io/apt/infra generic main
-EOF
-
-sudo apt update
-sudo apt install -y pig
-  {{< /code-tab >}}
-{{< /code-group >}}
+```
 
 这些最简仓库示例有意使用 `gpgcheck=0` / `trusted=yes`，与 PIG 偏兼容性的默认设置一致。安全敏感环境应安装并固定相应签名密钥、启用签名校验，并在采用仓库前审查软件包来源。
 

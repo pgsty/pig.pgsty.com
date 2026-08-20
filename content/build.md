@@ -84,28 +84,25 @@ pig build pkg citus              # get + dep + ext
 
 ### Directory Layout
 
-{{< filetree label="PIG build directories" >}}
-  {{< filetree/folder name="~/ext" open=true >}}
-    {{< filetree/folder name="pkg" >}}{{< /filetree/folder >}}
-    {{< filetree/folder name="src" >}}{{< /filetree/folder >}}
-    {{< filetree/folder name="log" >}}{{< /filetree/folder >}}
-    {{< filetree/folder name="tmp" >}}{{< /filetree/folder >}}
-  {{< /filetree/folder >}}
-  {{< filetree/folder name="~/rpmbuild" open=true >}}
-    {{< filetree/file name="RPMS -> ~/ext/pkg" >}}
-    {{< filetree/file name="SOURCES -> ~/ext/src" >}}
-    {{< filetree/folder name="SPECS" >}}{{< /filetree/folder >}}
-    {{< filetree/folder name="BUILD" >}}{{< /filetree/folder >}}
-    {{< filetree/folder name="BUILDROOT" >}}{{< /filetree/folder >}}
-    {{< filetree/folder name="SRPMS" >}}{{< /filetree/folder >}}
-  {{< /filetree/folder >}}
-  {{< filetree/folder name="~/debbuild" open=true >}}
-    {{< filetree/file name="DEBS -> ~/ext/pkg" >}}
-    {{< filetree/file name="SOURCES -> ~/ext/src" >}}
-    {{< filetree/folder name="SPECS" >}}{{< /filetree/folder >}}
-    {{< filetree/folder name="BUILD" >}}{{< /filetree/folder >}}
-  {{< /filetree/folder >}}
-{{< /filetree >}}
+```filetree {title="PIG build directories"}
+- ~/ext/
+  - pkg/   {open=false}
+  - src/   {open=false}
+  - log/   {open=false}
+  - tmp/   {open=false}
+- ~/rpmbuild/
+  - RPMS -> ~/ext/pkg
+  - SOURCES -> ~/ext/src
+  - SPECS/   {open=false}
+  - BUILD/   {open=false}
+  - BUILDROOT/   {open=false}
+  - SRPMS/   {open=false}
+- ~/debbuild/
+  - DEBS -> ~/ext/pkg
+  - SOURCES -> ~/ext/src
+  - SPECS/   {open=false}
+  - BUILD/   {open=false}
+```
 
 `~/ext/` is the real working directory: `pkg` stores built packages, `src` stores source tarballs, and `log` / `tmp` hold build logs and temporary files. The platform-specific trees link their output and source directories back into it.
 

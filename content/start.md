@@ -223,54 +223,50 @@ pg14-core:    "postgresql14 postgresql14-server postgresql14-libs postgresql14-c
 Note the `$v` placeholder is replaced by the PG major version. When you use the `pgsql` alias, `$v` becomes 18, 17, etc.
 So when you install the `pg18-server` alias, EL actually installs `postgresql18-server`, `postgresql18-libs`, `postgresql18-contrib`, while Debian/Ubuntu installs `postgresql-18`. Pig handles all details.
 
-<details>
-<summary>Common PostgreSQL Aliases</summary>
-
-[Alias translation list for EL](https://github.com/pgsty/pig/blob/main/cli/ext/catalog.go#L231)
-
-```bash
-"pgsql":        "postgresql$v postgresql$v-server postgresql$v-libs postgresql$v-contrib postgresql$v-plperl postgresql$v-plpython3 postgresql$v-pltcl",
-"pgsql-mini":   "postgresql$v postgresql$v-server postgresql$v-libs postgresql$v-contrib",
-"pgsql-core":   "postgresql$v postgresql$v-server postgresql$v-libs postgresql$v-contrib postgresql$v-plperl postgresql$v-plpython3 postgresql$v-pltcl",
-"pgsql-full":   "postgresql$v postgresql$v-server postgresql$v-libs postgresql$v-contrib postgresql$v-plperl postgresql$v-plpython3 postgresql$v-pltcl postgresql$v-llvmjit postgresql$v-test postgresql$v-devel",
-"pgsql-main":   "postgresql$v postgresql$v-server postgresql$v-libs postgresql$v-contrib postgresql$v-plperl postgresql$v-plpython3 postgresql$v-pltcl pg_repack_$v wal2json_$v pgvector_$v",
-"pgsql-client": "postgresql$v",
-"pgsql-server": "postgresql$v-server postgresql$v-libs postgresql$v-contrib",
-"pgsql-devel":  "postgresql$v-devel",
-"pgsql-basic":  "pg_repack_$v wal2json_$v pgvector_$v",
-```
-
-[Alias translation list for Debian/Ubuntu](https://github.com/pgsty/pig/blob/main/cli/ext/catalog.go#L312)
-
-```bash
-"pgsql":        "postgresql-$v postgresql-client-$v postgresql-plpython3-$v postgresql-plperl-$v postgresql-pltcl-$v",
-"pgsql-mini":   "postgresql-$v postgresql-client-$v",
-"pgsql-core":   "postgresql-$v postgresql-client-$v postgresql-plpython3-$v postgresql-plperl-$v postgresql-pltcl-$v",
-"pgsql-full":   "postgresql-$v postgresql-client-$v postgresql-plpython3-$v postgresql-plperl-$v postgresql-pltcl-$v postgresql-server-dev-$v",
-"pgsql-main":   "postgresql-$v postgresql-client-$v postgresql-plpython3-$v postgresql-plperl-$v postgresql-pltcl-$v postgresql-$v-repack postgresql-$v-wal2json postgresql-$v-pgvector",
-"pgsql-client": "postgresql-client-$v",
-"pgsql-server": "postgresql-$v",
-"pgsql-devel":  "postgresql-server-dev-$v",
-"pgsql-basic":  "postgresql-$v-repack postgresql-$v-wal2json postgresql-$v-pgvector",
-```
-
-These aliases can be instantiated with major versions, or you can use versioned aliases like `pg18`, `pg17`, and so on.
-The actively supported PostgreSQL major versions are now **14-18**. For example, for PostgreSQL 18 you can use:
-
-| `pgsql`        | `pg18`        | `pg17`        | `pg16`        | `pg15`        | `pg14`        |
-|:---------------|:--------------|:--------------|:--------------|:--------------|:--------------|
-| `pgsql`        | **`pg18`**    | `pg17`        | `pg16`        | `pg15`        | `pg14`        |
-| `pgsql-mini`   | `pg18-mini`   | `pg17-mini`   | `pg16-mini`   | `pg15-mini`   | `pg14-mini`   |
-| `pgsql-core`   | `pg18-core`   | `pg17-core`   | `pg16-core`   | `pg15-core`   | `pg14-core`   |
-| `pgsql-full`   | `pg18-full`   | `pg17-full`   | `pg16-full`   | `pg15-full`   | `pg14-full`   |
-| `pgsql-main`   | `pg18-main`   | `pg17-main`   | `pg16-main`   | `pg15-main`   | `pg14-main`   |
-| `pgsql-client` | `pg18-client` | `pg17-client` | `pg16-client` | `pg15-client` | `pg14-client` |
-| `pgsql-server` | `pg18-server` | `pg17-server` | `pg16-server` | `pg15-server` | `pg14-server` |
-| `pgsql-devel`  | `pg18-devel`  | `pg17-devel`  | `pg16-devel`  | `pg15-devel`  | `pg14-devel`  |
-| `pgsql-basic`  | `pg18-basic`  | `pg17-basic`  | `pg16-basic`  | `pg15-basic`  | `pg14-basic`  |
-{.full-width}
-
-</details>
+> [!DETAILS]- Common PostgreSQL Aliases
+> [Alias translation list for EL](https://github.com/pgsty/pig/blob/main/cli/ext/catalog.go#L231)
+>
+> ```bash
+> "pgsql":        "postgresql$v postgresql$v-server postgresql$v-libs postgresql$v-contrib postgresql$v-plperl postgresql$v-plpython3 postgresql$v-pltcl",
+> "pgsql-mini":   "postgresql$v postgresql$v-server postgresql$v-libs postgresql$v-contrib",
+> "pgsql-core":   "postgresql$v postgresql$v-server postgresql$v-libs postgresql$v-contrib postgresql$v-plperl postgresql$v-plpython3 postgresql$v-pltcl",
+> "pgsql-full":   "postgresql$v postgresql$v-server postgresql$v-libs postgresql$v-contrib postgresql$v-plperl postgresql$v-plpython3 postgresql$v-pltcl postgresql$v-llvmjit postgresql$v-test postgresql$v-devel",
+> "pgsql-main":   "postgresql$v postgresql$v-server postgresql$v-libs postgresql$v-contrib postgresql$v-plperl postgresql$v-plpython3 postgresql$v-pltcl pg_repack_$v wal2json_$v pgvector_$v",
+> "pgsql-client": "postgresql$v",
+> "pgsql-server": "postgresql$v-server postgresql$v-libs postgresql$v-contrib",
+> "pgsql-devel":  "postgresql$v-devel",
+> "pgsql-basic":  "pg_repack_$v wal2json_$v pgvector_$v",
+> ```
+>
+> [Alias translation list for Debian/Ubuntu](https://github.com/pgsty/pig/blob/main/cli/ext/catalog.go#L312)
+>
+> ```bash
+> "pgsql":        "postgresql-$v postgresql-client-$v postgresql-plpython3-$v postgresql-plperl-$v postgresql-pltcl-$v",
+> "pgsql-mini":   "postgresql-$v postgresql-client-$v",
+> "pgsql-core":   "postgresql-$v postgresql-client-$v postgresql-plpython3-$v postgresql-plperl-$v postgresql-pltcl-$v",
+> "pgsql-full":   "postgresql-$v postgresql-client-$v postgresql-plpython3-$v postgresql-plperl-$v postgresql-pltcl-$v postgresql-server-dev-$v",
+> "pgsql-main":   "postgresql-$v postgresql-client-$v postgresql-plpython3-$v postgresql-plperl-$v postgresql-pltcl-$v postgresql-$v-repack postgresql-$v-wal2json postgresql-$v-pgvector",
+> "pgsql-client": "postgresql-client-$v",
+> "pgsql-server": "postgresql-$v",
+> "pgsql-devel":  "postgresql-server-dev-$v",
+> "pgsql-basic":  "postgresql-$v-repack postgresql-$v-wal2json postgresql-$v-pgvector",
+> ```
+>
+> These aliases can be instantiated with major versions, or you can use versioned aliases like `pg18`, `pg17`, and so on.
+> The actively supported PostgreSQL major versions are now **14-18**. For example, for PostgreSQL 18 you can use:
+>
+> | `pgsql`        | `pg18`        | `pg17`        | `pg16`        | `pg15`        | `pg14`        |
+> |:---------------|:--------------|:--------------|:--------------|:--------------|:--------------|
+> | `pgsql`        | **`pg18`**    | `pg17`        | `pg16`        | `pg15`        | `pg14`        |
+> | `pgsql-mini`   | `pg18-mini`   | `pg17-mini`   | `pg16-mini`   | `pg15-mini`   | `pg14-mini`   |
+> | `pgsql-core`   | `pg18-core`   | `pg17-core`   | `pg16-core`   | `pg15-core`   | `pg14-core`   |
+> | `pgsql-full`   | `pg18-full`   | `pg17-full`   | `pg16-full`   | `pg15-full`   | `pg14-full`   |
+> | `pgsql-main`   | `pg18-main`   | `pg17-main`   | `pg16-main`   | `pg15-main`   | `pg14-main`   |
+> | `pgsql-client` | `pg18-client` | `pg17-client` | `pg16-client` | `pg15-client` | `pg14-client` |
+> | `pgsql-server` | `pg18-server` | `pg17-server` | `pg16-server` | `pg15-server` | `pg14-server` |
+> | `pgsql-devel`  | `pg18-devel`  | `pg17-devel`  | `pg16-devel`  | `pg15-devel`  | `pg14-devel`  |
+> | `pgsql-basic`  | `pg18-basic`  | `pg17-basic`  | `pg16-basic`  | `pg15-basic`  | `pg14-basic`  |
+> {.full-width}
 
 ## Install Extensions
 

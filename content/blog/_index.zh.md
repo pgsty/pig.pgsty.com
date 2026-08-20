@@ -22,12 +22,11 @@ cascade:
     - print
     - markdown
   params:
-    # 发布列表刻意采用 OINK 的纯文本卡片，不重复铺同一张默认图片。
-    default_featured: false
-    ui:
-      sidebar_menu_foldable: false
-      sidebar_menu_compact: false
-      ul_show: 3
+    # 刻意不设 images cascade：发布列表保持 OINK 的纯文本卡片，
+    # 不重复铺同一张默认图片；社交卡片仍由 params.images 提供。
+    sidebar_menu_foldable: false
+    sidebar_menu_compact: false
+    sidebar_expand_levels: 3
 icon: fa-solid fa-blog
 ---
 

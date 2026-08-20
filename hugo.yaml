@@ -99,6 +99,7 @@ permalinks:
 markup:
   goldmark:
     parser:
+      wrapStandAloneImageWithinParagraph: false
       attribute:
         block: true
       autoHeadingID: true
@@ -117,6 +118,7 @@ markup:
           inline:
             - ['\(', '\)']
           block:
+            - ['\[', '\]']
             - ['$$', '$$']
   highlight:
     style: tango
@@ -179,14 +181,14 @@ params:
 
   # 文档、博客与定制首页统一使用 OINK 的本地命令面板；summary 在搜索
   # 召回率与下载体积之间取平衡，关键词与 boost 仍可在页面 front matter 覆盖。
-  offlineSearch: true
-  offlineSearchIndex: summary
-  offlineSearchSummaryLength: 100
-  offlineSearchMaxResults: 12
-  prism_syntax_highlighting: false
+  offline_search: true
+  offline_search_index: summary
+  offline_search_summary_length: 100
+  offline_search_max_results: 12
 
   ui:
-    breadcrumb_disable: false
+    blog_index_size: 60
+    breadcrumb: true
     navbar_logo: true
     navbar_translucent_over_cover_disable: false
     navbar_theme: dark
@@ -195,17 +197,18 @@ params:
     sidebar_menu_truncate: 2000
     sidebar_cache_limit: 1000
     sidebar_root_enabled: true
+    docs_sidebar_root: home
     sidebar_icon_policy: groups
-    ul_show: 2
-    showLightDarkModeMenu: true
+    sidebar_expand_levels: 2
+    dark_mode:
+      show_menu: true
     quick_links: [docs, blog]
     page_context_menu:
       # Activating these entries hands the current public URL to the selected
       # assistant; the theme performs no handoff until the visitor chooses it.
       assistant_links: true
     # OINK shell 自己维护目录状态，不启用 Bootstrap ScrollSpy。
-    scrollSpy:
-      disable: true
+    scroll_spy: false
     # ---- OINK 文档 shell 配置 ----
     # 搜索框下方的根节点下拉：列出 /docs/ 总览 + 所有 sidebar_root_for: self
     # 的 section（这里就是 Blog）。
@@ -218,25 +221,4 @@ params:
     sidebar_item_overflow: ellipsis
     feedback:
       enable: false
-    readingtime:
-      enable: false
-
-  links:
-    user:
-      - name: PIG source
-        url: https://github.com/pgsty/pig
-        icon: fab fa-github
-        desc: pig source repository
-      - name: Pigsty
-        url: https://pigsty.io
-        icon: fa fa-database
-        desc: Pigsty project
-    developer:
-      - name: Releases
-        url: https://github.com/pgsty/pig/releases
-        icon: fa fa-box-archive
-        desc: pig release artifacts
-      - name: Documentation source
-        url: https://github.com/pgsty/pig.pgsty.com
-        icon: fab fa-github
-        desc: pig documentation repository
+    reading_time: false

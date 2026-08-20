@@ -52,18 +52,17 @@ Current `v{{< param version >}}` installation packages (`RPM`/`DEB`/tarball) are
 
 In this filename template, `X.Y.Z` is the current {{< param version >}} release:
 
-{{< filetree label="Release assets for the current version" >}}
-  {{< filetree/folder name="vX.Y.Z" open=true >}}
-    {{< filetree/file name="pig_X.Y.Z-1_amd64.deb" >}}
-    {{< filetree/file name="pig_X.Y.Z-1_arm64.deb" >}}
-    {{< filetree/file name="pig-X.Y.Z-1.aarch64.rpm" >}}
-    {{< filetree/file name="pig-X.Y.Z-1.x86_64.rpm" >}}
-    {{< filetree/file name="pig-vX.Y.Z.linux-amd64.tar.gz" >}}
-    {{< filetree/file name="pig-vX.Y.Z.linux-arm64.tar.gz" >}}
-    {{< filetree/file name="pig-vX.Y.Z.darwin-amd64.tar.gz" >}}
-    {{< filetree/file name="pig-vX.Y.Z.darwin-arm64.tar.gz" >}}
-  {{< /filetree/folder >}}
-{{< /filetree >}}
+```filetree {title="Release assets for the current version"}
+- vX.Y.Z/
+  - pig_X.Y.Z-1_amd64.deb
+  - pig_X.Y.Z-1_arm64.deb
+  - pig-X.Y.Z-1.aarch64.rpm
+  - pig-X.Y.Z-1.x86_64.rpm
+  - pig-vX.Y.Z.linux-amd64.tar.gz
+  - pig-vX.Y.Z.linux-arm64.tar.gz
+  - pig-vX.Y.Z.darwin-amd64.tar.gz
+  - pig-vX.Y.Z.darwin-arm64.tar.gz
+```
 
 After extracting, place the binary file in your system PATH.
 The equivalent Pigsty mirror directory becomes available after repository synchronization; check the target URL before using a version-pinned installer command.
@@ -74,8 +73,16 @@ The `pig` software is located in the [`pigsty-infra`](https://pigsty.io/docs/rep
 
 Choose the package-manager tab for the target host:
 
-{{< code-group id="install-pig-repository" persist=true label="Choose a package manager" copy="all" >}}
-  {{< code-tab title="YUM / DNF (EL)" value="yum" lang="bash" >}}
+```bash {tab="APT (Debian / Ubuntu)" group="install-pig-repository" value="apt" copy="all"}
+sudo tee /etc/apt/sources.list.d/pigsty-infra.list > /dev/null <<EOF
+deb [trusted=yes] https://repo.pigsty.io/apt/infra generic main
+EOF
+
+sudo apt update
+sudo apt install -y pig
+```
+
+```bash {tab="YUM / DNF (EL)" value="yum" copy="all"}
 sudo tee /etc/yum.repos.d/pigsty-infra.repo > /dev/null <<-'EOF'
 [pigsty-infra]
 name=Pigsty Infra for $basearch
@@ -87,16 +94,7 @@ EOF
 
 sudo yum makecache
 sudo yum install -y pig
-  {{< /code-tab >}}
-  {{< code-tab title="APT (Debian / Ubuntu)" value="apt" lang="bash" selected=true >}}
-sudo tee /etc/apt/sources.list.d/pigsty-infra.list > /dev/null <<EOF
-deb [trusted=yes] https://repo.pigsty.io/apt/infra generic main
-EOF
-
-sudo apt update
-sudo apt install -y pig
-  {{< /code-tab >}}
-{{< /code-group >}}
+```
 
 These minimal repository examples deliberately use `gpgcheck=0` / `trusted=yes`, matching PIG's compatibility-oriented defaults. In a security-sensitive environment, install and pin the appropriate signing key, enable signature verification, and review package provenance before adopting the repository.
 

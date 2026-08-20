@@ -50,9 +50,9 @@ stay out of the docs sidebar tree via `toc_root: true` — `docs/` and
 
 ## Theme boundary
 
-OINK 0.4.1 owns the documentation and blog layouts, navigation shell, search, table
+OINK 0.5.1 owns the documentation and blog layouts, navigation shell, search, table
 of contents, blocks and shortcodes, styles, scripts, fonts, and third-party
-runtimes. The site imports the pinned OINK 0.4.1 release as a Hugo Module.
+runtimes. The site imports the pinned OINK 0.5.1 release as a Hugo Module.
 
 The custom landing page keeps its visual design while reusing OINK's
 language-local command palette, action manifest, search ranking, and horizontal
@@ -67,11 +67,10 @@ The local layout surface is intentionally small:
 - `layouts/index.md` and `layouts/index.llms.txt` index PIG's intentionally
   root-level documents; the generic OINK indexes assume documents live below
   `/docs/`.
-- `layouts/_partials/shell/sidebar.html` keeps root-level documentation
-  rooted at `Site.Home`; `/docs/` remains an overview rather than a content
-  container.
-- `layouts/_partials/shell/sidebar-tree.html` adds the PIG-specific
-  `sidebar_divider` grouping row.
+- `params.ui.docs_sidebar_root: home` keeps root-level documentation rooted at
+  `Site.Home`; `/docs/` remains an overview rather than a content container.
+- OINK renders the `sidebar_divider` grouping row; the project stylesheet only
+  applies PIG's visual treatment to that theme-owned semantic row.
 - the favicon, robots, and math render-hook files contain site policy rather
   than theme chrome.
 
@@ -84,7 +83,8 @@ keep local overrides limited to PIG-specific behavior.
 Install Hugo Extended 0.160.1 or newer, Go, and Git. OINK vendors its runtime
 assets, so this site does not require Node.js, npm, or a CDN.
 
-Debug against the latest sibling OINK checkout with an ignored Go workspace:
+Debug against the latest sibling OINK checkout with an inline Hugo Module
+replacement (no Go workspace file is created):
 
 ```bash
 make d
@@ -105,7 +105,7 @@ make c
 ```
 
 The corresponding long targets are `debug`, `serve`, `build`, and `check`;
-`make dev` retains the pinned-theme preview. Preview targets let Hugo choose an
+`make dev` uses the sibling OINK checkout while `make serve` retains the pinned-theme preview. Preview targets let Hugo choose an
 available port unless `PORT` is set explicitly.
 
 The production build also publishes Markdown copies for pages and sections,
