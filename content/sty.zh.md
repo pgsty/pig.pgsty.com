@@ -4,6 +4,7 @@ description: "使用 pig sty 子命令管理 Pigsty 安装"
 weight: 150
 icon: fas fa-server
 categories: [参考]
+tags: [sty]
 ---
 
 **pig** 也可作为 Pigsty 的命令行工具使用 —— 这是一款开箱即用的免费 PostgreSQL RDS 解决方案。

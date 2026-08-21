@@ -2,11 +2,11 @@
 title: "pig v0.7.3"
 linkTitle: "v0.7.3"
 date: 2025-11-25
-author: "Ruohang Feng"
 description: "Fix repo for el10 & debian13"
-categories: [release]
-tags: [Release, pig]
+tags: [repo]
 weight: 190
+authors: [Vonng]
+release_url: https://github.com/pgsty/pig/releases/tag/v0.7.3
 ---
 
 - Add new command: `pig repo reload` to update repo metadata
@@ -17,7 +17,7 @@ weight: 190
 
 ## Checksums
 
-```bash
+```checksums
 786d72f6b685d6d6abf5f255f0a7de9204988a05630a26a53bfc7631823c0c6f  pig-0.7.3-1.aarch64.rpm
 da59e24ef79d1164e348bacc43e3222e8e2778ec0e103e7ffc0c6df064758e8f  pig-0.7.3-1.x86_64.rpm
 73062a979749095e89abc07dd583d34d4f57908bb4ee935cf7640f129ca6a2cb  pig-v0.7.3.darwin-amd64.tar.gz
@@ -28,4 +28,4 @@ e7f612df0e8e4d9fac6df3765862b9e491bb50aad651856abf7a6935986e6f99  pig-v0.7.3.lin
 32e695ba2d49a741d8cd92008f8f2dec29f10754d35b732035f48517b382c30d  pig_0.7.3-1_arm64.deb
 ```
 
-Release: https://github.com/pgsty/pig/releases/tag/v0.7.3
+{{< release-card >}}

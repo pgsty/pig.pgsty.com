@@ -4,6 +4,7 @@ description: "Run patronictl transparently, with Pigsty service, config, and log
 weight: 170
 icon: fas fa-infinity
 categories: [Reference]
+tags: [patroni]
 ---
 
 Since v1.6.0, the `pig patroni` command (alias `pig pt`) is a **transparent launcher** for the

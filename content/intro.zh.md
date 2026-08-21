@@ -7,6 +7,7 @@ search_boost: 1.25
 weight: 20
 icon: fas fa-lightbulb
 categories: [概念]
+tags: [catalog, ext]
 ---
 
 PostgreSQL 拥有极其丰富的扩展生态，但“找得到扩展”并不等于“能把它稳妥地装进生产环境”。一个可用的软件包必须同时匹配 PostgreSQL 大版本、Linux 发行版、CPU 架构与依赖组合，有时还依赖厂商自己的软件仓库。若没有现成的软件包，编译工具链与后续升级维护也都要由使用者承担。

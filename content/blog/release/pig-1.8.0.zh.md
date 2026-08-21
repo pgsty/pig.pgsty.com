@@ -2,11 +2,11 @@
 title: "pig v1.8.0"
 linkTitle: "v1.8.0"
 date: 2026-08-14
-author: "冯若航"
 description: "原生 pig sty boot 与 pig sty conf 工作流，以及 575 个已打包 PostgreSQL 扩展。"
-categories: [release]
-tags: [Release, pig]
+tags: [sty, repo, inventory, catalog]
 weight: 1
+authors: [Vonng]
+release_url: https://github.com/pgsty/pig/releases/tag/v1.8.0
 ---
 
 Pig `v1.8.0` 将 Pigsty 控制节点的准备过程原生化。两条核心安装命令
@@ -107,7 +107,7 @@ Pig `v1.8.0` 将 Pigsty 控制节点的准备过程原生化。两条核心安�
 
 制品：[GitHub Release](https://github.com/pgsty/pig/releases/tag/v1.8.0) · [checksums.txt](https://github.com/pgsty/pig/releases/download/v1.8.0/checksums.txt)
 
-```bash
+```checksums
 02fd2628810c1b00de730ece32b09dba1318be4c99a4ff1a0551740e32bf223b  pig-1.8.0-1.aarch64.rpm
 72ba72a00af52a84b08b1346f85b42668b52bc097e315774ff9f501ca23ece8b  pig-1.8.0-1.x86_64.rpm
 f023a5c9049dc532a057e932c73a8197683eaf4d97cb7a8f219492da1ad2a65f  pig-v1.8.0.darwin-amd64.tar.gz
@@ -118,4 +118,4 @@ a24a08c1b8d54adcdef5a99ed7b91caeedef1552a1440b1258eb4eb07fb20353  pig-v1.8.0.lin
 2e7370211514df6355ef96fb812670febe6ee1b85a28378432c33ebdaecb4b63  pig_1.8.0-1_arm64.deb
 ```
 
-发布：https://github.com/pgsty/pig/releases/tag/v1.8.0
+{{< release-card >}}

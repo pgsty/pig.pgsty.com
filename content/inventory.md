@@ -4,6 +4,7 @@ description: "Inspect, edit, validate, check, and exchange the Pigsty Inventory"
 weight: 155
 icon: fas fa-list-check
 categories: [Reference]
+tags: [inventory, sty]
 ---
 
 The `pig inventory` command group (alias `pig inv`), introduced in v1.6.0, provides

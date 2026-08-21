@@ -2,11 +2,11 @@
 title: "pig v0.3.2"
 linkTitle: "v0.3.2"
 date: 2025-03-21
-author: "冯若航"
 description: "新扩展"
-categories: [release]
-tags: [Release, pig]
+tags: [catalog, install]
 weight: 320
+authors: [Vonng]
+release_url: https://github.com/pgsty/pig/releases/tag/v0.3.2
 ---
 
 ## 增强功能
@@ -15,4 +15,4 @@ weight: 320
 - 使用 `upx` 减少二进制大小
 - 移除嵌入的 pigsty 以减少二进制大小
 
-发布：https://github.com/pgsty/pig/releases/tag/v0.3.2
+{{< release-card >}}

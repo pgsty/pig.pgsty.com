@@ -4,7 +4,13 @@ description: "PIG 是 PostgreSQL 扩展包管理器：通过一个自包含 CLI�
 weight: 1
 type: home
 cascade:
-  type: docs
+  # 只把 type: docs 洒到普通页与栏目上。分类法（tags / categories / authors）
+  # 的列表页与词条页也是 home 的后代，如果一起被染成 docs，就会落到
+  # OINK 的 docs/list.html，丢掉 term 页自己的标题与博客行样式。
+  - target:
+      kind: '{page,section}'
+    type: docs
+body_class: landing-page
 ---
 
 PIG 是 PostgreSQL 与其扩展的命令行包管理器。它依托（PiggyBack）系统原生的 `apt` / `dnf`

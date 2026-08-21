@@ -2,11 +2,11 @@
 title: "pig v1.6.2"
 linkTitle: "v1.6.2"
 date: 2026-08-11
-author: "冯若航"
 description: "572 个已打包扩展、Grafana 仪表盘 schema v2，以及 SOW 优先的本地软件仓库生成。"
-categories: [release]
-tags: [Release, pig]
+tags: [catalog, repo, ext, sty]
 weight: 5
+authors: [Vonng]
+release_url: https://github.com/pgsty/pig/releases/tag/v1.6.2
 ---
 
 Pig `v1.6.2` 是 [v1.6.1](/zh/release/pig-1.6.1/) 之上的功能与目录更新版本：已打包扩展从 562 个增加到 572 个，新增 Grafana 仪表盘 schema v2 原生支持，并改进本地软件仓库生成流程。内置 Pigsty 版本继续锁定为 `4.5.0`。
@@ -36,7 +36,7 @@ Pig `v1.6.2` 是 [v1.6.1](/zh/release/pig-1.6.1/) 之上的功能与目录更新
 
 制品：[GitHub Release](https://github.com/pgsty/pig/releases/tag/v1.6.2) · [checksums.txt](https://github.com/pgsty/pig/releases/download/v1.6.2/checksums.txt)
 
-```bash
+```checksums
 6697a96bbf476e697a5c3da8b6c861719e4b7208e1e4fe927cf4b475ea1f162f  pig-1.6.2-1.aarch64.rpm
 ad0b311867bc6cd689dd73e9a96b84f1fe0f49f6c0f1184abf9eb3232a07a184  pig-1.6.2-1.x86_64.rpm
 bb167e04fceb6cebee5c8a2423279cefb4474f46301a5055c464ac98294dc9db  pig-v1.6.2.darwin-amd64.tar.gz
@@ -47,4 +47,4 @@ b511e727642987867be5921d72e8019e9c6186b82e63ddc34ad653773abed5a8  pig-v1.6.2.lin
 00e4c84cd6b07a98401c73fb58dedaafe34bc794d7604edbcb76c5de39b0fb44  pig_1.6.2-1_arm64.deb
 ```
 
-发布：https://github.com/pgsty/pig/releases/tag/v1.6.2
+{{< release-card >}}

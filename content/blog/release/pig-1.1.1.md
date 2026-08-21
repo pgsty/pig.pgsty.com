@@ -2,11 +2,11 @@
 title: "pig v1.1.1"
 linkTitle: "v1.1.1"
 date: 2026-02-14
-author: "Ruohang Feng"
 description: "Path, symlink, and build migration fixes"
-categories: [release]
-tags: [Release, pig]
+tags: [repo, sty]
 weight: 135
+authors: [Vonng]
+release_url: https://github.com/pgsty/pig/releases/tag/v1.1.1
 ---
 
 ## Fixes
@@ -18,7 +18,7 @@ weight: 135
 
 ## Checksums
 
-```bash
+```checksums
 22fe5e951f09e7cfa46ab22781199b3209792992940eb5615ace4928e41a7429  pig-1.1.1-1.aarch64.rpm
 7f5a10bbefdc39e5d66a7e688fa78c5ba566c8140458b9f4b1536ff0d7ed457a  pig-1.1.1-1.x86_64.rpm
 b90aec9dc559df81c46d32575a8d231fa6d7eeb8b25f4d2e0b6076cc0a9c0e59  pig-v1.1.1.darwin-amd64.tar.gz
@@ -29,4 +29,4 @@ b90aec9dc559df81c46d32575a8d231fa6d7eeb8b25f4d2e0b6076cc0a9c0e59  pig-v1.1.1.dar
 3a108f0544af4d1f98acee55c06c5b5af3b856e3be2b18767e6db0b8a1cc664f  pig_1.1.1-1_arm64.deb
 ```
 
-Release: https://github.com/pgsty/pig/releases/tag/v1.1.1
+{{< release-card >}}

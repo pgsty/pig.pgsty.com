@@ -12,15 +12,6 @@
     var(--bg);
 }
 
-.download-page .nav-link.active {
-  color: var(--ink);
-  background: var(--bg-elev);
-}
-
-.download-page .mobile-menu-link.active {
-  color: var(--pg-strong);
-  background: color-mix(in srgb, var(--pg) 8%, transparent);
-}
 
 .download-page code {
   font-family: var(--font-mono);
@@ -37,10 +28,12 @@
 }
 
 /* Hero */
-.download-hero {
+.landing-page .download-hero {
   position: relative;
   overflow: hidden;
-  padding: clamp(108px, 12vw, 154px) 0 clamp(72px, 8vw, 112px);
+  /* 顶部内边距经自定义属性暴露给 landing-v3.css 里的 shell 接缝规则。 */
+  --pig-section-pad-top: clamp(108px, 12vw, 154px);
+  padding: var(--pig-section-pad-top) 0 clamp(72px, 8vw, 112px);
   border-bottom: 1px solid var(--line);
 }
 
@@ -375,7 +368,7 @@
 }
 
 /* Product sections */
-.download-product-section {
+.landing-page .download-product-section {
   position: relative;
   padding: clamp(76px, 8vw, 116px) 0;
 }
@@ -558,7 +551,9 @@
   min-height: 500px;
 }
 
-.download-panel {
+/* `.landing-page` 前缀是为了压过 OINK 的 `.td-default main section`
+   区块内边距（(0,2,0) 的类计数高于 (0,1,2)）。 */
+.landing-page .download-panel {
   padding: clamp(26px, 4.5vw, 54px);
   animation: download-panel-in 260ms ease both;
 }
@@ -1269,7 +1264,7 @@
 }
 
 /* Topology */
-.topology-section {
+.landing-page .topology-section {
   position: relative;
   padding: clamp(76px, 8vw, 112px) 0;
   border-top: 1px solid var(--line);
@@ -1373,7 +1368,7 @@
 }
 
 /* Support */
-.download-support {
+.landing-page .download-support {
   padding: clamp(76px, 8vw, 112px) 0;
 }
 
@@ -1444,11 +1439,6 @@
 
 /* Responsive */
 @media (max-width: 1080px) {
-  .download-page .nav-link {
-    padding-right: 8px;
-    padding-left: 8px;
-  }
-
   .method-grid {
     grid-template-columns: minmax(0, 1.45fr) minmax(250px, 0.65fr);
   }
@@ -1514,8 +1504,9 @@
 }
 
 @media (max-width: 768px) {
-  .download-hero {
-    padding-top: 96px;
+  .landing-page .download-hero {
+    --pig-section-pad-top: 96px;
+    padding-top: var(--pig-section-pad-top);
   }
 
   .product-choice-grid {
@@ -1655,4 +1646,88 @@
   .download-release-line a span {
     transition: none;
   }
+}
+
+/* ------------------------------------------------------------
+   PIG 站点专属覆盖
+   ------------------------------------------------------------ */
+
+/* 目标矩阵是四格（EL / Debian / Ubuntu / macOS），比三格版多一列。
+   必须连同断点一起写在文件末尾：上面 900px 的 .topology-grid 规则
+   与这里同权重，靠源码顺序决胜。 */
+.topology-grid--four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 1080px) {
+  .topology-grid--four { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 900px) {
+  .topology-grid--four { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* pig 的着陆页顶栏是 56px 的 sticky 条，不是 OINK 的文档 shell，
+   下载页首屏不需要留出那么大的顶部间距。 */
+.download-page .download-hero {
+  --pig-section-pad-top: clamp(56px, 6vw, 88px);
+  padding-top: var(--pig-section-pad-top);
+}
+@media (max-width: 768px) {
+  .download-page .download-hero {
+    --pig-section-pad-top: 56px;
+    padding-top: var(--pig-section-pad-top);
+  }
+}
+
+/* 「装完之后」的四条命令：命令名一列、说明一列，说明贴着命令左对齐，
+   不要 SILO 版把说明推到最右侧的 `1fr auto`。 */
+.build-plate--cmds > div {
+  grid-template-columns: 7px minmax(8.5rem, auto) minmax(0, 1fr);
+  font-size: 0.68rem;
+  line-height: 1.6;
+  align-items: baseline;
+}
+.build-plate--cmds > div i { align-self: center; }
+.build-plate--cmds > div b { color: var(--ink); font-weight: 600; }
+.build-plate--cmds > div em code {
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--copper) 12%, transparent);
+}
+@media (max-width: 640px) {
+  .build-plate--cmds > div { grid-template-columns: 7px minmax(0, 1fr); }
+  .build-plate--cmds > div em { grid-column: 2; }
+}
+
+/* 面板内的嵌套子标签（下载源 / 包管理器）。 */
+.download-subtabs .download-tablist--sub {
+  flex-wrap: wrap;
+  overflow-x: visible;
+  padding: 0;
+  gap: 8px;
+  margin: 0 0 12px;
+  border-bottom: 0;
+  background: transparent;
+}
+
+.download-tablist--sub button {
+  min-height: 34px;
+  padding: 0 16px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 0.74rem;
+}
+
+.download-tablist--sub button::after {
+  display: none;
+}
+
+.download-tablist--sub button[aria-selected="true"] {
+  border-color: var(--copper);
+  color: var(--ink);
+  background: color-mix(in srgb, var(--copper) 10%, transparent);
+}
+
+/* 子标签的面板本身不需要内边距，纵向节奏由里面的 .download-code 决定。
+   同样要压过 OINK 后代选择器加的区块内边距。 */
+.landing-page .download-subtabs section[role="tabpanel"] {
+  padding-top: 0;
+  padding-bottom: 0;
 }

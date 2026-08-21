@@ -4,6 +4,7 @@ description: "使用 pig ext 检索扩展目录并管理 PostgreSQL 扩展软件
 weight: 120
 icon: fas fa-puzzle-piece
 categories: [参考]
+tags: [ext, catalog]
 ---
 
 `pig ext` 用于检索扩展目录并管理主机上的 PostgreSQL 扩展 **软件包**。它可以解析名称、查询软件包可用性，安装、移除、升级 RPM/DEB 包，也能处理 PostgreSQL 内核包；数据库内部的启用与迁移不属于这一命令组的职责。

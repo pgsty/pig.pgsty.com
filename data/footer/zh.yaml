@@ -1,0 +1,30 @@
+# OINK 胖页脚（data/footer/<lang>.yaml）：品牌块 + 四列链接。
+# 站内链接写相对路径（主题会过 relLangURL），站外链接标 external: true。
+brand:
+  tagline: '**P**ostgreSQL **I**nstall **G**uide'
+  slogan: 一行命令，装好扩展
+columns:
+  - title: 获取 PIG
+    links:
+      - { label: 下载, url: /download/ }
+      - { label: 安装, url: /install/ }
+      - { label: 快速上手, url: /start/ }
+      - { label: 发行版本, url: 'https://github.com/pgsty/pig/releases', external: true }
+  - title: 文档
+    links:
+      - { label: 文档总览, url: /docs/ }
+      - { label: 简介, url: /intro/ }
+      - { label: 命令参考, url: /cmd/ }
+      - { label: 发布注记, url: /release/ }
+  - title: 命令速查
+    links:
+      - { label: pig repo, url: /repo/ }
+      - { label: pig ext, url: /ext/ }
+      - { label: pig build, url: /build/ }
+      - { label: pig sty, url: /sty/ }
+  - title: 社区
+    links:
+      - { label: GitHub, url: 'https://github.com/pgsty/pig', external: true }
+      - { label: Issue, url: 'https://github.com/pgsty/pig/issues', external: true }
+      - { label: Pigsty, url: 'https://pigsty.cc/', external: true }
+      - { label: PGSTY, url: 'https://pgsty.com/', external: true }

@@ -2,11 +2,11 @@
 title: "pig v0.6.1"
 linkTitle: "v0.6.1"
 date: 2025-08-14
-author: "冯若航"
 description: "CI/CD, el10 存根，PGDG 中国镜像"
-categories: [release]
-tags: [Release, pig]
+tags: [repo]
 weight: 240
+authors: [Vonng]
+release_url: https://github.com/pgsty/pig/releases/tag/v0.6.1
 ---
 
 - 新增 el10 与 debian 13 trixie 的支持存根
@@ -18,4 +18,4 @@ weight: 240
 - 修复 EL 10 专用的 EPEL 仓库
 - pig version 输出构建环境信息
 
-发布：https://github.com/pgsty/pig/releases/tag/v0.6.1
+{{< release-card >}}

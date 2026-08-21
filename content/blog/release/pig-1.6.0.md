@@ -2,11 +2,11 @@
 title: "pig v1.6.0"
 linkTitle: "v1.6.0"
 date: 2026-07-28
-author: "Ruohang Feng"
 description: "562 packaged extensions, patronictl passthrough, inventory & CMDB, Grafana"
-categories: [release]
-tags: [Release, pig]
+tags: [inventory, patroni, catalog, cli]
 weight: 20
+authors: [Vonng]
+release_url: https://github.com/pgsty/pig/releases/tag/v1.6.0
 ---
 
 Pig `v1.6.0` is a major release: `pig pt` becomes a transparent `patronictl` launcher, the new root-level `pig inventory` command group brings lossless editing and validation of `pigsty.yml` (with an experimental PostgreSQL CMDB bridge), `pig sty grafana` adds native Grafana dashboard management, and the packaged extension catalog grows to 562.
@@ -37,7 +37,7 @@ Pig `v1.6.0` is a major release: `pig pt` becomes a transparent `patronictl` lau
 
 ## Checksums
 
-```bash
+```checksums
 6899e8a3e1c0adfe8c0c177c0632b0a00821b304ed5998fcbdf28d02660c6768  pig-1.6.0-1.aarch64.rpm
 cabe593fe7f5c31cdbcd8d546ae4925b57f98f70c564452335568389f3f9737c  pig-1.6.0-1.x86_64.rpm
 1f46d4a0b4710eed06b2cf8e7e17ee04b8d65331697c5c65afd513cc28282231  pig-v1.6.0.darwin-amd64.tar.gz
@@ -48,4 +48,4 @@ e35ef0f2c76afe5f3512d34c0440abd8c0106c0e2775c5452e167ae3a4127e8e  pig_1.6.0-1_am
 c3bc6d04c6acd7e5c3164a33b7525b25a93e2de9822ce957c15c18ee0d551901  pig_1.6.0-1_arm64.deb
 ```
 
-Release: https://github.com/pgsty/pig/releases/tag/v1.6.0
+{{< release-card >}}

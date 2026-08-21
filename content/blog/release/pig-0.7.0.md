@@ -2,11 +2,11 @@
 title: "pig v0.7.0"
 linkTitle: "v0.7.0"
 date: 2025-11-07
-author: "Ruohang Feng"
 description: "Build Enhancement and massive upgrade"
-categories: [release]
-tags: [Release, pig]
+tags: [build, repo, catalog, install]
 weight: 220
+authors: [Vonng]
+release_url: https://github.com/pgsty/pig/releases/tag/v0.7.0
 ---
 
 - Add support for Debian 13 and EL 10 distributions
@@ -25,7 +25,7 @@ weight: 220
 
 ## Checksums
 
-```bash
+```checksums
 ad60f9abcde954769e46eb23de61965e  pig_0.7.0-1_amd64.deb
 aa15d7088d561528e38b2778fe8f7cf9  pig_0.7.0-1_arm64.deb
 05549fe01008e04f8d5a59d4f2a5f0b8  pig-0.7.0-1.aarch64.rpm
@@ -36,4 +36,4 @@ ee7e055ceff638039956765fb747f80b  pig-v0.7.0.linux-amd64.tar.gz
 284e674807b87447d4b33691fd7a420d  pig-v0.7.0.linux-arm64.tar.gz
 ```
 
-Release: https://github.com/pgsty/pig/releases/tag/v0.7.0
+{{< release-card >}}

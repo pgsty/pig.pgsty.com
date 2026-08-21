@@ -32,3 +32,16 @@
     opacity: 0.65;
   }
 }
+
+// 发布注记索引用 table 形态。OINK 的日期列宽 7.5em 是给 ISO 日期算的，
+// 本站的 time_format_blog 是 'January 02, 2006' / '2006年01月02日'，
+// 长日期会顶到标题列上，所以这里只放宽这一列。
+.td-blog-table__date {
+  width: 11em;
+}
+
+@media (max-width: 575.98px) {
+  .td-blog-table__date {
+    width: 8.5em;
+  }
+}

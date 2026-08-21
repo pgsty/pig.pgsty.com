@@ -2,11 +2,11 @@
 title: "pig v1.6.1"
 linkTitle: "v1.6.1"
 date: 2026-07-30
-author: "Ruohang Feng"
 description: "pig v1.6.1 refreshes the bundled extension catalog and aligns the embedded Pigsty version with 4.5.0."
-categories: [release]
-tags: [Release, pig]
+tags: [catalog, ext, install, repo]
 weight: 10
+authors: [Vonng]
+release_url: https://github.com/pgsty/pig/releases/tag/v1.6.1
 ---
 
 `pig` v1.6.1 is a maintenance release on top of [v1.6.0](/release/pig-1.6.0/). It carries no new
@@ -46,6 +46,6 @@ You can also refresh only the catalog on an existing install, without upgrading 
 pig ext reload             # download the latest catalog to ~/.pig/extension.csv
 ```
 
-See the [release notes](/release/) for the full version history, and the
-[GitHub release page](https://github.com/pgsty/pig/releases/tag/v1.6.1) for artifacts and
-checksums.
+See the [release notes](/release/) for the full version history.
+
+{{< release-card >}}

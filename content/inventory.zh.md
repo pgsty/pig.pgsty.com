@@ -4,6 +4,7 @@ description: "检视、编辑、校验、体检并与 CMDB 交换 Pigsty 配置�
 weight: 155
 icon: fas fa-list-check
 categories: [参考]
+tags: [inventory, sty]
 ---
 
 `pig inventory` 命令组（别名 `pig inv`）自 v1.6.0 起提供，用于以 **无损** 方式检视、编辑、

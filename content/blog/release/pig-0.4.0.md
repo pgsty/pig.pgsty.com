@@ -2,11 +2,11 @@
 title: "pig v0.4.0"
 linkTitle: "v0.4.0"
 date: 2025-04-27
-author: "Ruohang Feng"
 description: "do & pt sub-cmd, halo & orioledb"
-categories: [release]
-tags: [Release, pig]
+tags: [ext, catalog, patroni, repo]
 weight: 290
+authors: [Vonng]
+release_url: https://github.com/pgsty/pig/releases/tag/v0.4.0
 ---
 
 - Updated extension list, available extensions reached **407**
@@ -18,4 +18,4 @@ weight: 290
 - Fixed `pig ext status` panic issue under specific conditions
 - Fixed `pig ext scan` unable to match several extensions
 
-Release: https://github.com/pgsty/pig/releases/tag/v0.4.0
+{{< release-card >}}

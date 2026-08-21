@@ -2,11 +2,11 @@
 title: "pig v0.4.2"
 linkTitle: "v0.4.2"
 date: 2025-05-27
-author: "冯若航"
 description: "421 个扩展，halo 和 oriole deb"
-categories: [release]
-tags: [Release, pig]
+tags: [catalog, repo]
 weight: 270
+authors: [Vonng]
+release_url: https://github.com/pgsty/pig/releases/tag/v0.4.2
 ---
 
 - 将扩展列表更新至 421 个
@@ -23,7 +23,7 @@ weight: 270
 
 ## 校验和
 
-```bash
+```checksums
 bbf83fa3e3ec9a4dca82eeed921ae90a  pig_0.4.2-1_amd64.deb
 e45753335faf80a70d4f2ef1d3100d72  pig_0.4.2-1_arm64.deb
 966d60bbc2025ba9cc53393011605f9f  pig-0.4.2-1.aarch64.rpm
@@ -32,4 +32,4 @@ e45753335faf80a70d4f2ef1d3100d72  pig_0.4.2-1_arm64.deb
 768d43441917a3625c462ce9f2b9d4ef  pig-v0.4.2.linux-arm64.tar.gz
 ```
 
-发布：https://github.com/pgsty/pig/releases/tag/v0.4.2
+{{< release-card >}}

@@ -2,11 +2,11 @@
 title: "pig v0.7.4"
 linkTitle: "v0.7.4"
 date: 2025-12-01
-author: "Ruohang Feng"
 description: "Update ivory/pgtde kernel and pgdg extras"
-categories: [release]
-tags: [Release, pig]
+tags: [catalog]
 weight: 180
+authors: [Vonng]
+release_url: https://github.com/pgsty/pig/releases/tag/v0.7.4
 ---
 
 - Update extension metadata: `pg_search`, `pgmq`, `pg_stat_monitor`
@@ -16,7 +16,7 @@ weight: 180
 
 ## Checksums
 
-```bash
+```checksums
 5769b0051f04dcda22dd92b30b8effc8ddfa40097308bded76ce2b38d012ce57  pig-0.7.4-1.aarch64.rpm
 d15c829fa2e3ce8dcd1adc063c107607b8e70f2cf747646aaa2fa257cdbf979c  pig-0.7.4-1.x86_64.rpm
 bb4c90e253a3d470e50316e633a41e90ed2d4a5c5a1fd3a8dbb68ee87d831d47  pig-v0.7.4.darwin-amd64.tar.gz
@@ -27,4 +27,4 @@ faaf7ac7b08390f5048c081bb7a78100714387e35dc890e26d9746fc1caef415  pig-v0.7.4.dar
 d2b80af89ed42601716f6b41eda3f8bee16db34023527df9deef8a43aa25a498  pig_0.7.4-1_arm64.deb
 ```
 
-Release: https://github.com/pgsty/pig/releases/tag/v0.7.4
+{{< release-card >}}

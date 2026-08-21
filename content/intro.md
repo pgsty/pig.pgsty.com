@@ -7,6 +7,7 @@ search_boost: 1.25
 weight: 20
 icon: fas fa-lightbulb
 categories: [Concept]
+tags: [catalog, ext]
 ---
 
 PostgreSQL has an unusually rich extension ecosystem, but distributing those extensions is harder than discovering them. A usable package must match the PostgreSQL major version, Linux distribution release, CPU architecture, dependency set, and sometimes a vendor-specific repository. If no matching package exists, the operator also owns the compiler toolchain and future upgrades.

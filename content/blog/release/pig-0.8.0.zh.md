@@ -2,11 +2,11 @@
 title: "pig v0.8.0"
 linkTitle: "v0.8.0"
 date: 2025-12-26
-author: "冯若航"
 description: "440 extensions，移除 sysupdate 仓库"
-categories: [release]
-tags: [Release, pig]
+tags: [repo, catalog, patroni]
 weight: 160
+authors: [Vonng]
+release_url: https://github.com/pgsty/pig/releases/tag/v0.8.0
 ---
 
 ## 扩展更新
@@ -34,7 +34,7 @@ weight: 160
 
 ## 校验和
 
-```bash
+```checksums
 e457832fb290e2f9975bf719966dc36e650bdcbf8505d319c9e0431f4c03bc9e  pig-0.8.0-1.aarch64.rpm
 c97b1bfdd7541f0f464cab0ecc273e65535c8dd2603c38d5cf8dccbf7e95b523  pig-0.8.0-1.x86_64.rpm
 d892f06d3d3b440671529f40e6cc7949686e0167e2a4758adc666b8a3d75254d  pig-v0.8.0.darwin-amd64.tar.gz
@@ -45,4 +45,4 @@ d2f410f7b243a8323c8d479f462a0267ac72d217aa4a506c80b5a9927d12dff8  pig-v0.8.0.lin
 5cb9eccce659110f3ba58e502575564bd6befffd51992a43d84df5a17f8eb8a0  pig_0.8.0-1_arm64.deb
 ```
 
-发布：https://github.com/pgsty/pig/releases/tag/v0.8.0
+{{< release-card >}}

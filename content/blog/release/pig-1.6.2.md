@@ -2,11 +2,11 @@
 title: "pig v1.6.2"
 linkTitle: "v1.6.2"
 date: 2026-08-11
-author: "Ruohang Feng"
 description: "572 packaged extensions, Grafana dashboard schema v2, and SOW-first local repository generation."
-categories: [release]
-tags: [Release, pig]
+tags: [catalog, repo, ext, sty]
 weight: 5
+authors: [Vonng]
+release_url: https://github.com/pgsty/pig/releases/tag/v1.6.2
 ---
 
 Pig `v1.6.2` is a feature and catalog release on top of [v1.6.1](/release/pig-1.6.1/). It grows the packaged extension catalog from 562 to 572, adds native Grafana dashboard schema v2 support, and improves local repository generation. The embedded Pigsty version remains locked at `4.5.0`.
@@ -34,9 +34,7 @@ Pig `v1.6.2` is a feature and catalog release on top of [v1.6.1](/release/pig-1.
 
 ## Checksums
 
-Artifacts: [GitHub Release](https://github.com/pgsty/pig/releases/tag/v1.6.2) · [checksums.txt](https://github.com/pgsty/pig/releases/download/v1.6.2/checksums.txt)
-
-```bash
+```checksums
 6697a96bbf476e697a5c3da8b6c861719e4b7208e1e4fe927cf4b475ea1f162f  pig-1.6.2-1.aarch64.rpm
 ad0b311867bc6cd689dd73e9a96b84f1fe0f49f6c0f1184abf9eb3232a07a184  pig-1.6.2-1.x86_64.rpm
 bb167e04fceb6cebee5c8a2423279cefb4474f46301a5055c464ac98294dc9db  pig-v1.6.2.darwin-amd64.tar.gz
@@ -47,4 +45,4 @@ b511e727642987867be5921d72e8019e9c6186b82e63ddc34ad653773abed5a8  pig-v1.6.2.lin
 00e4c84cd6b07a98401c73fb58dedaafe34bc794d7604edbcb76c5de39b0fb44  pig_1.6.2-1_arm64.deb
 ```
 
-Release: https://github.com/pgsty/pig/releases/tag/v1.6.2
+{{< release-card >}}

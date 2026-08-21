@@ -4,6 +4,7 @@ description: "Build PostgreSQL extensions from source with pig build"
 weight: 130
 icon: fas fa-hammer
 categories: [Reference]
+tags: [build, ext]
 ---
 
 The `pig build` command simplifies the full workflow for building PostgreSQL extensions from source. It provides build infrastructure setup, dependency management, and compilation environments for standard and custom PostgreSQL extensions across supported operating systems.

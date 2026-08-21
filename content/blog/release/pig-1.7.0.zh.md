@@ -2,11 +2,11 @@
 title: "pig v1.7.0"
 linkTitle: "v1.7.0"
 date: 2026-08-12
-author: "冯若航"
 description: "更安全的 EL 模块处理、更新的中国镜像、精简的 EL7 兼容目录，以及 575 个已打包扩展。"
-categories: [release]
-tags: [Release, pig]
+tags: [repo, catalog, ext]
 weight: 2
+authors: [Vonng]
+release_url: https://github.com/pgsty/pig/releases/tag/v1.7.0
 ---
 
 Pig `v1.7.0` 是 [v1.6.2](/zh/release/pig-1.6.2/) 之上的仓库兼容性与目录更新版本：明确中国镜像选择语义，默认保留 DNF 原生模块过滤，恢复精简的 EL7 仓库目录，并将内置扩展快照从 572 个增加到 575 个。内置 Pigsty 版本仍为 `4.5.0`。
@@ -37,7 +37,7 @@ Pig `v1.7.0` 是 [v1.6.2](/zh/release/pig-1.6.2/) 之上的仓库兼容性与目
 
 制品：[GitHub Release](https://github.com/pgsty/pig/releases/tag/v1.7.0) · [checksums.txt](https://github.com/pgsty/pig/releases/download/v1.7.0/checksums.txt)
 
-```bash
+```checksums
 e3a339fefdd2203825d15438b52f18e729547eb88dae014212a46006a9bd47d1  pig-1.7.0-1.aarch64.rpm
 34ce29d75ef9f669f3bf832cc812ae082abda7320ee2b2336ea61e701b9b67f8  pig-1.7.0-1.x86_64.rpm
 d26803c685ba29c01cb8e6dfe50c6c1b0f004173be82015618fa8cdf6a329ba7  pig-v1.7.0.darwin-amd64.tar.gz
@@ -48,4 +48,4 @@ ea8120d48b93da936919f590ebbefeb72e73277e6bc133c1ef0bb1abc055d3ce  pig-v1.7.0.dar
 adf7b2d9ce8fe42bad935428d16a9c998337df986b1065e0761dc167ce837ef5  pig_1.7.0-1_arm64.deb
 ```
 
-发布：https://github.com/pgsty/pig/releases/tag/v1.7.0
+{{< release-card >}}

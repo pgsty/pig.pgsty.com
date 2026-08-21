@@ -2,11 +2,11 @@
 title: "pig v1.3.1"
 linkTitle: "v1.3.1"
 date: 2026-03-05
-author: "Ruohang Feng"
 description: "Retire PG13 defaults, unify PG14-18 support window, 464 extensions"
-categories: [release]
-tags: [Release, pig]
+tags: [build, catalog]
 weight: 110
+authors: [Vonng]
+release_url: https://github.com/pgsty/pig/releases/tag/v1.3.1
 ---
 
 This is a small maintenance release from `v1.3.0` to `v1.3.1`.
@@ -20,7 +20,7 @@ This is a small maintenance release from `v1.3.0` to `v1.3.1`.
 
 ## Checksums
 
-```bash
+```checksums
 196e57c7dd46cdedd90ab75965a766f74aabc3bc23ddc8fb757473647bed7b8f  pig-1.3.1-1.aarch64.rpm
 e4bdd52ef635524d5aec95f6a5abd76bd49940584ecbb00bd309a4f9186292ac  pig-1.3.1-1.x86_64.rpm
 4f3f9479344c158e1c5edc3003471be6b595c01b7d86104bf676b34f8faadce5  pig-v1.3.1.darwin-amd64.tar.gz
@@ -31,4 +31,4 @@ e4bdd52ef635524d5aec95f6a5abd76bd49940584ecbb00bd309a4f9186292ac  pig-1.3.1-1.x8
 e495678ae1c762194a56e8c9969fd2109e7a59830f34a4747039fb978f7820cc  pig_1.3.1-1_arm64.deb
 ```
 
-Release: https://github.com/pgsty/pig/releases/tag/v1.3.1
+{{< release-card >}}

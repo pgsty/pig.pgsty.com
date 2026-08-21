@@ -5,6 +5,7 @@ description: "How to download and install the pig package manager"
 weight: 30
 icon: fas fa-download
 categories: [Task]
+tags: [install, repo]
 ---
 
 ## Script Installation

@@ -4,6 +4,7 @@ description: "透明运行 patronictl，附带 Pigsty 服务、配置与日志�
 weight: 170
 icon: fas fa-infinity
 categories: [参考]
+tags: [patroni]
 ---
 
 `pig patroni` 命令（别名 `pig pt`）自 v1.6.0 起是已安装 `patronictl` 的 **透明启动器**：

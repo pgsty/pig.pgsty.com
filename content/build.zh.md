@@ -4,6 +4,7 @@ description: "使用 pig build 子命令从源码构建扩展"
 weight: 130
 icon: fas fa-hammer
 categories: [参考]
+tags: [build, ext]
 ---
 
 `pig build` 命令是一个强大的工具，简化了从源码构建 PostgreSQL 扩展的整个工作流程。它提供了完整的构建基础设施设置、依赖管理，以及标准和自定义 PostgreSQL 扩展在不同操作系统上的编译环境。

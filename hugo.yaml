@@ -42,6 +42,10 @@ languages:
     params:
       description: "PIG: the PostgreSQL extension package manager. Install PostgreSQL 14-18 and 575 cataloged extension packages with native APT/DNF workflows."
       time_format_blog: 'January 02, 2006'
+      copyright:
+        authors: '[Ruohang Feng](https://vonng.com) ([Vonng](https://github.com/Vonng)) @ [PGSTY](https://pgsty.com)'
+        from_year: 2025
+        url: https://pgsty.com
     menu:
       main:
         - identifier: docs
@@ -54,6 +58,11 @@ languages:
           weight: 20
           url: /blog/
           pre: <i class='fa-solid fa-blog'></i>
+        - identifier: download
+          name: Download
+          weight: 30
+          url: /download/
+          pre: <i class='fa-solid fa-download'></i>
   zh:
     label: 简体中文
     locale: zh-CN
@@ -62,6 +71,15 @@ languages:
     params:
       description: "PIG：PostgreSQL 扩展包管理器，通过原生 APT/DNF 工作流安装 PostgreSQL 14-18 与目录中的 575 个扩展包。"
       time_format_blog: '2006年01月02日'
+      copyright:
+        authors: '[冯若航](https://vonng.com)（[Vonng](https://github.com/Vonng)）@ [PGSTY](https://pgsty.com)'
+        from_year: 2025
+        url: https://pgsty.com
+      # giscus 的 aria-label 与加载失败提示没有走 i18n，只能按语言覆盖。
+      comments:
+        giscus:
+          arialabel: 评论
+          errormessage: 评论加载失败。
     menu:
       main:
         - identifier: docs
@@ -74,13 +92,21 @@ languages:
           weight: 20
           url: /zh/blog/
           pre: <i class='fa-solid fa-blog'></i>
+        - identifier: download
+          name: 下载
+          weight: 30
+          url: /zh/download/
+          pre: <i class='fa-solid fa-download'></i>
 
 #=======================================#
 # Taxonomies and blog URLs
 #=======================================#
+# authors 是 OINK 0.6 的作者分类法：声明它就够了，作者档案就是
+# content/authors/<slug>/_index.md 这张词条页（标题=显示名，description=一句话简介）。
 taxonomies:
   categories: categories
   tags: tags
+  author: authors
 
 # 博客内容按栏目组织在 content/blog/ 下，但 URL 不带 blog 前缀：
 # content/blog/release/pig-1.6.0.md → /release/pig-1.6.0/
@@ -162,19 +188,42 @@ params:
   version: 1.8.0            # pig 最新版本号（= internal/config.PigVersion），正文用 {{< param version >}}
   pigsty_version: 4.5.0     # pig 内置的 Pigsty 版本（= internal/config.PigstyVersion）
   pgext_count: 575          # Pigsty 已打包 PG 扩展数量，正文用 {{< param pgext_count >}}
+  # 页脚版权行（OINK footer/copyright.html 会按 Markdown 渲染 authors）。
+  # 中英两版署名不同，各自写在下面的 languages 块里。
   copyright:
-    authors: PIGSTY & PIG Contributors
     from_year: 2025
     url: https://pgsty.com
 
   # 正文列宽模式：normal（1050px，默认）| wide（1300px）| full（占满可用宽）。
   # 页面 front matter 可单页覆盖（page_width: wide），栏目可经 cascade 继承。
   page_width: normal
-  # ICP 备案号（单行页脚居中显示，链接到 beian.miit.gov.cn；留空则不渲染）。
-  footer_icp: ""
+  # 页脚底栏中间那句话（接受行内 Markdown，OINK 默认是 "Powered by Oink"）。
+  # ICP 备案号也放这里，例如：
+  # footer_center_info: '[浙ICP备15016890号-2](https://beian.miit.gov.cn/)'
+  footer_center_info: 'Built with [OINK](https://oink.pgsty.com/)'
 
   archived_version: false
   url_latest_version: https://pig.pgsty.com
+
+  # GitHub Discussions 评论（giscus）。讨论区开在站点仓库 pgsty/pig.pgsty.com 下，
+  # 与 silo.pgsty.com 的做法一致：产品仓库的 Discussions 留给用户提问，
+  # 站点页面的评论不去占它。strict=1 用 pathname 的哈希精确匹配线程。
+  # 首页与下载页是自定义整页模板，不走 page-end，因此不渲染评论。
+  comments:
+    enable: true
+    type: giscus
+    giscus:
+      repo: pgsty/pig.pgsty.com
+      repoId: R_kgDOTyDjmw
+      category: Announcements
+      categoryId: DIC_kwDOTyDjm84DDDv-
+      mapping: pathname
+      strict: 1
+      reactionsEnabled: 1
+      emitMetadata: 0
+      inputPosition: top
+      theme: auto
+      loading: lazy
   github_repo: https://github.com/pgsty/pig.pgsty.com
   github_project_repo: https://github.com/pgsty/pig
   github_branch: main
@@ -188,6 +237,12 @@ params:
 
   ui:
     blog_index_size: 60
+    # 页尾分享栏：每一项都是普通 <a href> 意图链接或本地复制按钮，
+    # 不引入任何第三方脚本、样式或计数。只有单页会渲染它。
+    share: [x, hackernews, reddit, telegram, weibo, email, copy]
+    # 让读者在列表 / 卡片 / 表格三种索引形态之间切换（工具栏里那个按钮）。
+    # 每个栏目的首发形态由自己的 front matter blog_index 决定。
+    blog_index_toggle: true
     breadcrumb: true
     navbar_logo: true
     navbar_translucent_over_cover_disable: false

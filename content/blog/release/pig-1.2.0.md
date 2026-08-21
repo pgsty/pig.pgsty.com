@@ -2,11 +2,11 @@
 title: "pig v1.2.0"
 linkTitle: "v1.2.0"
 date: 2026-02-23
-author: "Ruohang Feng"
 description: "Unified aliases, routine updates, plan mode, repo fixes"
-categories: [release]
-tags: [Release, pig]
+tags: [repo, sty, catalog, cli]
 weight: 130
+authors: [Vonng]
+release_url: https://github.com/pgsty/pig/releases/tag/v1.2.0
 ---
 
 - Extension catalog and alias resolution enhancements:
@@ -49,7 +49,7 @@ weight: 130
 
 ## Checksums
 
-```bash
+```checksums
 344b77385fa9c3d4fe5e1961340e68716251e38d1cb8308f5af45ce8a03cd206  pig-1.2.0-1.aarch64.rpm
 aa9cf1820a9045cc42f0d66689d5e8679cb71452042f3f01ddd4c3a518a2b757  pig-1.2.0-1.x86_64.rpm
 f26e4d9e9fa76c39f7c591c18a09287ca3388e016d121c196302ee9eafb5b678  pig-v1.2.0.darwin-amd64.tar.gz
@@ -60,4 +60,4 @@ e824716ddfbf3805dc0a1fd6d97917241b7780503657e9fd40a37beb6b398d7a  pig_1.2.0-1_am
 b67baa404d877b37004331041cb270c85b8f9a3f8a92a5083390a54d76553d2a  pig_1.2.0-1_arm64.deb
 ```
 
-Release: https://github.com/pgsty/pig/releases/tag/v1.2.0
+{{< release-card >}}

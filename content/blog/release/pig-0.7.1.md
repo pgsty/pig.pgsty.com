@@ -2,11 +2,11 @@
 title: "pig v0.7.1"
 linkTitle: "v0.7.1"
 date: 2025-11-10
-author: "Ruohang Feng"
 description: "New Website, improve in-docker experience"
-categories: [release]
-tags: [Release, pig]
+tags: [ext]
 weight: 210
+authors: [Vonng]
+release_url: https://github.com/pgsty/pig/releases/tag/v0.7.1
 ---
 
 - The brand-new website: /ext/
@@ -19,7 +19,7 @@ weight: 210
 
 ## Checksums
 
-```bash
+```checksums
 a696c9ec784e2fc248e5f3d87cc8aae4116e890f78c5997957d30593f2c85ca6  pig-0.7.1-1.aarch64.rpm
 f669538a99cd1dc592d3005b949628fcceb9e78114fc78862d7726b340ee194d  pig-0.7.1-1.x86_64.rpm
 e42bdaaf93b720c5b76b32b57362320e4b447109740c76089aefe030b7c8b836  pig-v0.7.1.darwin-amd64.tar.gz
@@ -30,4 +30,4 @@ ffc687add0ca71ac90cba5749c8a7a6075cf7618cba85584072831cf3eb182f7  pig-v0.7.1.lin
 fc2a34aeb46e07cb0ae93611de47d6622c3bd46fe4c415ce4c9091840e0e08a2  pig_0.7.1-1_arm64.deb
 ```
 
-Release: https://github.com/pgsty/pig/releases/tag/v0.7.1
+{{< release-card >}}

@@ -4,6 +4,7 @@ description: "Manage local PostgreSQL server with pig postgres subcommand"
 weight: 160
 icon: fas fa-database
 categories: [Reference]
+tags: [postgres]
 ---
 
 The `pig pg` command (alias `pig postgres`) manages local PostgreSQL servers and databases. It wraps local primitives such as `pg_ctl`, `psql`, and `vacuumdb`; use `pig pt` for Patroni cluster operations and `pig pitr` for orchestrated PITR.

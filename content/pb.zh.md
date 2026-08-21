@@ -4,6 +4,7 @@ description: "使用 pig pgbackrest 子命令管理 pgBackRest 备份与时间�
 weight: 180
 icon: fas fa-database
 categories: [参考]
+tags: [pgbackrest]
 ---
 
 `pig pgbackrest` 命令（别名 `pig pb`）用于管理 pgBackRest 备份，并提供低层 restore 原语。

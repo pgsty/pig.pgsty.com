@@ -2,11 +2,11 @@
 title: "pig v0.4.0"
 linkTitle: "v0.4.0"
 date: 2025-04-27
-author: "冯若航"
 description: "do 和 pt 子命令，halo 和 orioledb"
-categories: [release]
-tags: [Release, pig]
+tags: [ext, catalog, patroni, repo]
 weight: 290
+authors: [Vonng]
+release_url: https://github.com/pgsty/pig/releases/tag/v0.4.0
 ---
 
 - 更新扩展列表，可用扩展达到 **407** 个
@@ -18,4 +18,4 @@ weight: 290
 - 修复特定条件下 `pig ext status` 的 panic 问题
 - 修复 `pig ext scan` 无法匹配多个扩展的问题
 
-发布：https://github.com/pgsty/pig/releases/tag/v0.4.0
+{{< release-card >}}

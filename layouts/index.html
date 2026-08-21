@@ -1,206 +1,41 @@
+{{- /* PIG 定制首页，跑在 OINK 的 landing shell 里：<head>、navbar、footer、
+     search 与 scripts 全部由主题提供，这里只出版面本身。
+     `body_class: landing-page` 在 content/_index.md 里，用来给这套 CSS 圈定作用域；
+     样式表与运行时经 layouts/_partials/hooks/{head-end,body-end}.html 加载。 */ -}}
+{{ define "main" }}
 {{- $zh := eq .Site.Language.Lang "zh" -}}
-{{- $description := .Description | default .Site.Params.description -}}
-{{- $locale := default .Site.Language.Lang .Site.Language.Locale -}}
 {{- $metrics := hugo.Data.home.metrics -}}
-{{- $socialImage := "img/pig-social-card.png" | absURL -}}
-{{- $socialAlt := cond $zh "PIG — Packager Index Gateway，PostgreSQL 扩展包管理器" "PIG — Packager Index Gateway, the PostgreSQL extension package manager" -}}
 {{- $ext := cond $zh "https://pigsty.cc/ext" "https://pigsty.io/ext" -}}
 {{- $pigsty := cond $zh "https://pigsty.cc" "https://pigsty.io" -}}
 {{- $install := cond $zh "curl -fsSL https://repo.pigsty.cc/pig | bash" "curl -fsSL https://repo.pigsty.io/pig | bash" -}}
-{{- $shell := partial "shell/config.html" . -}}
-<!DOCTYPE html>
-<html lang="{{ $locale }}" class="no-js">
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>{{ .Title }}</title>
-  <meta name="description" content="{{ $description }}">
-  {{ if hugo.IsProduction -}}
-  <meta name="robots" content="index, follow">
-  {{ else -}}
-  <meta name="robots" content="noindex, nofollow">
-  {{ end -}}
-  <meta name="author" content="Pigsty and PIG contributors">
-  <meta name="application-name" content="PIG">
-  <meta name="theme-color" content="#0b1119">
-  <meta name="color-scheme" content="dark light">
-
-  <link rel="icon" type="image/svg+xml" href="{{ "img/pig.svg" | relURL }}">
-  <link rel="icon" href="{{ "favicon.ico" | relURL }}" sizes="any">
-  <link rel="canonical" href="{{ .Permalink }}">
-  {{ range .AllTranslations -}}
-  <link rel="alternate" hreflang="{{ .Language.Locale | default .Language.Lang }}" href="{{ .Permalink }}">
-  {{ end -}}
-  {{ range where .AllTranslations "Language.Lang" "en" -}}
-  <link rel="alternate" hreflang="x-default" href="{{ .Permalink }}">
-  {{ end -}}
-  {{ with .OutputFormats.Get "rss" -}}
-  <link rel="alternate" type="{{ .MediaType.Type }}" title="{{ $.Site.Title }} RSS" href="{{ .Permalink }}">
-  {{ end }}
-
-  <meta property="og:title" content="{{ .Title }}">
-  <meta property="og:description" content="{{ $description }}">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="{{ .Permalink }}">
-  <meta property="og:site_name" content="PIG">
-  <meta property="og:locale" content="{{ replace $locale "-" "_" }}">
-  {{ range .Translations -}}
-  <meta property="og:locale:alternate" content="{{ replace (.Language.Locale | default .Language.Lang) "-" "_" }}">
-  {{ end -}}
-  <meta property="og:image" content="{{ $socialImage }}">
-  <meta property="og:image:type" content="image/png">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="{{ $socialAlt }}">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="{{ .Title }}">
-  <meta name="twitter:description" content="{{ $description }}">
-  <meta name="twitter:image" content="{{ $socialImage }}">
-  <meta name="twitter:image:alt" content="{{ $socialAlt }}">
-
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": "PIG — Packager Index Gateway",
-    "alternateName": "pig",
-    "applicationCategory": "DeveloperApplication",
-    "operatingSystem": "Linux, macOS",
-    "url": {{ .Site.BaseURL | jsonify | safeJS }},
-    "image": {{ $socialImage | jsonify | safeJS }},
-    "inLanguage": {{ $locale | jsonify | safeJS }},
-    "downloadUrl": "https://github.com/pgsty/pig/releases",
-    "codeRepository": "https://github.com/pgsty/pig",
-    "softwareVersion": {{ .Site.Params.version | jsonify | safeJS }},
-    "isAccessibleForFree": true,
-    "maintainer": {
-      "@type": "Organization",
-      "name": "Pigsty",
-      "url": "https://pigsty.io/"
-    },
-    "sameAs": [
-      "https://github.com/pgsty/pig"
-    ],
-    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-    "description": {{ $description | jsonify | safeJS }}
-  }
-  </script>
-
-  <script>
-    (function () {
-      var theme = null;
-      try {
-        theme = window.localStorage.getItem('td-color-theme') ||
-          window.localStorage.getItem('pig-landing-theme');
-      } catch (error) {}
-      if (theme === 'auto') theme = null;
-      if (theme !== 'light' && theme !== 'dark') {
-        theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-      }
-      document.documentElement.setAttribute('data-theme', theme);
-      document.documentElement.classList.remove('no-js');
-      document.documentElement.classList.add('js');
-    })();
-  </script>
-
-  <link rel="stylesheet" href="{{ "fonts/fonts.css" | relURL }}">
-  <link rel="stylesheet" href="{{ "vendor/fontawesome/css/all.min.css" | relURL }}">
-  {{/* Content hash in the query string: static/ assets are served with long cache
-       lifetimes, so an edited stylesheet must change its URL to be picked up. */}}
-  {{- range slice "css/landing-v3.css" "css/pig-v3.css" "css/download.css" "css/pig-footer.css" }}
-  <link rel="stylesheet" href="{{ . | relURL }}?v={{ substr (md5 (readFile (path.Join "static" .))) 0 8 }}">
-  {{- end }}
-  {{- $searchCss := resources.Get "scss/landing-search.scss" | toCSS | minify | fingerprint }}
-  <link rel="stylesheet" href="{{ $searchCss.RelPermalink }}" integrity="{{ $searchCss.Data.Integrity }}">
-  {{ if hugo.IsProduction }}{{ partial "google_analytics.html" . }}{{ end }}
-</head>
-<body class="landing-page">
-  <a class="skip-link" href="#main">{{ if $zh }}跳到正文{{ else }}Skip to content{{ end }}</a>
-
-  <header class="landing-header" data-header>
-    <div class="landing-container">
-      <nav class="landing-nav" aria-label="{{ if $zh }}主导航{{ else }}Main navigation{{ end }}">
-        <a href="{{ relLangURL "" }}" class="nav-brand" aria-label="{{ if $zh }}PIG 首页{{ else }}PIG home{{ end }}">
-          {{- if $shell.wordmarkURL }}
-          <img src="{{ $shell.wordmarkURL }}" alt="" class="nav-wordmark" width="96" height="32">
-          {{- else }}
-          <img src="{{ "img/pig.svg" | relURL }}" alt="" class="nav-logo">
-          <span class="nav-title">PIG</span>
-          {{- end }}
-        </a>
-
-        <div class="nav-links">
-          <a href="{{ relLangURL "docs/" }}" class="nav-link">{{ if $zh }}文档{{ else }}Docs{{ end }}</a>
-          <a href="{{ relLangURL "blog/" }}" class="nav-link">{{ if $zh }}博客{{ else }}Blog{{ end }}</a>
-          <div class="nav-utils">
-            <button type="button" class="nav-util" data-td-shell-search-open title="{{ if $zh }}搜索与命令（⌘K）{{ else }}Search &amp; commands (⌘K){{ end }}" aria-label="{{ if $zh }}搜索与命令{{ else }}Search and commands{{ end }}" aria-controls="td-shell-search" aria-expanded="false">
-              {{- partialCached "shell/icon.html" "search" "search" -}}
-            </button>
-            <button type="button" class="nav-util" data-theme-toggle title="{{ if $zh }}切换深浅主题{{ else }}Switch light / dark mode{{ end }}" aria-label="{{ if $zh }}切换深浅主题{{ else }}Switch light / dark mode{{ end }}">
-              {{- partialCached "shell/icon.html" "moon" "moon" -}}
-              {{- partialCached "shell/icon.html" "sun" "sun" -}}
-            </button>
-            {{ range .Translations }}
-            <a href="{{ .RelPermalink }}" class="nav-util" title="{{ .Language.Label }}" aria-label="{{ .Language.Label }}">{{ partialCached "shell/icon.html" "languages" "languages" }}</a>
-            {{ end }}
-            <a href="https://github.com/pgsty/pig" class="nav-github" target="_blank" rel="noopener" title="GitHub" aria-label="GitHub">
-              {{ partialCached "shell/icon.html" "github" "github" }}
-            </a>
-          </div>
-        </div>
-
-        <button class="mobile-menu-toggle" type="button" aria-label="{{ if $zh }}打开菜单{{ else }}Open menu{{ end }}" aria-expanded="false" data-menu-toggle>
-          <span></span><span></span><span></span>
-        </button>
-      </nav>
-    </div>
-  </header>
-
-  <div class="mobile-menu" data-mobile-menu>
-    <a href="{{ relLangURL "docs/" }}" class="mobile-menu-link">{{ if $zh }}文档{{ else }}Docs{{ end }}</a>
-    <a href="{{ relLangURL "blog/" }}" class="mobile-menu-link">{{ if $zh }}博客{{ else }}Blog{{ end }}</a>
-    <a href="{{ relLangURL "install/" }}" class="mobile-menu-link"><i class="fas fa-download" aria-hidden="true"></i> {{ if $zh }}下载安装{{ else }}Download &amp; Install{{ end }}</a>
-    <button type="button" class="mobile-menu-link mobile-menu-link--btn" data-td-shell-search-open aria-controls="td-shell-search" aria-expanded="false"><i class="fas fa-search" aria-hidden="true"></i> {{ if $zh }}搜索与命令{{ else }}Search &amp; Commands{{ end }}</button>
-    {{ range .Translations }}<a href="{{ .RelPermalink }}" class="mobile-menu-link"><i class="fas fa-language" aria-hidden="true"></i> {{ .Language.Label }}</a>{{ end }}
-    <button type="button" class="mobile-menu-link mobile-menu-link--btn" data-theme-toggle><i class="fas fa-moon" aria-hidden="true"></i> {{ if $zh }}浅色 / 深色{{ else }}Light / Dark{{ end }}</button>
-    <a href="https://github.com/pgsty/pig" class="mobile-menu-link" target="_blank" rel="noopener"><i class="fab fa-github" aria-hidden="true"></i> GitHub</a>
-  </div>
-
-  <main id="main">
     {{/* ---------------------------------------------------------------- HERO
-         单栏品牌声明：P / I / G 对应 Packager / Index / Gateway，
-         用一句定位、一组行动入口和一条真命令完成首屏。 */}}
+         左半是品牌声明：P / I / G 对应 PostgreSQL / Install / Guide，
+         一句定位 + 行动入口 + 一条真命令；右半是架构图，讲 pig 怎么工作。 */}}
     <section class="hero" id="hero">
       <div class="hero-bg" aria-hidden="true"></div>
       <div class="landing-container">
-        <div class="hero-grid">
+        <div class="hero-grid hero-grid--split">
           <div class="hero-copy" id="about">
             <p class="hero-eyebrow anim" style="--d:0">
               <span class="eyebrow-mark" aria-hidden="true"></span>
               <span class="eyebrow-en">{{ if $zh }}PostgreSQL 扩展包管理器{{ else }}THE POSTGRESQL EXTENSION PACKAGE MANAGER{{ end }}</span>
             </p>
 
-            <h1 class="hero-title pig-hero-title anim" style="--d:1" aria-label="PIG — Packager Index Gateway">
-              <span class="hero-title-line"><b class="ini ini-p">P</b>ackager</span>
-              <span class="hero-title-line"><b class="ini ini-i">I</b>ndex</span>
-              <span class="hero-title-line"><b class="ini ini-g">G</b>ateway</span>
+            <h1 class="hero-title pig-hero-title anim" style="--d:1" aria-label="PIG — PostgreSQL Install Guide">
+              <span class="hero-title-line"><b class="ini ini-p">P</b>ostgreSQL</span>
+              <span class="hero-title-line"><b class="ini ini-i">I</b>nstall</span>
+              <span class="hero-title-line"><b class="ini ini-g">G</b>uide</span>
             </h1>
 
             <p class="hero-tagline anim" style="--d:2">
-              <strong>{{ if $zh }}PostgreSQL 扩展包的统一入口。{{ else }}One gateway to PostgreSQL extension packages.{{ end }}</strong>
-              <span>{{ if $zh }}{{ $metrics.packaged_extensions }} 个目录条目 · PostgreSQL 14-18 · EL / Debian / Ubuntu{{ else }}{{ $metrics.packaged_extensions }} catalog entries · PostgreSQL 14-18 · EL / Debian / Ubuntu{{ end }}</span>
-            </p>
-
-            <p class="hero-sub anim" style="--d:3">
-              {{ if $zh }}一个 CLI 检索目录、配置仓库并安装原生 RPM / DEB；具体可用性以目标矩阵为准。{{ else }}One CLI to search the catalog, configure repositories, and install native RPM / DEB. Availability is target-specific.{{ end }}
+              <strong>{{ if $zh }}一条命令，装好 PostgreSQL 与它的扩展。{{ else }}One command installs PostgreSQL and its extensions.{{ end }}</strong>
+              <span>{{ if $zh }}{{ $metrics.packaged_extensions }} 个扩展 · PostgreSQL 14-18 · EL / Debian / Ubuntu{{ else }}{{ $metrics.packaged_extensions }} extensions · PostgreSQL 14-18 · EL / Debian / Ubuntu{{ end }}</span>
             </p>
 
             <div class="hero-actions anim" style="--d:4">
               <div class="hero-ctas">
                 <a href="{{ relLangURL "start/" }}" class="btn btn-primary"><i class="fas fa-rocket" aria-hidden="true"></i> {{ if $zh }}快速上手{{ else }}Get Started{{ end }}</a>
-                <a href="{{ relLangURL "docs/" }}" class="btn btn-ghost"><i class="fas fa-book-open" aria-hidden="true"></i> {{ if $zh }}浏览文档{{ else }}Documentation{{ end }}</a>
+                <a href="{{ relLangURL "download/" }}" class="btn btn-ghost"><i class="fas fa-download" aria-hidden="true"></i> {{ if $zh }}下载{{ else }}Download{{ end }}</a>
               </div>
               <div class="command-box">
                 <span class="command-prompt">$</span>
@@ -210,6 +45,10 @@
                 </button>
               </div>
             </div>
+          </div>
+
+          <div class="hero-art anim" style="--d:3">
+            {{ partial "pig/hero-diagram.html" . }}
           </div>
         </div>
       </div>
@@ -425,7 +264,7 @@
         </div>
 
         <div class="product-choice-grid" aria-label="{{ if $zh }}选择安装方式{{ else }}Choose an install path{{ end }}">
-          <a class="product-choice-card product-choice-card--server" href="{{ relLangURL "install/" }}" data-reveal>
+          <a class="product-choice-card product-choice-card--server" href="{{ relLangURL "download/" }}#script" data-reveal>
             <div class="product-choice-top">
               <div>
                 <p class="silkscreen">{{ if $zh }}安装脚本{{ else }}INSTALL SCRIPT{{ end }}</p>
@@ -436,10 +275,10 @@
             <p><code>{{ $install }}</code></p>
             <p>{{ if $zh }}脚本识别系统与架构，取回对应的 RPM / DEB，交给 <code>rpm</code> 或 <code>dpkg</code> 安装。{{ else }}The script detects your OS and architecture, fetches the matching RPM / DEB, and hands it to <code>rpm</code> or <code>dpkg</code>.{{ end }}</p>
             <div class="product-platforms"><span>EL 8/9/10</span><span>Debian 12/13</span><span>Ubuntu 22/24/26</span><span>amd64 · arm64</span></div>
-            <strong>{{ if $zh }}阅读安装文档{{ else }}Read the install guide{{ end }} <i aria-hidden="true">↗</i></strong>
+            <strong>{{ if $zh }}打开下载页{{ else }}Open the download page{{ end }} <i aria-hidden="true">↗</i></strong>
           </a>
 
-          <a class="product-choice-card product-choice-card--client" href="{{ relLangURL "install/" }}" data-reveal>
+          <a class="product-choice-card product-choice-card--client" href="{{ relLangURL "download/" }}#packages" data-reveal>
             <div class="product-choice-top">
               <div>
                 <p class="silkscreen">{{ if $zh }}包管理器与二进制{{ else }}PACKAGE OR BINARY{{ end }}</p>
@@ -449,7 +288,7 @@
             </div>
             <p>{{ if $zh }}把 Pigsty Infra 仓库加进系统，之后 <code>apt install pig</code> / <code>dnf install pig</code> 就能装和升；也可以直接取发布压缩包里的二进制丢进 PATH。{{ else }}Add the Pigsty Infra repository, then <code>apt install pig</code> or <code>dnf install pig</code>. Or just take the binary out of the release tarball and drop it on your PATH.{{ end }}</p>
             <div class="product-platforms"><span>rpm</span><span>deb</span><span>tarball</span><span>macOS</span></div>
-            <strong>{{ if $zh }}查看发布产物{{ else }}See the release artifacts{{ end }} <i aria-hidden="true">↗</i></strong>
+            <strong>{{ if $zh }}查看下载矩阵{{ else }}See the download matrix{{ end }} <i aria-hidden="true">↗</i></strong>
           </a>
         </div>
 
@@ -459,12 +298,4 @@
         </div>
       </div>
     </section>
-
-  </main>
-
-  {{ partial "pig/landing-footer.html" . }}
-
-  <script src="{{ "js/landing-v3.js" | relURL }}?v={{ substr (md5 (readFile "static/js/landing-v3.js")) 0 8 }}"></script>
-  {{ partial "pig/command-palette.html" . }}
-</body>
-</html>
+{{ end }}

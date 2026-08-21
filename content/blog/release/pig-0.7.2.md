@@ -2,11 +2,11 @@
 title: "pig v0.7.2"
 linkTitle: "v0.7.2"
 date: 2025-11-20
-author: "Ruohang Feng"
 description: "437 extensions, fix pig build issue"
-categories: [release]
-tags: [Release, pig]
+tags: [build, catalog]
 weight: 200
+authors: [Vonng]
+release_url: https://github.com/pgsty/pig/releases/tag/v0.7.2
 ---
 
 - Extension list update, + 6 new extensions, 437 total
@@ -19,7 +19,7 @@ weight: 200
 
 ## Checksums
 
-```bash
+```checksums
 f303c391fc28bc74832712e0aa58319abe0ebcae4f6c07fdf9a9e542b735d2ec  pig-0.7.2-1.aarch64.rpm
 c096a61a4e3a49b1238659664bbe2cd7f29954c43fb6bb8e8e9fb271f95a612e  pig-0.7.2-1.x86_64.rpm
 5e037c891dff23b46856485108d6f64bede5216dfbd4f38a481f0d0672ee910b  pig-v0.7.2.darwin-amd64.tar.gz
@@ -30,4 +30,4 @@ b6faad9f92b926546a10f590274f2cb2afff21b9cea878094cfc5caf09e67d2c  pig_0.7.2-1_am
 452f73f1fa035e5417ab49fc51d797925550179ffcc023e8f03d80144309212a  pig_0.7.2-1_arm64.deb
 ```
 
-Release: https://github.com/pgsty/pig/releases/tag/v0.7.2
+{{< release-card >}}

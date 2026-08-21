@@ -2,11 +2,11 @@
 title: "pig v1.4.0"
 linkTitle: "v1.4.0"
 date: 2026-04-19
-author: "Ruohang Feng"
 description: "510 extensions, pgrx 0.18.0, more building specs"
-categories: [release]
-tags: [Release, pig]
+tags: [build, catalog, patroni, repo]
 weight: 70
+authors: [Vonng]
+release_url: https://github.com/pgsty/pig/releases/tag/v1.4.0
 ---
 
 - Refresh the extension catalog and increase the total available extensions to **510**, with version bumps such as `timescaledb 2.26.3`, `decoderbufs 3.5.0`, `pgclone 4.0.0`, and `nominatim_fdw 1.3`.
@@ -17,7 +17,7 @@ weight: 70
 
 ## Checksums
 
-```bash
+```checksums
 c8d2f46ea1b25f7d4665ee0994f0cb403a59f1464f80b3ecfa575ac283e5ecd0  pig-1.4.0-1.aarch64.rpm
 fb1fd2f4f1e71894779de7b11a42960c09261620dffa0b54ff7f84e60efbf976  pig-1.4.0-1.x86_64.rpm
 aa08045a31c26b9a6bfb770753817581c819022a6ed899e44f7b5a31f57f1733  pig-v1.4.0.darwin-amd64.tar.gz
@@ -28,4 +28,4 @@ e425bf35ab6cb7907e94caca802b4418e3baf4bb1642dd957ab4baaa9db9f583  pig-v1.4.0.lin
 d60515f72fb9f8963554dc5668d2398e5ecefd0153a7756a9d555de90115bcce  pig_1.4.0-1_arm64.deb
 ```
 
-Release: https://github.com/pgsty/pig/releases/tag/v1.4.0
+{{< release-card >}}

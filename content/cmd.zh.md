@@ -4,6 +4,7 @@ description: "pig CLI 命令参考概览"
 weight: 100
 icon: fas fa-terminal
 categories: [参考]
+tags: [cli]
 ---
 
 `pig` CLI 提供了全面的工具集，用于管理 PostgreSQL 安装、扩展、软件仓库以及从源码构建扩展。使用 `pig help <command>` 查看命令文档。

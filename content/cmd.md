@@ -4,6 +4,7 @@ description: "pig CLI command reference overview"
 weight: 100
 icon: fas fa-terminal
 categories: [Reference]
+tags: [cli]
 ---
 
 The `pig` CLI provides a comprehensive toolkit for managing PostgreSQL installations, extensions, repositories, and extension builds from source. Use `pig help <command>` to view command documentation.

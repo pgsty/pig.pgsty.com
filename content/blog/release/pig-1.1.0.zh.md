@@ -2,11 +2,11 @@
 title: "pig v1.1.0"
 linkTitle: "v1.1.0"
 date: 2026-02-12
-author: "冯若航"
 description: "451 扩展，Agent-Native CLI 框架"
-categories: [release]
-tags: [Release, pig]
+tags: [cli, patroni, build, catalog]
 weight: 140
+authors: [Vonng]
+release_url: https://github.com/pgsty/pig/releases/tag/v1.1.0
 ---
 
 该版本是从 `v1.0.0` 到 `v1.1.0` 的一次规划中架构级升级（79 commits，193 files 变更），
@@ -73,7 +73,7 @@ weight: 140
 
 ## 校验和
 
-```bash
+```checksums
 95245dc035270df2b02cdd5d19afac57ccf4949a61b07b1b806fffde3a3b780e  pig-1.1.0-1.aarch64.rpm
 8b1a26f1b5dd002841a0b31904eea8ce94d1e6c4acde4704a78d9e121e1656f4  pig-1.1.0-1.x86_64.rpm
 dbd079510513f1cd0521b0871cc6fe3eed8f7fa26f66c04c682568c43e24c456  pig-v1.1.0.darwin-amd64.tar.gz
@@ -84,4 +84,4 @@ ad61384bf01cbb8346ce869da0bc893203ad316c516fb9420cb748f1519a005e  pig-v1.1.0.lin
 fc5cf16671254f8f3495ff7e80c9d77d06b2328c1a247f90f96cf1e918e0ad0e  pig_1.1.0-1_arm64.deb
 ```
 
-发布：https://github.com/pgsty/pig/releases/tag/v1.1.0
+{{< release-card >}}

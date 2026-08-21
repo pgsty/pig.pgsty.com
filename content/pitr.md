@@ -4,6 +4,7 @@ description: "Perform orchestrated point-in-time recovery (PITR) with pig pitr"
 weight: 185
 icon: fas fa-clock-rotate-left
 categories: [Reference]
+tags: [pitr, pgbackrest]
 ---
 
 The `pig pitr` command performs point-in-time recovery through pgBackRest and conservatively handles the local PostgreSQL and Patroni lifecycle. Unlike the lower-level `pig pb restore`, `pig pitr` runs pre-restore checks, stops Patroni and PostgreSQL when needed, executes restore, then decides whether to start PostgreSQL based on the selected options.

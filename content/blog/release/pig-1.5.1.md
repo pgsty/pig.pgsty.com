@@ -2,11 +2,11 @@
 title: "pig v1.5.1"
 linkTitle: "v1.5.1"
 date: 2026-07-08
-author: "Ruohang Feng"
 description: "PG kernel fork updates, mirror mode, bug fixes"
-categories: [release]
-tags: [Release, pig]
+tags: [repo, build, ext]
 weight: 30
+authors: [Vonng]
+release_url: https://github.com/pgsty/pig/releases/tag/v1.5.1
 ---
 
 Pig `v1.5.1` updates PG kernel forks to the latest package names.
@@ -23,7 +23,7 @@ Pig `v1.5.1` updates PG kernel forks to the latest package names.
 
 ## Checksums
 
-```bash
+```checksums
 bc83887d640ed299a967b4eda2ae6db621a985abfa022fccabf508f7ec7b98e3  pig-1.5.1-1.aarch64.rpm
 f0eab8e638d9e00a9172751446db869d0fe6ca7f382c7d540a931e0764014c0a  pig-1.5.1-1.x86_64.rpm
 b32d894dc444ef2b9ec00816d50d82b5834e64c35b3bb18f08b6286a7ca8e8e7  pig-v1.5.1.darwin-amd64.tar.gz
@@ -34,4 +34,4 @@ a0d15145409d8a2629a74d3071f7af593e470920f22d9af4bf6f96725dbb6d49  pig_1.5.1-1_am
 f05b9b5abef5992ed16cbb5b6a6e3e5e58230072e3665ecc57b9ce2df3edb9a6  pig_1.5.1-1_arm64.deb
 ```
 
-Release: https://github.com/pgsty/pig/releases/tag/v1.5.1
+{{< release-card >}}

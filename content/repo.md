@@ -4,6 +4,7 @@ description: "Manage software repositories with pig repo"
 weight: 110
 icon: fas fa-warehouse
 categories: [Reference]
+tags: [repo]
 ---
 
 The `pig repo` command is a comprehensive package repository manager. It can add, remove, create, and manage repositories on RPM systems (RHEL/CentOS/Rocky/Alma) and Debian systems (Debian/Ubuntu).

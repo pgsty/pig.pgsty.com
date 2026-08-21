@@ -4,6 +4,7 @@ description: "Manage pgBackRest backup and restore primitives with pig pgbackres
 weight: 180
 icon: fas fa-database
 categories: [Reference]
+tags: [pgbackrest]
 ---
 
 The `pig pgbackrest` command (alias `pig pb`) manages pgBackRest backups and provides low-level restore primitives.

@@ -2,11 +2,11 @@
 title: "pig v1.4.2"
 linkTitle: "v1.4.2"
 date: 2026-06-18
-author: "Ruohang Feng"
 description: "524 extensions, PG19 beta, pgrx 0.18.1, Patroni fixes"
-categories: [release]
-tags: [Release, pig]
+tags: [patroni, build, catalog, sty]
 weight: 50
+authors: [Vonng]
+release_url: https://github.com/pgsty/pig/releases/tag/v1.4.2
 ---
 
 - Refresh the built-in extension catalog from **510** to **524** available extensions. This adds 14 extensions: `pg_stl`, `pgmnemo`, `psql_bm25s`, `pg_orca`, `pg_sorted_heap`, `graph`, `pgrdf`, `fsm_core`, `jsonschema`, `pg_durable`, `pg_mockable`, `pg_uuid_v8`, `pg_stat_backtrace`, and `pg_projection`.
@@ -20,7 +20,7 @@ weight: 50
 
 ## Checksums
 
-```bash
+```checksums
 790afe4d6622cb041b06c622bc466cb1b2960a77487f368238027fb4a3a5ef93  pig-1.4.2-1.aarch64.rpm
 ef918166b38a5eb1d108a928718c9e2cb8c3590e5a1f72effee942faca9b4bea  pig-1.4.2-1.x86_64.rpm
 3e37ff22aed076cbdd453911dc89fcc9340b1a4faac62c0580094bc1eb2d6273  pig-v1.4.2.darwin-amd64.tar.gz
@@ -31,4 +31,4 @@ c536c324e40a861217e31f4699ee5f0e6c2daeb4e6f0f0e8cc5f606da9d787eb  pig-v1.4.2.lin
 8c09e741975cb2f74b0f88c5995a8fa43d6c30a9a7ab7aaf0b8d83a7c66e1fc1  pig_1.4.2-1_arm64.deb
 ```
 
-Release: https://github.com/pgsty/pig/releases/tag/v1.4.2
+{{< release-card >}}

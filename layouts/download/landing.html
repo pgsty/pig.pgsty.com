@@ -1,0 +1,418 @@
+{{- /* PIG 下载页，跑在 OINK 的 landing shell 里：<head>、navbar、footer、
+     search 与 scripts 全部由主题提供，这里只出版面本身。
+     版号只从 params.version 取，制品名按 goreleaser 的命名规则拼出来。 */ -}}
+{{ define "main" }}
+{{- $zh := eq .Site.Language.Lang "zh" -}}
+{{- $v := .Site.Params.version -}}
+{{- $tag := printf "v%s" $v -}}
+{{- $rel := printf "https://github.com/pgsty/pig/releases/tag/%s" $tag -}}
+{{- $base := printf "https://github.com/pgsty/pig/releases/download/%s" $tag -}}
+{{- $mirror := cond $zh "https://repo.pigsty.cc" "https://repo.pigsty.io" -}}
+{{- $pigstyDocs := cond $zh "https://pigsty.cc" "https://pigsty.io" -}}
+{{- $relPage := .Site.GetPage (printf "/blog/release/pig-%s" $v) -}}
+{{- $relDate := "" -}}
+{{- with $relPage }}{{ $relDate = .Date.Format "2006-01-02" }}{{ end -}}
+{{- $rpm64 := printf "pig-%s-1.x86_64.rpm" $v -}}
+{{- $rpmA := printf "pig-%s-1.aarch64.rpm" $v -}}
+{{- $deb64 := printf "pig_%s-1_amd64.deb" $v -}}
+{{- $debA := printf "pig_%s-1_arm64.deb" $v -}}
+{{- $lin64 := printf "pig-v%s.linux-amd64.tar.gz" $v -}}
+{{- $linA := printf "pig-v%s.linux-arm64.tar.gz" $v -}}
+{{- $mac64 := printf "pig-v%s.darwin-amd64.tar.gz" $v -}}
+{{- $macA := printf "pig-v%s.darwin-arm64.tar.gz" $v -}}
+
+    {{/* ---------------------------------------------------------------- HERO */}}
+    <section class="download-hero" aria-labelledby="download-title">
+      <div class="download-grid-bg" aria-hidden="true"></div>
+      <div class="landing-container">
+        <div class="download-hero-copy" data-reveal>
+          <p class="section-eyebrow download-eyebrow"><span class="silkscreen">RELEASE MATRIX</span><span class="eyebrow-trace" aria-hidden="true"></span></p>
+          <h1 id="download-title">{{ if $zh }}下载安装 <span>pig</span>{{ else }}Download &amp; Install <span>pig</span>{{ end }}</h1>
+          <p>{{ if $zh }}一个自包含的静态二进制，没有运行时依赖。用一行安装脚本、系统包管理器，或者直接抓对应架构的 RPM / DEB / tarball。{{ else }}One self-contained static binary, no runtime dependencies. Use the one-line installer, your system package manager, or grab the RPM, DEB, or tarball for your architecture directly.{{ end }}</p>
+          <div class="download-release-line">
+            <span class="release-live"><i aria-hidden="true"></i>{{ if $zh }}当前版本{{ else }}CURRENT RELEASE{{ end }}</span>
+            <a href="{{ $rel }}" target="_blank" rel="noopener">pig {{ $tag }} <span aria-hidden="true">↗</span></a>
+            <span>{{ with $relDate }}{{ . }} · {{ end }}amd64 / arm64</span>
+          </div>
+        </div>
+
+        <div class="product-choice-grid" aria-label="{{ if $zh }}选择安装方式{{ else }}Choose an install path{{ end }}">
+          <a class="product-choice-card product-choice-card--server" href="#script" data-reveal>
+            <div class="product-choice-top">
+              <div>
+                <p class="silkscreen">{{ if $zh }}最快路径{{ else }}FASTEST PATH{{ end }}</p>
+                <h2>{{ if $zh }}一行装好{{ else }}One Line{{ end }}</h2>
+              </div>
+              <span class="product-choice-icon"><i class="fas fa-bolt" aria-hidden="true"></i></span>
+            </div>
+            <p>{{ if $zh }}安装脚本识别发行版与架构，取回匹配的 RPM / DEB，交给 <code>rpm</code> 或 <code>dpkg</code> 安装。{{ else }}The installer detects your distro and architecture, fetches the matching RPM or DEB, and hands it to <code>rpm</code> or <code>dpkg</code>.{{ end }}</p>
+            <div class="product-platforms"><span>EL 8/9/10</span><span>Debian 12/13</span><span>Ubuntu 22/24/26</span></div>
+            <strong>{{ if $zh }}查看安装脚本{{ else }}See the installer{{ end }} <i aria-hidden="true">↗</i></strong>
+          </a>
+
+          <a class="product-choice-card product-choice-card--client" href="#packages" data-reveal>
+            <div class="product-choice-top">
+              <div>
+                <p class="silkscreen">{{ if $zh }}发布制品{{ else }}RELEASE ARTIFACTS{{ end }}</p>
+                <h2>RPM · DEB · tar.gz</h2>
+              </div>
+              <span class="product-choice-icon"><i class="fas fa-box-archive" aria-hidden="true"></i></span>
+            </div>
+            <p>{{ if $zh }}直接下载 {{ $tag }} 的原生包与二进制归档，附 SHA-256 校验和，适合离线交付与镜像同步。{{ else }}Download the native packages and binary archives for {{ $tag }} directly, with SHA-256 checksums — for offline delivery and mirror sync.{{ end }}</p>
+            <div class="product-platforms"><span>x86_64</span><span>aarch64</span><span>Linux</span><span>macOS</span></div>
+            <strong>{{ if $zh }}打开下载矩阵{{ else }}Open the download matrix{{ end }} <i aria-hidden="true">↗</i></strong>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    {{/* ------------------------------------------------------------- 安装方式 */}}
+    <section class="download-product-section" id="install" aria-labelledby="install-title">
+      <div class="landing-container">
+        <div class="download-section-head" data-reveal>
+          <div>
+            <p class="section-eyebrow"><span class="silkscreen">01 / INSTALL</span><span class="eyebrow-trace" aria-hidden="true"></span></p>
+            <h2 id="install-title">{{ if $zh }}安装 pig{{ else }}Install pig{{ end }}</h2>
+            <p>{{ if $zh }}五条路径通向同一个二进制：脚本、系统仓库、原生包、tarball、源码。选一条与你的交付边界匹配的。{{ else }}Five paths to the same binary: script, system repository, native package, tarball, source. Pick the one that matches your delivery boundary.{{ end }}</p>
+          </div>
+          <a class="version-card" href="{{ $rel }}" target="_blank" rel="noopener">
+            <span>{{ if $zh }}当前版本{{ else }}CURRENT VERSION{{ end }}</span>
+            <strong>{{ $tag }}</strong>
+            <small>{{ if $zh }}发布注记与全部制品{{ else }}Release notes &amp; all artifacts{{ end }} ↗</small>
+          </a>
+        </div>
+
+        <div class="download-tabs" data-download-tabs data-reveal>
+          <div class="download-tablist" role="tablist" aria-label="{{ if $zh }}pig 安装方式{{ else }}pig install methods{{ end }}">
+            <button type="button" role="tab" id="tab-script" aria-controls="script" aria-selected="true" data-download-tab="script"><i class="fas fa-bolt" aria-hidden="true"></i> {{ if $zh }}安装脚本{{ else }}Script{{ end }}</button>
+            <button type="button" role="tab" id="tab-repository" aria-controls="repository" aria-selected="false" tabindex="-1" data-download-tab="repository"><i class="fas fa-warehouse" aria-hidden="true"></i> {{ if $zh }}系统仓库{{ else }}Repository{{ end }}</button>
+            <button type="button" role="tab" id="tab-packages" aria-controls="packages" aria-selected="false" tabindex="-1" data-download-tab="packages"><i class="fas fa-box" aria-hidden="true"></i> {{ if $zh }}原生软件包{{ else }}Packages{{ end }}</button>
+            <button type="button" role="tab" id="tab-binary" aria-controls="binary" aria-selected="false" tabindex="-1" data-download-tab="binary"><i class="fas fa-microchip" aria-hidden="true"></i> {{ if $zh }}二进制归档{{ else }}Binaries{{ end }}</button>
+            <button type="button" role="tab" id="tab-source" aria-controls="source" aria-selected="false" tabindex="-1" data-download-tab="source"><i class="fas fa-code" aria-hidden="true"></i> {{ if $zh }}源码构建{{ else }}Source{{ end }}</button>
+          </div>
+
+          <div class="download-tabpanels">
+
+            {{/* ---- 脚本 ---- */}}
+            <section class="download-panel" id="script" role="tabpanel" aria-labelledby="tab-script">
+              <div class="method-heading">
+                <div><span class="method-kicker">ONE-LINE INSTALLER</span><h3>{{ if $zh }}一行命令装好 pig{{ else }}Install pig with one command{{ end }}</h3></div>
+                <div class="method-tags"><span>x86_64</span><span>aarch64</span><span>rpm</span><span>dpkg</span></div>
+              </div>
+              <div class="method-grid">
+                <div class="method-main">
+                  <p>{{ if $zh }}脚本从 Pigsty 软件仓库拉取与当前系统匹配的 RPM 或 DEB，然后交给 <code>rpm</code> / <code>dpkg</code> 安装。它只负责装 <code>pig</code> 自己，不会改动 PostgreSQL 或系统仓库配置。{{ else }}The script pulls the RPM or DEB that matches the running system from the Pigsty software repository, then hands it to <code>rpm</code> / <code>dpkg</code>. It installs <code>pig</code> itself and nothing else — no PostgreSQL, no repository changes.{{ end }}</p>
+                  <div class="download-subtabs" data-download-tabs>
+                    <div class="download-tablist download-tablist--sub" role="tablist" aria-label="{{ if $zh }}下载源{{ else }}Download source{{ end }}">
+                      <button type="button" role="tab" id="tab-script-cdn" aria-controls="script-cdn" aria-selected="true" data-download-tab="script-cdn">Cloudflare CDN</button>
+                      <button type="button" role="tab" id="tab-script-cn" aria-controls="script-cn" aria-selected="false" tabindex="-1" data-download-tab="script-cn">{{ if $zh }}中国镜像{{ else }}China Mirror{{ end }}</button>
+                      <button type="button" role="tab" id="tab-script-pin" aria-controls="script-pin" aria-selected="false" tabindex="-1" data-download-tab="script-pin">{{ if $zh }}指定版本{{ else }}Pin a version{{ end }}</button>
+                    </div>
+                    <section role="tabpanel" id="script-cdn" aria-labelledby="tab-script-cdn">
+                      <div class="download-code">
+                        <div class="download-code-head"><span><i class="fas fa-terminal" aria-hidden="true"></i> shell</span><button type="button" data-copy-command aria-label="{{ if $zh }}复制安装命令{{ else }}Copy install command{{ end }}"><i class="far fa-copy" aria-hidden="true"></i><b>{{ if $zh }}复制{{ else }}Copy{{ end }}</b></button></div>
+                        <pre><code>curl -fsSL https://repo.pigsty.io/pig | bash
+pig --version</code></pre>
+                      </div>
+                    </section>
+                    <section role="tabpanel" id="script-cn" aria-labelledby="tab-script-cn" hidden>
+                      <div class="download-code">
+                        <div class="download-code-head"><span><i class="fas fa-terminal" aria-hidden="true"></i> shell</span><button type="button" data-copy-command aria-label="{{ if $zh }}复制安装命令{{ else }}Copy install command{{ end }}"><i class="far fa-copy" aria-hidden="true"></i><b>{{ if $zh }}复制{{ else }}Copy{{ end }}</b></button></div>
+                        <pre><code>curl -fsSL https://repo.pigsty.cc/pig | bash
+pig --version</code></pre>
+                      </div>
+                    </section>
+                    <section role="tabpanel" id="script-pin" aria-labelledby="tab-script-pin" hidden>
+                      <div class="download-code">
+                        <div class="download-code-head"><span><i class="fas fa-terminal" aria-hidden="true"></i> shell</span><button type="button" data-copy-command aria-label="{{ if $zh }}复制安装命令{{ else }}Copy install command{{ end }}"><i class="far fa-copy" aria-hidden="true"></i><b>{{ if $zh }}复制{{ else }}Copy{{ end }}</b></button></div>
+                        <pre><code>curl -fsSL {{ $mirror }}/pig | bash -s {{ $v }}</code></pre>
+                      </div>
+                    </section>
+                  </div>
+                  <div class="method-actions">
+                    <a class="btn btn-primary" href="{{ relLangURL "start/" }}"><i class="fas fa-rocket" aria-hidden="true"></i> {{ if $zh }}快速上手{{ else }}Quick start{{ end }}</a>
+                    <a class="btn btn-line" href="{{ relLangURL "install/" }}">{{ if $zh }}安装文档{{ else }}Install guide{{ end }} →</a>
+                  </div>
+                  <div class="security-note"><i class="fas fa-shield-halved" aria-hidden="true"></i><span>{{ if $zh }}镜像发布可能滞后于 GitHub Release。要精确安装 {{ $tag }}，请用下面的原生包直链，并核对 <code>checksums.txt</code>。管道执行远程脚本前，可以先把脚本落盘读一遍。{{ else }}Mirror publication can lag the GitHub release. To install exactly {{ $tag }}, use the direct package links below and verify against <code>checksums.txt</code>. If piping a remote script to a shell is outside your policy, download and read it first.{{ end }}</span></div>
+                </div>
+                <div class="method-aside">
+                  <div class="aside-card">
+                    <span class="aside-icon"><i class="fas fa-circle-question" aria-hidden="true"></i></span>
+                    <p class="silkscreen">{{ if $zh }}装到哪里{{ else }}WHERE IT LANDS{{ end }}</p>
+                    <h4>/usr/bin/pig</h4>
+                    <p>{{ if $zh }}扩展目录数据随二进制一起分发，<code>pig ext reload</code> 可单独更新。{{ else }}The extension catalog ships inside the binary; <code>pig ext reload</code> refreshes it on its own.{{ end }}</p>
+                    <div class="mini-command"><code>pig ext list</code></div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {{/* ---- 系统仓库 ---- */}}
+            <section class="download-panel" id="repository" role="tabpanel" aria-labelledby="tab-repository" hidden>
+              <div class="method-heading">
+                <div><span class="method-kicker">PIGSTY INFRA REPO</span><h3>{{ if $zh }}把 pig 交给系统包管理器管{{ else }}Let the system package manager own pig{{ end }}</h3></div>
+                <div class="method-tags"><span>apt</span><span>dnf / yum</span><span>{{ if $zh }}可升级{{ else }}upgradable{{ end }}</span></div>
+              </div>
+              <div class="method-grid method-grid--single">
+                <div class="method-main">
+                  <p>{{ if $zh }}<code>pig</code> 位于 <a href="{{ $pigstyDocs }}/docs/repo/infra/" target="_blank" rel="noopener">pigsty-infra</a> 仓库。把仓库加进系统之后，安装与后续升级都走 <code>apt</code> / <code>dnf</code>，与其它系统软件一致。{{ else }}<code>pig</code> lives in the <a href="{{ $pigstyDocs }}/docs/repo/infra/" target="_blank" rel="noopener">pigsty-infra</a> repository. Once the repository is wired in, installs and upgrades go through <code>apt</code> / <code>dnf</code> like any other system package.{{ end }}</p>
+                  <div class="download-subtabs" data-download-tabs>
+                    <div class="download-tablist download-tablist--sub" role="tablist" aria-label="{{ if $zh }}包管理器{{ else }}Package manager{{ end }}">
+                      <button type="button" role="tab" id="tab-repo-apt" aria-controls="repo-apt" aria-selected="true" data-download-tab="repo-apt">APT · Debian / Ubuntu</button>
+                      <button type="button" role="tab" id="tab-repo-dnf" aria-controls="repo-dnf" aria-selected="false" tabindex="-1" data-download-tab="repo-dnf">DNF / YUM · EL</button>
+                    </div>
+                    <section role="tabpanel" id="repo-apt" aria-labelledby="tab-repo-apt">
+                      <div class="download-code">
+                        <div class="download-code-head"><span><i class="fas fa-terminal" aria-hidden="true"></i> shell</span><button type="button" data-copy-command aria-label="{{ if $zh }}复制 APT 命令{{ else }}Copy APT commands{{ end }}"><i class="far fa-copy" aria-hidden="true"></i><b>{{ if $zh }}复制{{ else }}Copy{{ end }}</b></button></div>
+                        <pre><code>sudo tee /etc/apt/sources.list.d/pigsty-infra.list &gt;/dev/null &lt;&lt;EOF
+deb [trusted=yes] {{ $mirror }}/apt/infra generic main
+EOF
+
+sudo apt update
+sudo apt install -y pig</code></pre>
+                      </div>
+                    </section>
+                    <section role="tabpanel" id="repo-dnf" aria-labelledby="tab-repo-dnf" hidden>
+                      <div class="download-code">
+                        <div class="download-code-head"><span><i class="fas fa-terminal" aria-hidden="true"></i> shell</span><button type="button" data-copy-command aria-label="{{ if $zh }}复制 DNF 命令{{ else }}Copy DNF commands{{ end }}"><i class="far fa-copy" aria-hidden="true"></i><b>{{ if $zh }}复制{{ else }}Copy{{ end }}</b></button></div>
+                        <pre><code>sudo tee /etc/yum.repos.d/pigsty-infra.repo &gt;/dev/null &lt;&lt;-'EOF'
+[pigsty-infra]
+name=Pigsty Infra for $basearch
+baseurl={{ $mirror }}/yum/infra/$basearch
+enabled=1
+gpgcheck=0
+module_hotfixes=1
+EOF
+
+sudo dnf makecache
+sudo dnf install -y pig</code></pre>
+                      </div>
+                    </section>
+                  </div>
+                  <div class="method-actions">
+                    <a class="btn btn-primary" href="{{ relLangURL "repo/" }}"><i class="fas fa-warehouse" aria-hidden="true"></i> pig repo</a>
+                    <a class="btn btn-line" href="{{ $pigstyDocs }}/docs/repo/" target="_blank" rel="noopener">{{ if $zh }}Pigsty 仓库文档{{ else }}Pigsty repository docs{{ end }} ↗</a>
+                  </div>
+                  <div class="security-note"><i class="fas fa-triangle-exclamation" aria-hidden="true"></i><span>{{ if $zh }}上面的最小示例刻意用 <code>gpgcheck=0</code> / <code>trusted=yes</code>，这是 PIG 面向兼容性的默认口径。在受管环境里请导入并锁定签名密钥、打开签名校验，再审查包来源。{{ else }}These minimal examples deliberately use <code>gpgcheck=0</code> / <code>trusted=yes</code>, matching PIG's compatibility-oriented defaults. In a managed environment, import and pin the signing key, enable signature verification, and review package provenance first.{{ end }}</span></div>
+                </div>
+              </div>
+            </section>
+
+            {{/* ---- 原生包 ---- */}}
+            <section class="download-panel" id="packages" role="tabpanel" aria-labelledby="tab-packages" hidden>
+              <div class="method-heading">
+                <div><span class="method-kicker">NATIVE PACKAGES</span><h3>{{ if $zh }}{{ $tag }} 的 RPM 与 DEB 直链{{ else }}Direct RPM and DEB links for {{ $tag }}{{ end }}</h3></div>
+                <div class="method-tags"><span>RPM</span><span>DEB</span><span>SHA-256</span><span>{{ if $zh }}离线可用{{ else }}offline-ready{{ end }}</span></div>
+              </div>
+              <p class="method-lead">{{ if $zh }}每个版本都同时发布 x86_64 与 aarch64 的原生包。直接下载当前版本，或去 GitHub Releases 取历史版本。{{ else }}Every release ships native packages for both x86_64 and aarch64. Download the current build directly, or use GitHub Releases for older versions.{{ end }}</p>
+              <div class="asset-family-grid">
+                <article class="asset-family">
+                  <div class="asset-family-head"><span>RPM</span><p>RHEL · Rocky · Alma · openEuler</p></div>
+                  <a href="{{ $base }}/{{ $rpm64 }}" target="_blank" rel="noopener"><b>x86_64</b><small>{{ $rpm64 }}</small><i class="fas fa-download" aria-hidden="true"></i></a>
+                  <a href="{{ $base }}/{{ $rpmA }}" target="_blank" rel="noopener"><b>aarch64</b><small>{{ $rpmA }}</small><i class="fas fa-download" aria-hidden="true"></i></a>
+                </article>
+                <article class="asset-family">
+                  <div class="asset-family-head"><span>DEB</span><p>Debian · Ubuntu</p></div>
+                  <a href="{{ $base }}/{{ $deb64 }}" target="_blank" rel="noopener"><b>amd64</b><small>{{ $deb64 }}</small><i class="fas fa-download" aria-hidden="true"></i></a>
+                  <a href="{{ $base }}/{{ $debA }}" target="_blank" rel="noopener"><b>arm64</b><small>{{ $debA }}</small><i class="fas fa-download" aria-hidden="true"></i></a>
+                </article>
+                <article class="asset-family">
+                  <div class="asset-family-head"><span>TAR.GZ</span><p>Linux · {{ if $zh }}无需安装器{{ else }}installer-free{{ end }}</p></div>
+                  <a href="{{ $base }}/{{ $lin64 }}" target="_blank" rel="noopener"><b>amd64</b><small>{{ $lin64 }}</small><i class="fas fa-download" aria-hidden="true"></i></a>
+                  <a href="{{ $base }}/{{ $linA }}" target="_blank" rel="noopener"><b>arm64</b><small>{{ $linA }}</small><i class="fas fa-download" aria-hidden="true"></i></a>
+                </article>
+              </div>
+              <div class="download-code download-code--compact">
+                <div class="download-code-head"><span><i class="fas fa-box" aria-hidden="true"></i> {{ if $zh }}下载并安装{{ else }}download &amp; install{{ end }}</span><button type="button" data-copy-command aria-label="{{ if $zh }}复制包安装命令{{ else }}Copy package install command{{ end }}"><i class="far fa-copy" aria-hidden="true"></i><b>{{ if $zh }}复制{{ else }}Copy{{ end }}</b></button></div>
+                <pre><code># EL / RHEL / Rocky / Alma
+curl -fLO {{ $base }}/{{ $rpm64 }}
+sudo rpm -ivh {{ $rpm64 }}
+
+# Debian / Ubuntu
+curl -fLO {{ $base }}/{{ $deb64 }}
+sudo dpkg -i {{ $deb64 }}</code></pre>
+              </div>
+              <div class="package-footer">
+                <a href="{{ $base }}/checksums.txt" target="_blank" rel="noopener"><i class="fas fa-fingerprint" aria-hidden="true"></i> SHA-256 {{ if $zh }}校验和{{ else }}checksums{{ end }}</a>
+                <a href="https://github.com/pgsty/pig/releases" target="_blank" rel="noopener"><i class="fab fa-github" aria-hidden="true"></i> {{ if $zh }}全部历史版本{{ else }}All previous releases{{ end }}</a>
+                <a href="{{ relLangURL "release/" }}"><i class="fas fa-clipboard-list" aria-hidden="true"></i> {{ if $zh }}发布注记{{ else }}Release notes{{ end }}</a>
+              </div>
+            </section>
+
+            {{/* ---- 二进制归档 ---- */}}
+            <section class="download-panel" id="binary" role="tabpanel" aria-labelledby="tab-binary" hidden>
+              <div class="method-heading">
+                <div><span class="method-kicker">STANDALONE ARCHIVES</span><h3>{{ if $zh }}解压即用的静态二进制{{ else }}Unpack-and-run static binaries{{ end }}</h3></div>
+                <div class="method-tags"><span>Linux</span><span>macOS</span><span>tar.gz</span><span>CI</span></div>
+              </div>
+              <p class="method-lead">{{ if $zh }}适合 CI、容器镜像、离线交付，以及不打算让包管理器接管的主机。macOS 上没有原生包，用这里的归档。{{ else }}For CI, container images, offline delivery, and hosts where you would rather not involve a package manager. macOS has no native package — use these archives.{{ end }}</p>
+              <div class="binary-grid">
+                <article class="binary-platform" data-platform="linux">
+                  <div><span class="platform-icon"><i class="fab fa-linux" aria-hidden="true"></i></span><h4>Linux</h4><small>glibc · {{ if $zh }}静态链接{{ else }}statically linked{{ end }}</small></div>
+                  <a href="{{ $base }}/{{ $lin64 }}" target="_blank" rel="noopener"><b>amd64</b><small>{{ $lin64 }}</small><i class="fas fa-download" aria-hidden="true"></i></a>
+                  <a href="{{ $base }}/{{ $linA }}" target="_blank" rel="noopener"><b>arm64</b><small>{{ $linA }}</small><i class="fas fa-download" aria-hidden="true"></i></a>
+                </article>
+                <article class="binary-platform" data-platform="macos">
+                  <div><span class="platform-icon"><i class="fab fa-apple" aria-hidden="true"></i></span><h4>macOS</h4><small>Intel · Apple Silicon</small></div>
+                  <a href="{{ $base }}/{{ $mac64 }}" target="_blank" rel="noopener"><b>Intel</b><small>{{ $mac64 }}</small><i class="fas fa-download" aria-hidden="true"></i></a>
+                  <a href="{{ $base }}/{{ $macA }}" target="_blank" rel="noopener"><b>Apple Silicon</b><small>{{ $macA }}</small><i class="fas fa-download" aria-hidden="true"></i></a>
+                </article>
+              </div>
+              <div class="download-code download-code--compact">
+                <div class="download-code-head"><span><i class="fab fa-linux" aria-hidden="true"></i> Linux amd64</span><button type="button" data-copy-command aria-label="{{ if $zh }}复制归档安装命令{{ else }}Copy archive install command{{ end }}"><i class="far fa-copy" aria-hidden="true"></i><b>{{ if $zh }}复制{{ else }}Copy{{ end }}</b></button></div>
+                <pre><code>curl -fLO {{ $base }}/{{ $lin64 }}
+tar -xzf {{ $lin64 }}
+sudo install -m 0755 pig /usr/bin/pig
+pig --version</code></pre>
+              </div>
+              <div class="security-note"><i class="fas fa-fingerprint" aria-hidden="true"></i><span>{{ if $zh }}校验归档：<code>curl -fsSL {{ $base }}/checksums.txt | grep {{ $lin64 }} | sha256sum -c -</code>{{ else }}Verify an archive with <code>curl -fsSL {{ $base }}/checksums.txt | grep {{ $lin64 }} | sha256sum -c -</code>{{ end }}</span></div>
+            </section>
+
+            {{/* ---- 源码 ---- */}}
+            <section class="download-panel" id="source" role="tabpanel" aria-labelledby="tab-source" hidden>
+              <div class="method-heading">
+                <div><span class="method-kicker">SOURCE BUILD</span><h3>{{ if $zh }}自己构建 pig{{ else }}Build pig yourself{{ end }}</h3></div>
+                <div class="method-tags"><span>Go</span><span>make</span><span>Apache-2.0</span></div>
+              </div>
+              <div class="method-grid">
+                <div class="method-main">
+                  <p>{{ if $zh }}pig 用 Go 写成，没有 cgo 依赖，构建过程就是 <code>go mod download</code> 加一条 <code>make build</code>。适合审计、二次开发，或者为发布矩阵之外的平台出包。{{ else }}pig is written in Go with no cgo dependency; the build is <code>go mod download</code> plus one <code>make build</code>. Use it for auditing, development, or targeting a platform outside the release matrix.{{ end }}</p>
+                  <div class="download-code">
+                    <div class="download-code-head"><span><i class="fab fa-git-alt" aria-hidden="true"></i> git + make</span><button type="button" data-copy-command aria-label="{{ if $zh }}复制源码构建命令{{ else }}Copy source build command{{ end }}"><i class="far fa-copy" aria-hidden="true"></i><b>{{ if $zh }}复制{{ else }}Copy{{ end }}</b></button></div>
+                    <pre><code>git clone https://github.com/pgsty/pig.git
+cd pig
+go mod download
+make build
+./pig --version</code></pre>
+                  </div>
+                  <div class="method-actions">
+                    <a class="btn btn-primary" href="https://github.com/pgsty/pig" target="_blank" rel="noopener"><i class="fab fa-github" aria-hidden="true"></i> pgsty/pig</a>
+                    <a class="btn btn-line" href="{{ relLangURL "build/" }}">{{ if $zh }}pig build 文档{{ else }}pig build docs{{ end }} →</a>
+                  </div>
+                </div>
+                <div class="method-aside">
+                  <div class="aside-card">
+                    <span class="aside-icon"><i class="fas fa-hammer" aria-hidden="true"></i></span>
+                    <p class="silkscreen">{{ if $zh }}构建前提{{ else }}PREREQUISITES{{ end }}</p>
+                    <h4>Go toolchain</h4>
+                    <p>{{ if $zh }}发布用的 RPM / DEB 由项目的 GitHub Actions + GoReleaser 流水线产出，本地 <code>make build</code> 只出当前平台的可执行文件。{{ else }}The published RPM / DEB packages come from the project's GitHub Actions + GoReleaser pipeline; a local <code>make build</code> produces the executable for the current platform only.{{ end }}</p>
+                    <div class="mini-command"><code>make build</code></div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {{/* ------------------------------------------------------------- 目标矩阵 */}}
+    <section class="topology-section" id="targets" aria-labelledby="targets-title">
+      <div class="landing-container">
+        <div class="section-head section-head--compact" data-reveal>
+          <p class="section-eyebrow"><span class="silkscreen">02 / TARGET MATRIX</span><span class="eyebrow-trace" aria-hidden="true"></span></p>
+          <h2 class="section-title section-title--sm" id="targets-title">{{ if $zh }}pig 自己能装在哪里{{ else }}Where pig itself runs{{ end }}</h2>
+          <p class="section-subtitle">{{ if $zh }}下面是 pig 二进制自身的支持矩阵。它能装出来的 PostgreSQL 内核与扩展，覆盖范围以扩展目录中的目标标记为准。{{ else }}This is the support matrix for the pig binary itself. What it can install — kernels and extension packages — is target-specific; the catalog carries the per-target availability.{{ end }}</p>
+        </div>
+        <div class="topology-grid topology-grid--four" data-reveal>
+          <article class="topology-featured">
+            <div class="topology-head"><span>EL</span><small>rpm</small></div>
+            <h3>{{ if $zh }}企业 Linux 8 / 9 / 10{{ else }}Enterprise Linux 8 / 9 / 10{{ end }}</h3>
+            <p>{{ if $zh }}RHEL、Rocky、AlmaLinux、openEuler 及其它 EL 兼容发行版，x86_64 与 aarch64 双架构。{{ else }}RHEL, Rocky, AlmaLinux, openEuler, and other EL-compatible distributions, on x86_64 and aarch64.{{ end }}</p>
+            <b>{{ $rpm64 }}</b>
+          </article>
+          <article>
+            <div class="topology-head"><span>DEB</span><small>deb</small></div>
+            <h3>Debian 12 / 13</h3>
+            <p>{{ if $zh }}Bookworm 与 Trixie，amd64 与 arm64。{{ else }}Bookworm and Trixie, on amd64 and arm64.{{ end }}</p>
+            <b>{{ $deb64 }}</b>
+          </article>
+          <article>
+            <div class="topology-head"><span>UBU</span><small>deb</small></div>
+            <h3>Ubuntu 22 / 24 / 26</h3>
+            <p>{{ if $zh }}Jammy、Noble 与 Resolute，amd64 与 arm64。{{ else }}Jammy, Noble, and Resolute, on amd64 and arm64.{{ end }}</p>
+            <b>{{ $debA }}</b>
+          </article>
+          <article>
+            <div class="topology-head"><span>MAC</span><small>tar.gz</small></div>
+            <h3>macOS</h3>
+            <p>{{ if $zh }}Intel 与 Apple Silicon，用于本地检索目录、生成清单与远程编排；本机不安装 PostgreSQL 包。{{ else }}Intel and Apple Silicon — for searching the catalog, authoring inventory, and remote orchestration. It does not install PostgreSQL packages locally.{{ end }}</p>
+            <b>{{ $macA }}</b>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    {{/* --------------------------------------------------------------- 装完之后 */}}
+    <section class="download-product-section download-product-section--client" id="after" aria-labelledby="after-title">
+      <div class="landing-container">
+        <div class="download-section-head" data-reveal>
+          <div>
+            <p class="section-eyebrow"><span class="silkscreen">03 / AFTER INSTALL</span><span class="eyebrow-trace" aria-hidden="true"></span></p>
+            <h2 id="after-title">{{ if $zh }}装完之后{{ else }}After the install{{ end }}</h2>
+            <p>{{ if $zh }}验证、升级、更新扩展目录，以及卸载 —— 都是一条命令。{{ else }}Verify, upgrade, refresh the catalog, uninstall — one command each.{{ end }}</p>
+          </div>
+          <a class="version-card version-card--client" href="{{ relLangURL "cmd/" }}">
+            <span>{{ if $zh }}命令参考{{ else }}COMMAND REFERENCE{{ end }}</span>
+            <strong>pig --help</strong>
+            <small>{{ if $zh }}全部子命令{{ else }}Every subcommand{{ end }} →</small>
+          </a>
+        </div>
+        <div class="build-plate build-plate--cmds" data-reveal>
+          <span class="silkscreen">{{ if $zh }}日常维护{{ else }}DAY-TO-DAY{{ end }}</span>
+          <strong>{{ if $zh }}四条命令{{ else }}Four commands{{ end }}</strong>
+          <div>
+            <i aria-hidden="true"></i>
+            <b>pig --version</b>
+            <em>{{ if $zh }}确认安装成功与当前版本{{ else }}confirm the install and the running version{{ end }}</em>
+          </div>
+          <div>
+            <i aria-hidden="true"></i>
+            <b>pig update</b>
+            <em>{{ if $zh }}升级 pig 自身；<code>-m</code> 走中国镜像，<code>-v X.Y.Z</code> 指定版本{{ else }}upgrade pig itself; <code>-m</code> uses the China mirror, <code>-v X.Y.Z</code> pins a version{{ end }}</em>
+          </div>
+          <div>
+            <i aria-hidden="true"></i>
+            <b>pig ext reload</b>
+            <em>{{ if $zh }}只刷新扩展目录数据，不动二进制{{ else }}refresh the extension catalog without touching the binary{{ end }}</em>
+          </div>
+          <div>
+            <i aria-hidden="true"></i>
+            <b>apt remove pig</b>
+            <em>{{ if $zh }}EL 上用 <code>dnf remove pig</code>；二进制安装直接删 <code>/usr/bin/pig</code>{{ else }}on EL use <code>dnf remove pig</code>; a binary install is just <code>rm /usr/bin/pig</code>{{ end }}</em>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {{/* ---------------------------------------------------------------- 支持 */}}
+    <section class="download-support" aria-labelledby="support-title">
+      <div class="landing-container">
+        <div class="section-head section-head--compact" data-reveal>
+          <p class="section-eyebrow"><span class="silkscreen">SUPPORT SURFACE</span><span class="eyebrow-trace" aria-hidden="true"></span></p>
+          <h2 class="section-title section-title--sm" id="support-title">{{ if $zh }}下一步{{ else }}Where to go next{{ end }}</h2>
+        </div>
+        <div class="support-grid" data-reveal>
+          <a href="{{ relLangURL "start/" }}">
+            <span><i class="fas fa-rocket" aria-hidden="true"></i></span>
+            <h3>{{ if $zh }}快速上手{{ else }}Get started{{ end }}</h3>
+            <p>{{ if $zh }}装完 pig 之后的第一组命令：配置仓库、装内核、装扩展。{{ else }}The first set of commands after pig is installed: wire repositories, install a kernel, install extensions.{{ end }}</p>
+            <b>{{ if $zh }}打开教程{{ else }}Open the tutorial{{ end }} ↗</b>
+          </a>
+          <a href="{{ relLangURL "release/" }}">
+            <span><i class="fas fa-clipboard-list" aria-hidden="true"></i></span>
+            <h3>{{ if $zh }}发布注记{{ else }}Release notes{{ end }}</h3>
+            <p>{{ if $zh }}每个版本改了什么、加了什么、破坏了什么，一版一篇。{{ else }}What changed, what was added, and what broke — one entry per version.{{ end }}</p>
+            <b>{{ if $zh }}查看全部版本{{ else }}Browse every version{{ end }} ↗</b>
+          </a>
+          <a href="https://github.com/pgsty/pig/issues" target="_blank" rel="noopener">
+            <span><i class="fab fa-github" aria-hidden="true"></i></span>
+            <h3>{{ if $zh }}报告问题{{ else }}Report an issue{{ end }}</h3>
+            <p>{{ if $zh }}安装失败、目标平台缺包、可复现的行为问题，都欢迎提。{{ else }}Install failures, missing targets, and reproducible behaviour problems are all welcome.{{ end }}</p>
+            <b>GitHub Issues ↗</b>
+          </a>
+        </div>
+      </div>
+    </section>
+{{ end }}

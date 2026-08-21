@@ -5,6 +5,7 @@ description: "快速上手 pig，PostgreSQL 包管理器"
 weight: 10
 icon: fas fa-rocket
 categories: [教程]
+tags: [install, repo, ext]
 ---
 
 下面是一个简单的上手教程，带您体验 PIG 包管理器的核心能力。

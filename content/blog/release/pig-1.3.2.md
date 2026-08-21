@@ -2,11 +2,11 @@
 title: "pig v1.3.2"
 linkTitle: "v1.3.2"
 date: 2026-03-23
-author: "Ruohang Feng"
-description: "Routine metadata refresh, new `pg tune`, new build aliases"
-categories: [release]
-tags: [Release, pig]
+description: "Routine metadata refresh, a new pg tune command, and new build aliases"
+tags: [catalog, build, ext, postgres]
 weight: 100
+authors: [Vonng]
+release_url: https://github.com/pgsty/pig/releases/tag/v1.3.2
 ---
 
 Routine maintenance release.
@@ -18,7 +18,7 @@ Routine maintenance release.
 
 ## Checksums
 
-```bash
+```checksums
 d760f47652ff3e2e4a61eb7b9a68ca68665b2b36c187c52f5eaf50d2f007d8f3  pig-1.3.2-1.aarch64.rpm
 c2e02e62497f4c2055a9b448ddb3a24c618fcd488580c28b2b9a0e7cedacef55  pig-1.3.2-1.x86_64.rpm
 b8d066ddefa4530946c74c30e7e4acdab6abf8da70a47dcfe2a77719b79e397f  pig-v1.3.2.darwin-amd64.tar.gz
@@ -29,4 +29,4 @@ d6c1cf2c52962045f6bbfb2a669058e7f903088526591d6c939e7723f3928d30  pig_1.3.2-1_am
 4352385c629b26a1837054445a546da89591499848b557699c2fb70fde9377aa  pig_1.3.2-1_arm64.deb
 ```
 
-Release: https://github.com/pgsty/pig/releases/tag/v1.3.2
+{{< release-card >}}

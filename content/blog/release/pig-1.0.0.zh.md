@@ -2,11 +2,11 @@
 title: "pig v1.0.0"
 linkTitle: "v1.0.0"
 date: 2026-01-26
-author: "冯若航"
 description: "444, 新增 pg/pt/pb/pitr 子命令，可用性矩阵"
-categories: [release]
-tags: [Release, pig]
+tags: [patroni, pgbackrest, postgres, pitr]
 weight: 150
+authors: [Vonng]
+release_url: https://github.com/pgsty/pig/releases/tag/v1.0.0
 ---
 
 本版本引入三组主要的新子命令（`pig pg`、`pig pt`、`pig pb`），用于管理 PostgreSQL、Patroni 和 pgBackRest，同时新增编排式 PITR 命令，并增强扩展可用性显示。
@@ -54,7 +54,7 @@ weight: 150
 
 ## 校验和
 
-```bash
+```checksums
 306637079e942bcac9ccbc089cd09a80051898f8db1630269bb1acd3fbdaa872  pig-1.0.0-1.aarch64.rpm
 d2b9440410f00efbca174d63b507c39d97fc55f402d8e9290ee054c1b1c6414c  pig-1.0.0-1.x86_64.rpm
 c8a169e48a8168ee03db508ca2edc22b56ecf6997bae924e9023796ab7ae4e62  pig-v1.0.0.darwin-amd64.tar.gz
@@ -65,4 +65,4 @@ a543882aa905713a0c50088d4e848951b6957a37a1594d7e9f3fe46453d5ce66  pig_1.0.0-1_am
 4cd6ec54261b09025c12e9c56bcc0cd3c11779ea0e8becdbd4f901cf2e7c8995  pig_1.0.0-1_arm64.deb
 ```
 
-发布：https://github.com/pgsty/pig/releases/tag/v1.0.0
+{{< release-card >}}

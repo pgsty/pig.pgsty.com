@@ -2,11 +2,11 @@
 title: "pig v0.3.3"
 linkTitle: "v0.3.3"
 date: 2025-03-25
-author: "冯若航"
 description: "别名、仓库、依赖"
-categories: [release]
-tags: [Release, pig]
+tags: [repo, build, ext]
 weight: 310
+authors: [Vonng]
+release_url: https://github.com/pgsty/pig/releases/tag/v0.3.3
 ---
 
 - 添加 `pig build dep` 命令安装扩展构建依赖项
@@ -17,4 +17,4 @@ weight: 310
 - 允许在 el7 中安装扩展
 - 更新包别名
 
-发布：https://github.com/pgsty/pig/releases/tag/v0.3.3
+{{< release-card >}}

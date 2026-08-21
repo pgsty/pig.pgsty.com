@@ -4,6 +4,7 @@ description: "使用 pig postgres 子命令管理本地 PostgreSQL 服务器"
 weight: 160
 icon: fas fa-database
 categories: [参考]
+tags: [postgres]
 ---
 
 `pig pg` 命令（别名 `pig postgres`）用于管理本地 PostgreSQL 服务器和数据库。它封装了 `pg_ctl`、`psql`、`vacuumdb` 等本地原语；集群级 Patroni 操作请使用 `pig pt`，编排式 PITR 请使用 `pig pitr`。

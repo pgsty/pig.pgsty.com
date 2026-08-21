@@ -2,11 +2,11 @@
 title: "pig v0.3.3"
 linkTitle: "v0.3.3"
 date: 2025-03-25
-author: "Ruohang Feng"
 description: "alias, repo, deps"
-categories: [release]
-tags: [Release, pig]
+tags: [repo, build, ext]
 weight: 310
+authors: [Vonng]
+release_url: https://github.com/pgsty/pig/releases/tag/v0.3.3
 ---
 
 - Add `pig build dep` command to install extension build dependencies
@@ -17,4 +17,4 @@ weight: 310
 - Allow installing extensions in el7
 - Update package alias
 
-Release: https://github.com/pgsty/pig/releases/tag/v0.3.3
+{{< release-card >}}

@@ -1,0 +1,138 @@
+{{- /* Hero 架构图：把 pig 的工作原理画成三段流水线 ——
+       上游仓库 → 一个静态二进制 → 本机上被管起来的东西。
+       颜色全部走 landing-v3.css 的主题变量（.pa-* 类），
+       所以深浅主题各自成立；动效受 prefers-reduced-motion 约束。 */ -}}
+{{- $zh := eq .Site.Language.Lang "zh" -}}
+{{- $ext := .Site.Params.pgext_count -}}
+<figure class="hero-figure" aria-labelledby="hero-arch-title" aria-describedby="hero-arch-desc">
+  <svg class="pig-arch" viewBox="0 0 560 512" role="img" xmlns="http://www.w3.org/2000/svg">
+    <title id="hero-arch-title">{{ if $zh }}pig 工作原理示意图{{ else }}How pig works{{ end }}</title>
+    <desc id="hero-arch-desc">{{ if $zh }}pig 从 Pigsty Infra、PGDG 与操作系统基础仓库解析软件包，通过 repo、ext、pg、pt、pb、pitr 等子命令，在本机配置仓库、安装 PostgreSQL 14-18 与 {{ $ext }} 个扩展，并接管 Patroni 高可用与 pgBackRest 备份恢复。{{ else }}pig resolves packages from Pigsty Infra, PGDG, and the OS base repositories, then uses its repo, ext, pg, pt, pb, and pitr subcommands to configure repositories on the host, install PostgreSQL 14-18 with {{ $ext }} extensions, and drive Patroni high availability and pgBackRest backup and recovery.{{ end }}</desc>
+
+    <defs>
+      <linearGradient id="pa-core-sheen" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#419edb" stop-opacity="0.20"/>
+        <stop offset="55%" stop-color="#419edb" stop-opacity="0"/>
+        <stop offset="100%" stop-color="#ffa269" stop-opacity="0.14"/>
+      </linearGradient>
+      <marker id="pa-arrow" viewBox="0 0 10 10" refX="8.5" refY="5"
+              markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path class="pa-arrowhead" d="M 0 1 L 9 5 L 0 9 z"/>
+      </marker>
+    </defs>
+
+    {{/* ---------------------------------------------------------- 上游仓库 */}}
+    <g class="pa-band">
+      <text class="pa-band-label" x="16" y="14">{{ if $zh }}上游仓库{{ else }}UPSTREAM{{ end }}</text>
+      <line class="pa-rule" x1="16" y1="24" x2="544" y2="24"/>
+
+      <g class="pa-src">
+        <rect class="pa-chip" x="16" y="36" width="168" height="52" rx="9"/>
+        <text class="pa-chip-title" x="100" y="58">Pigsty Infra</text>
+        <text class="pa-chip-sub" x="100" y="75">pgsql · infra · extra</text>
+      </g>
+      <g class="pa-src">
+        <rect class="pa-chip" x="196" y="36" width="168" height="52" rx="9"/>
+        <text class="pa-chip-title" x="280" y="58">PGDG</text>
+        <text class="pa-chip-sub" x="280" y="75">postgresql.org</text>
+      </g>
+      <g class="pa-src">
+        <rect class="pa-chip" x="376" y="36" width="168" height="52" rx="9"/>
+        <text class="pa-chip-title" x="460" y="58">{{ if $zh }}系统基础源{{ else }}OS Base{{ end }}</text>
+        <text class="pa-chip-sub" x="460" y="75">EPEL · Debian · Ubuntu</text>
+      </g>
+    </g>
+
+    {{/* 上游 → 内核：三条支路汇到一根总线，再单点落入内核 */}}
+    <g class="pa-wires">
+      <path class="pa-trace" d="M100 88 V 106 H 460 V 88"/>
+      <path class="pa-trace" d="M280 88 V 106"/>
+      <path class="pa-trace pa-trace--head" d="M280 106 V 126" marker-end="url(#pa-arrow)"/>
+      <path class="pa-flow" d="M100 88 V 106 H 280 V 126"/>
+      <path class="pa-flow pa-flow--b" d="M460 88 V 106 H 280 V 126"/>
+      <circle class="pa-node" cx="100" cy="88" r="3"/>
+      <circle class="pa-node" cx="280" cy="88" r="3"/>
+      <circle class="pa-node" cx="460" cy="88" r="3"/>
+      <text class="pa-edge-label" x="292" y="121">{{ if $zh }}检索 · 解析 · 校验{{ else }}search · resolve · verify{{ end }}</text>
+    </g>
+
+    {{/* ------------------------------------------------------------ pig CLI */}}
+    <g class="pa-core-group">
+      <rect class="pa-core" x="16" y="130" width="528" height="186" rx="14"/>
+      <rect class="pa-core-sheen" x="16" y="130" width="528" height="186" rx="14"/>
+
+      <circle class="pa-dot pa-dot--r" cx="40" cy="154" r="4"/>
+      <circle class="pa-dot pa-dot--y" cx="54" cy="154" r="4"/>
+      <circle class="pa-dot pa-dot--g" cx="68" cy="154" r="4"/>
+      <text class="pa-prompt" x="88" y="159">$</text>
+      <text class="pa-core-title" x="102" y="159">pig</text>
+      <rect class="pa-badge" x="368" y="142" width="160" height="24" rx="12"/>
+      <text class="pa-badge-text" x="448" y="158">{{ if $zh }}单个静态二进制{{ else }}one static binary{{ end }}</text>
+      <line class="pa-core-rule" x1="36" y1="176" x2="524" y2="176"/>
+
+      {{/* 子命令栅格：3 列 × 2 行 */}}
+      <g class="pa-cmds">
+        <g class="pa-cmd">
+          <rect x="36" y="190" width="156" height="52" rx="8"/>
+          <text class="pa-cmd-name" x="50" y="211">pig repo</text>
+          <text class="pa-cmd-sub" x="50" y="230">{{ if $zh }}配置 APT / DNF 源{{ else }}wire APT / DNF{{ end }}</text>
+        </g>
+        <g class="pa-cmd">
+          <rect x="202" y="190" width="156" height="52" rx="8"/>
+          <text class="pa-cmd-name" x="216" y="211">pig ext</text>
+          <text class="pa-cmd-sub" x="216" y="230">{{ if $zh }}{{ $ext }} 个扩展{{ else }}{{ $ext }} extensions{{ end }}</text>
+        </g>
+        <g class="pa-cmd">
+          <rect x="368" y="190" width="156" height="52" rx="8"/>
+          <text class="pa-cmd-name" x="382" y="211">pig pg</text>
+          <text class="pa-cmd-sub" x="382" y="230">{{ if $zh }}内核 14 – 18{{ else }}kernel 14 – 18{{ end }}</text>
+        </g>
+        <g class="pa-cmd">
+          <rect x="36" y="252" width="156" height="52" rx="8"/>
+          <text class="pa-cmd-name" x="50" y="273">pig pt</text>
+          <text class="pa-cmd-sub" x="50" y="292">{{ if $zh }}Patroni 高可用{{ else }}Patroni HA{{ end }}</text>
+        </g>
+        <g class="pa-cmd">
+          <rect x="202" y="252" width="156" height="52" rx="8"/>
+          <text class="pa-cmd-name" x="216" y="273">pig pb</text>
+          <text class="pa-cmd-sub" x="216" y="292">pgBackRest</text>
+        </g>
+        <g class="pa-cmd">
+          <rect x="368" y="252" width="156" height="52" rx="8"/>
+          <text class="pa-cmd-name" x="382" y="273">pig pitr</text>
+          <text class="pa-cmd-sub" x="382" y="292">{{ if $zh }}时间点恢复{{ else }}point-in-time{{ end }}</text>
+        </g>
+      </g>
+    </g>
+
+    {{/* 内核 → 主机 */}}
+    <g class="pa-wires">
+      <path class="pa-trace pa-trace--head" d="M280 316 V 372" marker-end="url(#pa-arrow)"/>
+      <path class="pa-flow pa-flow--c" d="M280 316 V 368"/>
+      <circle class="pa-node" cx="280" cy="316" r="3"/>
+      <text class="pa-edge-label" x="292" y="344">apt · dnf · systemd</text>
+    </g>
+
+    {{/* -------------------------------------------------------------- 主机 */}}
+    <g class="pa-band">
+      <text class="pa-band-label" x="16" y="366">{{ if $zh }}你的主机{{ else }}YOUR HOST{{ end }}</text>
+      <line class="pa-rule" x1="16" y1="376" x2="544" y2="376"/>
+
+      <rect class="pa-plate" x="16" y="388" width="258" height="52" rx="9"/>
+      <text class="pa-plate-title" x="34" y="410">{{ if $zh }}仓库定义{{ else }}Repositories{{ end }}</text>
+      <text class="pa-plate-sub" x="34" y="428">/etc/apt · /etc/yum.repos.d</text>
+
+      <rect class="pa-plate" x="286" y="388" width="258" height="52" rx="9"/>
+      <text class="pa-plate-title" x="304" y="410">PostgreSQL 14 – 18</text>
+      <text class="pa-plate-sub" x="304" y="428">{{ if $zh }}内核 + {{ $ext }} 个扩展包{{ else }}kernels + {{ $ext }} extension packages{{ end }}</text>
+
+      <rect class="pa-plate" x="16" y="448" width="258" height="52" rx="9"/>
+      <text class="pa-plate-title" x="34" y="470">Patroni</text>
+      <text class="pa-plate-sub" x="34" y="488">{{ if $zh }}高可用集群与切换{{ else }}HA cluster &amp; switchover{{ end }}</text>
+
+      <rect class="pa-plate" x="286" y="448" width="258" height="52" rx="9"/>
+      <text class="pa-plate-title" x="304" y="470">pgBackRest → PITR</text>
+      <text class="pa-plate-sub" x="304" y="488">{{ if $zh }}备份、校验与时间点恢复{{ else }}backup, verify, recover{{ end }}</text>
+    </g>
+  </svg>
+</figure>

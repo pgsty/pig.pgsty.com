@@ -4,6 +4,7 @@ description: "Manage Pigsty installation with pig sty"
 weight: 150
 icon: fas fa-server
 categories: [Reference]
+tags: [sty]
 ---
 
 **pig** can also be used as a CLI tool for Pigsty, a batteries-included free PostgreSQL RDS solution.

@@ -2,11 +2,11 @@
 title: "pig v1.6.1"
 linkTitle: "v1.6.1"
 date: 2026-07-30
-author: "冯若航"
 description: "pig v1.6.1 刷新了内置的扩展目录，并将内嵌的 Pigsty 版本对齐到 4.5.0。"
-categories: [release]
-tags: [Release, pig]
+tags: [catalog, ext, install, repo]
 weight: 10
+authors: [Vonng]
+release_url: https://github.com/pgsty/pig/releases/tag/v1.6.1
 ---
 
 `pig` v1.6.1 是 [v1.6.0](/zh/release/pig-1.6.0/) 之上的维护版本：没有新增命令，也没有参数变更，
@@ -43,5 +43,6 @@ curl -fsSL https://repo.pigsty.io/pig | bash   # 全球站点（Cloudflare CDN�
 pig ext reload             # 把最新目录下载到 ~/.pig/extension.csv
 ```
 
-完整版本历史见 [发布注记](/zh/release/)，安装包与校验和见
-[GitHub 发布页](https://github.com/pgsty/pig/releases/tag/v1.6.1)。
+完整版本历史见 [发布注记](/zh/release/)。
+
+{{< release-card >}}

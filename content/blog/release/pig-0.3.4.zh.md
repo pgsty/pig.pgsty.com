@@ -2,11 +2,11 @@
 title: "pig v0.3.4"
 linkTitle: "v0.3.4"
 date: 2025-04-05
-author: "冯若航"
 description: "常规更新"
-categories: [release]
-tags: [Release, pig]
+tags: [repo, catalog]
 weight: 300
+authors: [Vonng]
+release_url: https://github.com/pgsty/pig/releases/tag/v0.3.4
 ---
 
 ```bash
@@ -18,4 +18,4 @@ curl https://repo.pigsty.io/pig | bash -s 0.3.4
 - 升级 pigsty 版本字符串
 - 在仓库列表中添加 `gitlab` 仓库
 
-发布：https://github.com/pgsty/pig/releases/tag/v0.3.4
+{{< release-card >}}

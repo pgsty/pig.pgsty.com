@@ -4,6 +4,7 @@ description: "使用 pig pitr 命令执行编排式时间点恢复（PITR）"
 weight: 185
 icon: fas fa-clock-rotate-left
 categories: [参考]
+tags: [pitr, pgbackrest]
 ---
 
 `pig pitr` 命令用于通过 pgBackRest 执行时间点恢复，并以保守方式处理本地 PostgreSQL 与 Patroni 生命周期。与底层的 `pig pb restore` 不同，`pig pitr` 会先做恢复前检查，必要时停止 Patroni 与 PostgreSQL，执行 restore，然后按参数决定是否启动 PostgreSQL。

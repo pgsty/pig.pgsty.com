@@ -1,0 +1,14 @@
+{{- /* 首页与下载页是 PIG 定制的着陆版面，跑在 OINK 的 shell 里（navbar、footer、
+     search 与 scripts 都由主题提供），只额外需要这几张自己的样式表和品牌字体。
+     其余页面一个字节都不多加。 */ -}}
+{{- $outputFormat := lower (.Store.Get "tdOutputFormat" | default "html") -}}
+{{- $landing := or .IsHome (eq .Type "download") -}}
+{{- if and (ne $outputFormat "print") $landing }}
+{{- /* 品牌字体（Chakra Petch / IBM Plex Mono / Noto Sans SC）只有着陆版面用到，
+     文档页走 OINK 的 typography preset。 */}}
+<link rel="stylesheet" href="{{ "fonts/fonts.css" | relURL }}">
+{{- /* 查询串里放内容哈希：static/ 走长缓存，样式表改了必须换 URL 才会被取到。 */}}
+{{- range slice "css/landing-v3.css" "css/pig-v3.css" "css/download.css" }}
+<link rel="stylesheet" href="{{ . | relURL }}?v={{ substr (md5 (readFile (path.Join "static" .))) 0 8 }}">
+{{- end }}
+{{- end }}

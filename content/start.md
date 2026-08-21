@@ -5,6 +5,7 @@ description: "Quick start with pig, the PostgreSQL package manager"
 weight: 10
 icon: fas fa-rocket
 categories: [Tutorial]
+tags: [install, repo, ext]
 ---
 
 Here is a simple getting started tutorial to help you experience the core capabilities of the PIG package manager.

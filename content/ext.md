@@ -4,6 +4,7 @@ description: "Search the extension catalog and manage PostgreSQL extension packa
 weight: 120
 icon: fas fa-puzzle-piece
 categories: [Reference]
+tags: [ext, catalog]
 ---
 
 The `pig ext` command searches the extension catalog and manages PostgreSQL extension **packages** on a host. It can resolve names, inspect package availability, install/remove/update RPM or DEB packages, and handle PostgreSQL kernel packages. Database-local activation and migration are deliberately outside this command group's scope.

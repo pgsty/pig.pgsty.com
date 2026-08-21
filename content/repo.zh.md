@@ -4,6 +4,7 @@ description: "使用 pig repo 子命令管理软件仓库"
 weight: 110
 icon: fas fa-warehouse
 categories: [参考]
+tags: [repo]
 ---
 
 `pig repo` 命令是一个综合性的软件包仓库管理工具。它提供了添加、移除、创建和管理软件仓库的功能，支持 RPM 系统（RHEL/CentOS/Rocky/Alma）和 Debian 系统（Debian/Ubuntu）。

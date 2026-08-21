@@ -1,0 +1,9 @@
+{{- /* 着陆版面的运行时：滚动揭示、数字滚动、命令复制；下载页再加标签页控制器。
+     主题切换、搜索、命令面板、菜单都由 OINK 的 shell 负责，这里不重复实现。 */ -}}
+{{- $landing := or .IsHome (eq .Type "download") -}}
+{{- if $landing }}
+<script src="{{ "js/landing-v3.js" | relURL }}?v={{ substr (md5 (readFile "static/js/landing-v3.js")) 0 8 }}"></script>
+{{- if eq .Type "download" }}
+<script src="{{ "js/download.js" | relURL }}?v={{ substr (md5 (readFile "static/js/download.js")) 0 8 }}"></script>
+{{- end }}
+{{- end }}

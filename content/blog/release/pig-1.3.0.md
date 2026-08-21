@@ -2,11 +2,11 @@
 title: "pig v1.3.0"
 linkTitle: "v1.3.0"
 date: 2026-02-27
-author: "Ruohang Feng"
 description: "Build pipeline hardening, 461 extensions, new pgedge/ivory support"
-categories: [release]
-tags: [Release, pig]
+tags: [catalog, build, cli, ext]
 weight: 120
+authors: [Vonng]
+release_url: https://github.com/pgsty/pig/releases/tag/v1.3.0
 ---
 
 This release is a focused engineering update from `v1.2.0` to `v1.3.0`: 15 commits, 74 files changed, `+1184 / -236` LOC.
@@ -77,7 +77,7 @@ It hardens the `pig build` pipeline and extends catalog/alias coverage, increasi
 
 ## Checksums
 
-```bash
+```checksums
 e8409cc8165139028323094bebede495d4b0d0a52616d1aecd8c7ecd3fb7471d  pig-1.3.0-1.aarch64.rpm
 73645ea4b9ce27b44b2c7f4587e6218cdbbba045f32dd45c942e03cf9020c61e  pig-1.3.0-1.x86_64.rpm
 a2d8a14b11606f4a23ca7b929686ff020fc8ce29e7cec21074f710f981aee6d4  pig-v1.3.0.darwin-amd64.tar.gz
@@ -88,4 +88,4 @@ d124450333e61a5c7d0ed387b13b4087cfd2a81a3fde018232e6bf9b4db6ba0e  pig-v1.3.0.lin
 beb8ff31d1e64dbfcf6896115e6d200d835fc28bbac5a5b92d75096ef1e68c80  pig_1.3.0-1_arm64.deb
 ```
 
-Release: https://github.com/pgsty/pig/releases/tag/v1.3.0
+{{< release-card >}}

@@ -2,11 +2,11 @@
 title: "pig v1.3.0"
 linkTitle: "v1.3.0"
 date: 2026-02-27
-author: "冯若航"
 description: "构建链路强化，扩展增至 461，新内核支持"
-categories: [release]
-tags: [Release, pig]
+tags: [catalog, build, cli, ext]
 weight: 120
+authors: [Vonng]
+release_url: https://github.com/pgsty/pig/releases/tag/v1.3.0
 ---
 
 这是从 `v1.2.0` 到 `v1.3.0` 的一次工程强化与目录扩展版本：15 commits、74 files changed、代码行 `+1184 / -236`。
@@ -76,7 +76,7 @@ weight: 120
 
 ## 校验和
 
-```bash
+```checksums
 196f32419886da095f303b1bcad2729b674abc03d412199e88a39390b2616534  pig-1.3.0-1.aarch64.rpm
 a2dcc930dd47a08e85285c1fb7925e1355a1e67d458a265a7ef6d9666bc8e7ec  pig-1.3.0-1.x86_64.rpm
 c7ebda6b9839408b12ffe1c8ea561f03e1793aae0732f9bbe2320a0d45160714  pig-v1.3.0.darwin-amd64.tar.gz
@@ -87,4 +87,4 @@ d61430eeafc8005a22918a9aa60dea5c987916f9834331b5484f761b8235644f  pig-v1.3.0.lin
 19261ae50e873a05a10a6ad500ab1b429b22e2612325c09f9cd5443dcd34308b  pig_1.3.0-1_arm64.deb
 ```
 
-发布：https://github.com/pgsty/pig/releases/tag/v1.3.0
+{{< release-card >}}

@@ -5,6 +5,7 @@ description: "如何下载与安装 pig 包管理器"
 weight: 30
 icon: fas fa-download
 categories: [任务]
+tags: [install, repo]
 ---
 
 ## 脚本安装

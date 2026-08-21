@@ -1,105 +1,13 @@
 /**
- * PIG landing interactions, reused from Pigsty Landing v3.
- * Theme switch / command copy / reveal / counters / gallery.
+ * PIG landing runtime: command copy, scroll reveal, counter animation.
+ * Theme, search, command palette, and menus belong to the OINK shell;
+ * nothing here duplicates them.
  */
 
 (function () {
   'use strict';
 
-  var DARK_THEME_COLOR = '#0b1119';
-  var LIGHT_THEME_COLOR = '#f1f4f8';
-  var THEME_KEY = 'td-color-theme';
-  var LEGACY_THEME_KEY = 'pig-landing-theme';
-
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  // ============================================
-  // Theme
-  // ============================================
-  function getStoredTheme() {
-    try {
-      var v = window.localStorage.getItem(THEME_KEY) || window.localStorage.getItem(LEGACY_THEME_KEY);
-      return v === 'light' || v === 'dark' || v === 'auto' ? v : null;
-    } catch (err) { return null; }
-  }
-
-  function setStoredTheme(theme) {
-    try {
-      window.localStorage.setItem(THEME_KEY, theme);
-      window.localStorage.removeItem(LEGACY_THEME_KEY);
-    } catch (err) { /* ignore */ }
-  }
-
-  function resolveTheme(theme) {
-    if (theme === 'light' || theme === 'dark') return theme;
-    return window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-  }
-
-  function currentTheme() {
-    return document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
-  }
-
-  function applyTheme(theme) {
-    var isLight = theme === 'light';
-    document.documentElement.setAttribute('data-theme', theme);
-
-    document.querySelectorAll('[data-theme-toggle]').forEach(function (btn) {
-      var icon = btn.querySelector('i');
-      if (icon) {
-        icon.classList.toggle('fa-sun', !isLight);
-        icon.classList.toggle('fa-moon', isLight);
-      }
-      var label = isLight ? 'Switch to dark mode' : 'Switch to light mode';
-      btn.setAttribute('title', label);
-      btn.setAttribute('aria-label', label);
-    });
-
-    var meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute('content', isLight ? LIGHT_THEME_COLOR : DARK_THEME_COLOR);
-
-    // 主题感知图片（如扩展生态全景图的深浅两版）
-    document.querySelectorAll('img[data-theme-src-light]').forEach(function (img) {
-      var src = isLight ? img.dataset.themeSrcLight : img.dataset.themeSrcDark;
-      if (src && img.getAttribute('src') !== src) img.setAttribute('src', src);
-    });
-
-    try {
-      window.dispatchEvent(new CustomEvent('pig-theme-change', { detail: { theme: theme } }));
-    } catch (err) { /* ignore */ }
-  }
-
-  function initThemeToggle() {
-    applyTheme(currentTheme()); // 同步按钮图标 / 主题图片（data-theme 已由内联脚本设置）
-    document.querySelectorAll('[data-theme-toggle]').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        var next = currentTheme() === 'light' ? 'dark' : 'light';
-        applyTheme(next);
-        setStoredTheme(next);
-      });
-    });
-
-    // OINK 0.3's command palette delegates the theme choice to the current
-    // surface. The landing page keeps its custom tokens but shares OINK's
-    // auto/light/dark preference with documentation pages.
-    if (window.OinkActions && window.OinkActions.get('switch_theme')) {
-      window.OinkActions.registerExecutor('switch_theme', function (context) {
-        var value = context && context.value;
-        var theme = typeof value === 'string' ? value : value && value.value;
-        if (theme !== 'auto' && theme !== 'light' && theme !== 'dark') {
-          return Promise.reject(new Error('Unsupported theme'));
-        }
-        setStoredTheme(theme);
-        applyTheme(resolveTheme(theme));
-        return { theme: theme };
-      });
-    }
-
-    if (window.matchMedia) {
-      window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', function () {
-        if (getStoredTheme() === 'auto') applyTheme(resolveTheme('auto'));
-      });
-    }
-  }
 
   // ============================================
   // Copy buttons
@@ -192,130 +100,12 @@
   }
 
   // ============================================
-  // Header scroll state
-  // ============================================
-  function initHeaderScroll() {
-    var header = document.querySelector('.landing-header');
-    if (!header) return;
-    var update = function () {
-      header.classList.toggle('scrolled', window.pageYOffset > 60);
-    };
-    window.addEventListener('scroll', update, { passive: true });
-    update();
-  }
-
-  // ============================================
-  // Mobile menu
-  // ============================================
-  function initMobileMenu() {
-    var toggle = document.querySelector('.mobile-menu-toggle');
-    var menu = document.querySelector('.mobile-menu');
-    if (!toggle || !menu) return;
-
-    toggle.addEventListener('click', function () {
-      var active = menu.classList.toggle('active');
-      toggle.classList.toggle('active', active);
-      toggle.setAttribute('aria-expanded', active ? 'true' : 'false');
-    });
-
-    // 链接与命令面板按钮点击后收起菜单（主题切换按钮除外，保持菜单打开）。
-    menu.querySelectorAll('a, [data-td-shell-search-open]').forEach(function (link) {
-      link.addEventListener('click', function () {
-        menu.classList.remove('active');
-        toggle.classList.remove('active');
-        toggle.setAttribute('aria-expanded', 'false');
-      });
-    });
-  }
-
-  // ============================================
-  // Dashboard gallery lazy loading
-  // ============================================
-  function initDashboardGallery() {
-    var slides = document.querySelectorAll('.dashboard-gallery-slide');
-    if (!slides.length) return;
-
-    var load = function (slide) {
-      var src = slide.dataset.src;
-      if (!src || slide.querySelector('img')) return;
-      var img = document.createElement('img');
-      img.src = src;
-      img.alt = slide.dataset.alt || 'PIG interface';
-      img.loading = 'lazy';
-      img.onload = function () { slide.classList.add('loaded'); };
-      img.onerror = function () { slide.style.display = 'none'; };
-      slide.appendChild(img);
-    };
-
-    if (!('IntersectionObserver' in window)) {
-      slides.forEach(load);
-      return;
-    }
-
-    var observer = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          load(entry.target);
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { rootMargin: '300px 600px', threshold: 0 });
-
-    slides.forEach(function (slide) { observer.observe(slide); });
-  }
-
-  // ============================================
-  // Asciinema player（主题感知）
-  // ============================================
-  function asciinemaTheme(theme) {
-    return theme === 'light' ? 'solarized-light' : 'dracula';
-  }
-
-  function renderAsciinema(container, theme) {
-    var playerTheme = asciinemaTheme(theme);
-    if (container.dataset.playerTheme === playerTheme && container.childElementCount > 0) return;
-
-    container.innerHTML = '';
-    container.dataset.playerTheme = playerTheme;
-
-    AsciinemaPlayer.create('/demo/install-hero.cast', container, {
-      cols: 120,
-      rows: 36,
-      autoPlay: true,
-      loop: true,
-      speed: 1.6,
-      preload: true,
-      poster: 'npt:0:03',
-      idleTimeLimit: 0.5,
-      theme: playerTheme,
-      fit: 'width'
-    });
-  }
-
-  function initAsciinema() {
-    var container = document.getElementById('asciinema-player');
-    if (!container || typeof AsciinemaPlayer === 'undefined') return;
-
-    renderAsciinema(container, currentTheme());
-
-    window.addEventListener('pig-theme-change', function (event) {
-      var theme = event && event.detail ? event.detail.theme : currentTheme();
-      renderAsciinema(container, theme);
-    });
-  }
-
-  // ============================================
   // Init
   // ============================================
   function init() {
-    initThemeToggle();
     initCopyButtons();
     initScrollReveal();
     initCounters();
-    initHeaderScroll();
-    initMobileMenu();
-    initDashboardGallery();
-    initAsciinema();
   }
 
   if (document.readyState === 'loading') {

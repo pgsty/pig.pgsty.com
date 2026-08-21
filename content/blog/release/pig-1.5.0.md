@@ -2,11 +2,11 @@
 title: "pig v1.5.0"
 linkTitle: "v1.5.0"
 date: 2026-07-04
-author: "Ruohang Feng"
 description: "531 extensions, pigsty v4.4, pg/pt/pb/pitr rework, clone & fork"
-categories: [release]
-tags: [Release, pig]
+tags: [patroni, pgbackrest, catalog, postgres]
 weight: 40
+authors: [Vonng]
+release_url: https://github.com/pgsty/pig/releases/tag/v1.5.0
 ---
 
 Pig `v1.5.0` is a PostgreSQL operations release for day-to-day DBA work. It adds local database clone/fork workflows, clarifies the boundaries between `pg`, `pt`, `pb`, and `pitr`, and tightens preview, confirmation, and structured-output behavior for high-risk operations.
@@ -35,7 +35,7 @@ Pig `v1.5.0` is a PostgreSQL operations release for day-to-day DBA work. It adds
 
 ## Checksums
 
-```bash
+```checksums
 9f83b78ed2eccedd55a86c634f88364f1945c3cefa1b23efdd72a7cf2062e1df  pig-1.5.0-1.aarch64.rpm
 b792001498e9907d4659db46640f9c5164152b20689f90f93418f76fb4633e6e  pig-1.5.0-1.x86_64.rpm
 ae1081dfbff8564ecdf713c85e8025c91bfd38e6575ea9ac99a92f968ab8a29d  pig-v1.5.0.darwin-amd64.tar.gz
@@ -46,4 +46,4 @@ d4de9ef1c28d0a3661c4a4d47c469b7bfd5f5bddb610325796afb669ab162234  pig-v1.5.0.lin
 2be1df804d3f630560bc3ced0107c49ffad8bb52b004f72c7f8b4d09dc8d3e04  pig_1.5.0-1_arm64.deb
 ```
 
-Release: https://github.com/pgsty/pig/releases/tag/v1.5.0
+{{< release-card >}}
