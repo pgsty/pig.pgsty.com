@@ -1,6 +1,6 @@
 # PIG Documentation
 
-This repository contains the bilingual website for **PIG** — *PostgreSQL
+This repository contains the bilingual website for **PIG** — *Postgres
 Install Guide*, the PostgreSQL extension package manager by
 [Pigsty](https://pigsty.io). It is built with
 [Hugo](https://gohugo.io/) and the [OINK](https://github.com/pgsty/oink)

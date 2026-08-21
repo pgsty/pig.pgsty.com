@@ -1,7 +1,7 @@
 # OINK 胖页脚（data/footer/<lang>.yaml）：品牌块 + 四列链接。
 # 站内链接写相对路径（主题会过 relLangURL），站外链接标 external: true。
 brand:
-  tagline: '**P**ostgreSQL **I**nstall **G**uide'
+  tagline: '**P**ostgres **I**nstall **G**uide'
   slogan: 一行命令，装好扩展
 columns:
   - title: 获取 PIG
