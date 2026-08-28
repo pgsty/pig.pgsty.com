@@ -4,6 +4,8 @@ linkTitle: Release
 description: Release notes for every pig version
 weight: 10
 icon: fa-solid fa-clipboard-list
+cascade:
+  images: [/images/pig-release-note.webp]
 ---
 
 Release notes for every published `pig` version, newest first. Artifacts and checksums for
