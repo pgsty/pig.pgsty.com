@@ -96,6 +96,9 @@ The command family uses PIG's legacy structured adapter for `-o json|yaml`. The 
 the operation and text produced by the endpoint; the Prometheus exposition format itself remains
 text owned by pg_exporter.
 
+This command family does not consume `~/.pig/config.yml` and remains available if that file is
+malformed; endpoint selection comes only from its command flags and defaults.
+
 ## Operational boundary
 
 `pig pe` does not start pg_exporter, edit its files, scrape continuously, or act as a Prometheus

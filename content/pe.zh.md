@@ -89,6 +89,8 @@ PIG 使用带连接阶段超时的共享 HTTP transport，但这个 legacy 包�
 该命令族使用 PIG 的旧命令结构化适配器支持 `-o json|yaml`。
 结果会捕获操作与端点产生的文本；Prometheus exposition format 本身仍是 pg_exporter 拥有的文本格式。
 
+该命令族不读取 `~/.pig/config.yml`；即使该文件格式错误仍可使用，端点选择只来自命令参数与默认值。
+
 ## 操作边界
 
 `pig pe` 不会启动 pg_exporter、编辑其配置文件、持续抓取指标或充当 Prometheus 服务器。

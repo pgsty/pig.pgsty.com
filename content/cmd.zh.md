@@ -283,6 +283,10 @@ pig version                      # 显示 pig 版本信息
 pig version -o json              # 结构化版本输出
 ```
 
+`pig version` 与 legacy `pig pe` HTTP 命令不读取 Pigsty 配置，因此即使
+`~/.pig/config.yml` 格式错误仍可使用。会使用配置或探测环境状态的命令（包括 `pig status`）
+仍会因错误配置而失败，避免静默忽略配置问题。
+
 ## 设计记录
 
 - [从面向人类到 Agent-Native](/zh/design/agent-native-cli/)

@@ -284,6 +284,11 @@ pig version                      # show pig version information
 pig version -o json              # structured version output
 ```
 
+`pig version` and the legacy `pig pe` HTTP commands do not consume Pigsty configuration, so they
+remain available when `~/.pig/config.yml` is malformed. Commands that use configuration or detected
+environment state, including `pig status`, continue to fail on a malformed file so the error is not
+silently ignored.
+
 ## Design records
 
 - [From Human-Friendly to Agent-Native](/design/agent-native-cli/)
