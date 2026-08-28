@@ -19,7 +19,8 @@ Environment Setup:
   pig build tool  [mini|full|...]  # init build toolset
   pig build rust  [-y] [-m]        # install Rust toolchain
   pig build pgrx  [-v <ver>] [-b]  # install & init pgrx (0.19.1)
-  pig build proxy [id@host:port ]  # init build proxy (optional)
+  pig build proxy                  # install or verify the vray package
+  pig build proxy id@host:port     # configure the optional build proxy
 
 Package Building:
   pig build pkg   [ext|pkg...]     # complete pipeline: get + dep + ext
@@ -39,7 +40,7 @@ Quick Start:
 | `build tool`  | 初始化构建工具            | 需要 sudo 或 root 权限 |
 | `build rust`  | 安装 Rust 工具链        | 需要 sudo 或 root 权限 |
 | `build pgrx`  | 安装并初始化 pgrx        | 需要 sudo 或 root 权限 |
-| `build proxy` | 初始化构建代理            |                   |
+| `build proxy` | 初始化构建代理            | 需要 sudo 或 root 权限 |
 | `build get`   | 下载源代码 tarball      |                   |
 | `build dep`   | 安装扩展构建依赖           | 需要 sudo 或 root 权限 |
 | `build ext`   | 构建扩展包              | 需要 sudo 或 root 权限 |
@@ -196,8 +197,16 @@ pig build pgrx -b                # 自动探测时包含 PostgreSQL 19 beta pg_c
 
 为受限互联网访问的构建环境设置代理配置。
 
+首次使用前，需要先配置一个提供 `vray` 的软件仓库，通常可运行 `pig build repo`（或使用等价的既有仓库配置）。
+该命令通过 `dnf`、`yum` 或 `apt-get` 安装 `vray`，写入 `/etc/v2ray.json` 与
+`/etc/profile.d/proxy.sh`，然后重启 `v2ray` 服务，因此需要 sudo 或 root 权限。
+该软件包必须提供 `v2ray` 服务账户与 systemd unit。连通性检查失败时命令会返回非零退出状态。
+
+远端用户 ID 应按凭据处理。PIG 会在诊断与结构化结果中遮盖它，但它仍作为命令参数传入，
+可能被 shell 历史保留；调用方应遵循所在 shell 或自动化环境的凭据处理策略。
+
 ```bash
-pig build proxy                  # 交互式设置
+pig build proxy                  # 仅安装或确认 vray 软件包
 pig build proxy user@host:8080   # 使用默认本地端口 127.0.0.1:12345
 pig build proxy user@host:8080 127.0.0.1:1080
 ```

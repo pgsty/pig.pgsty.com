@@ -19,7 +19,8 @@ Environment Setup:
   pig build tool  [mini|full|...]  # init build toolset
   pig build rust  [-y] [-m]        # install Rust toolchain
   pig build pgrx  [-v <ver>] [-b]  # install & init pgrx (0.19.1)
-  pig build proxy [id@host:port ]  # init build proxy (optional)
+  pig build proxy                  # install or verify the vray package
+  pig build proxy id@host:port     # configure the optional build proxy
 
 Package Building:
   pig build pkg   [ext|pkg...]     # complete pipeline: get + dep + ext
@@ -39,7 +40,7 @@ Quick Start:
 | `build tool` | Initialize build tools | Requires sudo or root |
 | `build rust` | Install Rust toolchain | Requires sudo or root |
 | `build pgrx` | Install and initialize pgrx | Requires sudo or root |
-| `build proxy` | Initialize build proxy | |
+| `build proxy` | Initialize build proxy | Requires sudo or root |
 | `build get` | Download source tarballs | |
 | `build dep` | Install extension build dependencies | Requires sudo or root |
 | `build ext` | Build extension packages | Requires sudo or root |
@@ -196,8 +197,18 @@ pig build pgrx -b                # include PostgreSQL 19 beta pg_config during a
 
 Configure a proxy for build environments with restricted internet access.
 
+Before first use, configure a package repository that provides `vray`, normally with
+`pig build repo` (or an equivalent existing repository setup). The command installs `vray` with
+`dnf`, `yum`, or `apt-get`, writes `/etc/v2ray.json` and `/etc/profile.d/proxy.sh`, then restarts
+the `v2ray` service, so it requires sudo or root. The package must provide the `v2ray` service
+account and systemd unit. A failed connectivity check returns a non-zero exit status.
+
+Treat the remote user ID as a credential. PIG redacts it from diagnostics and structured results,
+but it is still supplied as a command argument and may be retained by shell history; apply the
+credential-handling policy of the calling shell or automation environment.
+
 ```bash
-pig build proxy                  # interactive setup
+pig build proxy                  # install or verify the vray package only
 pig build proxy user@host:8080   # use default local endpoint 127.0.0.1:12345
 pig build proxy user@host:8080 127.0.0.1:1080
 ```
