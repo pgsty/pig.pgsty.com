@@ -61,6 +61,16 @@ pig do pgsql-svc pg-meta                  # refresh PostgreSQL services
 `pgsql-rm --uninstall` expands the removal scope to packages. Treat it as a separate destructive
 decision and verify that the selected hosts no longer need those packages.
 
+Commands whose operand is explicitly a PostgreSQL cluster validate it before running Ansible.
+PIG accepts `^[A-Za-z0-9][A-Za-z0-9-]*$`: this is Pigsty's alphanumeric-and-hyphen contract with
+an additional leading-alphanumeric CLI boundary, so an option-shaped value cannot become an
+Ansible limit. `root` and the Ansible built-in groups `all` and `ungrouped` are reserved.
+`pgsql-user` accepts Pigsty user names matching `^[a-z_][a-z0-9_@.-]{0,62}$` and reserves
+`postgres`. `pgsql-db` accepts a bounded ASCII name beginning with a letter or underscore and
+continuing with letters, digits, `_`, `@`, `.`, or `-`; this keeps Inventory lookup and generated
+path handling unambiguous without forcing database names to lowercase. Selector-oriented commands
+retain the broader selector grammar.
+
 ## Node and repository operations
 
 Selectors may be cluster names, host names, IP addresses, or another selector form supported by

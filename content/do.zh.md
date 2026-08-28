@@ -60,6 +60,13 @@ pig do pgsql-svc pg-meta                  # 刷新 PostgreSQL 服务
 `pgsql-rm --uninstall` 会把移除范围扩大到软件包。应将其视为独立的破坏性决策，
 确认选中主机已经不再需要这些软件包。
 
+参数明确为 PostgreSQL 集群名的命令会在运行 Ansible 前完成校验。PIG 接受
+`^[A-Za-z0-9][A-Za-z0-9-]*$`：它沿用 Pigsty 的字母数字与连字符契约，并额外要求首字符为字母或数字，
+防止形似选项的值进入 Ansible limit。`root` 与 Ansible 内置组 `all`、`ungrouped` 均为保留值。
+`pgsql-user` 接受匹配 `^[a-z_][a-z0-9_@.-]{0,62}$` 的 Pigsty 用户名，并保留 `postgres`。
+`pgsql-db` 接受以字母或下划线开头、后续仅包含字母、数字、`_`、`@`、`.`、`-` 的有界 ASCII 名称；
+这样可避免 Inventory 查询与生成路径产生歧义，同时不强制数据库名使用小写。以 selector 为参数的命令仍保留更宽的 selector 语法。
+
 ## 节点与仓库操作
 
 Selector 可以是集群名、主机名、IP 地址，或 Pigsty Playbook 支持的其它选择形式。
