@@ -537,3 +537,8 @@ For full `pgbackrest` functionality, use the `pgbackrest` command directly.
 **Platform Support:**
 
 This command is designed for Linux systems and depends on Pigsty's default directory layout.
+
+## Design record
+
+[PIG's Operations CLI Safety Contract](/design/ops-cli-safety/) explains the boundary between
+the low-level `pb restore` primitive and the orchestrated `pig pitr` workflow.

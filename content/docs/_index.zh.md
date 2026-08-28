@@ -85,10 +85,14 @@ pig install -y pg18 pg_duckdb vector
 - [**pig sty**](/zh/sty/)：管理 Pigsty 安装与 Grafana 仪表盘
 - [**pig inventory**](/zh/inventory/)：检视、编辑、校验与交换 Pigsty 配置清单
 - [**pig context**](/zh/cmd/#pig-context)：采集主机、PostgreSQL、Patroni、pgBackRest 与扩展上下文
+- [**pig do**](/zh/do/)：执行有边界的 Pigsty 管理 Playbook 任务
 - [**pig pg**](/zh/pg/)：管理本地 PostgreSQL 服务
 - [**pig pt**](/zh/pt/)：透明运行 patronictl 管理 Patroni HA 集群
+- [**pig pe**](/zh/pe/)：检查并重载运行中的 pg_exporter
 - [**pig pb**](/zh/pb/)：管理 pgBackRest 备份
 - [**pig pitr**](/zh/pitr/)：时间点恢复工作流
+
+[设计归档](/zh/design/)解释这些命令契约背后的决策与取舍。
 
 ## 关于
 

@@ -371,3 +371,10 @@ The two formats are not flattened into one another during loading:
 - `dump` preserves schema v2 only when the target file already exists locally in v2 form; it then fetches the native v2 resource using that file's namespace. A new dump target defaults to classic JSON. Local-only files are never deleted by `dump`.
 
 Other `dashboard.grafana.app/*` versions or malformed resource envelopes are rejected instead of being silently treated as classic dashboards. Format preservation therefore depends on keeping the existing local file when round-tripping v2 resources.
+
+## Design records
+
+- [Native sty boot](/design/native-sty-boot/)
+- [Native sty conf](/design/native-sty-conf/)
+- [Native Grafana Management](/design/native-grafana-management/)
+- [Use the CMDB Pigsty Already Has](/design/existing-cmdb-boundary/)

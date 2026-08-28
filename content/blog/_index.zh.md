@@ -2,7 +2,7 @@
 title: PIG 博客
 url: /zh/blog/
 linkTitle: 博客
-description: 发布注记与项目动态
+description: 发布注记、设计归档与项目动态
 weight: 40
 type: blog
 sidebar_root_for: self
@@ -22,12 +22,12 @@ cascade:
     - print
     - markdown
   params:
-    # 刻意不设 images cascade：发布列表保持 OINK 的纯文本卡片，
-    # 不重复铺同一张默认图片；社交卡片仍由 params.images 提供。
+    # Blog 根节点不向所有栏目强加同一张图片；Release 与 Design
+    # 各自在栏目级决定自己的图片策略。
     sidebar_menu_foldable: false
     sidebar_menu_compact: false
     sidebar_expand_levels: 3
 icon: fa-solid fa-blog
 ---
 
-PIG 的发布注记与项目动态 —— Pigsty 出品的 PostgreSQL 扩展包管理器。
+PIG 的发布注记、设计归档与项目动态 —— Pigsty 出品的 PostgreSQL 扩展包管理器。

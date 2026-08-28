@@ -251,12 +251,18 @@ Create a compressed tarball of repository contents for offline distribution.
 ```bash
 pig repo cache                   # default: /www to /tmp/pkg.tgz
 pig repo cache -d /srv           # custom source directory
+pig repo cache pigsty docker     # include multiple top-level repositories
 ```
 
 **Options:**
 
 - `-d, --dir`: source directory, default `/www/`
 - `-p, --path`: output path, default `/tmp/pkg.tgz`
+
+An offline bundle must include `pigsty` and a regular `pigsty/repo_complete` marker. Missing
+requested repositories are skipped and reported separately from the repositories actually included.
+Symbolic links are rejected because the native boot extractor accepts only directories and regular
+files. A failed cache leaves an existing output package unchanged.
 
 ## repo boot
 
@@ -272,6 +278,17 @@ pig repo boot -d /srv            # custom target directory
 
 - `-p, --path`: package path, default `/tmp/pkg.tgz`
 - `-d, --dir`: target directory, default `/www/`
+
+Boot extracts into a staging directory and rejects conflicting top-level targets before committing
+anything. Within one running boot operation, additional repositories are moved first and `pigsty`
+is moved last, so its `repo_complete` marker is exposed only after the other roots were renamed.
+If the process stops before that final rename, already moved roots may remain and a retry rejects
+their target conflicts until the operator removes or moves them. This is fail-closed ordering, not
+a crash-recovery transaction. The marker is a presence sentinel; PIG does not validate its
+contents. An existing committed `pigsty` repository is reused rather than incrementally merged or
+overwritten; on that reuse path the requested package is not inspected and additional bundle roots
+are not applied. Structured output sets `reused: true` and does not report any extracted files for
+that path.
 
 ## repo reload
 

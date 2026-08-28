@@ -362,3 +362,8 @@ pig pb create
 **平台支持：**
 
 此命令专为 Linux 系统设计，依赖 pgBackRest、systemd（托管服务场景）以及 DBSU 可访问的数据目录与日志路径。
+
+## 设计记录
+
+[PIG 运维 CLI 安全契约](/zh/design/ops-cli-safety/)解释恢复原语、确认机制与 PITR 编排器
+为什么必须保持为不同契约。

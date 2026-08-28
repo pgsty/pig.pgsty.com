@@ -301,3 +301,8 @@ preflight, retry, or output rewriting to forwarded commands.
 
 **Platform**: designed for Linux; service management relies on `systemctl`, and the log
 helpers require readable Patroni log files.
+
+## Design record
+
+[Let Patronictl Speak for Itself](/design/patronictl-passthrough/) records why PIG stopped
+mirroring the upstream command tree and which local responsibilities remain.

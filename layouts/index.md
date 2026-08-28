@@ -24,8 +24,10 @@
 {{- with .OutputFormats.Get "markdown" }}{{ $url = .Permalink }}{{ end -}}
 - [{{ .Title }}]({{ $url }}){{ with .Description }}: {{ . | strings.TrimSpace | replaceRE `\s+` " " }}{{ end }}
 {{ end }}
-{{- with .Site.GetPage "blog/release" }}
+{{ range slice "blog/design" "blog/release" -}}
+{{- with $.Site.GetPage . -}}
 {{- $url := .Permalink -}}
 {{- with .OutputFormats.Get "markdown" }}{{ $url = .Permalink }}{{ end }}
 - [{{ .Title }}]({{ $url }}): {{ .Description }}
+{{- end }}
 {{ end -}}

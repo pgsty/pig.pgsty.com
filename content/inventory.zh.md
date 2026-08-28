@@ -164,3 +164,8 @@ pig inventory cmdb disable               # 切回静态 pigsty.yml
 > **注意**：`init` 会直接应用 `cmdb.sql` 基线，**不会** 先备份既有 CMDB——对已有数据的 CMDB
 > 执行前请自行备份；`load` 会替换全部声明行。破坏性操作均有基于目标指纹的确认门，
 > 结构化输出模式下必须显式 `--yes`。
+
+## 设计记录
+
+- [无损 Pigsty Inventory](/zh/design/lossless-inventory/)
+- [复用 Pigsty 已经拥有的 CMDB](/zh/design/existing-cmdb-boundary/)

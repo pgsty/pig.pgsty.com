@@ -371,8 +371,8 @@ pig pg role -D /data/pg18         # 指定数据目录
 
 **检测策略（按优先级）：**
 
-1. **进程检测**：检查 `walreceiver`、`recovery` 等进程
-2. **SQL 查询**：执行 `pg_is_in_recovery()` 查询（需要 PostgreSQL 运行）
+1. **目标进程检测**：读取所选数据目录的 `postmaster.pid`，只检查该 postmaster 的进程树
+2. **绑定实例的 SQL 查询**：使用所选实例记录的端口与 socket，并在信任 `pg_is_in_recovery()` 前核对 `data_directory`
 3. **数据目录检查**：检查 `standby.signal`、`recovery.signal`、`recovery.conf` 文件
 
 ## 连接与查询命令
@@ -843,3 +843,8 @@ pig pg svc status                # 显示服务状态
 **平台支持：**
 
 此命令专为 Linux 系统设计，部分功能依赖 `systemctl`。
+
+## 设计记录
+
+- [七成正确的调优器：界定 pig pg tune 的边界](/zh/design/pg-tune/)
+- [PIG 运维 CLI 安全契约](/zh/design/ops-cli-safety/)

@@ -176,3 +176,8 @@ pig inventory cmdb disable               # switch back to the static pigsty.yml
 > of an existing CMDB — back it up yourself before running against real data; `load`
 > replaces all declaration rows. Destructive operations are gated by a target-fingerprint
 > confirmation, and structured output mode requires an explicit `--yes`.
+
+## Design records
+
+- [Lossless Pigsty Inventory](/design/lossless-inventory/)
+- [Use the CMDB Pigsty Already Has](/design/existing-cmdb-boundary/)

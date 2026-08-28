@@ -28,9 +28,10 @@ content/
   _link_release.md     # sidebar entry pointing at /release/ (manualLink, not a page)
   _div_cmd.md          # sidebar group heading (sidebar_divider, not a page)
   cmd.md               # /cmd/        weight 100
-  repo.md ext.md build.md sty.md inventory.md pg.md pt.md pb.md pitr.md
+  repo.md ext.md build.md sty.md inventory.md do.md pg.md pt.md pe.md pb.md pitr.md
   blog/                # /blog/ — all posts, newest first
     release/           # /release/ and /release/pig-X.Y.Z/
+    design/            # /design/ and dated bilingual decision records
   authors/vonng/       # /authors/vonng/ — an author profile (the `authors` taxonomy term)
 data/home/metrics.yaml # landing page counters
 ```
@@ -46,6 +47,10 @@ Release notes are one dated post per version under
 `content/blog/release/`. Adding a release means adding a
 `pig-X.Y.Z.md` / `.zh.md` pair with `weight` ascending from the newest.
 
+Design records are dated bilingual posts under `content/blog/design/`. Their historical
+`date` is the evidence-backed decision date; `lastmod` records the latest editorial or status
+review. They explain why a contract exists and link back to the current reference page.
+
 Each page ships as an English `.md` plus a Chinese `.zh.md`. Two sections
 stay out of the docs sidebar tree via `toc_root: true` — `docs/` and
 `blog/` — because the sidebar root menu already lists them.
@@ -57,9 +62,8 @@ Three taxonomies are declared in `hugo.yaml`: `categories`, `tags`, and OINK
 
 - **categories** name the kind of page, and they are localized. Only
   documentation carries them, using the Diátaxis four — `Tutorial` / `Task` /
-  `Concept` / `Reference` (`教程` / `任务` / `概念` / `参考`). Release notes
-  carry no category: the section already says what they are, so a `Release`
-  term on every post would classify nothing.
+  `Concept` / `Reference` (`教程` / `任务` / `概念` / `参考`). Release notes and
+  design records carry no category: their sections already identify the page kind.
 - **tags** name the pig subsystem a page is about, from one closed vocabulary
   shared by documentation and release notes, in English on both language
   trees: `repo`, `ext`, `postgres`, `patroni`, `pgbackrest`, `pitr`, `sty`,
@@ -75,6 +79,18 @@ Three taxonomies are declared in `hugo.yaml`: `categories`, `tags`, and OINK
 Blog indexes publish as OINK's default row list. `params.ui.blog_index_toggle`
 puts a control in the index toolbar so a reader can cycle any of them through
 list, cards, and table.
+
+## Design records
+
+`/design/` is the canonical rationale and decision-history surface. Current syntax remains in
+the root documentation pages, delivery timing remains in `/release/`, and implementation evidence
+links to fixed source commits. A design record uses the same explicit heading anchors in English
+and Chinese: `decision`, `context`, `alternatives`, `contract`, `impact`, `verification`, and
+`status`.
+
+Do not publish raw planning prompts, local absolute paths, temporary review transcripts, secrets,
+or unverified completion claims. `bin/check_design.py` enforces pairing, front matter, tag vocabulary,
+anchor parity, visible decision metadata, source evidence, and the main publication-safety rules.
 
 Each release note is written in OINK 0.6's native release forms rather than by
 hand:
@@ -105,7 +121,7 @@ that user questions filed against `pgsty/pig` stay separate from page comments.
 
 ## Theme boundary
 
-OINK 0.6.0 owns the documentation and blog layouts, navigation shell, search, table
+The pinned OINK module owns the documentation and blog layouts, navigation shell, search, table
 of contents, blocks and shortcodes, styles, scripts, fonts, and third-party
 runtimes. The site imports the pinned OINK 0.6.0 release as a Hugo Module.
 
@@ -113,9 +129,9 @@ The landing page and the download page keep their bespoke visual design, but
 they render *inside* the theme shell: OINK supplies `<head>`, the navbar, the
 fat footer, the search box and command palette, and the script bundle. Neither
 page hand-rolls chrome any more. Documentation uses the new search metadata, sidebar icon policy,
-content primitives, and assistant page actions. Release rows stay text-only:
-no `images` cascade is set on the blog tree, so nothing resolves a featured
-image and `params.ui.featured_image` has nothing to render.
+content primitives, and assistant page actions. The blog root does not impose a shared
+featured image; Release and Design may set their own section-level image cascades without
+forcing one asset onto every blog subsection.
 
 The local layout surface is intentionally small:
 

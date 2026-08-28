@@ -275,3 +275,8 @@ switchover / failover 不再有 pig 侧的 pause 预检——维护模式语义�
 - 其他用户：`sudo -inu postgres -- ...` 执行。
 
 **平台支持**：此命令专为 Linux 设计，服务管理依赖 `systemctl`，日志功能依赖可读取的 Patroni 日志文件。
+
+## 设计记录
+
+[让 Patronictl 自己说话](/zh/design/patronictl-passthrough/)记录了 PIG 为什么停止镜像上游命令树，
+以及仍然保留了哪些本地职责。

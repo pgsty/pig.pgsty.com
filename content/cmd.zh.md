@@ -15,8 +15,8 @@ tags: [cli]
 - **pig install**：使用原生包管理器安装包，并对 PostgreSQL 别名做翻译
 - [**pig sty**](/zh/sty/)：管理 Pigsty 安装与 Grafana 仪表盘
 - [**pig inventory**](/zh/inventory/)：检视、编辑、校验与交换 Pigsty 配置清单（v1.6.0 新增）
-- **pig do**：执行 Pigsty 管理 playbook 任务
-- **pig pe**：访问 pg_exporter 指标与配置
+- [**pig do**](/zh/do/)：执行 Pigsty 管理 playbook 任务
+- [**pig pe**](/zh/pe/)：访问 pg_exporter 指标与配置
 - [**pig pg**](/zh/pg/)：管理本地 PostgreSQL 服务器
 - [**pig pt**](/zh/pt/)：透明运行 patronictl，附带服务与配置辅助命令
 - [**pig pb**](/zh/pb/)：管理 pgBackRest 备份与恢复
@@ -178,7 +178,8 @@ pig inventory cmdb check         # 与 PostgreSQL CMDB 交换（实验性）
 
 ## pig do
 
-执行 Pigsty 管理任务，底层调用对应的 Ansible playbook。
+执行 Pigsty 管理任务，底层调用对应的 Ansible Playbook。完整命令与安全边界见
+[`pig do`](/zh/do/)。
 
 ```bash
 pig do pgsql-add  <cls> [ip...]       # 添加集群或实例
@@ -191,7 +192,8 @@ pig do node-pkg   <sel> [pkg...]      # 安装节点软件包
 
 ## pig pe
 
-访问 pg_exporter 暴露的 PostgreSQL 监控指标，默认连接 `127.0.0.1:9630`。
+访问 pg_exporter 暴露的 PostgreSQL 监控指标，默认连接 `127.0.0.1:9630`；
+legacy 端点假设与操作详情见 [`pig pe`](/zh/pe/)。
 
 ```bash
 pig pe list                    # 列出可用指标类型
@@ -280,3 +282,9 @@ pig update -v X.Y.Z              # 升级到已发布在当前软件仓库中的
 pig version                      # 显示 pig 版本信息
 pig version -o json              # 结构化版本输出
 ```
+
+## 设计记录
+
+- [从面向人类到 Agent-Native](/zh/design/agent-native-cli/)
+- [为什么 PIG 保持扁平的 Cobra 命令层](/zh/design/flat-cobra-command-layer/)
+- [PIG 运维 CLI 安全契约](/zh/design/ops-cli-safety/)

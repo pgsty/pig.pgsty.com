@@ -537,3 +537,8 @@ pig pb log cat                       # show 的别名
 **平台支持：**
 
 此命令专为 Linux 系统设计，依赖 Pigsty 的默认目录结构。
+
+## 设计记录
+
+[PIG 运维 CLI 安全契约](/zh/design/ops-cli-safety/)解释底层 `pb restore` 原语与
+编排式 `pig pitr` 工作流之间的边界。

@@ -366,8 +366,8 @@ pig pg role -D /data/pg18         # Specify data directory
 
 **Detection Strategy (by priority):**
 
-1. **Process detection**: Check for `walreceiver`, `recovery` processes
-2. **SQL query**: Execute `pg_is_in_recovery()` (requires PostgreSQL running)
+1. **Target process detection**: Read the selected `postmaster.pid`, then inspect only that postmaster's process tree
+2. **Bound SQL query**: Use the selected instance's port/socket and verify `data_directory` before trusting `pg_is_in_recovery()`
 3. **Data directory check**: Check for `standby.signal`, `recovery.signal`, `recovery.conf` files
 
 ## Connection & Query Commands
@@ -826,3 +826,8 @@ For full native tool functionality, call the respective commands directly.
 **Platform Support:**
 
 This command is designed for Linux systems. Some features depend on `systemctl`, and log commands depend on readable PostgreSQL log files plus common tools such as `tail`, `less`, and `grep`.
+
+## Design records
+
+- [The 70% Tuner: Defining the Boundary of pig pg tune](/design/pg-tune/)
+- [PIG's Operations CLI Safety Contract](/design/ops-cli-safety/)

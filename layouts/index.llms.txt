@@ -20,10 +20,12 @@
   {{- with .OutputFormats.Get "markdown" }}{{ $url = .Permalink }}{{ end }}
 - [{{ .Title }}]({{ $url }}): {{ .Description }}
 {{- end }}
-{{- with .Site.GetPage "blog/release" }}
-  {{- $url := .Permalink -}}
-  {{- with .OutputFormats.Get "markdown" }}{{ $url = .Permalink }}{{ end }}
+{{- range slice "blog/design" "blog/release" }}
+  {{- with $.Site.GetPage . }}
+    {{- $url := .Permalink -}}
+    {{- with .OutputFormats.Get "markdown" }}{{ $url = .Permalink }}{{ end }}
 - [{{ .Title }}]({{ $url }}): {{ .Description }}
+  {{- end }}
 {{- end }}
 
 ## {{ cond $zh "文档" "Documentation" }}

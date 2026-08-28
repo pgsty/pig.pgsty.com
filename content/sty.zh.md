@@ -351,3 +351,10 @@ HTTP 客户端带有超时与响应大小限制，并拒绝重定向；TLS 证�
 - `dump` 只有在目标文件已经以 v2 形式存在时才保持 schema v2；此时会使用该文件的 namespace 拉取原生 v2 资源。全新导出目标默认写成传统 JSON；仅存在于本地的文件不会被 `dump` 删除。
 
 其他 `dashboard.grafana.app/*` 版本或结构不完整的资源封装会被直接拒绝，不会被静默当成传统仪表盘。因此，要往返保持 v2 格式，必须保留已有的本地 v2 文件作为格式契约。
+
+## 设计记录
+
+- [原生 sty boot](/zh/design/native-sty-boot/)
+- [原生 sty conf](/zh/design/native-sty-conf/)
+- [原生 Grafana 管理](/zh/design/native-grafana-management/)
+- [复用 Pigsty 已经拥有的 CMDB](/zh/design/existing-cmdb-boundary/)

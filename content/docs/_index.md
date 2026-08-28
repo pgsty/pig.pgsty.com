@@ -85,10 +85,14 @@ Run `pig help <command>` to get detailed help for subcommands.
 - [**pig sty**](/sty/): Manage Pigsty installation and Grafana dashboards
 - [**pig inventory**](/inventory/): Inspect, edit, validate, and exchange the Pigsty inventory
 - [**pig context**](/cmd/#pig-context): Collect host, PostgreSQL, Patroni, pgBackRest, and extension context
+- [**pig do**](/do/): Run bounded Pigsty administrative playbook tasks
 - [**pig pg**](/pg/): Manage local PostgreSQL server
 - [**pig pt**](/pt/): Run patronictl transparently to manage Patroni HA clusters
+- [**pig pe**](/pe/): Inspect and reload a running pg_exporter
 - [**pig pb**](/pb/): Manage pgBackRest backup & restore
 - [**pig pitr**](/pitr/): Point-in-time recovery workflow
+
+The [Design Records](/design/) explain the decisions and trade-offs behind these command contracts.
 
 ## About
 

@@ -364,3 +364,8 @@ Leaving Patroni stopped after managed data-directory recovery is intentional. It
 **Platform support:**
 
 This command is designed for Linux and depends on pgBackRest, systemd for managed service scenarios, and data/log paths accessible by the DBSU.
+
+## Design record
+
+[PIG's Operations CLI Safety Contract](/design/ops-cli-safety/) explains why recovery primitives,
+confirmation, and the PITR orchestrator remain separate contracts.

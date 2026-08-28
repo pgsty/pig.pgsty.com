@@ -15,8 +15,8 @@ The `pig` CLI provides a comprehensive toolkit for managing PostgreSQL installat
 - **pig install**: install packages with the native package manager and translate PostgreSQL aliases
 - [**pig sty**](/sty/): manage Pigsty installation and Grafana dashboards
 - [**pig inventory**](/inventory/): inspect, edit, validate, and exchange the Pigsty inventory (new in v1.6.0)
-- **pig do**: run Pigsty administration playbook tasks
-- **pig pe**: access pg_exporter metrics and configuration
+- [**pig do**](/do/): run Pigsty administration playbook tasks
+- [**pig pe**](/pe/): access pg_exporter metrics and configuration
 - [**pig pg**](/pg/): manage local PostgreSQL servers
 - [**pig pt**](/pt/): run patronictl transparently with service and config helpers
 - [**pig pb**](/pb/): manage pgBackRest backup and restore
@@ -179,7 +179,8 @@ pig inventory cmdb check         # exchange with the PostgreSQL CMDB (experiment
 
 ## pig do
 
-Run Pigsty administration tasks through the corresponding Ansible playbooks.
+Run Pigsty administration tasks through the corresponding Ansible playbooks. See
+[`pig do`](/do/) for the complete command and safety reference.
 
 ```bash
 pig do pgsql-add  <cls> [ip...]       # add cluster or instances
@@ -192,7 +193,8 @@ pig do node-pkg   <sel> [pkg...]      # install node packages
 
 ## pig pe
 
-Access PostgreSQL monitoring metrics exposed by pg_exporter. The default endpoint is `127.0.0.1:9630`.
+Access PostgreSQL monitoring metrics exposed by pg_exporter. The default endpoint is
+`127.0.0.1:9630`; see [`pig pe`](/pe/) for its legacy endpoint assumptions and operation details.
 
 ```bash
 pig pe list                    # list available metric types
@@ -281,3 +283,9 @@ pig update -v X.Y.Z              # upgrade to a version published by the configu
 pig version                      # show pig version information
 pig version -o json              # structured version output
 ```
+
+## Design records
+
+- [From Human-Friendly to Agent-Native](/design/agent-native-cli/)
+- [Why PIG Keeps the Cobra Command Layer Flat](/design/flat-cobra-command-layer/)
+- [PIG's Operations CLI Safety Contract](/design/ops-cli-safety/)

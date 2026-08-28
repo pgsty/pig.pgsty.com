@@ -2,7 +2,7 @@
 title: PIG Blog
 url: /blog/
 linkTitle: Blog
-description: Release notes and project news
+description: Release notes, design records, and project news
 weight: 40
 type: blog
 sidebar_root_for: self
@@ -22,12 +22,12 @@ cascade:
     - print
     - markdown
   params:
-    # No `images` cascade here on purpose: release rows keep OINK's clean
-    # text-only presentation. The site card still comes from params.images.
+    # The blog root does not impose one image on every subsection. Release and
+    # Design own their section-level image policy independently.
     sidebar_menu_foldable: false
     sidebar_menu_compact: false
     sidebar_expand_levels: 3
 icon: fa-solid fa-blog
 ---
 
-Release notes and project news for PIG — the PostgreSQL extension package manager by Pigsty.
+Release notes, design records, and project news for PIG — the PostgreSQL extension package manager by Pigsty.

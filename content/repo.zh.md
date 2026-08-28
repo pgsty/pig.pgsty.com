@@ -252,12 +252,17 @@ SOW 的 `--pigsty` 事务会：
 ```bash
 pig repo cache                   # 默认：/www 到 /tmp/pkg.tgz
 pig repo cache -d /srv           # 自定义源目录
+pig repo cache pigsty docker     # 包含多个顶层仓库
 ```
 
 **选项：**
 
 - `-d, --dir`：源目录（默认：`/www/`）
 - `-p, --path`：输出路径（默认：`/tmp/pkg.tgz`）
+
+离线包必须包含 `pigsty`，且 `pigsty/repo_complete` 必须是普通文件。请求中不存在的仓库会被
+跳过，并与实际打包的仓库分别报告。原生 boot 解包器只接受目录和普通文件，因此 cache
+拒绝符号链接。cache 失败时不会覆盖已有的输出包。
 
 ## repo boot
 
@@ -273,6 +278,14 @@ pig repo boot -d /srv           # 自定义目标目录
 
 - `-p, --path`：包路径（默认：`/tmp/pkg.tgz`）
 - `-d, --dir`：目标目录（默认：`/www/`）
+
+Boot 先解压到 staging 目录，并在提交前拒绝所有顶层目标冲突。在同一次运行过程中，附加仓库
+先移动，`pigsty` 最后移动，因此其他根目录完成 rename 后才会暴露 `repo_complete`。如果进程在
+最后一次 rename 前中断，已经移动的根目录可能保留；再次执行会拒绝这些目标冲突，直到操作员将其
+删除或移走。这是失败关闭的提交顺序，不是崩溃恢复事务。该 marker 只是存在性哨兵；PIG 不校验
+其中内容。已有且已提交的 `pigsty` 仓库会被复用，不会执行增量合并或覆盖；复用路径不会检查请求的
+离线包，也不会应用其中的附加根目录。结构化输出会设置 `reused: true`，且不会为该路径报告任何
+已解压文件。
 
 ## repo reload
 
