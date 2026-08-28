@@ -2,7 +2,7 @@
 title: "危险操作只有一套语法：PIG 运维 CLI 安全契约"
 linkTitle: "运维 CLI 安全"
 date: 2026-07-02
-lastmod: 2026-08-28
+lastmod: 2026-08-29
 description: "PIG 如何分离底层原语与编排器、显式表达破坏性意图，并防止别名或结构化输出改变操作含义。"
 tags: [cli, postgres, pgbackrest, pitr]
 weight: 40
@@ -11,8 +11,8 @@ draft: false
 ---
 
 > **决策日期：** 2026-07-02<br>
-> **状态：** 已在 `pg`、`pb`、`pt`、`pitr` 命令族中实现，并于 v1.5.0 前完成交付。<br>
-> **当前参考：** [`pig pg`](/zh/pg/)、[`pig pb`](/zh/pb/) 与 [`pig pitr`](/zh/pitr/)<br>
+> **状态：** `pg`、`pb`、`pt`、`pitr` 已于 v1.5.0 交付；2026-08-29 的 `do` 与 `build proxy` 修订已在源码中实现并通过测试，但尚未发布。<br>
+> **当前参考：** [`pig pg`](/zh/pg/)、[`pig pb`](/zh/pb/)、[`pig pitr`](/zh/pitr/)、[`pig do`](/zh/do/) 与 [`pig build`](/zh/build/)<br>
 > **范围：** PIG 自己拥有的运维命令；透明上游命令继续采用上游的确认与退出行为。
 
 ## 决策 {#decision}
@@ -44,7 +44,9 @@ PostgreSQL 停止、恢复、重新启动与恢复后指引。任何别名都不
 - 子命令别名不能遮蔽另一个顶层命令；
 - PIG 自己拥有的破坏性操作要求显式确认，并在有意义时提供无副作用计划；
 - 命令层在产生副作用前拒绝错误或多余的位置参数；
+- 命令专用名称遵循下游 Pigsty 契约；下游 Playbook 没有显式语法时，只采用有文档说明的最窄安全边界；
 - 结构化输出与文本模式共享同一个结果和成功定义；
+- 含凭据的值不进入诊断输出；就绪或连通性失败必须保持命令失败，不能只记警告后返回成功；
 - 底层 restore 不声称管理 Patroni 或 HA 路由；
 - PITR 编排器按需停止管理器，证明 PostgreSQL 已停止，执行恢复，可选启动 PostgreSQL，
   并有意保持 Patroni 停止，等待运维人员验证；
@@ -65,6 +67,15 @@ Guard 测试遍历 Cobra 树，拒绝同级与跨层别名冲突；恢复测试�
 重启行为与结构化失败结果。
 
 Patroni 后来改成透明透传，这仍遵循同一原则：PIG 只为自己拥有的工作流提供安全保证。
+
+同一契约在 [`3e1603b`](https://github.com/pgsty/pig/commit/3e1603b) 中扩展到 `pig do` 的名称与集群校验，
+并在 [`a880485`](https://github.com/pgsty/pig/commit/a880485) 中封闭 Ansible 内置目标。
+软件包驱动、凭据安全且如实报告失败的 `build proxy` 设置进入
+[`220ef9c`](https://github.com/pgsty/pig/commit/220ef9c)，随后由
+[`74cb128`](https://github.com/pgsty/pig/commit/74cb128) 补齐结构化参数遮盖与机器注解，
+并在 [`de7ffd0`](https://github.com/pgsty/pig/commit/de7ffd0) 中把可选参数同步到机器语法。
+这些修改均在 Ubuntu 24.04 与 Rocky Linux 9 ARM64 Farrow 客体中完成实机测试；
+这属于源码与本地测试环境证据，不是发布证据。
 
 ## 当前状态 {#status}
 

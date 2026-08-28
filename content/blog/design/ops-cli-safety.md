@@ -2,7 +2,7 @@
 title: "One Grammar for Dangerous Work: PIG's Operations CLI Safety Contract"
 linkTitle: "Operations CLI Safety"
 date: 2026-07-02
-lastmod: 2026-08-28
+lastmod: 2026-08-29
 description: "How PIG separates primitives from orchestrators, makes destructive intent explicit, and prevents aliases or structured output from changing operational meaning."
 tags: [cli, postgres, pgbackrest, pitr]
 weight: 40
@@ -11,8 +11,8 @@ draft: false
 ---
 
 > **Decision date:** 2026-07-02<br>
-> **Status:** Implemented across the `pg`, `pb`, `pt`, and `pitr` command families and released by v1.5.0.<br>
-> **Current reference:** [`pig pg`](/pg/), [`pig pb`](/pb/), and [`pig pitr`](/pitr/)<br>
+> **Status:** Released for `pg`, `pb`, `pt`, and `pitr` by v1.5.0; the 2026-08-29 `do` and `build proxy` refinements are implemented and tested in source, but not yet released.<br>
+> **Current reference:** [`pig pg`](/pg/), [`pig pb`](/pb/), [`pig pitr`](/pitr/), [`pig do`](/do/), and [`pig build`](/build/)<br>
 > **Scope:** PIG-owned operational commands; transparent upstream commands retain upstream confirmation and exit behavior.
 
 ## Decision {#decision}
@@ -53,7 +53,11 @@ rendering used different definitions of success.
 - destructive PIG-owned operations require explicit confirmation and support non-mutating plans
   where a meaningful plan exists;
 - command-layer validation rejects malformed or extra positional arguments before side effects;
+- command-specific names mirror the downstream Pigsty contract, or use the narrowest documented
+  safe boundary when the downstream playbook has no explicit grammar;
 - structured output and text mode share one result and one success definition;
+- credential-bearing values stay out of diagnostics, and readiness or connectivity failure remains
+  a command failure rather than a logged warning followed by success;
 - low-level restore does not claim to manage Patroni or HA routing;
 - the PITR orchestrator stops the manager when required, proves PostgreSQL is stopped, restores,
   optionally starts PostgreSQL, and deliberately leaves Patroni stopped for operator verification;
@@ -78,6 +82,16 @@ confirmation, stop escalation, side restores, restart behavior, and structured f
 
 Patroni later moved to transparent passthrough. That refinement keeps the same safety principle:
 PIG owns safeguards only for workflows it owns.
+
+The same contract was applied to `pig do` name and cluster validation in
+[`3e1603b`](https://github.com/pgsty/pig/commit/3e1603b), with Ansible built-in targets closed in
+[`a880485`](https://github.com/pgsty/pig/commit/a880485). Package-backed, credential-safe, truthful
+`build proxy` setup entered in [`220ef9c`](https://github.com/pgsty/pig/commit/220ef9c), followed by
+structured-argument redaction and corrected machine annotations in
+[`74cb128`](https://github.com/pgsty/pig/commit/74cb128), and optional operands were reflected in
+the machine grammar in [`de7ffd0`](https://github.com/pgsty/pig/commit/de7ffd0). These changes were
+exercised on Ubuntu 24.04 and Rocky Linux 9 ARM64 Farrow guests; this is source and live-lab
+evidence, not release evidence.
 
 ## Current status {#status}
 
