@@ -7,8 +7,9 @@ icon: fa-solid fa-pen-ruler
 sidebar_expanded: true
 module: [BLOG]
 blog_index: list
+images: [/images/pig-design.webp]
 cascade:
-  images: [/images/pig-design-blog.webp]
+  images: [/images/pig-design.webp]
 ---
 
 设计归档解释 PIG 为什么采用今天的行为。每篇记录都会标明决策日期、实现与发布边界、

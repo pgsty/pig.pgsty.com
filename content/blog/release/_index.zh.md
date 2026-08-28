@@ -4,8 +4,9 @@ linkTitle: 发布
 description: pig 每个版本的发布注记
 weight: 10
 icon: fa-solid fa-clipboard-list
+images: [/images/pig-release.webp]
 cascade:
-  images: [/images/pig-release-note.webp]
+  images: [/images/pig-release.webp]
 ---
 
 `pig` 每个已发布版本的发布注记，从新到旧。安装包与校验和见各版本的

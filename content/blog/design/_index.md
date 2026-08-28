@@ -7,8 +7,9 @@ icon: fa-solid fa-pen-ruler
 sidebar_expanded: true
 module: [BLOG]
 blog_index: list
+images: [/images/pig-design.webp]
 cascade:
-  images: [/images/pig-design-blog.webp]
+  images: [/images/pig-design.webp]
 ---
 
 Design records explain why PIG behaves the way it does. Each record identifies the decision date,

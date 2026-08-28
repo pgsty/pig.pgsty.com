@@ -129,9 +129,10 @@ The landing page and the download page keep their bespoke visual design, but
 they render *inside* the theme shell: OINK supplies `<head>`, the navbar, the
 fat footer, the search box and command palette, and the script bundle. Neither
 page hand-rolls chrome any more. Documentation uses the new search metadata, sidebar icon policy,
-content primitives, and assistant page actions. The blog root does not impose a shared
-featured image; Release and Design may set their own section-level image cascades without
-forcing one asset onto every blog subsection.
+content primitives, and assistant page actions. The blog root provides `pig.webp` as its
+fallback featured image. Release and Design replace that fallback with `pig-release.webp`
+and `pig-design.webp` on both the section page and its descendant cascade, so an article's
+own featured resource or explicit `images` value can still take precedence.
 
 The local layout surface is intentionally small:
 
