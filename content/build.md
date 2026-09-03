@@ -256,17 +256,23 @@ pig build dep citus --pg 17,16   # for selected PG versions
 
 Compile extensions and create installation packages.
 
+Debug packages are enabled by default. Compiled RPM builds normally add `debuginfo` and
+`debugsource` packages, while Debhelper-based builds normally add a `dbgsym` package. Pure SQL,
+architecture-independent, or recipe-specific builds may have no debug payload to split. A package
+recipe can also make a narrower explicit choice; PIG does not rewrite spec files or `debian/rules`.
+
 ```bash
 pig build ext citus              # build one extension
 pig build ext citus pgvector     # build multiple extensions
 pig build ext citus --pg 17      # build for a selected PG version
-pig build ext citus -s           # include debug symbols (RPM only)
+pig build ext citus --nodbg      # explicitly omit automatic debug packages
 ```
 
 **Options:**
 
 - `--pg`: specify one or more PostgreSQL major versions.
-- `-s|--symbol`: build debug symbol packages (RPM only).
+- `--nodbg`: disable automatic `debuginfo` / `debugsource` packages on RPM builds and `dbgsym`
+  packages on DEB builds.
 
 ## build pkg
 
@@ -276,14 +282,15 @@ Run the complete build pipeline: download, dependency installation, and build.
 pig build pkg citus              # build one extension
 pig build pkg citus pgvector     # build multiple extensions
 pig build pkg citus --pg 17,16   # build for multiple PG versions
-pig build pkg citus -s           # include debug symbols
+pig build pkg citus --nodbg      # explicitly omit automatic debug packages
 pig build pkg citus -m           # prefer the pigsty.cc China mirror for sources
 ```
 
 **Options:**
 
 - `--pg`: specify one or more PostgreSQL major versions.
-- `-s|--symbol`: build debug symbol packages (RPM only).
+- `--nodbg`: disable automatic `debuginfo` / `debugsource` packages on RPM builds and `dbgsym`
+  packages on DEB builds.
 - `-m|--mirror`: prefer the `pigsty.cc` mirror when downloading source files.
 
 ## Common Workflows

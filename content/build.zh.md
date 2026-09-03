@@ -254,17 +254,22 @@ pig build dep citus --pg 17,16   # 为特定 PG 版本
 
 编译扩展并创建安装包。
 
+调试包默认启用。包含编译产物的 RPM 构建通常会额外生成 `debuginfo` 与 `debugsource`，
+基于 Debhelper 的构建通常会额外生成 `dbgsym`。纯 SQL、架构无关或采用特殊配方的包可能没有
+可拆分的调试内容；包配方也可以做更窄的显式选择，PIG 不会改写 spec 或 `debian/rules`。
+
 ```bash
 pig build ext citus              # 构建单个扩展
 pig build ext citus pgvector     # 构建多个
 pig build ext citus --pg 17      # 为特定 PG 版本
-pig build ext citus -s           # 包含调试符号（仅 RPM）
+pig build ext citus --nodbg      # 显式省略自动调试包
 ```
 
 **选项：**
 
 - `--pg`：指定一个或多个 PostgreSQL 大版本
-- `-s|--symbol`：构建调试符号包（仅 RPM）
+- `--nodbg`：在 RPM 构建中禁用自动 `debuginfo` / `debugsource` 包，在 DEB 构建中禁用
+  `dbgsym` 包
 
 ## build pkg
 
@@ -274,14 +279,15 @@ pig build ext citus -s           # 包含调试符号（仅 RPM）
 pig build pkg citus              # 构建单个扩展
 pig build pkg citus pgvector     # 构建多个
 pig build pkg citus --pg 17,16   # 为多个 PG 版本
-pig build pkg citus -s           # 包含调试符号
+pig build pkg citus --nodbg      # 显式省略自动调试包
 pig build pkg citus -m           # 优先使用 pigsty.cc 中国镜像下载源码
 ```
 
 **选项：**
 
 - `--pg`：指定一个或多个 PostgreSQL 大版本
-- `-s|--symbol`：构建调试符号包（仅 RPM）
+- `--nodbg`：在 RPM 构建中禁用自动 `debuginfo` / `debugsource` 包，在 DEB 构建中禁用
+  `dbgsym` 包
 - `-m|--mirror`：下载源码时优先使用 `pigsty.cc` 镜像
 
 ## 常见工作流
