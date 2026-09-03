@@ -51,13 +51,55 @@ languages:
         - identifier: docs
           name: Docs
           weight: 10
-          url: /docs/
+          pageRef: /docs
           pre: <i class='fa-solid fa-book'></i>
+        - identifier: docs-start
+          parent: docs
+          name: Getting Started
+          weight: 10
+          pageRef: /start
+          params: { icon: fa-solid fa-rocket }
+        - identifier: docs-intro
+          parent: docs
+          name: Introduction
+          weight: 20
+          pageRef: /intro
+          params: { icon: fa-solid fa-circle-info }
+        - identifier: docs-install
+          parent: docs
+          name: Installation
+          weight: 30
+          pageRef: /install
+          params: { icon: fa-solid fa-download }
+        - identifier: docs-reference
+          parent: docs
+          name: Reference
+          weight: 40
+          pageRef: /cmd
+          params: { icon: fa-solid fa-terminal }
         - identifier: blog
           name: Blog
           weight: 20
-          url: /blog/
+          pageRef: /blog
           pre: <i class='fa-solid fa-blog'></i>
+        - identifier: blog-article
+          parent: blog
+          name: Article
+          weight: 10
+          pageRef: /blog/article
+          params: { icon: fa-solid fa-newspaper }
+        - identifier: blog-design
+          parent: blog
+          name: Design
+          weight: 20
+          pageRef: /blog/design
+          params: { icon: fa-solid fa-pen-ruler }
+        - identifier: blog-release
+          parent: blog
+          name: Release
+          weight: 30
+          pageRef: /blog/release
+          params: { icon: fa-solid fa-clipboard-list }
         - identifier: download
           name: Download
           weight: 30
@@ -85,13 +127,55 @@ languages:
         - identifier: docs
           name: 文档
           weight: 10
-          url: /zh/docs/
+          pageRef: /docs
           pre: <i class='fa-solid fa-book'></i>
+        - identifier: docs-start
+          parent: docs
+          name: 上手
+          weight: 10
+          pageRef: /start
+          params: { icon: fa-solid fa-rocket }
+        - identifier: docs-intro
+          parent: docs
+          name: 简介
+          weight: 20
+          pageRef: /intro
+          params: { icon: fa-solid fa-circle-info }
+        - identifier: docs-install
+          parent: docs
+          name: 安装
+          weight: 30
+          pageRef: /install
+          params: { icon: fa-solid fa-download }
+        - identifier: docs-reference
+          parent: docs
+          name: 参考
+          weight: 40
+          pageRef: /cmd
+          params: { icon: fa-solid fa-terminal }
         - identifier: blog
           name: 博客
           weight: 20
-          url: /zh/blog/
+          pageRef: /blog
           pre: <i class='fa-solid fa-blog'></i>
+        - identifier: blog-article
+          parent: blog
+          name: 文章
+          weight: 10
+          pageRef: /blog/article
+          params: { icon: fa-solid fa-newspaper }
+        - identifier: blog-design
+          parent: blog
+          name: 设计
+          weight: 20
+          pageRef: /blog/design
+          params: { icon: fa-solid fa-pen-ruler }
+        - identifier: blog-release
+          parent: blog
+          name: 发布
+          weight: 30
+          pageRef: /blog/release
+          params: { icon: fa-solid fa-clipboard-list }
         - identifier: download
           name: 下载
           weight: 30
@@ -101,7 +185,7 @@ languages:
 #=======================================#
 # Taxonomies and blog URLs
 #=======================================#
-# authors 是 OINK 0.6 的作者分类法：声明它就够了，作者档案就是
+# authors 是 OINK 的作者分类法：声明它就够了，作者档案就是
 # content/authors/<slug>/_index.md 这张词条页（标题=显示名，description=一句话简介）。
 taxonomies:
   categories: categories

@@ -30,8 +30,9 @@ content/
   cmd.md               # /cmd/        weight 100
   repo.md ext.md build.md sty.md inventory.md do.md pg.md pt.md pe.md pb.md pitr.md
   blog/                # /blog/ — all posts, newest first
-    release/           # /release/ and /release/pig-X.Y.Z/
+    article/           # /article/ — topical bilingual articles and their bundled media
     design/            # /design/ and dated bilingual decision records
+    release/           # /release/ and /release/pig-X.Y.Z/
   authors/vonng/       # /authors/vonng/ — an author profile (the `authors` taxonomy term)
 data/home/metrics.yaml # landing page counters
 ```
@@ -50,6 +51,11 @@ Release notes are one dated post per version under
 Design records are dated bilingual posts under `content/blog/design/`. Their historical
 `date` is the evidence-backed decision date; `lastmod` records the latest editorial or status
 review. They explain why a contract exists and link back to the current reference page.
+
+Topical articles live as bilingual leaf bundles under `content/blog/article/`. The bundles keep each
+article's featured image and inline media beside `index.md` / `index.zh.md`. Republished historical
+articles retain their original date and contemporary figures, carry an archive note linking the
+source, and point readers to current PIG documentation and the live extension catalog.
 
 Each page ships as an English `.md` plus a Chinese `.zh.md`. Two sections
 stay out of the docs sidebar tree via `toc_root: true` — `docs/` and
@@ -92,7 +98,7 @@ Do not publish raw planning prompts, local absolute paths, temporary review tran
 or unverified completion claims. `bin/check_design.py` enforces pairing, front matter, tag vocabulary,
 anchor parity, visible decision metadata, source evidence, and the main publication-safety rules.
 
-Each release note is written in OINK 0.6's native release forms rather than by
+Each release note is written in OINK's native release forms rather than by
 hand:
 
 - `release_url` in front matter is the one release fact. Everything else — the
@@ -123,7 +129,7 @@ that user questions filed against `pgsty/pig` stay separate from page comments.
 
 The pinned OINK module owns the documentation and blog layouts, navigation shell, search, table
 of contents, blocks and shortcodes, styles, scripts, fonts, and third-party
-runtimes. The site imports the pinned OINK 0.6.0 release as a Hugo Module.
+runtimes. The site imports the pinned OINK 1.0.0 release as a Hugo Module.
 
 The landing page and the download page keep their bespoke visual design, but
 they render *inside* the theme shell: OINK supplies `<head>`, the navbar, the

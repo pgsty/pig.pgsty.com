@@ -2,7 +2,7 @@
 title: PIG Blog
 url: /blog/
 linkTitle: Blog
-description: Release notes, design records, and project news
+description: Articles, design notes, release notes, and project news
 weight: 40
 type: blog
 sidebar_root_for: self
@@ -32,4 +32,4 @@ cascade:
 icon: fa-solid fa-blog
 ---
 
-Release notes, design records, and project news for PIG — the PostgreSQL extension package manager by Pigsty.
+Articles, design notes, release notes, and project news for PIG — the PostgreSQL extension package manager by Pigsty.

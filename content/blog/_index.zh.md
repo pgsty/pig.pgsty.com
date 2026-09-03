@@ -2,7 +2,7 @@
 title: PIG 博客
 url: /zh/blog/
 linkTitle: 博客
-description: 发布注记、设计归档与项目动态
+description: 文章、设计注记、发布注记与项目动态
 weight: 40
 type: blog
 sidebar_root_for: self
@@ -32,4 +32,4 @@ cascade:
 icon: fa-solid fa-blog
 ---
 
-PIG 的发布注记、设计归档与项目动态 —— Pigsty 出品的 PostgreSQL 扩展包管理器。
+PIG 的文章、设计注记、发布注记与项目动态 —— Pigsty 出品的 PostgreSQL 扩展包管理器。

@@ -1,8 +1,8 @@
 ---
-title: 设计归档
+title: 设计注记
 linkTitle: 设计
-description: PIG 背后的关键决策、取舍与实现边界。
-weight: 5
+description: 关于 PIG 关键决策、取舍与实现边界的设计注记。
+weight: 20
 icon: fa-solid fa-pen-ruler
 sidebar_expanded: true
 module: [BLOG]
@@ -12,7 +12,7 @@ cascade:
   images: [/images/pig-design.webp]
 ---
 
-设计归档解释 PIG 为什么采用今天的行为。每篇记录都会标明决策日期、实现与发布边界、
+设计注记解释 PIG 为什么采用今天的行为。每篇注记都会标明决策日期、实现与发布边界、
 被否决的替代方案，以及对应的当前用户文档。
 
 这些文章提供历史与架构背景。当前命令语法和行为以 [PIG 文档](/zh/docs/) 为准，

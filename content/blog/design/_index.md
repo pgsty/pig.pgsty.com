@@ -1,8 +1,8 @@
 ---
-title: Design Records
+title: Design Notes
 linkTitle: Design
-description: The decisions, trade-offs, and implementation boundaries behind PIG.
-weight: 5
+description: Design notes on the decisions, trade-offs, and implementation boundaries behind PIG.
+weight: 20
 icon: fa-solid fa-pen-ruler
 sidebar_expanded: true
 module: [BLOG]
@@ -12,7 +12,7 @@ cascade:
   images: [/images/pig-design.webp]
 ---
 
-Design records explain why PIG behaves the way it does. Each record identifies the decision date,
+Design notes explain why PIG behaves the way it does. Each note identifies the decision date,
 the implementation and release boundary, alternatives that were rejected, and the current user
 documentation.
 

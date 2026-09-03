@@ -2,7 +2,7 @@
 title: Release Notes
 linkTitle: Release
 description: Release notes for every pig version
-weight: 10
+weight: 30
 icon: fa-solid fa-clipboard-list
 images: [/images/pig-release.webp]
 cascade:

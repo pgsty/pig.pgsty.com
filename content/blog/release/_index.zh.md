@@ -2,7 +2,7 @@
 title: 发布注记
 linkTitle: 发布
 description: pig 每个版本的发布注记
-weight: 10
+weight: 30
 icon: fa-solid fa-clipboard-list
 images: [/images/pig-release.webp]
 cascade:
