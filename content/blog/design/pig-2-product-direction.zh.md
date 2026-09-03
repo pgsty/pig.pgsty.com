@@ -2,7 +2,7 @@
 title: "PIG 2.0 产品方向：一份提案，而不是发布契约"
 linkTitle: "PIG 2.0 提案"
 date: 2026-08-13
-lastmod: 2026-08-28
+lastmod: 2026-09-03
 description: "PIG 2.0 的候选边界：稳定的 Pigsty 初始化前门、可验证 Catalog 客户端，以及保持显式部署的薄编排层。"
 tags: [cli, sty, catalog]
 weight: 85
@@ -12,7 +12,7 @@ draft: false
 
 > **决策日期：** 2026-08-13<br>
 > **状态：** 等待 owner 审议的提案；尚未实现，也不是 PIG 2.0 发布承诺。<br>
-> **当前参考：** [PIG 文档](/zh/docs/)与当前 [v1.8.0 发布](/zh/release/pig-1.8.0/)<br>
+> **当前参考：** [PIG 文档](/zh/docs/)与当前 [v1.8.1 发布](/zh/release/pig-1.8.1/)<br>
 > **范围：** 未来 PIG 2.0 / Pigsty 5.0 的候选产品边界与验证门槛。
 
 ## 决策 {#decision}
@@ -94,6 +94,6 @@ event receipt 或 2.0 迁移契约。
 
 ## 当前状态 {#status}
 
-这是一份公开提案记录，不是发布公告。当前用户应继续遵循 [v1.8.0 文档](/zh/docs/)。
+这是一份公开提案记录，不是发布公告。当前用户应继续遵循 [v1.8.1 文档](/zh/docs/)。
 Catalog v2 安全方案、typed overlay、路径布局细节、EL7 支持档位、event bridge 可行性与最终 2.0 范围，
 都需要明确决策和实验结果，之后才能作出实现或发布声明。

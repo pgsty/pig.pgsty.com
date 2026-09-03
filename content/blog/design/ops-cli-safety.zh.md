@@ -2,7 +2,7 @@
 title: "危险操作只有一套语法：PIG 运维 CLI 安全契约"
 linkTitle: "运维 CLI 安全"
 date: 2026-07-02
-lastmod: 2026-08-29
+lastmod: 2026-09-03
 description: "PIG 如何分离底层原语与编排器、显式表达破坏性意图，并防止别名或结构化输出改变操作含义。"
 tags: [cli, postgres, pgbackrest, pitr]
 weight: 40
@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **决策日期：** 2026-07-02<br>
-> **状态：** `pg`、`pb`、`pt`、`pitr` 已于 v1.5.0 交付；2026-08-29 的 `do` 与 `build proxy` 修订已在源码中实现并通过测试，但尚未发布。<br>
+> **状态：** `pg`、`pb`、`pt`、`pitr` 已于 v1.5.0 交付；2026-08-29 的 `do` 与 `build proxy` 修订已随 [v1.8.1](/zh/release/pig-1.8.1/) 发布。<br>
 > **当前参考：** [`pig pg`](/zh/pg/)、[`pig pb`](/zh/pb/)、[`pig pitr`](/zh/pitr/)、[`pig do`](/zh/do/) 与 [`pig build`](/zh/build/)<br>
 > **范围：** PIG 自己拥有的运维命令；透明上游命令继续采用上游的确认与退出行为。
 
@@ -68,14 +68,18 @@ Guard 测试遍历 Cobra 树，拒绝同级与跨层别名冲突；恢复测试�
 
 Patroni 后来改成透明透传，这仍遵循同一原则：PIG 只为自己拥有的工作流提供安全保证。
 
-同一契约在源码提交 `3e1603b2bfbb949fb77b7ecd5fd458ec2ee45d25` 中扩展到 `pig do` 的名称与集群校验，
-并在 `a88048596dffdfd6c1bb51cdbe7da6782a11cc22` 中封闭 Ansible 内置目标。
-软件包驱动、凭据安全且如实报告失败的 `build proxy` 设置进入
-`220ef9c722b54951d3dc502ea3e3baafd642b592`，随后由
-`74cb1281860fae659f2aa4fec2898af34a0c2519` 补齐结构化参数遮盖与机器注解，
-并在 `de7ffd0e81e500ea2f4268ca326917aa385150ca` 中把可选参数同步到机器语法。
-这些修改均在 Ubuntu 24.04 与 Rocky Linux 9 ARM64 Farrow 客体中完成实机测试；
-这属于源码与本地测试环境证据，不是发布证据。
+同一契约在 [`3e1603b`](https://github.com/pgsty/pig/commit/3e1603b2bfbb949fb77b7ecd5fd458ec2ee45d25)
+中扩展到 `pig do` 的名称与集群校验，并在
+[`a880485`](https://github.com/pgsty/pig/commit/a88048596dffdfd6c1bb51cdbe7da6782a11cc22)
+中封闭 Ansible 内置目标。软件包驱动、凭据安全且如实报告失败的 `build proxy` 设置进入
+[`220ef9c`](https://github.com/pgsty/pig/commit/220ef9c722b54951d3dc502ea3e3baafd642b592)，
+随后由 [`74cb128`](https://github.com/pgsty/pig/commit/74cb1281860fae659f2aa4fec2898af34a0c2519)
+补齐结构化参数遮盖与机器注解，并在
+[`de7ffd0`](https://github.com/pgsty/pig/commit/de7ffd0e81e500ea2f4268ca326917aa385150ca)
+中把可选参数同步到机器语法。这些修改均在 Ubuntu 24.04 与 Rocky Linux 9 ARM64 Farrow
+客体中完成实机测试，并在 [v1.8.1 CI](https://github.com/pgsty/pig/actions/runs/33718574084)
+通过后，从源码提交 [`e3d1eb4`](https://github.com/pgsty/pig/commit/e3d1eb4a86cedddcf49fff398fc69751e861372e)
+正式发布。
 
 ## 当前状态 {#status}
 

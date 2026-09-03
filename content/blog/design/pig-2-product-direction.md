@@ -2,7 +2,7 @@
 title: "PIG 2.0 Product Direction: A Proposal, Not a Release Contract"
 linkTitle: "PIG 2.0 Proposal"
 date: 2026-08-13
-lastmod: 2026-08-28
+lastmod: 2026-09-03
 description: "The proposed PIG 2.0 boundary: a stable Pigsty onboarding front door, verifiable Catalog client, and thin orchestrator that keeps deployment explicit."
 tags: [cli, sty, catalog]
 weight: 85
@@ -12,7 +12,7 @@ draft: false
 
 > **Decision date:** 2026-08-13<br>
 > **Status:** Proposal for owner review; it is not implemented and is not a PIG 2.0 release commitment.<br>
-> **Current reference:** [PIG documentation](/docs/) and the current [v1.8.0 release](/release/pig-1.8.0/)<br>
+> **Current reference:** [PIG documentation](/docs/) and the current [v1.8.1 release](/release/pig-1.8.1/)<br>
 > **Scope:** Candidate product boundaries and verification gates for a future PIG 2.0 / Pigsty 5.0 line.
 
 ## Decision {#decision}
@@ -112,6 +112,6 @@ project pin, setup command, event receipt, or 2.0 migration contract.
 ## Current status {#status}
 
 This is a public proposal record, not an announcement. Current users should follow the
-[v1.8.0 documentation](/docs/). Catalog v2 security selection, typed overlays, path layout details,
+[v1.8.1 documentation](/docs/). Catalog v2 security selection, typed overlays, path layout details,
 EL7 support tier, event-bridge viability, and the final 2.0 scope still require explicit decisions
 and experimental evidence before implementation or release claims are appropriate.

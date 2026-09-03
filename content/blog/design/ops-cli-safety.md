@@ -2,7 +2,7 @@
 title: "One Grammar for Dangerous Work: PIG's Operations CLI Safety Contract"
 linkTitle: "Operations CLI Safety"
 date: 2026-07-02
-lastmod: 2026-08-29
+lastmod: 2026-09-03
 description: "How PIG separates primitives from orchestrators, makes destructive intent explicit, and prevents aliases or structured output from changing operational meaning."
 tags: [cli, postgres, pgbackrest, pitr]
 weight: 40
@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **Decision date:** 2026-07-02<br>
-> **Status:** Released for `pg`, `pb`, `pt`, and `pitr` by v1.5.0; the 2026-08-29 `do` and `build proxy` refinements are implemented and tested in source, but not yet released.<br>
+> **Status:** Released for `pg`, `pb`, `pt`, and `pitr` by v1.5.0; the 2026-08-29 `do` and `build proxy` refinements were released in [v1.8.1](/release/pig-1.8.1/).<br>
 > **Current reference:** [`pig pg`](/pg/), [`pig pb`](/pb/), [`pig pitr`](/pitr/), [`pig do`](/do/), and [`pig build`](/build/)<br>
 > **Scope:** PIG-owned operational commands; transparent upstream commands retain upstream confirmation and exit behavior.
 
@@ -83,15 +83,19 @@ confirmation, stop escalation, side restores, restart behavior, and structured f
 Patroni later moved to transparent passthrough. That refinement keeps the same safety principle:
 PIG owns safeguards only for workflows it owns.
 
-The same contract was applied to `pig do` name and cluster validation in source commit
-`3e1603b2bfbb949fb77b7ecd5fd458ec2ee45d25`, with Ansible built-in targets closed in
-`a88048596dffdfd6c1bb51cdbe7da6782a11cc22`. Package-backed, credential-safe, truthful
-`build proxy` setup entered in `220ef9c722b54951d3dc502ea3e3baafd642b592`, followed by
-structured-argument redaction and corrected machine annotations in source commit
-`74cb1281860fae659f2aa4fec2898af34a0c2519`, and optional operands were reflected in
-the machine grammar in `de7ffd0e81e500ea2f4268ca326917aa385150ca`. These changes were
-exercised on Ubuntu 24.04 and Rocky Linux 9 ARM64 Farrow guests; this is source and live-lab
-evidence, not release evidence.
+The same contract was applied to `pig do` name and cluster validation in
+[`3e1603b`](https://github.com/pgsty/pig/commit/3e1603b2bfbb949fb77b7ecd5fd458ec2ee45d25),
+with Ansible built-in targets closed in
+[`a880485`](https://github.com/pgsty/pig/commit/a88048596dffdfd6c1bb51cdbe7da6782a11cc22).
+Package-backed, credential-safe, truthful `build proxy` setup entered in
+[`220ef9c`](https://github.com/pgsty/pig/commit/220ef9c722b54951d3dc502ea3e3baafd642b592),
+followed by structured-argument redaction and corrected machine annotations in
+[`74cb128`](https://github.com/pgsty/pig/commit/74cb1281860fae659f2aa4fec2898af34a0c2519),
+and optional operands were reflected in the machine grammar in
+[`de7ffd0`](https://github.com/pgsty/pig/commit/de7ffd0e81e500ea2f4268ca326917aa385150ca).
+The changes were exercised on Ubuntu 24.04 and Rocky Linux 9 ARM64 Farrow guests, then released
+from source commit [`e3d1eb4`](https://github.com/pgsty/pig/commit/e3d1eb4a86cedddcf49fff398fc69751e861372e)
+after the [v1.8.1 CI run](https://github.com/pgsty/pig/actions/runs/33718574084) passed.
 
 ## Current status {#status}
 
