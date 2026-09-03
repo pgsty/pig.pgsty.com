@@ -2,6 +2,7 @@
      search 与 scripts 全部由主题提供，这里只出版面本身。
      版号只从 params.version 取，制品名按 goreleaser 的命名规则拼出来。 */ -}}
 {{ define "main" }}
+{{- .Page.Store.Set "hasLanding" true -}}
 {{- $zh := eq .Site.Language.Lang "zh" -}}
 {{- $v := .Site.Params.version -}}
 {{- $tag := printf "v%s" $v -}}

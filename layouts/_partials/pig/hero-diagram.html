@@ -1,108 +1,112 @@
-{{- /* Hero 架构图：上游仓库 → 一个静态二进制及其子命令。
-       颜色全部走 landing-v3.css 的主题变量（.pa-* 类），
-       所以深浅主题各自成立；动效受 prefers-reduced-motion 约束。 */ -}}
+{{- /* PIG 首页流程图沿用 OINK landing hero 的 media 逻辑：
+       左列列出输入源，中间突出唯一的 PIG 二进制，右列展示交付物。 */ -}}
 {{- $zh := eq .Site.Language.Lang "zh" -}}
-{{- $ext := .Site.Params.pgext_count -}}
-<figure class="hero-figure" aria-labelledby="hero-arch-title" aria-describedby="hero-arch-desc">
-  <svg class="pig-arch" viewBox="0 0 560 326" role="img" xmlns="http://www.w3.org/2000/svg">
-    <title id="hero-arch-title">{{ if $zh }}pig 工作原理示意图{{ else }}How pig works{{ end }}</title>
-    <desc id="hero-arch-desc">{{ if $zh }}pig 从 Pigsty Infra、PGDG 与操作系统基础仓库解析软件包，再由一个静态二进制的 repo、ext、pg、pt、pb、pitr 等子命令，配置仓库、安装 PostgreSQL 14-18 与 {{ $ext }} 个扩展，并接管 Patroni 高可用与 pgBackRest 备份恢复。{{ else }}pig resolves packages from Pigsty Infra, PGDG, and the OS base repositories, then drives them from one static binary whose repo, ext, pg, pt, pb, and pitr subcommands configure repositories, install PostgreSQL 14-18 with {{ $ext }} extensions, and run Patroni high availability and pgBackRest backup and recovery.{{ end }}</desc>
+{{- $ext := hugo.Data.home.metrics.packaged_extensions -}}
+<figure class="pig-home-diagram" aria-labelledby="pig-flow-title" aria-describedby="pig-flow-desc">
+  <svg class="pig-home-flow" viewBox="0 0 720 500" role="img" xmlns="http://www.w3.org/2000/svg">
+    <title id="pig-flow-title">{{ if $zh }}PIG 软件包交付流程{{ else }}PIG package delivery flow{{ end }}</title>
+    <desc id="pig-flow-desc">{{ if $zh }}PIG 从 Pigsty Infra、PGDG 和操作系统基础源解析软件包，通过一个静态二进制配置仓库、安装扩展，并向 PostgreSQL 14 到 18 交付原生 RPM 与 DEB。{{ else }}PIG resolves packages from Pigsty Infra, PGDG, and operating-system repositories, then uses one static binary to configure repositories, install extensions, and deliver native RPM and DEB packages for PostgreSQL 14 through 18.{{ end }}</desc>
 
     <defs>
-      <linearGradient id="pa-core-sheen" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%" stop-color="#419edb" stop-opacity="0.20"/>
-        <stop offset="55%" stop-color="#419edb" stop-opacity="0"/>
-        <stop offset="100%" stop-color="#ffa269" stop-opacity="0.14"/>
-      </linearGradient>
-      <marker id="pa-arrow" viewBox="0 0 10 10" refX="8.5" refY="5"
-              markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-        <path class="pa-arrowhead" d="M 0 1 L 9 5 L 0 9 z"/>
+      <filter id="pig-flow-shadow" x="-25%" y="-30%" width="150%" height="170%">
+        <feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#172a42" flood-opacity="0.12"/>
+      </filter>
+      <marker id="pig-flow-arrow-blue" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M 0 1 L 9 5 L 0 9 z" fill="#2f6793"/>
+      </marker>
+      <marker id="pig-flow-arrow-green" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M 0 1 L 9 5 L 0 9 z" fill="#29906d"/>
+      </marker>
+      <marker id="pig-flow-arrow-copper" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M 0 1 L 9 5 L 0 9 z" fill="#b4762e"/>
       </marker>
     </defs>
 
-    {{/* ---------------------------------------------------------- 上游仓库 */}}
-    <g class="pa-band">
-      <text class="pa-band-label" x="16" y="14">{{ if $zh }}上游仓库{{ else }}UPSTREAM{{ end }}</text>
-      <line class="pa-rule" x1="16" y1="24" x2="544" y2="24"/>
+    <text class="ph-column-label" x="16" y="25">{{ if $zh }}上游软件源{{ else }}UPSTREAM{{ end }}</text>
+    <text class="ph-column-label ph-column-label--center" x="385" y="25">PIG</text>
+    <text class="ph-column-label ph-column-label--center" x="630" y="25">{{ if $zh }}交付{{ else }}DELIVERS{{ end }}</text>
 
-      <g class="pa-src">
-        <rect class="pa-chip" x="16" y="36" width="168" height="52" rx="9"/>
-        <text class="pa-chip-title" x="100" y="58">Pigsty Infra</text>
-        <text class="pa-chip-sub" x="100" y="75">pgsql · infra · extra</text>
-      </g>
-      <g class="pa-src">
-        <rect class="pa-chip" x="196" y="36" width="168" height="52" rx="9"/>
-        <text class="pa-chip-title" x="280" y="58">PGDG</text>
-        <text class="pa-chip-sub" x="280" y="75">postgresql.org</text>
-      </g>
-      <g class="pa-src">
-        <rect class="pa-chip" x="376" y="36" width="168" height="52" rx="9"/>
-        <text class="pa-chip-title" x="460" y="58">{{ if $zh }}系统基础源{{ else }}OS Base{{ end }}</text>
-        <text class="pa-chip-sub" x="460" y="75">EPEL · Debian · Ubuntu</text>
-      </g>
+    {{/* 输入源 */}}
+    <g class="ph-card" filter="url(#pig-flow-shadow)">
+      <rect x="10" y="48" width="200" height="82" rx="13"/>
+      <rect class="ph-icon-bg ph-icon-bg--blue" x="28" y="66" width="46" height="46" rx="12"/>
+      <text class="ph-icon-text ph-icon-text--blue" x="51" y="89">PI</text>
+      <text class="ph-card-title" x="88" y="80">Pigsty Infra</text>
+      <text class="ph-card-sub" x="88" y="103">pgsql · infra · extra</text>
     </g>
 
-    {{/* 上游 → 内核：三条支路汇到一根总线，再单点落入内核 */}}
-    <g class="pa-wires">
-      <path class="pa-trace" d="M100 88 V 106 H 460 V 88"/>
-      <path class="pa-trace" d="M280 88 V 106"/>
-      <path class="pa-trace pa-trace--head" d="M280 106 V 126" marker-end="url(#pa-arrow)"/>
-      <path class="pa-flow" d="M100 88 V 106 H 280 V 126"/>
-      <path class="pa-flow pa-flow--b" d="M460 88 V 106 H 280 V 126"/>
-      <circle class="pa-node" cx="100" cy="88" r="3"/>
-      <circle class="pa-node" cx="280" cy="88" r="3"/>
-      <circle class="pa-node" cx="460" cy="88" r="3"/>
-      <text class="pa-edge-label" x="292" y="121">{{ if $zh }}检索 · 解析 · 校验{{ else }}search · resolve · verify{{ end }}</text>
+    <g class="ph-card" filter="url(#pig-flow-shadow)">
+      <rect x="10" y="158" width="200" height="82" rx="13"/>
+      <rect class="ph-icon-bg ph-icon-bg--green" x="28" y="176" width="46" height="46" rx="12"/>
+      <text class="ph-icon-text ph-icon-text--green" x="51" y="199">PG</text>
+      <text class="ph-card-title" x="88" y="190">PGDG</text>
+      <text class="ph-card-sub" x="88" y="213">postgresql.org</text>
     </g>
 
-    {{/* ------------------------------------------------------------ pig CLI */}}
-    <g class="pa-core-group">
-      <rect class="pa-core" x="16" y="130" width="528" height="186" rx="14"/>
-      <rect class="pa-core-sheen" x="16" y="130" width="528" height="186" rx="14"/>
-
-      <circle class="pa-dot pa-dot--r" cx="40" cy="154" r="4"/>
-      <circle class="pa-dot pa-dot--y" cx="54" cy="154" r="4"/>
-      <circle class="pa-dot pa-dot--g" cx="68" cy="154" r="4"/>
-      <text class="pa-prompt" x="88" y="159">$</text>
-      <text class="pa-core-title" x="102" y="159">pig</text>
-      <rect class="pa-badge" x="368" y="142" width="160" height="24" rx="12"/>
-      <text class="pa-badge-text" x="448" y="158">{{ if $zh }}单个静态二进制{{ else }}one static binary{{ end }}</text>
-      <line class="pa-core-rule" x1="36" y1="176" x2="524" y2="176"/>
-
-      {{/* 子命令栅格：3 列 × 2 行 */}}
-      <g class="pa-cmds">
-        <g class="pa-cmd">
-          <rect x="36" y="190" width="156" height="52" rx="8"/>
-          <text class="pa-cmd-name" x="50" y="211">pig repo</text>
-          <text class="pa-cmd-sub" x="50" y="230">{{ if $zh }}配置 APT / DNF 源{{ else }}wire APT / DNF{{ end }}</text>
-        </g>
-        <g class="pa-cmd">
-          <rect x="202" y="190" width="156" height="52" rx="8"/>
-          <text class="pa-cmd-name" x="216" y="211">pig ext</text>
-          <text class="pa-cmd-sub" x="216" y="230">{{ if $zh }}{{ $ext }} 个扩展{{ else }}{{ $ext }} extensions{{ end }}</text>
-        </g>
-        <g class="pa-cmd">
-          <rect x="368" y="190" width="156" height="52" rx="8"/>
-          <text class="pa-cmd-name" x="382" y="211">pig pg</text>
-          <text class="pa-cmd-sub" x="382" y="230">{{ if $zh }}内核 14 – 18{{ else }}kernel 14 – 18{{ end }}</text>
-        </g>
-        <g class="pa-cmd">
-          <rect x="36" y="252" width="156" height="52" rx="8"/>
-          <text class="pa-cmd-name" x="50" y="273">pig pt</text>
-          <text class="pa-cmd-sub" x="50" y="292">{{ if $zh }}Patroni 高可用{{ else }}Patroni HA{{ end }}</text>
-        </g>
-        <g class="pa-cmd">
-          <rect x="202" y="252" width="156" height="52" rx="8"/>
-          <text class="pa-cmd-name" x="216" y="273">pig pb</text>
-          <text class="pa-cmd-sub" x="216" y="292">pgBackRest</text>
-        </g>
-        <g class="pa-cmd">
-          <rect x="368" y="252" width="156" height="52" rx="8"/>
-          <text class="pa-cmd-name" x="382" y="273">pig pitr</text>
-          <text class="pa-cmd-sub" x="382" y="292">{{ if $zh }}时间点恢复{{ else }}point-in-time{{ end }}</text>
-        </g>
-      </g>
+    <g class="ph-card" filter="url(#pig-flow-shadow)">
+      <rect x="10" y="268" width="200" height="82" rx="13"/>
+      <rect class="ph-icon-bg ph-icon-bg--copper" x="28" y="286" width="46" height="46" rx="12"/>
+      <text class="ph-icon-text ph-icon-text--copper" x="51" y="309">OS</text>
+      <text class="ph-card-title" x="88" y="300">{{ if $zh }}系统基础源{{ else }}OS Base{{ end }}</text>
+      <text class="ph-card-sub" x="88" y="323">EPEL · Debian · Ubuntu</text>
     </g>
 
+    {{/* 输入流：分别进入 PIG 的三个责任层。 */}}
+    <path class="ph-wire ph-wire--blue" d="M210 89 C250 89 245 151 280 151" marker-end="url(#pig-flow-arrow-blue)"/>
+    <path class="ph-wire ph-wire--green" d="M210 199 C250 199 245 226 280 226" marker-end="url(#pig-flow-arrow-green)"/>
+    <path class="ph-wire ph-wire--copper" d="M210 309 C250 309 245 301 280 301" marker-end="url(#pig-flow-arrow-copper)"/>
+
+    {{/* 核心：保持单一视觉焦点，内部只保留三层能力与一条示例命令。 */}}
+    <g class="ph-core" filter="url(#pig-flow-shadow)">
+      <rect x="280" y="66" width="210" height="320" rx="18"/>
+      <rect class="ph-core-icon" x="359" y="90" width="52" height="52" rx="14"/>
+      <text class="ph-core-icon-text" x="385" y="116">$</text>
+      <text class="ph-core-title" x="385" y="171">PIG</text>
+      <text class="ph-core-kicker" x="385" y="194">{{ if $zh }}单个静态二进制{{ else }}ONE STATIC BINARY{{ end }}</text>
+      <line class="ph-core-rule" x1="300" y1="210" x2="470" y2="210"/>
+
+      <rect class="ph-core-row" x="302" y="225" width="166" height="34" rx="9"/>
+      <text class="ph-core-row-text" x="385" y="242">repo · resolve · verify</text>
+      <rect class="ph-core-row" x="302" y="267" width="166" height="34" rx="9"/>
+      <text class="ph-core-row-text" x="385" y="284">ext · install · build</text>
+      <rect class="ph-core-row" x="302" y="309" width="166" height="34" rx="9"/>
+      <text class="ph-core-row-text" x="385" y="326">pg · pt · pb · pitr</text>
+
+      <rect class="ph-core-command" x="302" y="351" width="166" height="24" rx="8"/>
+      <text class="ph-core-command-text" x="385" y="363">pig install postgis</text>
+    </g>
+
+    {{/* 输出流 */}}
+    <path class="ph-wire ph-wire--out" d="M490 231 H520 C542 231 530 161 550 161" marker-end="url(#pig-flow-arrow-blue)"/>
+    <path class="ph-wire ph-wire--out" d="M520 231 C542 231 530 316 550 316" marker-end="url(#pig-flow-arrow-blue)"/>
+    <circle class="ph-wire-node" cx="520" cy="231" r="4"/>
+    <text class="ph-wire-label" x="530" y="223">deliver</text>
+
+    <g class="ph-card ph-card--output" filter="url(#pig-flow-shadow)">
+      <rect x="550" y="105" width="160" height="112" rx="13"/>
+      <rect class="ph-icon-bg ph-icon-bg--blue" x="609" y="120" width="42" height="42" rx="12"/>
+      <text class="ph-icon-text ph-icon-text--blue" x="630" y="141">PG</text>
+      <text class="ph-card-title ph-card-title--center" x="630" y="181">PostgreSQL</text>
+      <text class="ph-card-sub ph-card-sub--center" x="630" y="201">14–18 · RPM / DEB</text>
+    </g>
+
+    <g class="ph-card ph-card--output" filter="url(#pig-flow-shadow)">
+      <rect x="550" y="260" width="160" height="112" rx="13"/>
+      <rect class="ph-icon-bg ph-icon-bg--rose" x="609" y="275" width="42" height="42" rx="12"/>
+      <text class="ph-icon-text ph-icon-text--rose" x="630" y="296">EX</text>
+      <text class="ph-card-title ph-card-title--center" x="630" y="336">{{ if $zh }}扩展包{{ else }}Extensions{{ end }}</text>
+      <text class="ph-card-sub ph-card-sub--center" x="630" y="356">{{ $ext }} packages</text>
+    </g>
+
+    {{/* 软件包目录作为声明式输入，从下方接入核心。 */}}
+    <path class="ph-config-wire" d="M385 420 V392" marker-end="url(#pig-flow-arrow-blue)"/>
+    <text class="ph-wire-label" x="398" y="407">catalog</text>
+    <g class="ph-card" filter="url(#pig-flow-shadow)">
+      <rect x="290" y="420" width="190" height="66" rx="13"/>
+      <rect class="ph-icon-bg ph-icon-bg--slate" x="307" y="434" width="38" height="38" rx="10"/>
+      <text class="ph-icon-text ph-icon-text--slate" x="326" y="453">≡</text>
+      <text class="ph-card-title ph-card-title--small" x="359" y="447">{{ if $zh }}软件包目录{{ else }}Package catalog{{ end }}</text>
+      <text class="ph-card-sub" x="359" y="468">OS · arch · PG major</text>
+    </g>
   </svg>
 </figure>

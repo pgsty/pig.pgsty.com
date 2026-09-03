@@ -3,53 +3,44 @@
      `body_class: landing-page` 在 content/_index.md 里，用来给这套 CSS 圈定作用域；
      样式表与运行时经 layouts/_partials/hooks/{head-end,body-end}.html 加载。 */ -}}
 {{ define "main" }}
+{{- .Page.Store.Set "hasLanding" true -}}
 {{- $zh := eq .Site.Language.Lang "zh" -}}
 {{- $metrics := hugo.Data.home.metrics -}}
 {{- $ext := cond $zh "https://pigsty.cc/ext" "https://pigsty.io/ext" -}}
 {{- $pigsty := cond $zh "https://pigsty.cc" "https://pigsty.io" -}}
 {{- $install := cond $zh "curl -fsSL https://repo.pigsty.cc/pig | bash" "curl -fsSL https://repo.pigsty.io/pig | bash" -}}
     {{/* ---------------------------------------------------------------- HERO
-         左半是品牌声明：P / I / G 对应 PostgreSQL / Install / Guide，
-         一句定位 + 行动入口 + 一条真命令；右半是架构图，讲 pig 怎么工作。 */}}
-    <section class="hero" id="hero">
-      <div class="hero-bg" aria-hidden="true"></div>
-      <div class="landing-container">
-        <div class="hero-grid hero-grid--split">
-          <div class="hero-copy" id="about">
-            <p class="hero-eyebrow anim" style="--d:0">
-              <span class="eyebrow-mark" aria-hidden="true"></span>
-              <span class="eyebrow-en">{{ if $zh }}PostgreSQL 扩展包管理器{{ else }}THE POSTGRESQL EXTENSION PACKAGE MANAGER{{ end }}</span>
-            </p>
+         直接采用 OINK 原生 landing hero 的排版节奏：左侧品牌、说明、事实与 CTA，
+         右侧用 PIG 自己的流程图填入同一 media 槽位。 */}}
+    <section class="td-landing-hero td-landing-hero--with-media pig-home-hero" id="hero" aria-labelledby="hero-title">
+      <div class="td-landing-hero__glow" aria-hidden="true"></div>
+      <div class="td-site-container">
+        <div class="td-landing-hero__copy" id="about">
+          <p class="td-landing-hero__eyebrow">
+            <span class="td-landing-status-dot" aria-hidden="true"></span>
+            <span>POSTGRESQL + EXTENSIONS → RPM / DEB</span>
+          </p>
 
-            <h1 class="hero-title pig-hero-title pig-hero-title--oneline anim" style="--d:1" aria-label="PIG — Postgres Install Guide">
-              <span class="hero-title-line"><b class="ini ini-p">P</b>ostgres</span>
-              <span class="hero-title-line"><b class="ini ini-i">I</b>nstall</span>
-              <span class="hero-title-line"><b class="ini ini-g">G</b>uide</span>
-            </h1>
+          <h1 class="td-landing-hero__title pig-home-hero__title" id="hero-title">Postgres Install Guide</h1>
 
-            <p class="hero-tagline anim" style="--d:2">
-              <strong>{{ if $zh }}一条命令，装好 PostgreSQL 与它的扩展。{{ else }}One command installs PostgreSQL and its extensions.{{ end }}</strong>
-              <span>{{ if $zh }}{{ $metrics.packaged_extensions }} 个扩展 · PostgreSQL 14-18 · EL / Debian / Ubuntu{{ else }}{{ $metrics.packaged_extensions }} extensions · PostgreSQL 14-18 · EL / Debian / Ubuntu{{ end }}</span>
-            </p>
+          <p class="td-landing-hero__lead">
+            <strong>{{ if $zh }}一条命令，装好 PostgreSQL 与它的扩展。{{ else }}One command installs PostgreSQL and its extensions.{{ end }}</strong>
+            {{ if $zh }}配置原生软件仓库，按目标系统解析软件包，并通过一个静态二进制交付 RPM / DEB。{{ else }}Wire native repositories, resolve packages for the target system, and deliver RPM / DEB with one static binary.{{ end }}
+          </p>
 
-            <div class="hero-actions anim" style="--d:4">
-              <div class="hero-ctas">
-                <a href="{{ relLangURL "start/" }}" class="btn btn-primary"><i class="fas fa-rocket" aria-hidden="true"></i> {{ if $zh }}快速上手{{ else }}Get Started{{ end }}</a>
-                <a href="{{ relLangURL "download/" }}" class="btn btn-ghost"><i class="fas fa-download" aria-hidden="true"></i> {{ if $zh }}下载{{ else }}Download{{ end }}</a>
-              </div>
-              <div class="command-box">
-                <span class="command-prompt">$</span>
-                <code class="command-text">{{ $install }}</code>
-                <button class="command-copy" data-copy-text="{{ $install }}" title="{{ if $zh }}复制命令{{ else }}Copy command{{ end }}" aria-label="{{ if $zh }}复制命令{{ else }}Copy command{{ end }}">
-                  <i class="fas fa-copy" aria-hidden="true"></i>
-                </button>
-              </div>
-            </div>
+          <p class="td-landing-hero__note">
+            <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+            <span>{{ if $zh }}{{ $metrics.packaged_extensions }} 个扩展 · PostgreSQL 14–18 · EL / Debian / Ubuntu{{ else }}{{ $metrics.packaged_extensions }} extensions · PostgreSQL 14–18 · EL / Debian / Ubuntu{{ end }}</span>
+          </p>
+
+          <div class="td-landing-hero__actions">
+            <a href="{{ relLangURL "download/" }}" class="td-landing-button td-landing-button--primary"><i class="fa-solid fa-download" aria-hidden="true"></i><span>{{ if $zh }}下载{{ else }}Download{{ end }}</span></a>
+            <a href="{{ relLangURL "start/" }}" class="td-landing-button td-landing-button--ghost"><i class="fa-solid fa-book-open" aria-hidden="true"></i><span>{{ if $zh }}阅读文档{{ else }}Read the docs{{ end }}</span></a>
           </div>
+        </div>
 
-          <div class="hero-art anim" style="--d:3">
-            {{ partial "pig/hero-diagram.html" . }}
-          </div>
+        <div class="pig-home-hero__media">
+          {{ partial "pig/hero-diagram.html" . }}
         </div>
       </div>
     </section>

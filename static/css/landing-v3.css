@@ -545,153 +545,317 @@ html[data-theme="dark"] .ini-s { color: #8b93a0; }
 }
 
 /* ------------------------------------------------------------
-   5b. Hero 架构图（pig 工作原理）
-   —— 上游仓库 → 一个静态二进制 → 主机上被管起来的东西。
-   所有颜色走主题变量，深浅两套自动成立。
+   5b. PIG 首页 Hero
+   使用 OINK 原生 hero 的文案、事实行、双 CTA、media 槽位与断点逻辑，
+   只把产品信息和右侧流程图替换成 PIG 自己的内容。
    ------------------------------------------------------------ */
-.pig-arch {
-  display: block;
+body.landing-page .td-default main > .pig-home-hero:first-of-type {
+  --pig-section-pad-top: clamp(34px, 3.2vw, 48px);
+  --td-display-font-family: var(--td-ui-font-family, var(--font-body));
+  --td-meta-font-family: var(--td-ui-font-family, var(--font-body));
+  box-sizing: border-box;
+  display: flex;
+  min-height: clamp(520px, 66svh, 610px);
+  align-items: center;
+  padding: var(--pig-section-pad-top) 0 clamp(34px, 3.2vw, 48px);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.pig-home-hero > .td-landing-hero__glow {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(48% 62% at 74% 34%, var(--glow-blue), transparent 74%),
+    radial-gradient(34% 46% at 7% 91%, var(--glow-copper), transparent 78%);
+}
+
+.pig-home-hero > .td-site-container {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.06fr) minmax(500px, 0.94fr);
+  gap: clamp(36px, 4.5vw, 64px);
+  align-items: center;
   width: 100%;
-  height: auto;
-  overflow: visible;
 }
 
-.pig-arch text { font-family: var(--font-mono); }
-
-/* 分带标题与分隔线 */
-.pa-band-label {
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.22em;
-  fill: var(--silk);
+.pig-home-hero .td-landing-hero__copy {
+  width: 100%;
+  max-width: 650px;
 }
-.pa-rule { stroke: var(--line); stroke-width: 1; }
 
-/* 上游仓库芯片 */
-.pa-chip {
+.pig-home-hero .td-landing-hero__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin: 0 0 clamp(28px, 2.8vw, 38px);
+  color: var(--ink-mute);
+  font-family: var(--td-meta-font-family);
+  font-size: 0.74rem;
+  font-weight: 650;
+  line-height: 1.4;
+  letter-spacing: 0.18em;
+}
+
+.pig-home-hero .td-landing-status-dot {
+  width: 10px;
+  height: 10px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--ok);
+  box-shadow: 0 0 0 6px color-mix(in srgb, var(--ok) 14%, transparent);
+}
+
+.pig-home-hero .pig-home-hero__title {
+  margin: 0 0 clamp(28px, 3vw, 38px);
+  color: var(--ink);
+  font-family: var(--td-display-font-family);
+  font-size: clamp(3rem, 4vw, 3.65rem);
+  font-weight: 800;
+  line-height: 0.98;
+  letter-spacing: -0.055em;
+  white-space: nowrap;
+}
+
+.pig-home-hero .td-landing-hero__lead {
+  max-width: 650px;
+  margin: 0;
+  color: var(--ink-soft);
+  font-family: var(--td-ui-font-family, var(--font-body));
+  font-size: clamp(1.08rem, 1.45vw, 1.28rem);
+  font-weight: 450;
+  line-height: 1.72;
+  text-wrap: pretty;
+}
+
+.pig-home-hero .td-landing-hero__lead strong {
+  color: var(--ink);
+  font-weight: 800;
+}
+
+.pig-home-hero .td-landing-hero__note {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin: clamp(24px, 2.6vw, 32px) 0 0;
+  color: var(--ink-mute);
+  font-family: var(--td-ui-font-family, var(--font-body));
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.pig-home-hero .td-landing-hero__note i { color: var(--ok); }
+
+.pig-home-hero .td-landing-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin: clamp(28px, 3vw, 36px) 0 0;
+}
+
+.pig-home-hero .td-landing-button {
+  min-height: 50px;
+  padding: 13px 26px;
+  border-radius: var(--radius-sm);
+  font-family: var(--td-ui-font-family, var(--font-body));
+  font-size: 1rem;
+  font-weight: 750;
+}
+
+.landing-page .pig-home-hero .td-landing-button--primary {
+  border-color: transparent;
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-ink);
+  box-shadow: 0 6px 22px rgba(47, 103, 147, 0.28);
+}
+.landing-page .pig-home-hero .td-landing-button--primary:hover {
+  background: var(--btn-primary-bg-hover);
+  color: var(--btn-primary-ink);
+}
+.landing-page .pig-home-hero .td-landing-button--ghost {
+  border-color: var(--line-strong);
+  background: transparent;
+  color: var(--ink);
+}
+.landing-page .pig-home-hero .td-landing-button--ghost:hover {
+  border-color: var(--pg);
+  color: var(--pg-strong);
+}
+
+.pig-home-hero__media {
+  width: 100%;
+  max-width: 620px;
+  justify-self: end;
+  align-self: center;
+}
+
+.pig-home-diagram { width: 100%; margin: 0; }
+.pig-home-flow { display: block; width: 100%; height: auto; overflow: visible; }
+.pig-home-flow text { font-family: var(--td-ui-font-family, var(--font-body)); }
+
+.ph-column-label {
+  fill: var(--ink-mute);
+  font-size: 10.5px;
+  font-weight: 750;
+  letter-spacing: 0.18em;
+}
+.ph-column-label--center { text-anchor: middle; }
+
+.ph-card > rect:first-of-type {
   fill: var(--bg-elev);
   stroke: var(--line-strong);
   stroke-width: 1;
 }
-.pa-src { transition: transform 220ms ease; }
-.pa-src:hover .pa-chip { stroke: var(--copper-dim); }
-.pa-chip-title {
+.ph-icon-bg { stroke-width: 1; }
+.ph-icon-bg--blue { fill: color-mix(in srgb, var(--pg) 12%, var(--bg-elev)); stroke: color-mix(in srgb, var(--pg) 25%, var(--line)); }
+.ph-icon-bg--green { fill: color-mix(in srgb, var(--ok) 12%, var(--bg-elev)); stroke: color-mix(in srgb, var(--ok) 25%, var(--line)); }
+.ph-icon-bg--copper { fill: color-mix(in srgb, var(--copper) 13%, var(--bg-elev)); stroke: color-mix(in srgb, var(--copper) 27%, var(--line)); }
+.ph-icon-bg--rose { fill: color-mix(in srgb, #df6a67 13%, var(--bg-elev)); stroke: color-mix(in srgb, #df6a67 28%, var(--line)); }
+.ph-icon-bg--slate { fill: color-mix(in srgb, var(--ink-mute) 11%, var(--bg-elev)); stroke: color-mix(in srgb, var(--ink-mute) 22%, var(--line)); }
+
+.ph-icon-text {
+  font-size: 11px;
+  font-weight: 850;
   text-anchor: middle;
-  font-size: 13px;
-  font-weight: 600;
+  dominant-baseline: middle;
+}
+.ph-icon-text--blue { fill: var(--pg); }
+.ph-icon-text--green { fill: var(--ok); }
+.ph-icon-text--copper { fill: var(--copper); }
+.ph-icon-text--rose { fill: #d85d5a; }
+.ph-icon-text--slate { fill: var(--ink-soft); font-size: 18px; }
+
+.ph-card-title {
   fill: var(--ink);
-}
-.pa-chip-sub {
-  text-anchor: middle;
-  font-size: 9.5px;
-  letter-spacing: 0.06em;
-  fill: var(--ink-mute);
-}
-
-/* 走线 */
-.pa-trace {
-  fill: none;
-  stroke: var(--trace);
-  stroke-width: 1.4;
-}
-.pa-flow {
-  fill: none;
-  stroke: var(--copper);
-  stroke-width: 1.6;
-  stroke-linecap: round;
-  stroke-dasharray: 26 300;
-  animation: pa-flow-run 3.6s linear infinite;
-  opacity: 0.85;
-}
-.pa-flow--b { animation-delay: 1.2s; }
-.pa-flow--c { stroke-dasharray: 16 60; animation: pa-flow-run 2.2s linear infinite; }
-@keyframes pa-flow-run {
-  from { stroke-dashoffset: 326; }
-  to   { stroke-dashoffset: 0; }
-}
-.pa-trace--head { stroke: var(--copper-dim); stroke-width: 1.6; }
-.pa-arrowhead { fill: var(--copper); }
-.pa-node { fill: var(--copper); }
-.pa-edge-label {
-  font-size: 9.5px;
-  letter-spacing: 0.1em;
-  fill: var(--ink-mute);
-}
-
-/* pig 内核：终端色板，两个主题下都是深底 */
-.pa-core {
-  fill: var(--terminal-bg);
-  stroke: var(--terminal-line);
-  stroke-width: 1;
-}
-.pa-core-sheen { fill: url(#pa-core-sheen); stroke: none; }
-.pa-core-rule { stroke: rgba(148, 176, 210, 0.18); stroke-width: 1; }
-.pa-dot--r { fill: #e06c6c; }
-.pa-dot--y { fill: #e0a35c; }
-.pa-dot--g { fill: #55c98a; }
-.pa-prompt { font-size: 13px; font-weight: 600; fill: #55c98a; }
-.pa-core-title {
   font-size: 15px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  fill: #e8eef6;
+  font-weight: 750;
+  dominant-baseline: middle;
 }
-.pa-badge { fill: rgba(65, 158, 219, 0.14); stroke: rgba(65, 158, 219, 0.4); stroke-width: 1; }
-.pa-badge-text {
-  text-anchor: middle;
-  font-size: 9.5px;
-  letter-spacing: 0.12em;
-  fill: #9dc4e6;
-}
-
-/* 子命令格 */
-.pa-cmd rect {
-  fill: rgba(148, 176, 210, 0.06);
-  stroke: rgba(148, 176, 210, 0.16);
-  stroke-width: 1;
-  transition: fill 180ms ease, stroke 180ms ease;
-}
-.pa-cmd:hover rect {
-  fill: rgba(224, 163, 92, 0.1);
-  stroke: rgba(224, 163, 92, 0.45);
-}
-.pa-cmd-name {
-  font-size: 12.5px;
-  font-weight: 600;
-  fill: #dbe7f5;
-}
-.pa-cmd:hover .pa-cmd-name { fill: #ffc79a; }
-.pa-cmd-sub {
-  font-size: 9.5px;
-  letter-spacing: 0.04em;
-  fill: #8296ad;
-}
-
-/* 主机侧的成果板 */
-.pa-plate {
-  fill: var(--bg-elev);
-  stroke: var(--line-strong);
-  stroke-width: 1;
-}
-.pa-plate-title {
-  font-size: 12.5px;
-  font-weight: 600;
-  fill: var(--ink);
-}
-.pa-plate-sub {
-  font-size: 9.5px;
-  letter-spacing: 0.04em;
+.ph-card-title--small { font-size: 13.5px; }
+.ph-card-title--center,
+.ph-card-sub--center { text-anchor: middle; }
+.ph-card-sub {
   fill: var(--ink-mute);
+  font-family: var(--td-meta-font-family);
+  font-size: 10.5px;
+  font-weight: 500;
+  dominant-baseline: middle;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .pa-flow { animation: none; stroke-dasharray: none; opacity: 0.55; }
+.ph-wire,
+.ph-config-wire {
+  fill: none;
+  stroke-width: 1.55;
+  stroke-linecap: round;
+  stroke-dasharray: 7 6;
+}
+.ph-wire--blue { stroke: #2f6793; }
+.ph-wire--green { stroke: #29906d; }
+.ph-wire--copper { stroke: #b4762e; }
+.ph-wire--out { stroke: #2f6793; }
+.ph-config-wire { stroke: color-mix(in srgb, var(--pg) 65%, var(--ink-mute)); }
+.ph-wire-node { fill: #2f6793; }
+.ph-wire-label {
+  fill: var(--ink-mute);
+  font-family: var(--td-meta-font-family);
+  font-size: 9.5px;
+  font-weight: 600;
 }
 
-/* 窄屏：架构图先于文案收窄，再在极窄处退到单列全宽 */
-@media (max-width: 980px) {
-  .hero-art { margin-top: 4px; }
-  .hero-figure { max-width: 520px; }
+.ph-core > rect:first-of-type {
+  fill: color-mix(in srgb, var(--bg-elev) 94%, var(--pg));
+  stroke: color-mix(in srgb, var(--pg) 65%, var(--line-strong));
+  stroke-width: 1.5;
+}
+.ph-core-icon { fill: color-mix(in srgb, var(--pg) 14%, var(--bg-elev)); }
+.ph-core-icon-text {
+  fill: var(--pg);
+  font-family: var(--font-mono);
+  font-size: 21px;
+  font-weight: 750;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+.ph-core-title {
+  fill: var(--ink);
+  font-size: 20px;
+  font-weight: 850;
+  text-anchor: middle;
+}
+.ph-core-kicker {
+  fill: var(--ink-mute);
+  font-family: var(--td-meta-font-family);
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-anchor: middle;
+}
+.ph-core-rule { stroke: var(--line); stroke-width: 1; }
+.ph-core-row {
+  fill: var(--bg-soft);
+  stroke: var(--line);
+  stroke-width: 1;
+}
+.ph-core-row-text {
+  fill: var(--ink-soft);
+  font-family: var(--td-meta-font-family);
+  font-size: 10.5px;
+  font-weight: 600;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+.ph-core-command { fill: var(--pg-strong); }
+.ph-core-command-text {
+  fill: #fff;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+@media (max-width: 1100px) {
+  .pig-home-hero > .td-site-container {
+    grid-template-columns: minmax(0, 1fr) minmax(430px, 0.95fr);
+    gap: 28px;
+  }
+  .pig-home-hero .pig-home-hero__title { font-size: clamp(2.35rem, 4.35vw, 3rem); }
+  .pig-home-hero__media { max-width: 540px; }
+}
+
+/* 与 OINK 原生 landing hero 相同：窄屏保留完整文案，流程图退场。 */
+@media (max-width: 900px) {
+  body.landing-page .td-default main > .pig-home-hero:first-of-type {
+    min-height: auto;
+    padding-top: clamp(50px, 9vw, 72px);
+    padding-bottom: clamp(50px, 9vw, 72px);
+  }
+  .pig-home-hero > .td-site-container { display: block; }
+  .pig-home-hero .td-landing-hero__copy { max-width: 690px; }
+  .pig-home-hero__media { display: none; }
+  .pig-home-hero .pig-home-hero__title {
+    font-size: clamp(2.45rem, 8vw, 3.65rem);
+    white-space: normal;
+  }
+}
+
+@media (max-width: 520px) {
+  .pig-home-hero .td-landing-hero__eyebrow {
+    align-items: flex-start;
+    font-size: 0.66rem;
+    letter-spacing: 0.12em;
+  }
+  .pig-home-hero .pig-home-hero__title {
+    font-size: clamp(2.3rem, 12vw, 3.2rem);
+    line-height: 1.02;
+  }
+  .pig-home-hero .td-landing-hero__lead { font-size: 1.03rem; line-height: 1.66; }
+  .pig-home-hero .td-landing-hero__note { align-items: flex-start; font-size: 0.82rem; }
+  .pig-home-hero .td-landing-hero__actions { display: grid; grid-template-columns: 1fr 1fr; }
+  .pig-home-hero .td-landing-button { justify-content: center; padding-right: 14px; padding-left: 14px; }
 }
 
 .board-stage {
