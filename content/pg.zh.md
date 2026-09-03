@@ -830,7 +830,7 @@ pig pg svc status                # 显示服务状态
 
 - 如果当前用户已是 DBSU：直接执行命令
 - 如果当前用户是 root：使用 `su - postgres -c "..."` 执行
-- 其他用户：使用 `sudo -inu postgres -- ...` 执行
+- 其他用户：使用 `sudo -H -u postgres -- ...` 直接执行，保留原始 argv，并将 HOME 设置为目标用户目录
 
 **安全性考虑：**
 

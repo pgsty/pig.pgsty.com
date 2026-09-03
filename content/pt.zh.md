@@ -268,11 +268,11 @@ switchover / failover 不再有 pig 侧的 pause 预检——维护模式语义�
 经由 Patroni REST API / DCS 生效。pig 不内嵌 DCS 客户端或 REST 控制引擎，
 不维护 patronictl 命令清单，不对转发命令做确认、预检、重试或结果改写。
 
-**权限处理**（与 v1.5.x 相同）：
+**权限处理：**
 
 - 当前用户已是 DBSU：直接执行；
 - 当前用户是 root：`su - postgres -c "..."` 执行；
-- 其他用户：`sudo -inu postgres -- ...` 执行。
+- 其他用户：通过 `sudo -H -u postgres -- ...` 直接执行，保留原始 argv，并将 HOME 设置为目标用户目录。
 
 **平台支持**：此命令专为 Linux 设计，服务管理依赖 `systemctl`，日志功能依赖可读取的 Patroni 日志文件。
 

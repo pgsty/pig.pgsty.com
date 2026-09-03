@@ -293,11 +293,12 @@ one selected config, acting through the Patroni REST API / DCS. Pig embeds no DC
 REST control engine, keeps no patronictl command inventory, and adds no confirmation,
 preflight, retry, or output rewriting to forwarded commands.
 
-**Privilege handling** (unchanged from v1.5.x):
+**Privilege handling:**
 
 - if the current user is already the DBSU: execute directly;
 - if the current user is root: execute via `su - postgres -c "..."`;
-- otherwise: execute via `sudo -inu postgres -- ...`.
+- otherwise: execute directly via `sudo -H -u postgres -- ...`, preserving argv while setting the
+  target user's home directory.
 
 **Platform**: designed for Linux; service management relies on `systemctl`, and the log
 helpers require readable Patroni log files.

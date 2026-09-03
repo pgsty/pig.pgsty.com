@@ -504,7 +504,8 @@ Execution logic:
 
 - If the current user is DBSU: execute directly
 - If the current user is root: use `su - postgres -c "..."` to execute
-- Other users: use `sudo -inu postgres -- ...` to execute
+- Other users: execute directly with `sudo -H -u postgres -- ...`, preserving argv while setting
+  the target user's home directory
 
 **Relationship with pgbackrest:**
 

@@ -359,7 +359,8 @@ Leaving Patroni stopped after managed data-directory recovery is intentional. It
 
 - If the current user is the DBSU: execute directly.
 - If the current user is root: execute with `su - postgres -c`.
-- Other users: execute with `sudo -inu postgres --`.
+- Other users: execute directly with `sudo -H -u postgres --`, preserving argv while setting the
+  target user's home directory.
 
 **Platform support:**
 
