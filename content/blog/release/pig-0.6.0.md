@@ -14,7 +14,7 @@ release_url: https://github.com/pgsty/pig/releases/tag/v0.6.0
 - Add new kernel support: percona with pg_tde
 - Add new package: Google GenAI MCP toolbox for databases
 - Add new repo: percona repo and clickhouse repo
-- Change extension summary info links to https://ext.pgsty.com
+- Change extension summary info links to [ext.pgsty.com](https://ext.pgsty.com)
 - Fix orioledb broken on the Debian/Ubuntu system
 - Fix epel repo on EL distributions
 - Bump golang to 1.24.5

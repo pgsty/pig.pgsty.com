@@ -14,7 +14,7 @@ release_url: https://github.com/pgsty/pig/releases/tag/v0.6.0
 - 添加新内核支持：带 pg_tde 的 percona
 - 添加新包：Google GenAI MCP 数据库工具箱
 - 添加新仓库：percona 仓库和 clickhouse 仓库
-- 将扩展摘要信息链接更改为 https://ext.pgsty.com
+- 将扩展摘要信息链接更改为 [ext.pgsty.com](https://ext.pgsty.com)
 - 修复 orioledb 在 Debian/Ubuntu 系统上的问题
 - 修复 EL 发行版上的 epel 仓库
 - 将 golang 升级到 1.24.5

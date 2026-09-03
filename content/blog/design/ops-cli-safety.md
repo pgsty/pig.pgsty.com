@@ -83,13 +83,13 @@ confirmation, stop escalation, side restores, restart behavior, and structured f
 Patroni later moved to transparent passthrough. That refinement keeps the same safety principle:
 PIG owns safeguards only for workflows it owns.
 
-The same contract was applied to `pig do` name and cluster validation in
-[`3e1603b`](https://github.com/pgsty/pig/commit/3e1603b), with Ansible built-in targets closed in
-[`a880485`](https://github.com/pgsty/pig/commit/a880485). Package-backed, credential-safe, truthful
-`build proxy` setup entered in [`220ef9c`](https://github.com/pgsty/pig/commit/220ef9c), followed by
-structured-argument redaction and corrected machine annotations in
-[`74cb128`](https://github.com/pgsty/pig/commit/74cb128), and optional operands were reflected in
-the machine grammar in [`de7ffd0`](https://github.com/pgsty/pig/commit/de7ffd0). These changes were
+The same contract was applied to `pig do` name and cluster validation in source commit
+`3e1603b2bfbb949fb77b7ecd5fd458ec2ee45d25`, with Ansible built-in targets closed in
+`a88048596dffdfd6c1bb51cdbe7da6782a11cc22`. Package-backed, credential-safe, truthful
+`build proxy` setup entered in `220ef9c722b54951d3dc502ea3e3baafd642b592`, followed by
+structured-argument redaction and corrected machine annotations in source commit
+`74cb1281860fae659f2aa4fec2898af34a0c2519`, and optional operands were reflected in
+the machine grammar in `de7ffd0e81e500ea2f4268ca326917aa385150ca`. These changes were
 exercised on Ubuntu 24.04 and Rocky Linux 9 ARM64 Farrow guests; this is source and live-lab
 evidence, not release evidence.
 
