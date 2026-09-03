@@ -18,7 +18,7 @@ Environment Setup:
   pig build repo --beta            # init build repo with PostgreSQL beta repo
   pig build tool  [mini|full|...]  # init build toolset
   pig build rust  [-y] [-m]        # install Rust toolchain
-  pig build pgrx  [-v <ver>] [-b]  # install & init pgrx (0.19.1)
+  pig build pgrx  [-v <ver>] [-b]  # install & init pgrx (0.19.2)
   pig build proxy                  # install or verify the vray package
   pig build proxy id@host:port     # configure the optional build proxy
 
@@ -184,8 +184,8 @@ pig build rust -m                # 使用中国镜像安装 Rust，并写入 Car
 安装并初始化 PGRX（Rust 的 PostgreSQL 扩展框架）。
 
 ```bash
-pig build pgrx                   # 安装最新稳定版 (0.19.1)
-pig build pgrx -v 0.19.1         # 安装特定版本
+pig build pgrx                   # 安装最新稳定版 (0.19.2)
+pig build pgrx -v 0.19.2         # 安装特定版本
 pig build pgrx --pg 18,17,16     # 为指定 PG 版本初始化 pgrx
 pig build pgrx --pg init         # 只执行 cargo pgrx init，不传 PG 参数
 pig build pgrx -b                # 自动探测时包含 PostgreSQL 19 beta pg_config
@@ -373,7 +373,7 @@ export PG_CONFIG=/usr/pgsql-18/bin/pg_config
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 # 更新 PGRX
-cargo install --locked cargo-pgrx@0.19.1
+cargo install --locked cargo-pgrx@0.19.2
 
 # 重新初始化 PGRX
 cargo pgrx init

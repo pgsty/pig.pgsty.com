@@ -18,7 +18,7 @@ Environment Setup:
   pig build repo --beta            # init build repo with PostgreSQL beta repo
   pig build tool  [mini|full|...]  # init build toolset
   pig build rust  [-y] [-m]        # install Rust toolchain
-  pig build pgrx  [-v <ver>] [-b]  # install & init pgrx (0.19.1)
+  pig build pgrx  [-v <ver>] [-b]  # install & init pgrx (0.19.2)
   pig build proxy                  # install or verify the vray package
   pig build proxy id@host:port     # configure the optional build proxy
 
@@ -184,8 +184,8 @@ pig build rust -m                # use China mirror mode and write Cargo mirror 
 Install and initialize PGRX, the PostgreSQL extension framework for Rust.
 
 ```bash
-pig build pgrx                   # install latest stable version (0.19.1)
-pig build pgrx -v 0.19.1         # install a specific pgrx version
+pig build pgrx                   # install latest stable version (0.19.2)
+pig build pgrx -v 0.19.2         # install a specific pgrx version
 pig build pgrx --pg 18,17,16     # initialize pgrx for selected PG versions
 pig build pgrx --pg init         # run cargo pgrx init without PG arguments
 pig build pgrx -b                # include PostgreSQL 19 beta pg_config during auto-detection
@@ -375,7 +375,7 @@ export PG_CONFIG=/usr/pgsql-18/bin/pg_config
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 # Update PGRX
-cargo install --locked cargo-pgrx@0.19.1
+cargo install --locked cargo-pgrx@0.19.2
 
 # Reinitialize PGRX
 cargo pgrx init
