@@ -125,11 +125,11 @@ Pigsty 中可用仓库的完整定义位于 [`cli/repo/assets/repo.yml`](https:/
 - EL：`/etc/pki/rpm-gpg/RPM-GPG-KEY-pigsty`
 - Debian / Ubuntu：`/etc/apt/keyrings/pigsty.asc`
 
-新安装的公钥文件权限为 `0644`。默认尽最大努力安装：失败只记录警告，并在结构化结果的 `data.warnings` 中保留，随后继续配置仓库。仅对所选 Pigsty 仓库降级：Debian/Ubuntu 使用 `trusted=yes`，EL 使用 `gpgcheck=0` 和 `repo_gpgcheck=0`，保留其他仓库定义。
+新安装的公钥文件权限为 `0644`。默认尽最大努力安装：失败只记录警告，并在结构化结果的 `data.warnings` 中保留，随后继续配置仓库。仅对所选 Pigsty 仓库降级：Debian/Ubuntu 使用 `trusted=yes`，EL 使用 `gpgcheck=0` 和 `repo_gpgcheck=0`。失败时仍保留默认密钥引用，使不同操作添加的 APT 定义保持相同的 `signed-by`，其他仓库定义保持不变。密钥不可用时，APT 可能告警并沿用旧索引；配置成功不代表刚刚下载了新索引。
 
-如果所选 Pigsty 仓库的元数据显式指定了非空的 `gpgkey` 或 `signed-by`，公钥准备就是必需步骤：安装失败会在备份、写入仓库和更新缓存之前返回错误，且不会修改这些元数据。显式密钥引用保持原样；此流程准备的是内嵌 Pigsty 公钥，不会下载任意自定义密钥。只选择 `pgdg`、`node` 等其他仓库不会准备 Pigsty 公钥。
+如果所选 Pigsty 仓库的元数据显式指定了非空密钥引用，就必须准备该引用实际指定的密钥。Debian/Ubuntu 的 `signed-by` 必须通过绝对路径指定已有普通密钥文件，多个文件以逗号分隔；默认 Pigsty 路径可由内嵌公钥安装。EL 会按需准备显式引用的默认公钥文件，再将 `gpgkey` 中列出的路径或不含变量的 URL 交给 `rpm --import`。准备失败会在备份、写入仓库和更新缓存之前返回错误。显式引用保持原样，不会静默降级；有效的自定义密钥不依赖默认密钥路径。只选择 `pgdg`、`node` 等其他仓库不会准备 Pigsty 公钥。
 
-安装文件不会将密钥导入 RPM 数据库或 APT 全局信任库。准备成功后，所选 Pigsty 定义通过 EL 的 `gpgkey` 或 Debian/Ubuntu 的 `signed-by` 引用该文件，已有显式引用则保持原样。APT 需要此引用才能找到公钥。普通 `repo add/set` 保留原签名校验设置。[`pig sty boot`](/zh/sty/#sty-boot) 在公钥准备成功时启用 Pigsty 签名校验，默认公钥失败时使用同样的告警与降级规则。详细边界见[设计记录](/zh/design/automatic-pigsty-repo-key/)。
+默认自动安装只准备公钥文件及其仓库引用，不会导入 RPM 数据库或 APT 全局信任库；EL 显式配置 `gpgkey` 时会额外执行上述 RPM 导入。普通 `repo add/set` 在准备成功时保留原签名校验设置。[`pig sty boot`](/zh/sty/#sty-boot) 在公钥准备成功时启用 Pigsty 签名校验，默认公钥失败时使用同样的告警与降级规则。详细边界见[设计记录](/zh/design/automatic-pigsty-repo-key/)。
 
 为了兼容离线仓库与镜像，PIG 内置元数据在 EL 上默认使用 `gpgcheck=0`，在 Debian/Ubuntu 上默认使用 `trusted=yes`；这些设置不会强制校验软件包签名。从 v1.7.0 起，普通 EL 仓库保留 DNF 原生模块过滤；只有显式声明 `module_hotfixes=1` 的定义（主要是 Pigsty 与 PGDG 仓库）会覆盖模块流，渲染 EL7 YUM 配置时还会移除该键。安全敏感环境应安装可信密钥、修改生成的仓库元数据以启用签名校验、固定批准的软件源，并通过既有配置管理体系维护这些设置。
 

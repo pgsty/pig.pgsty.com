@@ -37,9 +37,13 @@ APT does not discover files under `/etc/apt/keyrings` automatically. A repositor
 the prepared file with `signed-by`; otherwise a successful write still leaves `NO_PUBKEY`
 warnings during cache refresh.
 
+Removing `signed-by` during fallback can conflict with a retained definition of the same APT
+source. Keep the default reference stable across successful preparation and fallback. Explicit
+metadata names a required key of its own; preparing an unrelated default file cannot satisfy it.
+
 ## Alternatives considered {#alternatives}
 
-- **Download the key at runtime.** The embedded release input already supplies it and works
+- **Download the default key at runtime.** The embedded release input already supplies it and works
   offline, without adding a network or external-tool dependency.
 - **Install the key on every repository operation.** Unrelated repositories should not cause a
   Pigsty key write. Resolve membership and platform availability first.
@@ -61,20 +65,26 @@ warnings during cache refresh.
 - Check for an existing regular key file first, including a symlink resolving to one; reuse it
   without changing its contents or permissions. If the existence check fails, attempt installation.
 - Create missing parent directories through the existing sudo fallback and use the atomic
-  file writer. An occupied directory or dangling symlink is an installation error.
+  file writer. A denied destination check must still reach the privileged attempt, which checks
+  the destination again. An occupied directory or dangling symlink is an installation error.
 - Without explicit key metadata, installation failure warns and continues. Only selected Pigsty
-  definitions fall back to APT `trusted=yes` or RPM `gpgcheck=0` and `repo_gpgcheck=0`.
-- A non-empty `gpgkey` or `signed-by` value in any selected Pigsty definition makes installation
-  failure fatal before backup, repository writes, or cache refresh. Do not replace explicit
-  references or silently downgrade those definitions. Custom key acquisition remains outside
-  this embedded-key installer.
-- After successful preparation, fill missing key references in selected Pigsty definitions:
-  `gpgkey` on EL and `signed-by` on Debian/Ubuntu. Preserve explicit references.
+  definitions fall back to APT `trusted=yes` or RPM `gpgcheck=0` and `repo_gpgcheck=0`. Fill the
+  default `gpgkey` or `signed-by` reference on both success and failure. Do not rewrite retained
+  repository files to implement fallback.
+- Explicit key preparation applies to the actual reference. APT `signed-by` accepts absolute
+  paths to existing regular keyring files, separated by commas; install the embedded key when
+  the default path is explicitly named. EL prepares an explicitly named default file if needed
+  and passes `gpgkey` paths or literal URLs to native `rpm --import`.
+- Failure to prepare an explicit key is fatal before backup, repository writes, or cache refresh.
+  Preserve its reference and never downgrade that definition. A valid custom key does not depend
+  on the default path; an implicit-key failure in another selected repository affects only that
+  implicit definition.
 - Successful ordinary operations preserve signature-checking settings. `sty boot` requests signing on
   successful key preparation and follows the same implicit-key fallback on failure.
 - Put fallback warnings on stderr and in `repo add/set`'s `data.warnings`; `sty boot` retains
-  them in its own warnings. Do not import keys into RPM's database or APT's global trust store.
-- Repository rollback restores definitions; an already installed public-key file remains.
+  them in its own warnings. Implicit installation does not import into RPM's database; explicit
+  EL metadata does. Neither path changes APT's global trust store.
+- Repository rollback restores definitions; already installed or imported public keys remain.
 
 ## Consequences {#impact}
 
@@ -83,13 +93,15 @@ hosts. Ordinary key failures no longer prevent repository setup. Falling back di
 verification for those Pigsty definitions and is reported explicitly. A successful existence
 check preserves the administrator's existing file; it does not validate that file's contents.
 Third-party repository trust remains unchanged.
+APT may retain previously authenticated indexes with a warning when a key becomes unavailable.
+Successful repository configuration therefore does not prove that every index was freshly downloaded.
 The maintained [repository reference](/repo/) describes the resulting defaults and paths.
 
 ## Verification and evolution {#verification}
 
-The [automatic-key implementation](https://github.com/pgsty/pig/blob/ec86bb83824309370e258c8ac1dca87336865588/cli/repo/key.go)
-and [repository regression tests](https://github.com/pgsty/pig/blob/ec86bb83824309370e258c8ac1dca87336865588/cli/repo/add_key_test.go)
-are recorded in source commit `ec86bb8`. Local regression tests exercise EL, Debian, and Ubuntu on both supported architectures,
+The [automatic-key implementation](https://github.com/pgsty/pig/blob/56f73537ac15ad5eb2520aa18ac33dab2bb862a0/cli/repo/key.go)
+and [repository regression tests](https://github.com/pgsty/pig/blob/56f73537ac15ad5eb2520aa18ac33dab2bb862a0/cli/repo/add_key_test.go)
+are recorded in source commit `56f7353`. Local regression tests exercise EL, Debian, and Ubuntu on both supported architectures,
 default and composite selections, existing-key reuse, denied existence checks, custom modules,
 unavailable repositories, implicit-key fallback, and explicit-key failure before repository
 mutation. Existing replacement tests continue to cover rollback.
@@ -98,11 +110,17 @@ Actual CLI tests on local EL9, EL10, Debian 12, and Ubuntu 24 ARM64 guests use i
 verify installation as an ordinary user through sudo with missing key directories, exact embedded
 bytes and permissions, repeated execution, composite selections, parseable structured output,
 implicit-key failure continuing with a warning, and explicit-key failure stopping before
-repository replacement. Real DNF/APT refreshes use fresh isolated caches, and the resulting indexes
+repository replacement. Real DNF/APT refreshes use isolated caches, and the resulting indexes
 are queried for available packages. APT tests also verify that the installed key is referenced
 without `NO_PUBKEY` warnings and that explicit `signed-by` with `trusted=no` authenticates the
 metadata. These checks do not install packages or verify RPM package signatures. The guests'
 original repository definitions, keys, and caches remain unchanged.
+
+Follow-up regression checks cover retained APT sources and previously authenticated caches,
+custom-key absence before both add and replacement, a valid custom key with an unusable default
+path, and mixed explicit/implicit definitions. Permission tests deny ordinary-user traversal of
+the key directory and verify both privileged installation and rejection of a hidden symlink.
+RPM import tests use an isolated copy of the guest's RPM database.
 
 ## Current status {#status}
 
