@@ -145,8 +145,11 @@ Source precedence and safety rules are deterministic:
   `/data/nginx` and the expected `/www -> /data/nginx` symbolic link before committing content.
 
 Offline mode enables only the strict `pigsty-local` repository. Online mode configures the
-selected region, installs Pigsty's embedded signing key with repository signature checks enabled,
-and installs the `node` and `pigsty` controller modules.
+selected region and installs the `node` and `pigsty` controller modules. It reuses or installs
+Pigsty's embedded signing key and enables signature checks when key preparation succeeds.
+If implicit-key preparation fails, it records a warning and continues with the selected Pigsty
+repositories' signature checks disabled. Explicit `gpgkey` or `signed-by` metadata keeps key
+installation failures fatal; see [`pig repo`](/repo/#trust-and-configuration-ownership).
 
 ### Repository transaction and failure boundary
 
