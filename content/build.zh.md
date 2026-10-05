@@ -237,7 +237,8 @@ ssh root@proxy.example.com 'pig build proxy server --host proxy.example.com --ex
 ssh root@proxy.example.com 'pig build proxy server --host proxy.example.com --export-only --export -' | pig build proxy client --from -
 ```
 
-相同输入重复设置时，配置和正在运行的服务保持不变。
+输入、文件归属、权限与服务状态均匹配时，重复设置不改写文件或重启服务。
+受管理文件归属错误时会修复归属，不改变连接凭据。
 替换不同或不支持的已有客户端配置需要 `--replace --yes`；`--plan` 只预览，不安装、写文件或更改服务。
 设置会通过两个代理协议访问 `https://www.google.com/generate_204`，要求返回 HTTP 204，
 因此服务端必须能访问这个外网端点。检查失败时返回非零，并恢复原有受管理文件与服务状态；
@@ -272,7 +273,7 @@ sudo pig build proxy server --host proxy.example.com --export-only --export -
 
 首次设置生成 UUID、X25519 密钥对、short ID，以及 ML-DSA-65 seed 和验证密钥。
 SNI 默认取 target 主机名。重复设置保留全部认证字段、SNI 与协议设置；省略 `--listen` 时
-保留已有监听地址。配置和服务状态已经匹配时，不重写、不重启。
+保留已有监听地址。配置、文件归属、权限和服务状态已经匹配时，不重写、不重启。
 相同 `--host` 与 `--port` 导出相同的规范 URI。
 target/SNI 冲突、已有材料损坏或有歧义时直接拒绝，不静默轮换凭据；不支持的已有服务端配置也会被拒绝。
 

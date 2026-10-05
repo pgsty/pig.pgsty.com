@@ -239,8 +239,9 @@ ssh root@proxy.example.com 'pig build proxy server --host proxy.example.com --ex
 ssh root@proxy.example.com 'pig build proxy server --host proxy.example.com --export-only --export -' | pig build proxy client --from -
 ```
 
-Repeated setup with matching input keeps the configuration and running service unchanged. A different
-or unsupported existing client configuration requires `--replace --yes`; `--plan` previews the
+Repeated setup with matching input, ownership, permissions, and service state leaves files and the
+running service unchanged. Incorrect managed-file ownership is repaired without changing connection
+credentials. A different or unsupported existing client configuration requires `--replace --yes`; `--plan` previews the
 operation without installation, writes, or service changes. Setup checks both proxy protocols using
 `https://www.google.com/generate_204` and requires HTTP 204, so the server needs outbound access to
 that endpoint. A failed check returns nonzero and restores prior managed files and service state;
@@ -275,8 +276,8 @@ sudo pig build proxy server --host proxy.example.com --export-only --export -
 
 First setup generates a UUID, X25519 key pair, short ID, and ML-DSA-65 seed and verification key.
 SNI defaults to the target hostname. Repeating setup retains all authentication fields, SNI, and
-protocol settings; an omitted `--listen` retains the existing listener. Matching configuration and
-service state require no rewrite or restart. With the same `--host` and `--port`, export returns the
+protocol settings; an omitted `--listen` retains the existing listener. Matching configuration, file
+ownership and permissions, and service state require no rewrite or restart. With the same `--host` and `--port`, export returns the
 same canonical URI. Conflicting target/SNI or malformed and ambiguous existing material is rejected
 instead of silently rotating credentials. An existing unsupported server configuration is refused.
 

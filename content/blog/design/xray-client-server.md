@@ -191,16 +191,21 @@ Linux setup requires root and a running systemd instance; macOS client setup req
 New role setup explicitly starts and enables the managed service; install-only does not start or enable it.
 On Linux, PIG owns a bounded `pig-proxy.conf` systemd drop-in for asset location and capabilities.
 Direct binding to a privileged port requires only `CAP_NET_BIND_SERVICE` in the bounding and
-ambient sets. A loopback backend on an unprivileged port does not need that capability.
+ambient sets. Reset both sets before assignment because systemd combines positive directives
+with the package unit. A loopback backend on an unprivileged port does not need that capability.
 Do not depend on permissive host sysctl settings or run Xray as root to make port 443 work.
 
 **Application and recovery.** Parse arguments and preflight paths, port ownership, service conflicts,
 and existing configuration before mutations. Recognize managed configuration by its complete
 supported shape, not merely an inbound tag. Replacing a different or unsupported client configuration requires `--replace --yes`. Unsupported
-server configurations and service units using another account or configuration path are refused. Preview supports `--plan`, with no installation, credential creation, file writes, or restarts.
+server configurations and service units using another account, an explicit different group, or
+extra configuration arguments are refused. Preview supports `--plan`, with no installation, credential creation, file writes, or restarts.
 
 Render JSON through Go serialization. Stage protected candidates, validate them with Xray under
-the actual service identity, then atomically apply configuration and service changes. Save original
+the actual service identity, then atomically apply configuration and service changes. Compare
+content, ownership, and permissions before treating files as unchanged. On macOS, track persistent
+disablement separately from loaded state, enable the managed LaunchAgent on start, and restore both
+states on failure. Save original
 content, ownership, mode, service enablement, and running state for bounded rollback. Check service
 health and connectivity before publishing shell aliases or connection exports. Client setup requires
 HTTP 204 from `https://www.google.com/generate_204` through both HTTP and SOCKS, so server outbound
@@ -287,8 +292,19 @@ HTTP 200 to a reachable TLS site. This test server's local network could not rea
 endpoint; the full client setup therefore correctly failed and rolled back for that pair. The full
 one-command client acceptance passed against the existing reference server.
 
-The Debian runtime checks do not establish RPM runtime acceptance, macOS LaunchAgent startup,
-UDP forwarding, arbitrary Xray-version compatibility, or a newly deployed PROXY-protocol frontend.
+The [final review fixes](https://github.com/pgsty/pig/commit/5d8660c8c12e6c00b77d409efd2287b8299377b1) cover file ownership,
+systemd capability resets, service identity and exact startup arguments, and persistent macOS
+enablement recovery. Debian tests first reproduced an unchanged-content configuration with the
+wrong group being treated as unchanged, then verified ownership repair with identical bytes and
+subsequent setup without a restart. The direct server retained only `CAP_NET_BIND_SERVICE` in both
+the bounding and ambient sets; authentication and export content were unchanged. An isolated macOS
+LaunchAgent client using the existing Homebrew Xray also passed HTTP/SOCKS requests through the
+reference server, unchanged reruns, disabled-state recovery, and wrong-UUID rollback restoring
+both configuration and the original disabled state. Requests succeeded after rollback. The
+original macOS reference service was not taken over.
+
+These checks do not establish RPM runtime acceptance, fresh Homebrew installation, UDP forwarding,
+arbitrary Xray-version compatibility, or a newly deployed PROXY-protocol frontend.
 The reference server's existing Nginx/PROXY ingress was exercised by the successful client test;
 PIG did not modify that ingress. These additional platform and transport checks remain release
 qualification work rather than inferred successes.
