@@ -19,8 +19,9 @@ Environment Setup:
   pig build tool  [mini|full|...]  # init build toolset
   pig build rust  [-y] [-m]        # install Rust toolchain
   pig build pgrx  [-v <ver>] [-b]  # install & init pgrx (0.19.3)
-  pig build proxy                  # install or verify the vray package
-  pig build proxy id@host:port     # configure the optional build proxy
+  pig build proxy                  # install or verify Xray
+  pig build proxy client URI       # setup an HTTP/SOCKS client
+  pig build proxy server [flags]   # setup or export a REALITY server
 
 Package Building:
   pig build pkg   [ext|pkg...]     # complete pipeline: get + dep + ext
@@ -40,7 +41,7 @@ Quick Start:
 | `build tool` | Initialize build tools | Requires sudo or root |
 | `build rust` | Install Rust toolchain | Requires sudo or root |
 | `build pgrx` | Install and initialize pgrx | Requires sudo or root |
-| `build proxy` | Initialize build proxy | Requires sudo or root |
+| `build proxy` | Set up Xray clients and servers | Linux: root; macOS client: regular user |
 | `build get` | Download source tarballs | |
 | `build dep` | Install extension build dependencies | Requires sudo or root |
 | `build ext` | Build extension packages | Requires sudo or root |
@@ -195,23 +196,120 @@ pig build pgrx -b                # include PostgreSQL 19 beta pg_config during a
 
 ## build proxy
 
-Configure a proxy for build environments with restricted internet access.
+Set up Xray clients and servers for build environments with restricted internet access.
+The `x` alias is retained. With no arguments, `pig build proxy` installs or verifies Xray only.
+The new role commands describe the current source implementation; they have not yet shipped in a tagged release.
+See the [Xray design record](/design/xray-client-server/) for the protocol and migration contract.
 
-Before first use, configure a package repository that provides `vray`, normally with
-`pig build repo` (or an equivalent existing repository setup). The command installs `vray` with
-`dnf`, `yum`, or `apt-get`, writes `/etc/v2ray.json` and `/etc/profile.d/proxy.sh`, then restarts
-the `v2ray` service, so it requires sudo or root. The package must provide the `v2ray` service
-account and systemd unit. A failed connectivity check returns a non-zero exit status.
+### Client
 
-Treat the remote user ID as a credential. PIG redacts it from diagnostics and structured results,
-but it is still supplied as a command argument and may be retained by shell history; apply the
-credential-handling policy of the calling shell or automation environment.
+One command installs Xray if needed, writes the client configuration, starts its service, and checks
+HTTPS through both HTTP and SOCKS. The first listener defaults to **`127.0.0.1:12345`**, with HTTP
+and SOCKS sharing that port. An omitted `--listen` preserves the listener of an existing supported
+client. The protocol is VLESS over RAW/TCP, REALITY, and `xtls-rprx-vision`, with a Chrome fingerprint
+and multiplexing disabled.
 
 ```bash
-pig build proxy                  # install or verify the vray package only
-pig build proxy user@host:8080   # use default local endpoint 127.0.0.1:12345
+pig build proxy client 'vless://UUID@proxy.example.com:443?encryption=none&security=reality&type=tcp&flow=xtls-rprx-vision&sni=www.sraoss.co.jp&fp=chrome&pbk=PUBLIC_KEY&sid=SHORT_ID&pqv=VERIFY_KEY'
+pig build proxy client --server proxy.example.com:443 --id UUID --sni www.sraoss.co.jp --public-key PUBLIC_KEY --short-id SHORT_ID --pqv VERIFY_KEY
+pig build proxy client --from ./client.uri
+pig build proxy client --from ./client.uri --listen 127.0.0.1:8888
+pig build proxy client --from ./client.uri --plan
+```
+
+Choose one connection input: a positional URI, direct connection flags, or `--from FILE/-`.
+`client.uri` is simply a text file containing one standard `vless://` URI, with an optional trailing
+newline; its name is arbitrary. `--from -` reads stdin. Do not mix input forms. `--pqv` supplies
+ML-DSA-65 verification when enabled on the server. Unsupported transports, duplicate URI parameters,
+and ambiguous inputs are rejected before setup.
+
+On **Linux**, run setup as root or with `sudo`, with systemd running and a repository providing the
+Pigsty `xray` package configured first, for example `sudo pig repo add infra -u`. Setup uses
+`/etc/xray.json` with mode 0640 and ownership `root:xray`, the `xray` service account, and a PIG-owned
+systemd drop-in. On **macOS**, run as your regular user with Homebrew available. Setup uses
+`~/.config/xray/pig-proxy.json` with mode 0600 and its own `com.pigsty.xray-proxy` LaunchAgent.
+
+For an already configured server, stream the connection directly into client setup. Both ends must
+use a PIG build containing these commands:
+
+```bash
+# Linux client: the remote command only reads and exports the existing server connection.
+ssh root@proxy.example.com 'pig build proxy server --host proxy.example.com --export-only --export -' | sudo pig build proxy client --from -
+# macOS client: omit sudo.
+ssh root@proxy.example.com 'pig build proxy server --host proxy.example.com --export-only --export -' | pig build proxy client --from -
+```
+
+Repeated setup with matching input keeps the configuration and running service unchanged. A different
+or unsupported existing client configuration requires `--replace --yes`; `--plan` previews the
+operation without installation, writes, or service changes. Setup checks both proxy protocols using
+`https://www.google.com/generate_204` and requires HTTP 204, so the server needs outbound access to
+that endpoint. A failed check returns nonzero and restores prior managed files and service state;
+an installed package may remain.
+
+The generated shell file defines `po`, `px`, and `pck`. To enable proxy variables in the calling shell:
+
+```bash
+# Linux
+source /etc/profile.d/proxy.sh
+po
+# macOS
+source ~/.config/xray/proxy.sh
+po
+```
+
+### Server
+
+Server setup supports Linux with the same package, root, and systemd requirements. Require the
+advertised public `--host` and REALITY camouflage `--target host:port`. The first direct listener
+defaults to `0.0.0.0:443`; `--port` changes the advertised public port and first direct listener.
+`--listen` sets an independent bind endpoint. The target must support TLS 1.3 and HTTP/2.
+
+```bash
+# Direct public listener; explicitly export a protected client URI file.
+sudo pig build proxy server --host proxy.example.com --target www.sraoss.co.jp:443 --export ./client.uri
+# Backend behind an already configured trusted PROXY-protocol ingress: 127.0.0.1:9443.
+sudo pig build proxy server --host proxy.example.com --target www.sraoss.co.jp:443 --proxy-protocol --export ./client.uri
+# Read an existing supported server and print its connection without changing the deployment.
+sudo pig build proxy server --host proxy.example.com --export-only --export -
+```
+
+First setup generates a UUID, X25519 key pair, short ID, and ML-DSA-65 seed and verification key.
+SNI defaults to the target hostname. Repeating setup retains all authentication fields, SNI, and
+protocol settings; an omitted `--listen` retains the existing listener. Matching configuration and
+service state require no rewrite or restart. With the same `--host` and `--port`, export returns the
+same canonical URI. Conflicting target/SNI or malformed and ambiguous existing material is rejected
+instead of silently rotating credentials. An existing unsupported server configuration is refused.
+
+`--export-only` requires `--export` and does not install, modify configuration, start, restart, or
+enable the service. It derives client verification material from the existing private material in
+process. One supported VLESS/REALITY inbound, account, SNI, and short ID must be unambiguous.
+`--host` and `--port` describe the external endpoint; a backend port such as 9443 is not inferred as
+the public port. Do not combine this read-only mode with setup options.
+
+`--export FILE` writes mode 0600 and never includes the server private key or seed. Re-exporting
+identical content succeeds without rewriting; a different existing file is refused. `--export -`
+explicitly prints one complete credential URI on stdout; diagnostics stay on stderr. Export requires
+text output and cannot be combined with JSON/YAML. Ordinary output and plans contain no credentials.
+Treat the whole URI and direct authentication flags as credentials; file/stdin input avoids retaining
+them as shell arguments.
+
+Server success proves its local listener and service, with public reachability pending a real client
+request. PIG does not configure Nginx, firewall rules, or cloud security groups. `--proxy-protocol`
+requires loopback binding and an existing trusted frontend. Port conflicts fail without stopping
+another service. Existing V2Ray is not automatically stopped or removed.
+
+### Historical VMess form
+
+The historical positional grammar keeps its V2Ray/VMess behavior and first client port 12345:
+
+```bash
+pig build proxy user@host:8080
 pig build proxy user@host:8080 127.0.0.1:1080
 ```
+
+This Linux compatibility path still needs a repository providing `vray`, writes `/etc/v2ray.json`
+and `/etc/profile.d/proxy.sh`, and restarts `v2ray`. It requires root or `sudo`; a failed HTTPS check
+returns nonzero. The remote user ID is a credential and is redacted from ordinary results.
 
 ## build get
 
