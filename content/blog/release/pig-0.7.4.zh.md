@@ -4,7 +4,7 @@ linkTitle: "v0.7.4"
 date: 2025-12-01
 description: "更新 ivory/pgtde 内核与 pgdg extras 仓库"
 tags: [catalog]
-weight: 180
+weight: 181
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v0.7.4
 ---

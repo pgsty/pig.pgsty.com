@@ -4,7 +4,7 @@ linkTitle: "v1.4.0"
 date: 2026-04-19
 description: "510 extensions, pgrx 0.18.0, more building specs"
 tags: [build, catalog, patroni, repo]
-weight: 70
+weight: 71
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.4.0
 ---

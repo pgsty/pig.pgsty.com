@@ -2,7 +2,7 @@
 title: "为什么 PIG 默认构建调试包"
 linkTitle: "默认构建调试包"
 date: 2026-09-03
-lastmod: 2026-09-03
+lastmod: 2026-10-06
 description: "将 RPM debuginfo/debugsource 与 DEB dbgsym 从显式启用改为显式退出的构建策略决策。"
 tags: [build, cli]
 weight: 35
@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **决策日期：** 2026-09-03<br>
-> **状态：** 已在 [`c90edd1`](https://github.com/pgsty/pig/commit/c90edd19a6dd5d863250f37d4c31d993bef9722e) 实现；尚未发布。<br>
+> **状态：** Released（已发布），随 [v1.8.1](/zh/release/pig-1.8.1/) 交付。<br>
 > **当前参考：** [`pig build`](/zh/build/)<br>
 > **范围：** `pig build ext` 与 `pig build pkg` 的调试包策略；单个包的产物仍以其配方为权威。
 
@@ -70,7 +70,7 @@ draft: false
 和
 [`rpmbuild` 命令构造](https://github.com/pgsty/pig/blob/e3d1eb4a86cedddcf49fff398fc69751e861372e/cli/build/builder.go#L701-L714)
 中复核。替代实现由
-[`c90edd1`](https://github.com/pgsty/pig/commit/c90edd19a6dd5d863250f37d4c31d993bef9722e)
+[`1c6f524`](https://github.com/pgsty/pig/commit/1c6f52401accc8ad6d7e8ab51248895632d7629b)
 固定。命令测试保证 `--nodbg` 可见、兼容参数已弃用；构建器测试保证默认 RPM argv 不含禁用宏、
 退出模式包含该宏，并保证 DEB 环境保留已有选项且只追加一次 `noautodbgsym`。
 
@@ -80,7 +80,6 @@ draft: false
 
 ## 当前状态 {#status}
 
-该策略及聚焦测试已在源码提交
-[`c90edd1`](https://github.com/pgsty/pig/commit/c90edd19a6dd5d863250f37d4c31d993bef9722e)
-中实现，但尚未发布。只有该行为出现在经过验证的 PIG 发布制品后，状态才能进入“已发布”。配方清理、
-软件包构建、仓库发布与部署仍是相互独立的门禁。
+该实现已进入经过验证的 [v1.8.1 标签](https://github.com/pgsty/pig/tree/v1.8.1)
+与[正式发布制品](https://github.com/pgsty/pig/releases/tag/v1.8.1)。上述实现与本地验证的证据范围保持不变。
+软件仓库发布、公开文档部署与既有系统升级仍是独立交付阶段。

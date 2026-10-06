@@ -4,7 +4,7 @@ linkTitle: "v0.7.4"
 date: 2025-12-01
 description: "Update ivory/pgtde kernel and pgdg extras"
 tags: [catalog]
-weight: 180
+weight: 181
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v0.7.4
 ---

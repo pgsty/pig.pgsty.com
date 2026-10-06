@@ -4,7 +4,7 @@ linkTitle: "v1.1.1"
 date: 2026-02-14
 description: "Path, symlink, and build migration fixes"
 tags: [repo, sty]
-weight: 135
+weight: 136
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.1.1
 ---

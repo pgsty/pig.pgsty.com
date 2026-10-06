@@ -4,7 +4,7 @@ linkTitle: "v1.6.1"
 date: 2026-07-30
 description: "pig v1.6.1 刷新了内置的扩展目录，并将内嵌的 Pigsty 版本对齐到 4.5.0。"
 tags: [catalog, ext, install, repo]
-weight: 10
+weight: 11
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.6.1
 ---

@@ -4,7 +4,7 @@ linkTitle: "v0.7.3"
 date: 2025-11-25
 description: "Fix repo for el10 & debian13"
 tags: [repo]
-weight: 190
+weight: 191
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v0.7.3
 ---

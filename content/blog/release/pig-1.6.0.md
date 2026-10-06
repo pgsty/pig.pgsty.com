@@ -4,7 +4,7 @@ linkTitle: "v1.6.0"
 date: 2026-07-28
 description: "562 packaged extensions, patronictl passthrough, inventory & CMDB, Grafana"
 tags: [inventory, patroni, catalog, cli]
-weight: 20
+weight: 21
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.6.0
 ---

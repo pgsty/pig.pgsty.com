@@ -4,7 +4,7 @@ linkTitle: "v1.4.2"
 date: 2026-06-18
 description: "524 个扩展，PG19 beta，pgrx 0.18.1，Patroni 修复"
 tags: [patroni, build, catalog, sty]
-weight: 50
+weight: 51
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.4.2
 ---

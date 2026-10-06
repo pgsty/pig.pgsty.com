@@ -4,7 +4,7 @@ linkTitle: "v0.6.0"
 date: 2025-07-17
 description: "423 extension, percona pg_tde, mcp toolbox"
 tags: [catalog, ext]
-weight: 250
+weight: 251
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v0.6.0
 ---

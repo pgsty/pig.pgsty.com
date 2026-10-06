@@ -4,7 +4,7 @@ linkTitle: "v1.6.0"
 date: 2026-07-28
 description: "562 个已打包扩展，pt 原生透传，inventory 与 CMDB，Grafana 管理"
 tags: [inventory, patroni, catalog, cli]
-weight: 20
+weight: 21
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.6.0
 ---

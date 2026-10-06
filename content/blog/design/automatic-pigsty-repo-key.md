@@ -2,7 +2,7 @@
 title: "Install the Pigsty Repository Key Automatically"
 linkTitle: "Automatic Pigsty Key"
 date: 2026-10-04
-lastmod: 2026-10-04
+lastmod: 2026-10-06
 description: "Prepare the Pigsty key best-effort, reuse existing files, and fall back with a warning unless repository metadata explicitly names a key."
 tags: [repo, sty]
 weight: 95
@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **Decision date:** 2026-10-04<br>
-> **Status:** Implemented and locally tested; unreleased.<br>
+> **Status:** Released in [v1.9.0](/release/pig-1.9.0/).<br>
 > **Current reference:** [`pig repo`](/repo/)<br>
 > **Scope:** Installing the existing embedded Pigsty public key during repository configuration.
 
@@ -124,6 +124,8 @@ RPM import tests use an isolated copy of the guest's RPM database.
 
 ## Current status {#status}
 
-The automatic installation path is implemented and locally tested. It has no verified release
-tag yet. Source integration, release artifacts, and public documentation deployment remain
-separate gates; consult [release history](/release/) for shipped versions.
+The implementation is present in the verified [v1.9.0 tag](https://github.com/pgsty/pig/tree/v1.9.0)
+and its [published release artifacts](https://github.com/pgsty/pig/releases/tag/v1.9.0).
+The implementation and local checks described above remain the scope of the evidence.
+Repository publication, public documentation deployment, and upgrades of existing systems
+remain separate gates.

@@ -2,7 +2,7 @@
 title: "One-command Xray Clients and Servers"
 linkTitle: "Xray Client and Server"
 date: 2026-10-05
-lastmod: 2026-10-05
+lastmod: 2026-10-06
 description: "One-command VLESS, REALITY, and Vision client/server setup, stable server credentials, and verified proxy connectivity."
 tags: [build, cli, install]
 weight: 90
@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **Decision date:** 2026-10-05<br>
-> **Status:** Implemented in source and locally tested; not yet tagged or released. Existing reference deployments remain unchanged.<br>
+> **Status:** Released in [v1.9.0](/release/pig-1.9.0/).<br>
 > **Current reference:** [`pig build`](/build/), [operations safety](/design/ops-cli-safety/), and [release history](/release/)<br>
 > **Scope:** One-command Xray client and server setup; Linux clients and servers, plus a macOS client. Shared Nginx ingress remains a separate deployment boundary.
 
@@ -306,8 +306,7 @@ original macOS reference service was not taken over.
 These checks do not establish RPM runtime acceptance, fresh Homebrew installation, UDP forwarding,
 arbitrary Xray-version compatibility, or a newly deployed PROXY-protocol frontend.
 The reference server's existing Nginx/PROXY ingress was exercised by the successful client test;
-PIG did not modify that ingress. These additional platform and transport checks remain release
-qualification work rather than inferred successes.
+PIG did not modify that ingress. These additional platform and transport checks remain unverified.
 
 Current bilingual reference and this record are delivered together and checked with `make docs-check`.
 Source commits, documentation commits, push/CI, tagged artifacts, and public deployment remain
@@ -315,9 +314,10 @@ separate completion gates.
 
 ## Current status {#status}
 
-The owner accepted the role workflow, direct and backend listener defaults, first client port 12345,
-and the requirement that server reruns preserve existing clients. The implementation and local
-Debian runtime checks satisfy those accepted requirements, including the one-command client test
-against the existing server. The macOS reference daemon and the existing Linux server were not
-changed. No tagged release, public documentation deployment, or system PIG upgrade is claimed.
+The implementation is present in the verified [v1.9.0 tag](https://github.com/pgsty/pig/tree/v1.9.0)
+and its [published release artifacts](https://github.com/pgsty/pig/releases/tag/v1.9.0).
+The implementation and local checks described above remain the scope of the evidence.
+Repository publication, public documentation deployment, and upgrades of existing systems
+remain separate gates.
+
 Nginx ingress automation and credential rotation remain separate future decisions.

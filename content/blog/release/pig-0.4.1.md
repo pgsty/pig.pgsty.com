@@ -4,7 +4,7 @@ linkTitle: "v0.4.1"
 date: 2025-05-07
 description: "414 extension, pg18 alias support"
 tags: [ext, catalog]
-weight: 280
+weight: 281
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v0.4.1
 ---

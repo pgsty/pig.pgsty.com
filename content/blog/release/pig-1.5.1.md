@@ -4,7 +4,7 @@ linkTitle: "v1.5.1"
 date: 2026-07-08
 description: "PG kernel fork updates, mirror mode, bug fixes"
 tags: [repo, build, ext]
-weight: 30
+weight: 31
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.5.1
 ---

@@ -4,7 +4,7 @@ linkTitle: "v1.4.1"
 date: 2026-05-01
 description: "510 个扩展，支持 Ubuntu 26.04，仓库校准"
 tags: [catalog, patroni]
-weight: 60
+weight: 61
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.4.1
 ---

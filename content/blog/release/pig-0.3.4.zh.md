@@ -4,7 +4,7 @@ linkTitle: "v0.3.4"
 date: 2025-04-05
 description: "常规更新"
 tags: [repo, catalog]
-weight: 300
+weight: 301
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v0.3.4
 ---

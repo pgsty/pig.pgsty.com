@@ -4,7 +4,7 @@ linkTitle: "v1.1.0"
 date: 2026-02-12
 description: "451 extensions, Agent-Native CLI framework"
 tags: [cli, patroni, build, catalog]
-weight: 140
+weight: 141
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.1.0
 ---

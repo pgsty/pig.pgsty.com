@@ -4,7 +4,7 @@ linkTitle: "v1.0.0"
 date: 2026-01-26
 description: "444, 新增 pg/pt/pb/pitr 子命令，可用性矩阵"
 tags: [patroni, pgbackrest, postgres, pitr]
-weight: 150
+weight: 151
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.0.0
 ---

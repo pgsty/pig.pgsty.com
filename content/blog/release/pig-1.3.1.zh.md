@@ -4,7 +4,7 @@ linkTitle: "v1.3.1"
 date: 2026-03-05
 description: "PG13 退役，支持窗口统一为 PG14-18，扩展增至 464"
 tags: [build, catalog]
-weight: 110
+weight: 111
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.3.1
 ---

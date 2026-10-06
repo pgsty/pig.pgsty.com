@@ -4,7 +4,7 @@ linkTitle: "v0.7.1"
 date: 2025-11-10
 description: "New Website, improve in-docker experience"
 tags: [ext]
-weight: 210
+weight: 211
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v0.7.1
 ---

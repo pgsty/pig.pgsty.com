@@ -4,7 +4,7 @@ linkTitle: "v1.2.0"
 date: 2026-02-23
 description: "Unified aliases, routine updates, plan mode, repo fixes"
 tags: [repo, sty, catalog, cli]
-weight: 130
+weight: 131
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.2.0
 ---

@@ -4,7 +4,7 @@ linkTitle: "v0.3.2"
 date: 2025-03-21
 description: "new extensions"
 tags: [catalog, install]
-weight: 320
+weight: 321
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v0.3.2
 ---

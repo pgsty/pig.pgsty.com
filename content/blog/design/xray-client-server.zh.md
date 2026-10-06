@@ -2,7 +2,7 @@
 title: "一键配置 Xray 客户端与服务端"
 linkTitle: "Xray 客户端与服务端"
 date: 2026-10-05
-lastmod: 2026-10-05
+lastmod: 2026-10-06
 description: "以现有可工作的客户端与服务端为参考，为 build proxy 增加配套的 VLESS、REALITY 与 Vision 初始化能力。"
 tags: [build, cli, install]
 weight: 90
@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **决策日期：** 2026-10-05<br>
-> **状态：** Implemented（已实现），源码与本地测试已验证；尚未打 tag 或发布。既有参考部署保持不变。<br>
+> **状态：** Released（已发布），随 [v1.9.0](/zh/release/pig-1.9.0/) 交付。<br>
 > **当前参考：** [`pig build`](/zh/build/)、[运维安全契约](/zh/design/ops-cli-safety/)与[发布历史](/zh/release/)<br>
 > **范围：** 一键配置 Xray 客户端与服务端；Linux 客户端和服务端，以及 macOS 客户端。共享 Nginx 入口仍是独立部署边界。
 
@@ -263,9 +263,8 @@ HTTP/SOCKS 请求、无变更重复设置、禁用状态恢复，以及错误 UU
 
 ## 当前状态 {#status}
 
-所有者接受角色工作流、直连与后端监听默认值、首次客户端端口 12345，
-以及服务端重复设置保持已有客户端有效的要求。
-源码实现与本地 Debian 运行检查满足这些要求，包含通过既有服务端完成的一行命令客户端实测。
-macOS 参考守护进程与既有 Linux 服务端均未变更。
-不宣称已打 tag 发布、部署公开文档或升级系统 PIG。
+该实现已进入经过验证的 [v1.9.0 标签](https://github.com/pgsty/pig/tree/v1.9.0)
+与[正式发布制品](https://github.com/pgsty/pig/releases/tag/v1.9.0)。上述实现与本地验证的证据范围保持不变。
+软件仓库发布、公开文档部署与既有系统升级仍是独立交付阶段。
+
 Nginx 入口自动化与凭据轮换仍属于后续独立决策。

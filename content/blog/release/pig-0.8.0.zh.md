@@ -4,7 +4,7 @@ linkTitle: "v0.8.0"
 date: 2025-12-26
 description: "440 extensions，移除 sysupdate 仓库"
 tags: [repo, catalog, patroni]
-weight: 160
+weight: 161
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v0.8.0
 ---

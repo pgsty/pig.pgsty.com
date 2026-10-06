@@ -4,7 +4,7 @@ linkTitle: "v1.5.0"
 date: 2026-07-04
 description: "531 extensions, pigsty v4.4, pg/pt/pb/pitr rework, clone & fork"
 tags: [patroni, pgbackrest, catalog, postgres]
-weight: 40
+weight: 41
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.5.0
 ---

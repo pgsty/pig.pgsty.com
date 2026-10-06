@@ -1,9 +1,9 @@
 # Landing page counters. These are product facts, not adoption numbers — every
 # value must stay verifiable against the documentation page the stat links to.
 
-# Extensions packaged by Pigsty and installable through `pig install`.
+# Extension catalog entries bundled with PIG, including retained lifecycle records.
 # Keep in sync with params.pgext_count in hugo.yaml.
-packaged_extensions: 575
+packaged_extensions: 600
 
 # PostgreSQL major versions covered by the repositories: 14, 15, 16, 17, 18.
 pg_majors: 5

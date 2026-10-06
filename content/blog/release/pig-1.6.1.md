@@ -4,7 +4,7 @@ linkTitle: "v1.6.1"
 date: 2026-07-30
 description: "pig v1.6.1 refreshes the bundled extension catalog and aligns the embedded Pigsty version with 4.5.0."
 tags: [catalog, ext, install, repo]
-weight: 10
+weight: 11
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.6.1
 ---

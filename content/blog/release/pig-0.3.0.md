@@ -4,7 +4,7 @@ linkTitle: "v0.3.0"
 date: 2025-02-24
 description: "new home page and extension catalog"
 tags: [catalog]
-weight: 340
+weight: 341
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v0.3.0
 ---

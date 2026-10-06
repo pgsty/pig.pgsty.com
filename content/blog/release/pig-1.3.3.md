@@ -4,7 +4,7 @@ linkTitle: "v1.3.3"
 date: 2026-04-10
 description: "481 extensions and Go 1.26.2 update"
 tags: [catalog]
-weight: 90
+weight: 91
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.3.3
 ---

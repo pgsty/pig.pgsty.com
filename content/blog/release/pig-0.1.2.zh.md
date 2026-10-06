@@ -4,7 +4,7 @@ linkTitle: "v0.1.2"
 date: 2025-01-12
 description: "anon 扩展和其他 350 个扩展"
 tags: [catalog]
-weight: 390
+weight: 391
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v0.1.2
 ---

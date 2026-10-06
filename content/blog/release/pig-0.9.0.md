@@ -4,7 +4,7 @@ linkTitle: "v0.9.0"
 date: 2025-12-28
 description: "Rename sty deploy and expand sty conf options"
 tags: [sty, ext]
-weight: 156
+weight: 157
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v0.9.0
 ---

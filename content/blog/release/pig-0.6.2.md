@@ -4,7 +4,7 @@ linkTitle: "v0.6.2"
 date: 2025-10-03
 description: "PG 18 official Repo"
 tags: [repo]
-weight: 230
+weight: 231
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v0.6.2
 ---

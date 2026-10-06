@@ -198,7 +198,7 @@ pig build pgrx -b                # include PostgreSQL 19 beta pg_config during a
 
 Set up Xray clients and servers for build environments with restricted internet access.
 The `x` alias is retained. With no arguments, `pig build proxy` installs or verifies Xray only.
-The new role commands describe the current source implementation; they have not yet shipped in a tagged release.
+The client and server role commands are available from PIG v1.9.0.
 See the [Xray design record](/design/xray-client-server/) for the protocol and migration contract.
 
 ### Client

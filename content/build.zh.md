@@ -198,7 +198,7 @@ pig build pgrx -b                # 自动探测时包含 PostgreSQL 19 beta pg_c
 
 为互联网访问受限的构建环境设置 Xray 客户端与服务端，保留 `x` 别名。
 不带参数的 `pig build proxy` 只安装或确认 Xray。
-新增角色命令描述当前源码实现，尚未随正式 tag 发布。
+客户端与服务端角色命令从 PIG v1.9.0 起提供。
 协议与迁移契约参见 [Xray 设计记录](/zh/design/xray-client-server/)。
 
 ### 客户端

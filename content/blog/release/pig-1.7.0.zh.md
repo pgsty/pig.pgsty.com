@@ -4,7 +4,7 @@ linkTitle: "v1.7.0"
 date: 2026-08-12
 description: "更安全的 EL 模块处理、更新的中国镜像、精简的 EL7 兼容目录，以及 575 个已打包扩展。"
 tags: [repo, catalog, ext]
-weight: 2
+weight: 3
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.7.0
 ---

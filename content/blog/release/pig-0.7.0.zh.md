@@ -4,7 +4,7 @@ linkTitle: "v0.7.0"
 date: 2025-11-07
 description: "强化 build 能力，大批量包更新"
 tags: [build, repo, catalog, install]
-weight: 220
+weight: 221
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v0.7.0
 ---

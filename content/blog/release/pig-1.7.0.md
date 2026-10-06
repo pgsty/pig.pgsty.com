@@ -4,7 +4,7 @@ linkTitle: "v1.7.0"
 date: 2026-08-12
 description: "Safer EL module handling, refreshed China mirrors, streamlined EL7 compatibility, and 575 packaged extensions."
 tags: [repo, catalog, ext]
-weight: 2
+weight: 3
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.7.0
 ---

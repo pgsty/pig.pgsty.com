@@ -4,7 +4,7 @@ linkTitle: "v0.4.2"
 date: 2025-05-27
 description: "421 个扩展，halo 和 oriole deb"
 tags: [catalog, repo]
-weight: 270
+weight: 271
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v0.4.2
 ---

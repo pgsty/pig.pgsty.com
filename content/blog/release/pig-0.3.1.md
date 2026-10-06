@@ -4,7 +4,7 @@ linkTitle: "v0.3.1"
 date: 2025-03-19
 description: "minor bug fix"
 tags: [repo, ext, catalog]
-weight: 330
+weight: 331
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v0.3.1
 ---

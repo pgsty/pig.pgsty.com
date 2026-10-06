@@ -4,7 +4,7 @@ linkTitle: "v1.3.0"
 date: 2026-02-27
 description: "构建链路强化，扩展增至 461，新内核支持"
 tags: [catalog, build, cli, ext]
-weight: 120
+weight: 121
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.3.0
 ---

@@ -2,7 +2,7 @@
 title: "Why PIG Builds Debug Packages by Default"
 linkTitle: "Debug Packages by Default"
 date: 2026-09-03
-lastmod: 2026-09-03
+lastmod: 2026-10-06
 description: "The build-policy decision that makes RPM debuginfo/debugsource and DEB dbgsym output opt-out rather than opt-in."
 tags: [build, cli]
 weight: 35
@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **Decision date:** 2026-09-03<br>
-> **Status:** Implemented in [`c90edd1`](https://github.com/pgsty/pig/commit/c90edd19a6dd5d863250f37d4c31d993bef9722e); not yet released.<br>
+> **Status:** Released in [v1.8.1](/release/pig-1.8.1/).<br>
 > **Current reference:** [`pig build`](/build/)<br>
 > **Scope:** Debug-package policy for `pig build ext` and `pig build pkg`; individual package recipes remain authoritative for their payload.
 
@@ -81,7 +81,7 @@ The superseded opt-in behavior is pinned in the earlier
 and
 [`rpmbuild` command construction](https://github.com/pgsty/pig/blob/e3d1eb4a86cedddcf49fff398fc69751e861372e/cli/build/builder.go#L701-L714).
 The replacement was implemented in
-[`c90edd1`](https://github.com/pgsty/pig/commit/c90edd19a6dd5d863250f37d4c31d993bef9722e).
+[`1c6f524`](https://github.com/pgsty/pig/commit/1c6f52401accc8ad6d7e8ab51248895632d7629b).
 Command tests keep `--nodbg` visible and the compatibility flag deprecated. Builder tests verify
 that the default RPM argv omits the suppression macro, the opt-out includes it, and the DEB
 environment preserves existing options while adding `noautodbgsym` once.
@@ -92,8 +92,8 @@ must be reported separately rather than treated as proof that the PIG command ig
 
 ## Current status {#status}
 
-The policy is implemented in source with focused tests at
-[`c90edd1`](https://github.com/pgsty/pig/commit/c90edd19a6dd5d863250f37d4c31d993bef9722e),
-but it is not yet released. This record becomes Released only after the behavior is present in a
-verified PIG release artifact. Recipe cleanup, package builds, repository publication, and
-deployment remain separate gates.
+The implementation is present in the verified [v1.8.1 tag](https://github.com/pgsty/pig/tree/v1.8.1)
+and its [published release artifacts](https://github.com/pgsty/pig/releases/tag/v1.8.1).
+The implementation and local checks described above remain the scope of the evidence.
+Repository publication, public documentation deployment, and upgrades of existing systems
+remain separate gates.

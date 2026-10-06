@@ -4,7 +4,7 @@ linkTitle: "v1.6.2"
 date: 2026-08-11
 description: "572 个已打包扩展、Grafana 仪表盘 schema v2，以及 SOW 优先的本地软件仓库生成。"
 tags: [catalog, repo, ext, sty]
-weight: 5
+weight: 6
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.6.2
 ---

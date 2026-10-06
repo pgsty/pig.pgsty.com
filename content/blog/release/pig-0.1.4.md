@@ -4,7 +4,7 @@ linkTitle: "v0.1.4"
 date: 2025-02-12
 description: "routine bugfix"
 tags: [catalog]
-weight: 370
+weight: 371
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v0.1.4
 ---

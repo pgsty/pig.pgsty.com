@@ -4,7 +4,7 @@ linkTitle: "v1.3.2"
 date: 2026-03-23
 description: "Routine metadata refresh, a new pg tune command, and new build aliases"
 tags: [catalog, build, ext, postgres]
-weight: 100
+weight: 101
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.3.2
 ---

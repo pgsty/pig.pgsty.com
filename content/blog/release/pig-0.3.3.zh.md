@@ -4,7 +4,7 @@ linkTitle: "v0.3.3"
 date: 2025-03-25
 description: "别名、仓库、依赖"
 tags: [repo, build, ext]
-weight: 310
+weight: 311
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v0.3.3
 ---

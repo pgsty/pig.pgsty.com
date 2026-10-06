@@ -4,7 +4,7 @@ linkTitle: "v1.8.1"
 date: 2026-09-03
 description: "CLI 安全与仓库流程加固、扩展目录刷新、Go 1.27.1，以及 cargo-pgrx 0.19.2。"
 tags: [cli, repo, build, catalog]
-weight: 1
+weight: 2
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.8.1
 ---
@@ -35,6 +35,9 @@ Pig `v1.8.1` 是 [v1.8.0](/zh/release/pig-1.8.0/) 之上的安全、正确性与
 
 ## 工具链与扩展目录
 
+- `pig build ext` 与 `pig build pkg` 默认保留平台调试包；使用 `--nodbg` 显式省略。
+  `-s|--symbol` 保留为已弃用的兼容空操作。
+
 - Go 升级到 `1.27.1`，Logrus 升级到 `1.10.2`，GoReleaser 升级到 `2.18.0`，
   golangci-lint 升级到 `2.13.2`。
 - `pig build pgrx` 默认安装 `cargo-pgrx 0.19.2`；如果某个扩展的目录元数据要求旧版 pgrx，
@@ -45,10 +48,10 @@ Pig `v1.8.1` 是 [v1.8.0](/zh/release/pig-1.8.0/) 之上的安全、正确性与
 ## 验证
 
 本版本从源码提交
-[`e3d1eb4`](https://github.com/pgsty/pig/commit/e3d1eb4a86cedddcf49fff398fc69751e861372e)
-构建。该精确提交通过完整 [CI 工作流](https://github.com/pgsty/pig/actions/runs/33718574084)，
+[`1c6f524`](https://github.com/pgsty/pig/commit/1c6f52401accc8ad6d7e8ab51248895632d7629b)
+构建。该精确提交通过完整 [CI 工作流](https://github.com/pgsty/pig/actions/runs/33747971725)，
 覆盖随机顺序测试、命令 race 回归、vet、静态分析、死代码检查、漏洞扫描与 GoReleaser snapshot。
-随后 tag 通过 [Release 工作流](https://github.com/pgsty/pig/actions/runs/33718945217)，生成并发布
+随后 tag 通过 [Release 工作流](https://github.com/pgsty/pig/actions/runs/33748002429)，生成并发布
 RPM、DEB、macOS 与 Linux 制品。
 
 ## 兼容性提醒
@@ -59,17 +62,15 @@ RPM、DEB、macOS 与 Linux 制品。
 
 ## 校验和
 
-制品：[GitHub Release](https://github.com/pgsty/pig/releases/tag/v1.8.1) · [checksums.txt](https://github.com/pgsty/pig/releases/download/v1.8.1/checksums.txt)
-
 ```checksums
-839ce3818941318be7707bd6c845f371c609d6f176f04705916108f04cbee38c  pig-1.8.1-1.aarch64.rpm
-54183895b09f82fb4d00d75f99e84f6bb4761e4bebd24042d646ee8b309a6d03  pig-1.8.1-1.x86_64.rpm
-167891e181d460d478a5ed8637d41017bc73201ec479a5735ca43c09dcf3826f  pig-v1.8.1.darwin-amd64.tar.gz
-1338500b4373c3ee3a08d6233202b3f391f5bf69ac0517501884ed2978e17d26  pig-v1.8.1.darwin-arm64.tar.gz
-5050cc4444313edc5863acd1a6c20bcfd3ae4af6e849c978d9a5882bc58f60a3  pig-v1.8.1.linux-amd64.tar.gz
-ecf5fcf11e35169b557380bbfc717562db5a440271b79b9eb3b8fd74c0c7f167  pig-v1.8.1.linux-arm64.tar.gz
-cf0de4f938c7360908ac0e315a7241ab7f3810eb026e28d4b92137ad743dde34  pig_1.8.1-1_amd64.deb
-108f50c5e6ccaf87b27cb62e36bbd8b45436039626e7715dbb3912bcbbb6963b  pig_1.8.1-1_arm64.deb
+4154b3e49cb499e57d7c7b1ab4ae5e45d03d5d0c2ffe26d6ade64e46db6923cf  pig-1.8.1-1.aarch64.rpm
+35c398f409d9293b4f8c0cdf949b19c62d06016ec7e724472143d2327199869d  pig-1.8.1-1.x86_64.rpm
+6c08b6a698191b8b6494a0f60880fb17cafa535bad12d5c544333e4625048455  pig-v1.8.1.darwin-amd64.tar.gz
+0fb6c86cc18a29aeb74e9d12e717c104087c6ecf5a43250dfcc71cd7681fb868  pig-v1.8.1.darwin-arm64.tar.gz
+9219e87433ebd239e0773ae7417fdd08e97bb511312e6747542bf46b6b1bbf2b  pig-v1.8.1.linux-amd64.tar.gz
+b30924880f21126ece3afc77ca75794a0ceb77964cdfd8bc20da72d9d3273078  pig-v1.8.1.linux-arm64.tar.gz
+6fc304501671921b18439223c630c7d4635b10ac75493d5c12a5987ff80c618e  pig_1.8.1-1_amd64.deb
+1a70cd71f6c1f443812fe30535427891513c0ba03be219ac21f1a3d6fd450051  pig_1.8.1-1_arm64.deb
 ```
 
 {{< release-card >}}

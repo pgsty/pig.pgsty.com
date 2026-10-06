@@ -4,7 +4,7 @@ linkTitle: "v0.7.2"
 date: 2025-11-20
 description: "437 extensions, fix pig build issue"
 tags: [build, catalog]
-weight: 200
+weight: 201
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v0.7.2
 ---

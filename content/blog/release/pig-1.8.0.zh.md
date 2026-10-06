@@ -4,7 +4,7 @@ linkTitle: "v1.8.0"
 date: 2026-08-14
 description: "原生 pig sty boot 与 pig sty conf 工作流，以及 575 个已打包 PostgreSQL 扩展。"
 tags: [sty, repo, inventory, catalog]
-weight: 1
+weight: 2
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.8.0
 ---

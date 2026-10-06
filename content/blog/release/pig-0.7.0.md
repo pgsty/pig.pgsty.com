@@ -4,7 +4,7 @@ linkTitle: "v0.7.0"
 date: 2025-11-07
 description: "Build Enhancement and massive upgrade"
 tags: [build, repo, catalog, install]
-weight: 220
+weight: 221
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v0.7.0
 ---

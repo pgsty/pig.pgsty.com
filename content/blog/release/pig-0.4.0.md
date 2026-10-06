@@ -4,7 +4,7 @@ linkTitle: "v0.4.0"
 date: 2025-04-27
 description: "do & pt sub-cmd, halo & orioledb"
 tags: [ext, catalog, patroni, repo]
-weight: 290
+weight: 291
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v0.4.0
 ---

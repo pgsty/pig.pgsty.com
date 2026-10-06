@@ -4,7 +4,7 @@ linkTitle: "v1.1.1"
 date: 2026-02-14
 description: "修复路径、符号链接与构建目录迁移问题"
 tags: [repo, sty]
-weight: 135
+weight: 136
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.1.1
 ---

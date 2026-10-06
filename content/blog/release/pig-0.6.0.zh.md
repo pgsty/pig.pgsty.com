@@ -4,7 +4,7 @@ linkTitle: "v0.6.0"
 date: 2025-07-17
 description: "423 个扩展，percona pg_tde，mcp 工具箱"
 tags: [catalog, ext]
-weight: 250
+weight: 251
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v0.6.0
 ---

@@ -4,7 +4,7 @@ linkTitle: "v0.1.1"
 date: 2025-01-09
 description: "Update Extension List"
 tags: [catalog]
-weight: 400
+weight: 401
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v0.1.1
 ---

@@ -4,7 +4,7 @@ linkTitle: "v1.3.1"
 date: 2026-03-05
 description: "Retire PG13 defaults, unify PG14-18 support window, 464 extensions"
 tags: [build, catalog]
-weight: 110
+weight: 111
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.3.1
 ---

@@ -4,7 +4,7 @@ linkTitle: "v1.3.4"
 date: 2026-04-14
 description: "504 extensions refreshed, release checksums updated"
 tags: [catalog]
-weight: 80
+weight: 81
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.3.4
 ---

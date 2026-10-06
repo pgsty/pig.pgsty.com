@@ -4,7 +4,7 @@ linkTitle: "v1.2.0"
 date: 2026-02-23
 description: "统一别名，例行更新，计划模式，仓库修复"
 tags: [repo, sty, catalog, cli]
-weight: 130
+weight: 131
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.2.0
 ---

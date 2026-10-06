@@ -4,7 +4,7 @@ linkTitle: "v0.8.1"
 date: 2025-12-27
 description: "将 llvmjit 恢复到 pgsql-full 别名"
 tags: [ext]
-weight: 158
+weight: 159
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v0.8.1
 ---

@@ -4,7 +4,7 @@ linkTitle: "v1.8.0"
 date: 2026-08-14
 description: "Native pig sty boot and pig sty conf workflows, with 575 packaged PostgreSQL extensions."
 tags: [sty, repo, inventory, catalog]
-weight: 1
+weight: 2
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.8.0
 ---

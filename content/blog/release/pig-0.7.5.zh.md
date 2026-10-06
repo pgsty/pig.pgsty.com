@@ -4,7 +4,7 @@ linkTitle: "v0.7.5"
 date: 2025-12-15
 description: "常规扩展更新，使用修复后的阿里云镜像"
 tags: [repo]
-weight: 170
+weight: 171
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v0.7.5
 ---

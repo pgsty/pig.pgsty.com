@@ -4,7 +4,7 @@ linkTitle: "v1.0.0"
 date: 2026-01-26
 description: "New pg/pt/pb/pitr commands, availability matrix"
 tags: [patroni, pgbackrest, postgres, pitr]
-weight: 150
+weight: 151
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.0.0
 ---
