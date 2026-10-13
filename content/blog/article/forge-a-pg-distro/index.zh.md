@@ -1,7 +1,7 @@
 ---
 title: "立足中国，面向全球的 PostgreSQL 发行版"
 date: 2025-11-27
-lastmod: 2026-08-30
+lastmod: 2026-10-13
 authors: [Vonng]
 description: >
   如何打造一个立足中国，面向全球的 PostgreSQL 数据库发行版？在第八届中国PG生态大会上的主题演讲。
@@ -89,14 +89,14 @@ tags: [postgres, repo, ext, build]
 1991 年，Linus Torvalds 发布了 Linux 内核。但 Linux 内核本身是不能直接用的，
 你需要有人把内核、工具链、软件包、配置脚本打包在一起，形成一个可以安装、可以使用的操作系统。这就是 **发行版**。
 
-1993 Debian 年诞生，94 年 RedHat 诞生。之后服务端操作系统内核很快就收敛到了 Linux 上，
+1993 年 Debian 诞生，1994 年 Red Hat 诞生。之后服务端操作系统内核很快就收敛到了 Linux 上，
 大家都用同一个内核，OS 世界的竞争很快就从内核层面转移到了发行版。
 
 **今天的 PostgreSQL，正处于当年 Linux 的位置上。**
 
 ![Linux 内核与发行版的分层关系](/article/forge-a-pg-distro/distro.webp)
 
-做过系统管理的朋友都清楚，真正的生产环境中几乎没有有人会从源码编译整个 Linux 内核和软件栈，而是直接选择一个发行版。
+做过系统管理的朋友都清楚，真正的生产环境中几乎没有人会从源码编译整个 Linux 内核和软件栈，而是直接选择一个发行版。
 因为后者已经帮我们选好了内核版本、驱动与库，准备好了软件仓库和包管理器，带有文档手册与最佳实践，可以 **开箱即用**。
 
 PostgreSQL 内核如今已经足够成熟强大了，**如何把内核 + 扩展 + 高可用 + 监控 + 备份 + 安全等要素整合起来，形成一个开箱即用的完整解决方案**，这件事成为了关键。
@@ -236,7 +236,7 @@ Pigsty 可以成为你们的交付载体。你们专注做内核、做特色功�
 
 ![面向 PostgreSQL 厂商的生态合作邀请](/article/forge-a-pg-distro/vendor-invite.webp)
 
-作为诚意，原本 AGPLv3 许可证的 Pigsty 本体也将在下个大版本中使用更宽松的开源许可。而像 PG 扩展仓库，PIG 包管理器的的全部代码与基础设施都以 Apache 2.0 许可证开源。
+作为诚意，原本 AGPLv3 许可证的 Pigsty 本体也将在下个大版本中使用更宽松的开源许可。而像 PG 扩展仓库，PIG 包管理器的全部代码与基础设施都以 Apache 2.0 许可证开源。
 
 ### 面向开发者的邀请
 
@@ -261,4 +261,4 @@ PostgreSQL 已经赢了。现在的问题是，我们中国人要不要参与这
 
 ---
 
-> **归档说明（2026-08-30）：** 本文原载 [vonng.com](https://vonng.com/pg/forge-a-pg-distro/)。文中的软件包数量、截图与上下文以原始发表日期为准；当前行为请以 [PIG 文档](/zh/docs/)和实时[扩展目录](https://pigsty.cc/ext/)为准。
+> 原文：[vonng.com](https://vonng.com/pg/forge-a-pg-distro/)。

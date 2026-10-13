@@ -5,7 +5,7 @@
 <figure class="pig-home-diagram" aria-labelledby="pig-flow-title" aria-describedby="pig-flow-desc">
   <svg class="pig-home-flow" viewBox="0 0 720 500" role="img" xmlns="http://www.w3.org/2000/svg">
     <title id="pig-flow-title">{{ if $zh }}PIG 软件包交付流程{{ else }}PIG package delivery flow{{ end }}</title>
-    <desc id="pig-flow-desc">{{ if $zh }}PIG 从 Pigsty Infra、PGDG 和操作系统基础源解析软件包，通过一个静态二进制配置仓库、安装扩展，并向 PostgreSQL 14 到 18 交付原生 RPM 与 DEB。{{ else }}PIG resolves packages from Pigsty Infra, PGDG, and operating-system repositories, then uses one static binary to configure repositories, install extensions, and deliver native RPM and DEB packages for PostgreSQL 14 through 18.{{ end }}</desc>
+    <desc id="pig-flow-desc">{{ if $zh }}PIG 从 Pigsty、PGDG 和操作系统基础源解析软件包，通过一个静态二进制配置仓库、安装扩展，并向 PostgreSQL 14 到 18 交付原生 RPM 与 DEB。{{ else }}PIG resolves packages from Pigsty, PGDG, and operating-system repositories, then uses one static binary to configure repositories, install extensions, and deliver native RPM and DEB packages for PostgreSQL 14 through 18.{{ end }}</desc>
 
     <defs>
       <filter id="pig-flow-shadow" x="-25%" y="-30%" width="150%" height="170%">
@@ -31,7 +31,7 @@
       <rect x="10" y="48" width="200" height="82" rx="13"/>
       <rect class="ph-icon-bg ph-icon-bg--blue" x="28" y="66" width="46" height="46" rx="12"/>
       <text class="ph-icon-text ph-icon-text--blue" x="51" y="89">PI</text>
-      <text class="ph-card-title" x="88" y="80">Pigsty Infra</text>
+      <text class="ph-card-title" x="88" y="80">Pigsty</text>
       <text class="ph-card-sub" x="88" y="103">pgsql · infra · extra</text>
     </g>
 
@@ -66,9 +66,9 @@
       <line class="ph-core-rule" x1="300" y1="210" x2="470" y2="210"/>
 
       <rect class="ph-core-row" x="302" y="225" width="166" height="34" rx="9"/>
-      <text class="ph-core-row-text" x="385" y="242">repo · resolve · verify</text>
+      <text class="ph-core-row-text" x="385" y="242">repo · ext · install</text>
       <rect class="ph-core-row" x="302" y="267" width="166" height="34" rx="9"/>
-      <text class="ph-core-row-text" x="385" y="284">ext · install · build</text>
+      <text class="ph-core-row-text" x="385" y="284">catalog · packages · build</text>
       <rect class="ph-core-row" x="302" y="309" width="166" height="34" rx="9"/>
       <text class="ph-core-row-text" x="385" y="326">pg · pt · pb · pitr</text>
 
@@ -95,7 +95,7 @@
       <rect class="ph-icon-bg ph-icon-bg--rose" x="609" y="275" width="42" height="42" rx="12"/>
       <text class="ph-icon-text ph-icon-text--rose" x="630" y="296">EX</text>
       <text class="ph-card-title ph-card-title--center" x="630" y="336">{{ if $zh }}扩展包{{ else }}Extensions{{ end }}</text>
-      <text class="ph-card-sub ph-card-sub--center" x="630" y="356">{{ $ext }} packages</text>
+      <text class="ph-card-sub ph-card-sub--center" x="630" y="356">{{ if $zh }}查找 · 安装 · 更新{{ else }}Find · Install · Update{{ end }}</text>
     </g>
 
     {{/* 软件包目录作为声明式输入，从下方接入核心。 */}}

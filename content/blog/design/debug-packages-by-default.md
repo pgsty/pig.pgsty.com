@@ -2,7 +2,7 @@
 title: "Why PIG Builds Debug Packages by Default"
 linkTitle: "Debug Packages by Default"
 date: 2026-09-03
-lastmod: 2026-10-06
+lastmod: 2026-10-13
 description: "The build-policy decision that makes RPM debuginfo/debugsource and DEB dbgsym output opt-out rather than opt-in."
 tags: [build, cli]
 weight: 35
@@ -92,8 +92,5 @@ must be reported separately rather than treated as proof that the PIG command ig
 
 ## Current status {#status}
 
-The implementation is present in the verified [v1.8.1 tag](https://github.com/pgsty/pig/tree/v1.8.1)
-and its [published release artifacts](https://github.com/pgsty/pig/releases/tag/v1.8.1).
-The implementation and local checks described above remain the scope of the evidence.
-Repository publication, public documentation deployment, and upgrades of existing systems
-remain separate gates.
+Released in [v1.8.1](https://github.com/pgsty/pig/releases/tag/v1.8.1).
+See the current reference linked above for usage and platform requirements.

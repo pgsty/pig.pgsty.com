@@ -1,31 +1,30 @@
 ---
 title: "pig pe"
-description: "使用 legacy pig pe 快捷命令访问默认 pg_exporter HTTP 端点"
+description: "读取 PostgreSQL 指标并重载 pg_exporter 配置"
 weight: 175
 icon: fas fa-chart-line
 categories: [参考]
 tags: [postgres, cli]
 ---
 
-`pig pe`（别名：`pgexp`、`pgexporter`）是运行中
-[pg_exporter](https://github.com/Vonng/pg_exporter) 的 legacy 便利包装。
-它读取默认指标与统计端点，也可以请求配置重载，但不是一套通用或版本化的 pg_exporter 客户端。
+使用 `pig pe` 读取运行中的 [pg_exporter](https://github.com/Vonng/pg_exporter) 指标，或重载其配置。
+完整命令名为 `pig pg_exporter`，别名为 `pe`、`pgexp` 和 `pgexporter`。
 
 ```bash
-pig pe get                     # 输出 pg_ 指标
-pig pe list                    # 从 HELP 行列出指标族
-pig pe stat                    # 输出 exporter 统计信息
-pig pe reload                  # 请求配置重载
+pig pe get                     # 查看 PostgreSQL 指标
+pig pe list                    # 列出 PostgreSQL 指标族
+pig pe stat                    # 查看 exporter 统计信息
+pig pe reload                  # 重载 exporter 配置
 ```
 
-## 端点选择
+## 选择 exporter
 
-默认端点是 `http://127.0.0.1:9630`。使用持久选项选择其它 exporter：
+默认端点为 `http://127.0.0.1:9630`。使用以下参数选择其他实例：
 
-| 选项 | 默认值 | 用途 |
+| 参数 | 默认值 | 说明 |
 |:---|:---|:---|
-| `--host` | `127.0.0.1` | pg_exporter 主机名或 IPv4 地址 |
-| `-p, --port` | `9630` | pg_exporter HTTP 端口 |
+| `--host` | `127.0.0.1` | 主机名或 IPv4 地址 |
+| `-p, --port` | `9630` | HTTP 端口 |
 {.full-width}
 
 ```bash
@@ -33,66 +32,55 @@ pig pe --host pg-meta -p 9630 stat
 pig pe --host 10.10.10.10 get
 ```
 
-命令直接把 host 与 port 拼成普通 HTTP URL，并假定使用标准 `/metrics`、`/stat` 与
-`/reload` 路径。它不支持自定义 telemetry path、HTTPS、认证、客户端证书或 base URL；
-这些场景应直接使用 `curl`、Prometheus 工具或安全反向代理。
+PIG 使用 HTTP 和标准的 `/metrics`、`/stat`、`/reload` 路径。
+需要 HTTPS、身份认证、客户端证书或自定义路径时，使用 `curl` 等 HTTP 客户端。
 
 ## pe get
 
-读取 `/metrics` 并输出 PostgreSQL 指标族。命令保留名称以 `pg_` 开头的指标样本，
-以及对应的 Prometheus `HELP` 和 `TYPE` 行。
+读取 `/metrics`，输出名称以 `pg_` 开头的指标样本，以及对应的 Prometheus `HELP` 和 `TYPE` 行。
 
 ```bash
 pig pe get
 pig pe --host pg-meta get
 ```
 
-如果需要包含非 `pg_` 进程与运行时指标在内的完整端点，请使用通用 Prometheus 客户端或 `curl`。
+要同时读取非 `pg_` 开头的进程与运行时指标，直接访问完整端点：
+
+```bash
+curl -fsS http://127.0.0.1:9630/metrics
+```
 
 ## pe list
 
-读取 `/metrics`，并为每个观察到的 `pg_` 指标族输出一条 `HELP` 声明。
+读取 `/metrics`，为响应中的每个 `pg_` 指标族输出一条 `HELP` 行。
+列表反映 exporter 的当前配置。
 
 ```bash
 pig pe list
-pig pe --host pg-meta list
 ```
-
-这是当前 exporter 配置的发现结果，不是内置在 PIG 中的静态列表。
 
 ## pe stat
 
-读取并输出 pg_exporter 的 `/stat` 响应。
+读取 `/stat` 并输出响应。响应格式取决于已安装的 pg_exporter 版本。
 
 ```bash
 pig pe stat
 ```
 
-响应的具体格式由已安装的 pg_exporter 版本拥有。
-
 ## pe reload
 
-请求 `/reload` 并输出响应。
+修改 exporter 配置后，通过 `/reload` 请求重载：
 
 ```bash
 pig pe reload
 ```
 
-Reload 会改变运行中 exporter 的配置状态。执行前应确认 exporter 配置已经校验，且选中的端点就是目标实例。
+## 输出与错误
 
-## Legacy 限制与输出
+使用 `-o json` 或 `-o yaml` 获取包含命令文本输出的 PIG 结果。
+Prometheus 指标在结果中仍以文本保存。
 
-PIG 使用带连接阶段超时的共享 HTTP transport，但这个 legacy 包装不会解释 HTTP 状态码，
-也不限制响应正文大小。网络或正文读取失败会返回非零；除此之外，非 2xx 正文仍按普通响应处理。
-需要严格 HTTP 语义时应直接访问 exporter 端点。
+网络或响应读取失败时，命令返回非零退出码。这些命令不检查 HTTP 状态码。
+如果脚本需要在 HTTP 错误时退出，使用 `curl --fail` 访问端点。
 
-该命令族使用 PIG 的旧命令结构化适配器支持 `-o json|yaml`。
-结果会捕获操作与端点产生的文本；Prometheus exposition format 本身仍是 pg_exporter 拥有的文本格式。
-
-该命令族不读取 `~/.pig/config.yml`；即使该文件格式错误仍可使用，端点选择只来自命令参数与默认值。
-
-## 操作边界
-
-`pig pe` 不会启动 pg_exporter、编辑其配置文件、持续抓取指标或充当 Prometheus 服务器。
-PIG 通过软件包目录安装 `pg-exporter`，而 daemon 配置与 HTTP 协议由 pg_exporter 自己拥有。
-该命令只是默认本地部署的兼容性快捷入口，不代表 PIG 新增了一套客户端子系统。
+使用 `pig ext add pg-exporter` 安装 pg_exporter。配置并启动 exporter 后，再使用 `pig pe` 访问其 HTTP API。

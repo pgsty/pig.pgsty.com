@@ -2,7 +2,7 @@
 title: "Build and Packaging: An Overlooked but Scarce Skill"
 linkTitle: "Build and Packaging"
 date: 2025-08-18
-lastmod: 2026-08-30
+lastmod: 2026-10-13
 description: "On the rare craft of production-grade Linux packaging in the PostgreSQL ecosystem."
 tags: [build, repo]
 authors: [Vonng]
@@ -96,4 +96,4 @@ Value often comes from non-consensus skills. Build and packaging work is a perfe
 
 ---
 
-> **Archive note (August 30, 2026):** This article first appeared as a [Chinese original on vonng.com](https://vonng.com/misc/packaging-skill/). Package counts, screenshots, and context reflect the original publication date; for current behavior, see the [PIG documentation](/docs/) and live [extension catalog](https://pigsty.io/ext/).
+> Originally published in Chinese on [vonng.com](https://vonng.com/misc/packaging-skill/).

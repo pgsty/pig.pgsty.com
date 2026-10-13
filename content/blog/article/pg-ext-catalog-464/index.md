@@ -2,8 +2,8 @@
 title: "464 Extensions, Ready Out of the Box: The New PostgreSQL Extension Catalog"
 linkTitle: "464 Extensions, Ready to Use"
 date: 2026-03-08
-lastmod: 2026-08-30
-description: "The story and design principles behind a PostgreSQL extension catalog that brings packages and documentation together."
+lastmod: 2026-10-13
+description: "The fifth extension catalog combines package metadata and usage documentation for 464 extensions."
 tags: [ext, catalog, repo]
 authors: [Vonng]
 ---
@@ -138,4 +138,4 @@ Who can say for sure? Tinkering is half the fun.
 
 ---
 
-> **Archive note (August 30, 2026):** This article was originally published in Chinese on [vonng.com](https://vonng.com/pg/pg-ext-catalog-464/). Package counts, screenshots, and context reflect the original publication date. For current behavior, see the [PIG documentation](/docs/) and the live [extension catalog](https://pigsty.io/ext/).
+> Originally published in Chinese on [vonng.com](https://vonng.com/pg/pg-ext-catalog-464/).

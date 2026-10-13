@@ -9,6 +9,6 @@ authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v0.3.0
 ---
 
-[`pig`](/zh/docs/) 项目现在有了新的 [主页](https://pigsty.cc/ext/pig/)，以及 PostgreSQL 扩展 [目录](https://pigsty.cc/ext/list/)。
+本次发布为 [PIG 项目](/zh/) 增加了主页，并提供 PostgreSQL 扩展[目录](https://pigsty.cc/ext/list/)。
 
 {{< release-card >}}

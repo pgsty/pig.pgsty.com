@@ -2,8 +2,8 @@
 title: "From Human-Friendly to Agent-Native: PIG's CLI Contract"
 linkTitle: "Agent-Native CLI"
 date: 2026-02-12
-lastmod: 2026-08-28
-description: "Why PIG separates human text, structured results, execution plans, and environment context instead of treating JSON as a formatting afterthought."
+lastmod: 2026-10-13
+description: "How PIG separates terminal text, structured results, execution plans, and environment context."
 tags: [cli]
 weight: 10
 authors: [Vonng]
@@ -11,19 +11,15 @@ draft: false
 ---
 
 > **Decision date:** 2026-02-12<br>
-> **Status:** Implemented in [pig v1.1.0](/release/pig-1.1.0/) and refined by later command-layer work.<br>
+> **Status:** Released in [pig v1.1.0](/release/pig-1.1.0/) and refined by later command-layer work.<br>
 > **Current reference:** [`pig` command overview](/cmd/)<br>
 > **Scope:** PIG-owned commands and their machine-consumption contract; opaque passthrough commands keep their native interface.
 
 ## Decision {#decision}
 
-PIG should be usable by a person at a terminal and by an automation agent without making either
-consumer parse the other's presentation. Human-facing text remains concise and operational.
-Commands that own a stable result expose explicit JSON or YAML results, status codes, and plans.
-Commands that merely forward an external tool preserve that tool's native stream, prompts, and
-exit status instead of wrapping them in a misleading envelope.
-
-Agent-native therefore means a clear capability boundary, not “append JSON to every command.”
+PIG provides terminal text for people and structured results for automation. Commands that produce
+stable data expose JSON or YAML and status codes. Supported workflows also expose execution plans.
+Transparent passthroughs such as `pig pt` preserve the external tool's output, prompts, and exit status.
 
 ## Context {#context}
 
@@ -62,7 +58,7 @@ The durable contract is:
 - destructive PIG-owned operations fail closed when confirmation is missing;
 - status codes distinguish usage, confirmation, environment, dependency, and execution failures;
 - `pig context` provides a bounded environment snapshot rather than forcing consumers to infer it;
-- passthrough and interactive commands retain the upstream contract.
+- transparent passthroughs retain the upstream contract.
 
 ## Consequences {#impact}
 
@@ -71,8 +67,8 @@ capability. It also creates maintenance obligations: every structured field beco
 surface, stdout purity needs tests, and a wrapper must not promise more stability than the tool it
 delegates to.
 
-The design intentionally allows mixed styles across PIG. Consistency is valuable, but semantic
-honesty is more valuable than a uniform-looking wrapper.
+The output contract follows the command: PIG results for PIG operations, native output for
+forwarded tools.
 
 ## Verification and evolution {#verification}
 
@@ -87,6 +83,5 @@ and context collection in the packages that own those contracts.
 
 ## Current status {#status}
 
-The principle remains active: use the structured mode documented by a specific command, and do
-not infer that global `-o` can safely transform every external or interactive stream. The current
-command surface and supported examples live in the [`pig` reference](/cmd/).
+Use the output mode supported by each command. See the [`pig` reference](/cmd/) for structured
+results and passthrough behavior.

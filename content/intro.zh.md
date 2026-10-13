@@ -1,7 +1,7 @@
 ---
 title: "简介"
 linkTitle: "简介"
-description: "PIG 管什么、解决什么，以及包管理能力止步于哪里"
+description: "PIG 的用途、软件包安装方式与支持平台"
 search_keywords: [概览, 架构, 职责边界, 软件包]
 search_boost: 1.25
 weight: 20
@@ -10,78 +10,76 @@ categories: [概念]
 tags: [catalog, ext]
 ---
 
-PostgreSQL 拥有极其丰富的扩展生态，但“找得到扩展”并不等于“能把它稳妥地装进生产环境”。一个可用的软件包必须同时匹配 PostgreSQL 大版本、Linux 发行版、CPU 架构与依赖组合，有时还依赖厂商自己的软件仓库。若没有现成的软件包，编译工具链与后续升级维护也都要由使用者承担。
+PIG 是 PostgreSQL 与扩展的命令行管理工具。它将扩展名转换为 RPM 或 DEB 软件包名，再调用 `apt`、`dnf` 或 `yum` 完成安装。
 
-**PIG** 是一个用 Go 编写的命令行工具，用来简化这条“软件包交付”路径。它维护 [{{< param pgext_count >}} 个已打包扩展](https://pigsty.cc/ext/list/)的目录，将扩展名解析为原生 RPM/DEB 包名，配置已知的 APT/DNF 软件仓库，再把安装工作交给操作系统包管理器。除此之外，它还提供源码构建辅助，以及 PostgreSQL、Patroni、pgBackRest、PITR、Pigsty 与 Grafana 的运维入口。
+扩展目录收录了 [{{< param pgext_count >}} 个条目](https://pigsty.cc/ext/list/)。PIG 根据 PostgreSQL 大版本、操作系统和 CPU 架构选择对应包名，也提供源码构建、本地 PostgreSQL 管理、备份恢复和 Pigsty 管理命令。
 
-这些能力确实省事，但边界同样重要：PIG 是一个 **软件包与主机管理工具**，不是逐库管理扩展的 PostgreSQL 内部注册表，不是独立的依赖求解器，也不能替代数据库变更管理。
+## 可以做什么
 
-> 《[ANNOUNCE pig: The Postgres Extension Wizard](https://www.postgresql.org/about/news/announce-pig-the-postgres-extension-wizard-2988/)》
-
-## PIG 实际管理什么
-
-| 层次 | PIG 负责的事情 | 仍需使用者负责的事情 |
+| 任务 | 命令 | 参考文档 |
 |:---|:---|:---|
-| 扩展目录 | 检索扩展元数据，将扩展名解析为操作系统软件包 | 确认版本、许可证与功能是否适合实际负载 |
-| 软件仓库 | 写入或更新 APT/DNF 仓库定义并刷新元数据 | 审批仓库信任、镜像、签名、网络策略与软件包来源 |
-| 软件包 | 安装、移除或升级原生 RPM/DEB 包 | 安排维护窗口，核查依赖变化与服务影响 |
-| 数据库 | 给出 `CREATE EXTENSION`、预加载等操作提示 | 执行 SQL、修改 `shared_preload_libraries`、按需重启、迁移扩展对象并逐库验证 |
-| 源码构建 | 按项目构建规格在本机执行构建 | 提供兼容工具链与依赖、固定输入，并测试构建产物 |
-| 运维操作 | 封装部分 PostgreSQL/Pigsty 工作流，对部分操作提供计划预览 | 负责备份、高可用策略、凭据、审批与生产验证 |
+| 查找扩展，检查是否有包可用 | `pig ext list`、`pig ext avail` | [扩展管理](/zh/ext/) |
+| 添加 PGDG 与 Pigsty 仓库 | `pig repo add pgsql -u` | [软件仓库](/zh/repo/) |
+| 安装 PostgreSQL 18 与 pgvector | `pig install -v 18 pg18 vector` | [快速上手](/zh/start/) |
+| 从源码构建扩展包 | `pig build pkg NAME` | [构建](/zh/build/) |
+| 启动、检查或停止本地 PostgreSQL 实例 | `pig pg` | [PostgreSQL](/zh/pg/) |
+| 管理 Patroni 集群 | `pig pt` | [Patroni](/zh/pt/) |
+| 备份或恢复实例 | `pig pb`、`pig pitr` | [pgBackRest](/zh/pb/)、[PITR](/zh/pitr/) |
+| 配置 Pigsty 并执行剧本 | `pig sty`、`pig inventory`、`pig do` | [Pigsty](/zh/sty/) |
 
-例如，安装 `pgvector` 只会把控制文件和共享库放到主机上，**不会** 自动在每个数据库中创建 `vector`。同样，`pig ext update` 只升级明确指定的操作系统软件包，不会替你执行 `ALTER EXTENSION UPDATE`。精确行为请参阅[扩展命令的职责边界](/zh/ext/#软件包层与数据库层)。
+从[上手教程](/zh/start/)开始，安装 PostgreSQL 并启用第一个扩展。
 
-## 便利背后的具体争议
+## 软件包如何安装
 
-### 目录数量不等于全矩阵可用
+例如，为 PostgreSQL 18 安装 pgvector：
 
-当前目录收录 {{< param pgext_count >}} 个已打包扩展条目。这个数字是 **目录条目数**，不代表每一个扩展都在每一种 PostgreSQL、操作系统与 CPU 架构组合上有包可装。许可证限制、上游构建支持、项目停更、依赖冲突与架构特有的构建失败都会形成空缺。实际使用时，应在目标主机上执行 `pig ext avail NAME`，再通过 APT 或 DNF 核对最终候选包，不能只凭总数判断生产可用性。
+```bash
+sudo pig install vector -v 18
+```
 
-### 软件包并非全部来自同一个生产者
+PIG 将 `vector` 转换为 EL 上的 `pgvector_18`，或 Debian、Ubuntu 上的 `postgresql-18-pgvector`。系统包管理器负责解析依赖并安装文件。
 
-PIG 可以使用 Pigsty、PGDG、Linux 发行版以及扩展厂商或上游仓库提供的软件包。这些来源的发布节奏、支持承诺、补丁策略与许可证并不相同。PIG 负责整理元数据并统一安装入口，但不会改变第三方软件的许可证，也不会让每一个上游包自动变成由 Pigsty 负责维护的产物。
+要启用扩展，连接目标数据库后执行：
 
-### 配仓库很方便，但会改变系统的信任状态
+```sql
+CREATE EXTENSION vector;
+```
 
-`pig repo add` 是增量添加；`pig repo set` 则会备份已有定义，并按所选模块重新写入一组仓库。应先用 `pig repo info` 检查预期定义，再把替换模式用于受配置管理约束的主机。为了兼容离线仓库和镜像，PIG 内置的 Pigsty 仓库模板默认采用宽松信任设置：RPM 系统为 `gpgcheck=0`，DEB 系统为 `trusted=yes`。安全敏感环境应自行建立并强制执行签名密钥与仓库信任策略，不能把“下载成功”等同于“供应链已经验证”。
+部分扩展还需要设置 `shared_preload_libraries` 并重启 PostgreSQL。用 `pig ext info NAME` 查看这些要求。升级与移除的操作见[软件包层与数据库层](/zh/ext/#软件包层与数据库层)。
 
-### 源码构建是退路，不是万能保证
-
-缺少二进制包时，[`pig build`](/zh/build/) 可以在合适的构建主机上套用维护好的构建规格。但能否成功仍然取决于上游源码、编译器与语言工具链、系统库、网络输入、目标 PostgreSQL 版本及架构。构建出的包还必须在目标组合上测试；“本机编译通过”本身不构成可复现性或支持承诺。
-
-### 自动化保证因命令而异
-
-PIG 在受支持的工作流中提供结构化输出、确认提示与 `--plan`。但并非所有命令都具有完全一致的保证：一部分命令封装了历史工具，`pig pt` 会刻意把参数原样透传给 `patronictl`，交互式命令和第三方工具也保留自己的输出与失败语义。自动化脚本应固定 PIG 版本、检查退出状态、避免解析面向人的文本，并只在文档明确支持时使用结构化模式。
+PIG 只在执行命令时运行。PostgreSQL 与已安装的扩展可以独立运行。你也可以直接用 `apt` 或 `dnf` 访问 [Pigsty 软件仓库](https://pigsty.cc/docs/repo/pgsql/)。
 
 ## Linux 兼容性
 
-当前已打包仓库矩阵覆盖 **8 个 Linux 发行版大版本**，每个大版本均包含 `x86_64` 与 `aarch64`，合计 16 个“操作系统 × 架构”目标。目录面向仍在 PostgreSQL 支持窗口内的 **14-18** 五个大版本；具体扩展在具体格子中是否有包，仍以实际查询结果为准。
+软件仓库覆盖以下 Linux 版本上的 PostgreSQL **14–18**。每个发行版均提供 **x86_64** 和 **aarch64** 两种架构的软件包。
 
-| OS 代码 | 发行版家族 | 版本线 | 架构 | 截至 2026 年 8 月的状态 |
-|:---|:---|:---|:---|:---|
-| `el8` | RHEL 兼容 | EL 8 | x86_64、aarch64 | 维护阶段；Rocky Linux 8 支持至 2029 年 |
-| `el9` | RHEL 兼容 | EL 9 | x86_64、aarch64 | 支持中 |
-| `el10` | RHEL 兼容 | EL 10 | x86_64、aarch64 | 支持中 |
-| `d12` | Debian | Debian 12 | x86_64、aarch64 | Oldstable / LTS 阶段 |
-| `d13` | Debian | Debian 13 | x86_64、aarch64 | 当前 Stable |
-| `u22` | Ubuntu | Ubuntu 22.04 LTS | x86_64、aarch64 | 标准安全维护至 2027 年 5 月 |
-| `u24` | Ubuntu | Ubuntu 24.04 LTS | x86_64、aarch64 | 标准安全维护至 2029 年 5 月 |
-| `u26` | Ubuntu | Ubuntu 26.04 LTS | x86_64、aarch64 | 标准安全维护至 2031 年 5 月 |
-{.full-width}
+| OS 代码 | 发行版 | 版本 |
+|:---|:---|:---|
+| `el8` | RHEL、Rocky Linux、AlmaLinux | 8 |
+| `el9` | RHEL、Rocky Linux、AlmaLinux | 9 |
+| `el10` | RHEL、Rocky Linux、AlmaLinux | 10 |
+| `d12` | Debian | 12 |
+| `d13` | Debian | 13 |
+| `u22` | Ubuntu | 22.04 LTS |
+| `u24` | Ubuntu | 24.04 LTS |
+| `u26` | Ubuntu | 26.04 LTS |
 
-生命周期信息来自 [Rocky Linux 版本指南](https://wiki.rockylinux.org/rocky/version/)、[Debian 发布信息](https://www.debian.org/releases/)与 [Ubuntu 发布周期](https://ubuntu.com/about/release-cycle)。操作系统仍在厂商支持期内，并不自动意味着它属于 PIG 当前的软件包目标；二进制中保留的旧别名或识别代码，也不代表对应仓库仍在持续发布软件包。尤其需要注意：EL 7 与 Debian 11 已不在当前 16 个扩展包目标之中。
+不同扩展支持的版本与平台组合有所不同。在目标主机上查询：
 
-PostgreSQL 官方[版本策略](https://www.postgresql.org/support/versioning/)当前列出的受支持大版本为 14-18，其中 PostgreSQL 14 将于 2026 年 11 月停止支持。PostgreSQL 19 等预发布分支需要显式测试，不能从稳定版软件包矩阵中自行推断支持。
+```bash
+pig ext avail vector
+```
 
-## 生产采用核对清单
+{{< param pgext_count >}} 个目录条目中包含已移除扩展的保留记录。选择软件包时，请查看条目状态和可用矩阵。EL 7 与 Debian 11 不在当前软件包矩阵中。
 
-在把 PIG 纳入生产软件供应链之前，建议逐项确认：
+macOS 版支持目录查询、配置清单编辑等操作。PostgreSQL 软件包安装使用 Linux 包管理器。二进制下载见[安装](/zh/install/)。
 
-1. 在目标操作系统、架构与 PostgreSQL 大版本上运行 `pig status` 和 `pig ext avail NAME`。
-2. 核查软件包来源、版本、许可证、依赖与仓库信任设置。
-3. 明确 `repo add` 的增量语义或 `repo set` 的替换语义，是否符合现有配置归属。
-4. 把主机软件包安装与数据库内的创建、预加载、重启、SQL 升级分成明确步骤。
-5. 在相同目标组合上验证安装、升级、回滚、备份与恢复。
-6. 固定版本；只有在具体命令明确支持时，才依赖计划预览或结构化输出。
+## 选择工作流
 
-PIG 能消除大量重复的软件包交付工作。目标环境落在其目录与仓库覆盖范围内时，它的价值最大；把软件包层、数据库层和生产验证层分开管理时，它的行为也最可预测。
+- **在已有主机上安装：** 用 `pig repo add pgsql -u` 添加仓库，再安装所需软件包。
+- **统一配置新主机的仓库：** 用 `pig repo set` 备份并替换现有仓库定义。
+- **构建软件包：** 准备构建主机，再用 [`pig build`](/zh/build/) 执行维护好的构建规格。
+- **准备离线安装：** 用 `pig ext import` 收集软件包，用 `pig repo create` 生成索引，再用 `pig repo cache` 打包。详见[离线仓库](/zh/repo/)。
+- **编写脚本或 Agent 工作流：** 用 `pig -o json --help` 查看命令能力，再按[命令参考](/zh/cmd/)选择输出格式与计划选项。
+
+[设计归档](/zh/design/)解释主要实现决策，[发布注记](/zh/release/)记录各版本的变化。

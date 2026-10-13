@@ -2,10 +2,9 @@
 title: "The PostgreSQL Extension Encyclopedia: Bilingual and Ready to Use"
 linkTitle: "PG Extension Encyclopedia"
 date: 2026-03-13
-lastmod: 2026-08-30
+lastmod: 2026-10-13
 authors: [Vonng]
-description: >
-  I turned 464 PostgreSQL extensions into a bilingual, ready-to-use encyclopedia with metadata, package matrices, install commands, docs, and binary distribution all in one place.
+description: "I brought metadata, package availability, install commands, and usage documentation for 464 PostgreSQL extensions into one bilingual encyclopedia."
 tags: [ext, catalog, repo]
 ---
 
@@ -137,12 +136,12 @@ The original post also included a related conference poster, so I kept it here a
 
 ![Extension for Everyone poster](/article/pgext-pedia/poster.webp)
 
-## Bottom line
+## The catalog in numbers
 
 Extensions are the soul of PostgreSQL, and this directory is an index to that soul.
 
-Four hundred and sixty-four extensions. Sixteen categories. Fourteen operating systems. Five PG major versions. Bilingual docs, metadata, package links, and install commands in one place.
+Four hundred and sixty-four extensions. Sixteen categories. Fourteen operating-system and CPU-architecture combinations. Five PG major versions. Bilingual docs, metadata, package links, and install commands in one place.
 
 ---
 
-> **Archive note (2026-08-30):** First published in Chinese on [vonng.com](https://vonng.com/pg/pgext-pedia/). Package counts, screenshots, and surrounding context reflect that date. For current behavior, use the [PIG documentation](/docs/) and live [extension catalog](https://pigsty.io/ext/).
+> Originally published in Chinese on [vonng.com](https://vonng.com/pg/pgext-pedia/).

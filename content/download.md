@@ -1,6 +1,6 @@
 ---
 title: "Download & Install pig"
-description: "Download pig for Linux and macOS: one-line installer, APT / DNF repository, native RPM and DEB packages, binary tarballs, and source build."
+description: "Install PIG on Linux with the installer, APT / DNF, or RPM / DEB packages. Download binary archives for Linux and macOS."
 type: download
 layout: landing
 translationKey: download

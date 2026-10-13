@@ -12,5 +12,4 @@ cascade:
 Release notes for every published `pig` version, newest first. Artifacts and checksums for
 each version live on its [GitHub release page](https://github.com/pgsty/pig/releases).
 
-Already installed? `pig update` upgrades in place through the native package manager; see
-[Installation](/install/) for the other paths.
+See [Installation](/install/) for upgrade commands and platform-specific instructions.

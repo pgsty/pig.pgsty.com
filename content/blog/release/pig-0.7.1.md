@@ -9,7 +9,7 @@ authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v0.7.1
 ---
 
-- The brand-new website: /ext/
+- Launch the new [PGEXT.CLOUD extension catalog](https://pgext.cloud/)
 - Remove unnecessary sudo usage, now can be used inside docker
 - Allow using `pg18`, `pg17` arg format in pig ext link command
 - Add environment var `PIG_NO_SUDO` to force not using sudo

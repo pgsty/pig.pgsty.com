@@ -7,14 +7,14 @@ categories: [Reference]
 tags: [cli]
 ---
 
-The `pig` CLI provides a comprehensive toolkit for managing PostgreSQL installations, extensions, repositories, and extension builds from source. Use `pig help <command>` to view command documentation.
+`pig` manages PostgreSQL packages, local database services, and Pigsty deployments. Choose a command below for your task. Use `pig COMMAND --help` to see the options supported by your installed program.
 
 - [**pig repo**](/repo/): manage software repositories
 - [**pig ext**](/ext/): manage PostgreSQL extensions
 - [**pig build**](/build/): build extensions from source
 - **pig install**: install packages with the native package manager and translate PostgreSQL aliases
 - [**pig sty**](/sty/): manage Pigsty installation and Grafana dashboards
-- [**pig inventory**](/inventory/): inspect, edit, validate, and exchange the Pigsty inventory (new in v1.6.0)
+- [**pig inventory**](/inventory/): inspect, edit, validate, and exchange the Pigsty inventory
 - [**pig do**](/do/): run Pigsty administration playbook tasks
 - [**pig pe**](/pe/): access pg_exporter metrics and configuration
 - [**pig pg**](/pg/): manage local PostgreSQL servers
@@ -24,57 +24,24 @@ The `pig` CLI provides a comprehensive toolkit for managing PostgreSQL installat
 - **pig context**: output an environment context snapshot for humans and agents
 - **pig status / update / version**: inspect environment status, upgrade pig, and print version information
 
-## Overview
+## Global options
+
+| Option | Purpose |
+|:---|:---|
+| `-h, --help` | Show help |
+| `-H, --home PATH` | Select the Pigsty installation directory |
+| `-i, --inventory PATH` | Select the inventory |
+| `-o, --output FORMAT` | Output format: `text` (default), `json`, `yaml`, or `json-pretty` |
+| `--debug` | Enable debug logging |
+| `--log-level LEVEL` | Log level: `debug`, `info` (default), `warn`, `error`, `fatal`, or `panic` |
+| `--log-path PATH` | Write logs to a file; the default is the terminal |
+
+PIG-owned results support structured output. Raw-content commands such as `inventory show` and passthrough commands such as `pt list` retain their native output. See the command reference for details.
 
 ```bash
-pig - The Linux package manager for PostgreSQL
-
-Usage:
-  pig [command]
-
-Examples:
-
-  pig repo add -ru            # overwrite existing repo and update cache
-  pig install pg18            # install PostgreSQL 18 PGDG packages
-  pig install pg_duckdb       # install a specific PostgreSQL extension
-  pig install pgactive -v 18  # install extension for a specific PG version
-
-  visit https://pigsty.io/ext/ for details
-
-PostgreSQL Extension Manager
-  build       Build Postgres extensions
-  ext         Manage PostgreSQL extensions (pgext)
-  repo        Manage Linux software repo (apt/dnf)
-
-Pigsty Management Commands
-  context     Show environment context snapshot
-  do          Run admin tasks
-  inventory   Inspect, edit, validate, check, and exchange Pigsty Inventory
-  patroni     Run patronictl with Pigsty service and config helpers (alias: pt)
-  pg_exporter Manage pg_exporter and metrics (alias: pe)
-  pgbackrest  Manage pgBackRest backup and restore (alias: pb)
-  pitr        Point-in-time recovery using pgBackRest
-  postgres    Manage local PostgreSQL server and databases (alias: pg)
-  sty         Manage Pigsty installation and controller services
-
-Additional Commands:
-  completion  Generate shell completion scripts
-  help        Help about any command
-  install     Install packages using native package manager
-  status      Show environment status
-  update      Upgrade pig itself
-  version     Show pig version info
-
-Flags:
-      --debug              enable debug mode
-  -h, --help               help for pig
-  -H, --home string        Pigsty home path
-  -i, --inventory string   config inventory path
-      --log-level string   log level: debug, info, warn, error, fatal, panic (default "info")
-      --log-path string    log file path, terminal by default
-  -o, --output string      output format: text, yaml, json, json-pretty (default "text")
-
-Use "pig [command] --help" for more information about a command.
+pig repo list
+pig ext list vector -o json
+pig help inventory edit
 ```
 
 ## pig repo
@@ -103,7 +70,7 @@ pig ext info    pg_duckdb        # extension details
 pig ext status                   # show installed extensions
 pig ext add     pg_duckdb -y     # install extension
 pig ext rm      old_extension    # remove extension
-pig ext update                   # update extension
+pig ext update  pg_duckdb        # update the named extension package
 pig ext scan                     # scan installed extensions
 pig ext import  pg_duckdb        # download for offline use
 pig ext link    17               # link PG version into PATH
@@ -146,7 +113,7 @@ pig install pg18                 # install PostgreSQL 18 kernel package group
 pig install nginx htop vim       # install multiple system packages
 pig install unknown-package -n   # disable translation and use raw package name
 pig install pg18 --plan          # preview installation plan
-pig install pg_vector -y         # auto-confirm installation
+pig install vector -y         # auto-confirm installation
 ```
 
 ## pig sty
@@ -156,7 +123,7 @@ Install the Pigsty distribution. See [`pig sty`](/sty/) for details.
 ```bash
 pig sty init                     # install Pigsty to ~/pigsty
 pig sty boot                     # install Ansible prerequisites
-pig sty conf                     # generate configuration
+pig sty conf -g                  # generate configuration with random passwords
 pig sty deploy                   # run deployment playbook
 pig sty list                     # list available Pigsty releases
 pig sty get {{< param pigsty_version >}}                # download the embedded Pigsty release
@@ -167,7 +134,7 @@ pig sty grafana list             # manage Grafana dashboards (info/list/boot/loa
 
 Inspect, edit, validate, check, and exchange the Pigsty inventory (`pigsty.yml`) with the
 CMDB. Root-level command group with alias `inv`; see [`pig inventory`](/inventory/)
-for details. (New in v1.6.0)
+for details.
 
 ```bash
 pig inventory status             # inspect the active inventory source
@@ -175,15 +142,15 @@ pig inventory list               # list inventory topology and value kinds
 pig inventory show               # show verbatim inventory YAML (may contain secrets)
 pig inventory edit               # edit the inventory (or one fragment) in $EDITOR
 pig inventory validate           # validate one complete static Pigsty inventory
-pig inventory check              # check inventory, controller, and target readiness
+pig inventory check              # check inventory and local controller readiness
 pig inventory diff other.yml     # compare declarations without emitting values
-pig inventory cmdb check         # exchange with the PostgreSQL CMDB (experimental)
+pig inventory cmdb check         # check the PostgreSQL CMDB (experimental)
 ```
 
 ## pig do
 
 Run Pigsty administration tasks through the corresponding Ansible playbooks. See
-[`pig do`](/do/) for the complete command and safety reference.
+[`pig do`](/do/) for the command reference.
 
 ```bash
 pig do pgsql-add  <cls> [ip...]       # add cluster or instances
@@ -197,7 +164,7 @@ pig do node-pkg   <sel> [pkg...]      # install node packages
 ## pig pe
 
 Access PostgreSQL monitoring metrics exposed by pg_exporter. The default endpoint is
-`127.0.0.1:9630`; see [`pig pe`](/pe/) for its legacy endpoint assumptions and operation details.
+`127.0.0.1:9630`; see [`pig pe`](/pe/) for endpoint and operation details.
 
 ```bash
 pig pe list                    # list available metric types
@@ -287,10 +254,7 @@ pig version                      # show pig version information
 pig version -o json              # structured version output
 ```
 
-`pig version` and the legacy `pig pe` HTTP commands do not consume Pigsty configuration, so they
-remain available when `~/.pig/config.yml` is malformed. Commands that use configuration or detected
-environment state, including `pig status`, continue to fail on a malformed file so the error is not
-silently ignored.
+If `~/.pig/config.yml` has a syntax error, fix it before running commands that read configuration, such as `pig status`. `pig version` and the `pig pe` HTTP commands remain available because they do not read this file.
 
 ## Design records
 

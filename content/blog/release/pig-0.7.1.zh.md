@@ -9,7 +9,7 @@ authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v0.7.1
 ---
 
-- 全新的网站： /ext/
+- 上线全新的 [PGEXT.CLOUD 扩展目录](https://pgext.cloud/zh/)
 - 修复了不必要的 sudo 使用问题，现在可以方便的在容器中使用
 - 允许 pig ext link 命令使用形如 pg17 pg18 的参数形式
 - 新增环境变量 `PIG_NO_SUDO`，强制不使用 sudo 执行命令

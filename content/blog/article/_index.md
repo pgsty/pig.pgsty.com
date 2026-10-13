@@ -24,9 +24,9 @@ Long-form articles about the problems PIG is built to solve: making PostgreSQL e
 discoverable, packaging them as native RPM/DEB artifacts, publishing trustworthy repositories,
 and exposing the resulting capabilities through a practical CLI.
 
-The articles retain their original publication dates, historical package counts, screenshots,
-and contemporary context. For current behavior, use the [PIG documentation](/docs/), the live
-[extension catalog](https://pigsty.io/ext/), and the [release notes](/release/).
+Versions, counts, and examples in these articles reflect their publication dates. For current
+usage, see the [PIG documentation](/docs/), [extension catalog](https://pigsty.io/ext/), and
+[release notes](/release/).
 
 Suggested reading paths:
 

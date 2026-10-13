@@ -1,15 +1,15 @@
 ---
 title: "聊聊开源软件供应链信任问题"
 date: 2025-11-22
-lastmod: 2026-08-30
+lastmod: 2026-10-13
 authors: [Vonng]
 description: >
   在严肃的生产环境里，你不能依赖一个明确说"我不提供任何保证"的上游。当别人告诉你"别指望我"，最好的回应是"那我自己来"。从TUNA镜像站的争议谈开源软件供应链信任问题。
 tags: [repo, build]
 ---
 
-昨天，老冯的一篇文章《[从PG“断供”看软件供应链中的信任问题](/zh/article/pg-mirror-pigsty/)》收到一条评论，
-评论者称是高校开源镜像站的管理员（清华 TUNA），向老冯提出批评抗议，内容如下：
+昨天，老冯此前发表的文章《[从PG“断供”看软件供应链中的信任问题](/zh/article/pg-mirror-pigsty/)》收到一条评论，
+评论者是清华大学 TUNA 开源镜像站的管理员，向老冯提出批评抗议，内容如下：
 
 > 作为高校开源镜像站管理员，我想要提醒作者，文中“躺平”“没有担当”的措辞是很不负责任的、令人心寒的指控。
 
@@ -19,7 +19,7 @@ tags: [repo, build]
 
 > 感谢 [回复与评论](https://vonng.com/pg/pg-mirror-pigsty/)，也感谢这些年 TUNA 以及国内各高校镜像站为开源镜像生态投入的时间和精力。我看到当时 TUNA 的 PostgreSQL 仓库已经[恢复了和上游的同步](/article/tuna-mirror-site/tuna.webp)，这一点先点个赞。
 >
-> 最初发现问题时，我用的是阿里云的 PostgreSQL 镜像。后来注意到 TUNA 上也存在同样的情况，就纯粹出于开源道义在 [向 TUNA 邮件列表反馈问题](https://groups.google.com/g/tuna-general/c/BU8P7X3y4sI)，得到的是一句（本邮件列表是 TUNA 的邮件列表，与阿里云无关）与长期的沉默，这样的感受会体现在文章的情绪中。
+> 最初发现问题时，我用的是阿里云的 PostgreSQL 镜像。后来注意到 TUNA 上也存在同样的情况，就纯粹出于开源道义 [向 TUNA 邮件列表反馈问题](https://groups.google.com/g/tuna-general/c/BU8P7X3y4sI)，得到的是一句（本邮件列表是 TUNA 的邮件列表，与阿里云无关）与长期的沉默，这样的感受会体现在文章的情绪中。
 >
 > 回头看原文，用“躺平”“没有担当”这样带有明显的情绪色彩的字眼，放在 **贵站身上** 已经不准确，也容易被误解为在给志愿者贴道德标签，这并非我本意。如果这段措辞让一线维护同学感到不舒服，我在这里先说声抱歉。我已经 [修改措辞](https://github.com/Vonng/blog/commit/916697a88f143679d658dc52338827ce603444fd) 为更中性的说法，比如“长期未更新” / “不再维护”，避免伤到真正干活的人。
 >
@@ -34,7 +34,7 @@ tags: [repo, build]
 
 ![讨论发生时 TUNA 的 PostgreSQL 18 软件包目录](/article/tuna-mirror-site/tuna.webp)
 
-其实在老冯的 PG 发行版 Pigsty 里，原来使用的是阿里云的 PostgreSQL 镜像站，并没有直接从 TUNA 拉 PG 包。
+这次同步问题发生时，老冯的 PG 发行版 Pigsty 使用的是阿里云的 PostgreSQL 镜像站。
 “躺平”“没有担当”这些情绪上的评价，最初更多是冲着阿里云这种有资源的大厂去的 —— [云计算泥石流](https://vonng.com/cloud) 的保留节目。
 毕竟阿里云作为互联网大厂和本土云计算一哥，从开源攫取了巨大价值，搞个开源镜像站却长期不维护 PG 仓库，实属拉垮。
 结果在这次风波里，反而是清华 TUNA 的同学先站出来表达了不同看法，这一点我也理解。
@@ -47,7 +47,7 @@ tags: [repo, build]
 
 为什么老冯会有这种感觉呢？我在发现 [全球镜像站出现同步问题](/zh/article/pg-mirror-break/) 之后，第一时间就 [给阿里云发邮件反馈了这个问题](/zh/article/pg-mirror-pigsty/)（当然阿里云现在还没修）。
 同时，我也顺手看了一圈国内其他镜像站，发现清华 TUNA 镜像站也有这个问题，就在他们的邮件列表里发了一封提醒。
-结果有同学回复说：“*你发的这个是阿里云的问题，跟本站无关*”。我解释这是所有镜像站共有的问题，然后就再没有任何回应。
+邮件里的链接已经改成了 TUNA 地址，但标签还写着“ALIYUN”。有同学因此回复：“*本邮件列表是 TUNA 的邮件列表，与阿里云无关*”。我纠正了标签，并解释这是多个镜像站共有的上游同步问题。直到这次 11 月的讨论前，没有收到进一步回复。
 
 ![TUNA 邮件列表中的 PostgreSQL 镜像同步讨论](/article/tuna-mirror-site/maillist.webp)
 
@@ -62,7 +62,7 @@ tags: [repo, build]
 
 实际上老冯自己也刚刚经历过类似的事情。我也维护了几个开源项目，还有不少 PostgreSQL 生态里的工具。
 比如说 [pg_exporter](https://github.com/pgsty/pg_exporter) —— PG 的 Prometheus 指标导出器，有一些 PG 厂商也在用。
-前天我才注意到，9月份有人在上面提了一个 [Issue](https://github.com/pgsty/pg_exporter/issues/79) 写到：
+11 月 20 日我才注意到，一位用户在 9 月提交的 [Issue](https://github.com/pgsty/pg_exporter/issues/79#issuecomment-3403244826) 中，于 10 月留下了这段话：
 
 > 你好，虽然我知道这是一个开源项目，但我一个月前提交的两个问题至今仍未得到任何回应，这实在令人失望。
 > 我对 pg_exporter 1.0 版本以及 PG 邮件列表上的公告都充满期待，甚至考虑过贡献代码。
@@ -122,7 +122,7 @@ tags: [repo, build]
 在这件事情上：
 
 - 清华 TUNA 管理员很坦率地表示：高校镜像站不提供服务承诺。这个立场本身没有问题，但下游看到这句话，自然会据此调整对你的使用边界；
-- 阿里云没有明确说，但从过往表现来看，我们可以暂时把它当成“部分负责的大厂”：如果继续出问题，那老冯回去催它/批评它，或者在自己的体系里换掉它；
+- 阿里云没有明确说，但从过往表现来看，我们可以暂时把它当成“部分负责的大厂”：如果继续出问题，那老冯会去催它、批评它，或者在自己的体系里换掉它；
 - 老冯的 Pigsty / PGDG APT / DNF 仓库，会明确给出承诺：如果仓库出问题，我会去修；如果修不好，那我自己信誉扫地，对付费客户来说，这也意味着 SLA 违约责任。
 
 镜像站、仓库、发行版，这些都是“基础设施中的基础设施”。是否愿意为自己的服务说一句“出了问题算我头上”，决定了你在这个生态里的角色 —— 只是好心的志愿者，还是真正能被依赖的关键节点。
@@ -133,49 +133,91 @@ tags: [repo, build]
 
 ## 广告时间
 
-写文章不打广告约等于没写，也许老冯提供的服务正好能帮到你。以下三个国内镜像仓库，免费对公众提供服务：
-这些仓库提供 Cloudflare 全球版本与国内云墙内版本，可以方便的使用 pig / apt / dnf 启用。
-更详细的介绍请参考 [PGEXT.CLOUD 软件仓库说明](https://pgext.cloud/repo)。
+写文章不打广告约等于没写，也许老冯提供的服务正好能帮到你。以下三个软件仓库免费向公众提供服务。
+它们提供由 Cloudflare 分发的全球入口，以及独立的国内入口，可以通过 PIG、APT 或 DNF 配置。
+当前地址与启用方式请参见 [Pigsty 软件仓库文档](https://pigsty.cc/docs/repo/)。
 
-### PGDG镜像
+### PGDG 镜像
 
-定期同步全球 PostgreSQL 开发组官方软件仓库（el 7-10, debian 11-13, ubuntu 20-24）
-最近同步于今天，每周更新。文中原有的 APT/YUM 目录入口现已停用；当前镜像地址与启用方式请参见 [Pigsty 软件仓库文档](https://pigsty.cc/docs/repo/)。
+定期同步 PostgreSQL 全球开发组的软件仓库，覆盖 EL 7–10、Debian 11–13 和 Ubuntu 20.04–24.04。截至本文发表的 2025 年 11 月 22 日，仓库刚完成一次同步，当时每周更新。
 
 ### PIGSTY PGSQL
 
-PIGSTY PGSQL 仓库：提供 [几款不同风味的 PG 内核分支](https://pigsty.cc/docs/pgsql/kernel) (PolarDB, IvorySQL, Babelfish, OrioleDB, OpenHaloDB, Percona TDE, Supabase,... )
-，与 PGDG 官方仓库配合使用，提供多达 [437 个 PG 扩展插件](https://pgext.cloud/list) 与生态常用工具。支持 [14 个 Linux 发行版大版本](https://pgext.cloud/os)。
-
-文中原有的 APT/YUM 目录入口现已停用；当前镜像地址与启用方式请参见 [Pigsty 软件仓库文档](https://pigsty.cc/docs/repo/)。
+这个仓库与 PGDG 配合使用，提供 [PG 内核分支与兼容方案](https://pigsty.cc/docs/pgsql/kernel/)，包括 PolarDB、IvorySQL、Babelfish、OrioleDB、OpenHaloDB、Percona TDE 和 Supabase。
+本文发表时，它提供 [437 个 PG 扩展](https://pgext.cloud/list) 和生态工具，覆盖 [14 个 Linux 发行版大版本](https://pgext.cloud/os)。
 
 ![PGEXT.CLOUD 扩展目录与可用性统计](/article/tuna-mirror-site/extensions.webp)
 
 ### PIGSTY INFRA
 
-提供各类数据库相关工具，Grafana，Prometheus，以及 Exporter 可观测性全家桶
+提供数据库工具、Grafana、Prometheus 和各类 Exporter。下表保留 2025 年 11 月 22 日的软件包版本。
 
-文中原有的 APT/YUM 目录入口现已停用；当前镜像地址与启用方式请参见 [Pigsty 软件仓库文档](https://pigsty.cc/docs/repo/)。
+#### 数据库与生态工具
 
-|                             **DBMS**                              |                |                               **Prometheus**                                |         |                                          **Grafana**                                           |        |
-|:-----------------------------------------------------------------:|:--------------:|:---------------------------------------------------------------------------:|:-------:|:----------------------------------------------------------------------------------------------:|:------:|
-|         [IvorySQL](https://github.com/IvorySQL/IvorySQL)          |      4.6       |           [prometheus](https://github.com/prometheus/prometheus)            |  3.7.3  |                         [grafana](https://github.com/grafana/grafana/)                         | 12.3.0 |
-|              [etcd](https://github.com/etcd-io/etcd)              |     3.6.6      |          [pushgateway](https://github.com/prometheus/pushgateway)           | 1.11.2  |                            [loki](https://github.com/grafana/loki)                             | 3.1.1  |
-|              [minio](https://github.com/minio/minio)              | 20250907161309 |         [alertmanager](https://github.com/prometheus/alertmanager)          | 0.29.0  |                [promtail](https://github.com/grafana/loki/releases/tag/v3.0.0)                 | 3.0.0  |
-|                [mcli](https://github.com/minio/mc)                | 20250813083541 |    [blackbox_exporter](https://github.com/prometheus/blackbox_exporter)     | 0.27.0  |                   [vector](https://github.com/vectordotdev/vector/releases)                    | 0.51.1 |
-|            [kafka](https://kafka.apache.org/downloads)            |     4.0.0      |    [VictoriaMetrics](https://github.com/VictoriaMetrics/VictoriaMetrics)    | 1.129.1 |         [grafana-infinity-ds](https://github.com/grafana/grafana-infinity-datasource/)         | 3.6.0  |
-|            [duckdb](https://github.com/duckdb/duckdb)             |     1.4.2      | [VictoriaLogs](https://github.com/VictoriaMetrics/VictoriaMetrics/releases) | 1.37.2  |   [grafana-vmlogs-ds](https://github.com/VictoriaMetrics/victorialogs-datasource/releases/)    | 0.21.4 |
-|         [ferretdb](https://github.com/FerretDB/FerretDB)          |     2.7.0      |             [pg_exporter](https://github.com/Vonng/pg_exporter)             |  1.0.3  | [grafana-vmetrics-ds](https://github.com/VictoriaMetrics/victoriametrics-datasource/releases/) | 0.19.6 |
-|     [tigerbeetle](https://github.com/tigerbeetle/tigerbeetle)     |    0.16.60     |     [pgbackrest_ex...](https://github.com/woblerr/pgbackrest_exporter)      | 0.21.0  |     [grafana-plugins](https://github.com/pgsty/infra-pkg/tree/main/grafana-plugins)     | 12.0.0 |
-|          [juicefs](https://github.com/juicedata/juicefs)          |     1.3.0      |        [node_exporter](https://github.com/prometheus/node_exporter)         | 1.10.2  |                                                                                                |        |
-|           [dblab](https://github.com/danvergara/dblab)            |     0.34.2     |      [keepalived_exp...](https://github.com/mehdy/keepalived-exporter)      |  1.7.0  |                                              **UTILS**                                         |        |
-|            [vray](https://github.com/v2fly/v2ray-core)            |     5.28.0     |   [nginx_exporter](https://github.com/nginxinc/nginx-prometheus-exporter)   |  1.5.1  |                          [sealos](https://github.com/labring/sealos)                           | 5.1.1  |
-|                [pig](https://github.com/pgsty/pig)                |     0.7.2      |    [zfs_exporter](https://github.com/waitingsong/zfs_exporter/releases/)    |  3.8.1  |                      [rclone](https://github.com/rclone/rclone/releases/)                      | 1.71.2 |
-| [vip-manager](https://github.com/cybertec-postgresql/vip-manager) |     4.0.0      |      [mysqld_exporter](https://github.com/prometheus/mysqld_exporter)       | 0.18.0  |                           [restic](https://github.com/restic/restic)                           | 0.18.1 |
-| [pev2](https://github.com/dalibo/pev2)                            |     1.17.0     |        [redis_exporter](https://github.com/oliver006/redis_exporter)        | 1.80.0  |                            [mtail](https://github.com/google/mtail)                            | 3.0.8  |
-|    [promscale](https://github.com/timescale/promscale)            |     0.17.0     |            [kafka_exporter](https://github.com/danielqsj/kafka_exporter)    |  1.9.0  |                  [genai-toolbox](https://github.com/googleapis/genai-toolbox)                  | 0.18.0 |
-|         [pgschema](https://github.com/pgschema/pgschema)          |   1.4.2        |       [mongodb_exporter](https://github.com/percona/mongodb_exporter)       | 0.47.1  |                        [sqlcmd](https://github.com/microsoft/go-sqlcmd)                        | 1.8.0  |
+| 软件包 | 版本 |
+|---|---|
+| [IvorySQL](https://github.com/IvorySQL/IvorySQL) | 4.6 |
+| [etcd](https://github.com/etcd-io/etcd) | 3.6.6 |
+| [minio](https://github.com/minio/minio) | 20250907161309 |
+| [mcli](https://github.com/minio/mc) | 20250813083541 |
+| [kafka](https://kafka.apache.org/downloads) | 4.0.0 |
+| [duckdb](https://github.com/duckdb/duckdb) | 1.4.2 |
+| [ferretdb](https://github.com/FerretDB/FerretDB) | 2.7.0 |
+| [tigerbeetle](https://github.com/tigerbeetle/tigerbeetle) | 0.16.60 |
+| [juicefs](https://github.com/juicedata/juicefs) | 1.3.0 |
+| [dblab](https://github.com/danvergara/dblab) | 0.34.2 |
+| [v2ray](https://github.com/v2fly/v2ray-core) | 5.28.0 |
+| [pig](https://github.com/pgsty/pig) | 0.7.2 |
+| [vip-manager](https://github.com/cybertec-postgresql/vip-manager) | 4.0.0 |
+| [pev2](https://github.com/dalibo/pev2) | 1.17.0 |
+| [promscale](https://github.com/timescale/promscale) | 0.17.0 |
+| [pgschema](https://github.com/pgschema/pgschema) | 1.4.2 |
+
+#### Prometheus 与 Exporter
+
+| 软件包 | 版本 |
+|---|---|
+| [prometheus](https://github.com/prometheus/prometheus) | 3.7.3 |
+| [pushgateway](https://github.com/prometheus/pushgateway) | 1.11.2 |
+| [alertmanager](https://github.com/prometheus/alertmanager) | 0.29.0 |
+| [blackbox_exporter](https://github.com/prometheus/blackbox_exporter) | 0.27.0 |
+| [VictoriaMetrics](https://github.com/VictoriaMetrics/VictoriaMetrics) | 1.129.1 |
+| [VictoriaLogs](https://github.com/VictoriaMetrics/VictoriaMetrics/releases) | 1.37.2 |
+| [pg_exporter](https://github.com/pgsty/pg_exporter) | 1.0.3 |
+| [pgbackrest_exporter](https://github.com/woblerr/pgbackrest_exporter) | 0.21.0 |
+| [node_exporter](https://github.com/prometheus/node_exporter) | 1.10.2 |
+| [keepalived_exporter](https://github.com/mehdy/keepalived-exporter) | 1.7.0 |
+| [nginx_exporter](https://github.com/nginxinc/nginx-prometheus-exporter) | 1.5.1 |
+| [zfs_exporter](https://github.com/waitingsong/zfs_exporter/releases/) | 3.8.1 |
+| [mysqld_exporter](https://github.com/prometheus/mysqld_exporter) | 0.18.0 |
+| [redis_exporter](https://github.com/oliver006/redis_exporter) | 1.80.0 |
+| [kafka_exporter](https://github.com/danielqsj/kafka_exporter) | 1.9.0 |
+| [mongodb_exporter](https://github.com/percona/mongodb_exporter) | 0.47.1 |
+
+#### Grafana 与日志工具
+
+| 软件包 | 版本 |
+|---|---|
+| [grafana](https://github.com/grafana/grafana/) | 12.3.0 |
+| [loki](https://github.com/grafana/loki) | 3.1.1 |
+| [promtail](https://github.com/grafana/loki/releases/tag/v3.0.0) | 3.0.0 |
+| [vector](https://github.com/vectordotdev/vector/releases) | 0.51.1 |
+| [grafana-infinity-ds](https://github.com/grafana/grafana-infinity-datasource/) | 3.6.0 |
+| [grafana-vmlogs-ds](https://github.com/VictoriaMetrics/victorialogs-datasource/releases/) | 0.21.4 |
+| [grafana-vmetrics-ds](https://github.com/VictoriaMetrics/victoriametrics-datasource/releases/) | 0.19.6 |
+| [grafana-plugins](https://github.com/pgsty/infra-pkg/tree/main/grafana-plugins) | 12.0.0 |
+
+#### 实用工具
+
+| 软件包 | 版本 |
+|---|---|
+| [sealos](https://github.com/labring/sealos) | 5.1.1 |
+| [rclone](https://github.com/rclone/rclone/releases/) | 1.71.2 |
+| [restic](https://github.com/restic/restic) | 0.18.1 |
+| [mtail](https://github.com/google/mtail) | 3.0.8 |
+| [genai-toolbox](https://github.com/googleapis/genai-toolbox) | 0.18.0 |
+| [sqlcmd](https://github.com/microsoft/go-sqlcmd) | 1.8.0 |
 
 ---
 
-> **归档说明（2026-08-30）：** 本文原载 [vonng.com](https://vonng.com/db/tuna-mirror-site/)。文中的软件包数量、截图与上下文以原始发表日期为准；当前行为请以 [PIG 文档](/zh/docs/)和实时[扩展目录](https://pigsty.cc/ext/)为准。
+> 原文：[vonng.com](https://vonng.com/db/tuna-mirror-site/)。

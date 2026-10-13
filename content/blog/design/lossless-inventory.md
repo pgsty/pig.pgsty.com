@@ -2,7 +2,7 @@
 title: "Edit the Declaration, Preserve the Document: Lossless Pigsty Inventory"
 linkTitle: "Lossless Inventory"
 date: 2026-07-18
-lastmod: 2026-08-28
+lastmod: 2026-10-13
 description: "Why pig inventory separates YAML semantics from source bytes so scoped edits can preserve comments, ordering, anchors, and formatting."
 tags: [inventory, sty]
 weight: 50
@@ -56,7 +56,7 @@ configuration on disk. The design needed source fidelity and whole-document corr
 - the complete candidate is reparsed and validated before commit;
 - writes use a same-directory temporary file, sync, rename, and directory sync;
 - symlink and unsafe path changes are rejected;
-- a successful edit tightens secret-bearing Inventory permissions to `0600`;
+- a successful edit removes group and other permissions, preserving the owner's existing read and write permissions;
 - diagnostics, diffs, plans, and structured results omit declaration values unless a command is
   explicitly a raw text surface.
 
@@ -67,8 +67,8 @@ are deliberately refused when source fidelity cannot be proven. The benefit is a
 unselected parts of the Inventory remain byte-for-byte stable, invalid YAML cannot be committed,
 and a concurrent edit cannot be overwritten silently.
 
-`show` remains intentionally secret-bearing. That explicit exception is safer than pretending a
-partial redactor can classify every future credential key.
+Inventory can contain custom credential fields, so field names alone cannot reliably identify secrets.
+For this reason, `show` prints the selected declaration as raw text. Metadata and validation commands omit declaration values.
 
 ## Verification and evolution {#verification}
 

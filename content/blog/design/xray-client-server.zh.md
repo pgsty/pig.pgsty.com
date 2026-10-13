@@ -2,7 +2,7 @@
 title: "一键配置 Xray 客户端与服务端"
 linkTitle: "Xray 客户端与服务端"
 date: 2026-10-05
-lastmod: 2026-10-06
+lastmod: 2026-10-13
 description: "以现有可工作的客户端与服务端为参考，为 build proxy 增加配套的 VLESS、REALITY 与 Vision 初始化能力。"
 tags: [build, cli, install]
 weight: 90
@@ -24,7 +24,7 @@ VLESS + RAW + REALITY + `xtls-rprx-vision`。服务端首次设置生成配套�
 文件传递是可选方式，不是初始化的前提。
 
 保留现有命令路径与 `x` 别名。无参数调用改为安装或确认 Xray。兼容期内，历史形式
-`id@host:port [local]` 保留 VMess 语义与默认端口，不能在参数不足时静默解释成 VLESS。
+`id@host:port [local]` 继续通过 V2Ray 使用 VMess，并保留默认端口。
 
 ## 背景 {#context}
 
@@ -39,12 +39,12 @@ HTTP 与 SOCKS，出站使用 VLESS/RAW/REALITY/Vision，采用 Chrome 指纹、
 
 参考 Linux 服务端监听回环地址的 9443 端口。Nginx 占用公网 443，按 SNI 选择后端，
 并转发 PROXY protocol 头。Xray 接收该头，连接 REALITY target，使用 `freedom` 出站，
-阻断匹配 `geoip:private` 的目的地址。这是入口组合，不是 Xray 独立监听公网 443。
+阻断匹配 `geoip:private` 的目的地址。此部署由 Nginx 提供公网入口。
 
 检查过的 Pigsty RPM 与 DEB 制品覆盖两种架构，均提供 `/usr/bin/xray`、权限为 0640 且归属
 `root:xray` 的 `/etc/xray.json`、`xray:xray` 服务账户、`xray.service`，以及
 `/usr/share/xray` 中的地理数据。安装脚本只重载 systemd，不自动启动或启用服务。
-公开仓库索引列出了 26.3.27-1PGSTY；制品检查和仓库收录不等于已在所有操作系统上完成安装验证。
+公开仓库索引列出了 26.3.27-1PGSTY。运行测试范围见下文。
 
 ## 考虑过的替代方案 {#alternatives}
 
@@ -219,52 +219,34 @@ SNI map、接收 PROXY 头的网站后端，以及操作系统特定的服务注
 保留已有监听地址。配置与服务管理明确区分角色、操作系统、所有权和外部入口。
 
 实现保留在 `cmd/build.go` 与 `cli/build` 下的聚焦文件中，复用现有计划、输出、确认、特权写入
-与日志辅助函数。只有可执行行为实现后才更新当前参考，只有到达发布门槛后才修改发布注记。
+与日志辅助函数。
 
 ## 验证与演进 {#verification}
 
-2026-10-05 的初始检查核对了运行中的参考配对、Xray 26.3.27、四份 RPM/DEB 软件包制品，
-以及此前 VMess 行为。这些观察建立参考基线，与下面的新实现验收分开记录。
+实现提交为
+[`d090b7c`](https://github.com/pgsty/pig/commit/d090b7c9ab9301c06f9ccb2151c732d598f0e40c)，
+[`5d8660c`](https://github.com/pgsty/pig/commit/5d8660c8c12e6c00b77d409efd2287b8299377b1)
+补齐文件归属与服务状态恢复。测试覆盖角色语法、输入形式等价、脱敏、监听默认值、凭据复用、
+导出冲突、受保护文件、capabilities 选择与执行计划。完整 Go 测试、vet、静态分析、死代码与
+复杂度检查，以及命令/build 包重复竞态测试均在本地通过。
 
-[源码实现](https://github.com/pgsty/pig/commit/d090b7c9ab9301c06f9ccb2151c732d598f0e40c) 的聚焦测试覆盖角色语法、
-URI/直接参数/文件/标准输入等价、严格参数解析、凭据脱敏、监听默认值与保留、只读导出、
-拒绝损坏或有歧义的服务端、复用服务端凭据、重复导出、受保护文件、capabilities 选择与无变更计划。
-`go test ./...`、`go vet ./...`、静态分析、死代码与复杂度检查，以及命令/build 包重复随机竞态测试均在本地通过。
+运行测试使用 Xray 26.3.27：
 
-一台全新 Debian 13 ARM64 虚拟机通过一条 SSH 管道读取既有参考服务端连接并执行
-`client --from -`。PIG 安装 Xray 26.3.27、以 `xray` 账户配置和启用服务，并通过独立的
-HTTP/SOCKS 健康检查。另行通过两个协议发起 HTTPS 请求，均返回 HTTP 200。
-重复设置保留配置字节与运行 PID。使用错误 UUID 替换时返回非零，恢复原配置与服务，
-随后请求成功。整个只读导出与客户端测试期间，参考服务端配置哈希与 PID 均未改变。
+| 环境 | 已验证行为 |
+|:---|:---|
+| 全新 Debian 13 ARM64 客户端 | 软件包安装；以 `xray` 身份运行；HTTP/SOCKS 健康检查；重复设置保持配置和 PID；错误 UUID 后回滚 |
+| 全新 Debian 服务端 | 直连特权端口；`0640` 配置与 `0600` 导出；重复设置保持凭据、文件与 PID；导出失败后回滚 |
+| macOS 已有 Homebrew Xray | 独立 LaunchAgent；HTTP/SOCKS 连通性；无变更重跑；失败后恢复配置与持久禁用状态 |
+| 已有参考服务端 | 只读导出与客户端测试期间，配置哈希和 PID 保持不变 |
 
-第二台全新 Debian 虚拟机验证直连服务端创建、以 `xray` 身份绑定特权端口、0640 配置、
-0600 导出与重复设置。第二次设置后配置、导出内容与 PID 均不变。
-应用监听变更后的导出失败能够恢复原配置与运行服务。
-生成的 URI 也成功建立新的 REALITY/Vision 连接，包含 ML-DSA 验证；
-HTTP 和 SOCKS 访问可达 TLS 网站均返回 HTTP 200。
-该测试服务端所在本地网络无法访问 Google 健康检查端点，因此这组配对的完整客户端设置
-正确失败并回滚。完整的一行命令客户端验收通过既有参考服务端完成。
+新服务端导出的 URI 成功建立 REALITY/Vision 连接，并使用 ML-DSA 验证。
+HTTP 与 SOCKS 访问可达的 TLS 网站均返回 HTTP 200。该服务器的网络无法访问 Google 健康检查端点，
+因此这组配对的完整客户端设置失败并回滚。完整客户端设置在连接已有参考服务端时通过，
+使用的是该服务端已有的 Nginx/PROXY 入口。
 
-[最终复核修正](https://github.com/pgsty/pig/commit/5d8660c8c12e6c00b77d409efd2287b8299377b1) 补上文件归属、systemd 权限集重置、
-服务身份与启动参数检查，以及 macOS 持久启用状态恢复。Debian 实测先复现了配置属组错误
-仍被判定为无变更的行为，再验证修复归属后配置字节保持不变，随后重复设置不重启。
-直连服务端的 bounding 与 ambient 集合均只保留 `CAP_NET_BIND_SERVICE`，认证与导出内容不变。
-另用已有 Homebrew Xray 创建独立的 macOS 临时 LaunchAgent 客户端，验证连接参考服务端的
-HTTP/SOCKS 请求、无变更重复设置、禁用状态恢复，以及错误 UUID 后恢复原配置和原禁用状态；
-回滚后的代理请求也成功。原有 macOS 参考服务未被接管。
-
-这些检查不能证明 RPM 运行验收、全新 Homebrew 安装、UDP 转发、
-任意 Xray 版本兼容性或新部署的 PROXY protocol 前端。
-成功的客户端测试经过参考服务端既有 Nginx/PROXY 入口，但 PIG 没有修改该入口。
-其余平台与传输检查属于后续发布验收，不能推断为已经通过。
-
-中英文当前参考与本记录配套交付，并通过 `make docs-check` 检查。
-源码提交、文档提交、推送/CI、tag 制品与公开部署分别作为完成门槛。
+运行测试未覆盖 RPM 安装、全新 Homebrew 安装、UDP 转发、其他 Xray 版本或新建 PROXY protocol 前端。
 
 ## 当前状态 {#status}
 
-该实现已进入经过验证的 [v1.9.0 标签](https://github.com/pgsty/pig/tree/v1.9.0)
-与[正式发布制品](https://github.com/pgsty/pig/releases/tag/v1.9.0)。上述实现与本地验证的证据范围保持不变。
-软件仓库发布、公开文档部署与既有系统升级仍是独立交付阶段。
-
-Nginx 入口自动化与凭据轮换仍属于后续独立决策。
+已随 [v1.9.0](https://github.com/pgsty/pig/releases/tag/v1.9.0) 发布。
+Nginx 入口自动化与凭据轮换留待后续设计。

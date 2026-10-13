@@ -2,9 +2,9 @@
 title: "PG Extension Cloud: Unlocking PostgreSQL’s Entire Ecosystem"
 linkTitle: PG Extension Cloud
 date: 2025-11-12
-lastmod: 2026-08-30
+lastmod: 2026-10-13
 authors: [Vonng]
-description: Free, open, no VPN. Install PostgreSQL and 431 extensions on 14 Linux distros × 6 PG versions via native RPM/DEB—and a tiny CLI.
+description: "A catalog of 431 PostgreSQL extensions, native RPM/DEB repositories, and the PIG command-line tool for finding and installing packages."
 tags: [ext, repo, catalog, cli]
 ---
 
@@ -28,7 +28,7 @@ pig repo set
 pig install -y -v 18 pgsql postgis timescaledb pgvector pg_duckdb
 ```
 
-Behind those three lines sits combinatorial chaos—14 distros × 6 PG versions × 431 extensions. Now it’s a one-liner.
+Behind those three lines sits combinatorial chaos—14 distros × 6 PG versions × 431 extensions. PIG selects the matching packages for the host.
 
 ## Why we needed this
 
@@ -38,7 +38,7 @@ I hoped projects like Tembo’s `trunk` or pgxman would solve distribution. They
 
 ## Smooth installs
 
-`pig` isn’t a new package manager; it’s a piggyback layer over yum/dnf/apt. You can still use `apt install postgresql-pgvector` directly—the repos are standard. `pig` just automates repo setup, architecture detection, PG version switching, and dependency resolution.
+`pig` isn’t a new package manager; it’s a piggyback layer over yum/dnf/apt. You can still use `apt install postgresql-18-pgvector` directly—the repos are standard. `pig` just automates repo setup, architecture detection, PG version switching, and dependency resolution.
 
 ## Open supply chain
 
@@ -65,4 +65,4 @@ PGEXT.CLOUD is my attempt to make PostgreSQL’s extension ecosystem accessible.
 
 ---
 
-> **Archive note (2026-08-30):** First published on [vonng.com](https://vonng.com/en/pg/pgext-cloud/). Package counts, screenshots, and surrounding context reflect that date. For current behavior, use the [PIG documentation](/docs/) and live [extension catalog](https://pigsty.io/ext/).
+> Originally published on [vonng.com](https://vonng.com/en/pg/pgext-cloud/).

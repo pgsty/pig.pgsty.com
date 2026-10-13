@@ -24,7 +24,7 @@ version is now `0.19.3`; the embedded Pigsty version remains `4.5.0`.
 - Matching configuration, ownership, permissions, and service state avoid rewrites and
   restarts. Failed client connectivity checks restore prior managed files and service state.
   Replacing a different client requires `--replace --yes`; `--plan` previews either role.
-- `server --export-only --export -` exports an existing connection without changing the
+- `server --export-only --host HOST --export -` exports an existing connection without changing the
   deployment. File exports use mode `0600`; explicit stdout export requires text output.
   Ordinary results and plans omit credentials. The historical VMess positional form remains
   available through V2Ray.
@@ -34,8 +34,8 @@ sudo pig build proxy server --host proxy.example.com --target www.sraoss.co.jp:4
 sudo pig build proxy client --from ./client.uri
 ```
 
-See [`pig build`](https://pig.pgsty.com/build/#build-proxy) for prerequisites, macOS setup,
-credential handling, and the separate public-ingress boundary.
+Run the server command on the server, then transfer `client.uri` securely to the client and run
+the client command there. See [`pig build`](/build/#build-proxy) for prerequisites and macOS setup.
 
 ## Repository keys
 
@@ -58,7 +58,7 @@ defaults and the distinction between key preparation and metadata refresh.
   `pg_statkit`, `pgtelemetry`, `pg_rusage`, `pgexporter_ext`, `pg_statvfs`, and `libx509pq`.
   Package versions and platform-availability metadata are refreshed as well.
 - The catalog total includes retained lifecycle records. Installability depends on each
-  extension's state and OS/architecture/PostgreSQL matrix; 600 is not a per-platform count.
+  extension's state and OS/architecture/PostgreSQL matrix. Use `pig ext avail NAME` to check a target.
 - `pig build pgrx` defaults to `cargo-pgrx 0.19.3`. An explicit `-v` and extension-specific
   catalog metadata continue to select another required version.
 - Platform debug packages remain enabled by default, as in v1.8.1. Use `--nodbg` for RPM
@@ -67,9 +67,9 @@ defaults and the distinction between key preparation and metadata refresh.
 ## Compatibility
 
 No existing command or flag is removed. New Xray role commands use VLESS/REALITY/Vision;
-existing positional VMess commands retain their V2Ray behavior. A server setup result verifies
-the local listener and service; firewall, Nginx, cloud security groups, and public reachability
-remain separate operator responsibilities.
+existing positional VMess commands retain their V2Ray behavior. Server setup checks the local listener and service.
+Configure the firewall, cloud security group, and any Nginx frontend for the chosen public port,
+then verify the connection from the client.
 
 ## Verification
 

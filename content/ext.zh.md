@@ -7,28 +7,7 @@ categories: [参考]
 tags: [ext, catalog]
 ---
 
-`pig ext` 用于检索扩展目录并管理主机上的 PostgreSQL 扩展 **软件包**。它可以解析名称、查询软件包可用性，安装、移除、升级 RPM/DEB 包，也能处理 PostgreSQL 内核包；数据库内部的启用与迁移不属于这一命令组的职责。
-
-```bash
-pig ext - Manage PostgreSQL Extensions
-
-  pig repo add -ru             # add all repo and update cache (brute but effective)
-  pig ext add pg18             # install optional postgresql 18 package
-  pig ext list duck            # search extension in catalog
-  pig ext scan -v 18           # scan installed extension for pg 18
-  pig ext add pg_duckdb        # install certain postgresql extension
-
-Examples:
-  pig ext list    [query]      # list & search extension
-  pig ext info    [ext...]     # get information of a specific extension
-  pig ext status  [-v]         # show installed extension and pg status
-  pig ext add     [ext...]     # install extension for current pg version
-  pig ext rm      [ext...]     # remove extension for current pg version
-  pig ext update  [ext...]     # update extension to the latest version
-  pig ext import  [ext...]     # download extension to local repo
-  pig ext link    [ext...]     # link postgres installation to path
-  pig ext reload               # reload the latest extension catalog data
-```
+`pig ext` 查询扩展目录，安装、升级或移除主机上的 PostgreSQL 扩展软件包。它也支持 PostgreSQL 内核包。安装软件包后，按扩展要求在数据库中执行 SQL 并修改配置。
 
 | 命令           | 描述             | 备注                |
 |:-------------|:---------------|:------------------|
@@ -47,59 +26,45 @@ Examples:
 
 ## 快速入门
 
-在安装 PostgreSQL 扩展前，你需要先添加 [`pig repo add`](/zh/repo/)：
+以下示例使用已运行的 PostgreSQL 18 实例。安装与启动步骤见[快速上手](/zh/start/)。
+
+添加 PostgreSQL 仓库，查询扩展，再安装软件包：
 
 ```bash
-pig repo add pgdg pigsty -u    # 温和方式添加 pgdg 和 pigsty 仓库
-pig repo set                   # 粗暴方式移除并添加所有所需仓库
+pig repo add pgsql -u
+pig ext list vector
+pig ext info vector
+pig ext add vector -v 18
 ```
 
-然后你可以搜索并安装 PostgreSQL 扩展：
+在目标数据库中启用扩展，例如：
 
-```bash
-pig ext install pg_duckdb
-pig ext install pg_partman
-pig ext install pg_cron
-pig ext install pg_repack
-pig ext install pg_stat_statements
-pig ext install pg_stat_kcache
+```sql
+CREATE EXTENSION vector;
 ```
 
-可用扩展及其名称请查阅 [**扩展列表**](https://pigsty.cc/ext/list/)。
+其他扩展见[扩展列表](https://pigsty.cc/ext/list/)。
+扩展需要预加载或额外配置时，先按 `pig ext info NAME` 的提示完成配置，再启用扩展。
 
-**使用说明：**
+### 选择 PostgreSQL 安装
 
-1. 未指定 PostgreSQL 版本时，工具会尝试从 `PATH` 中的 `pg_config` 自动检测当前活动的 PostgreSQL 安装。
-2. PostgreSQL 可通过主版本号（`-v`）或 pg_config 路径（`-p`）指定。
-   - 若指定 `-v`，pig 会使用该版本 PGDG 内核包的默认路径。
-     - EL 发行版为 `/usr/pgsql-$v/bin/pg_config`，
-     - DEB 发行版为 `/usr/lib/postgresql/$v/bin/pg_config` 等。
-   - 若指定 `-p`，则直接用该路径定位 PostgreSQL。
-3. 扩展管理器会根据操作系统自动适配不同的包格式：
-   - RHEL/CentOS/Rocky Linux/AlmaLinux 使用 RPM 包
-   - Debian/Ubuntu 使用 DEB 包
-4. 某些扩展可能有依赖项，安装时会自动解决。
-5. 谨慎使用 `-y` 参数，它会自动确认所有提示。
+- `-v, --version 18`：指定 PostgreSQL 主版本。
+- `-p, --path /path/to/pg_config`：指定一套 PostgreSQL 安装的 `pg_config`。
+- 两个参数不能同时使用。省略时，PIG 尝试探测本机 PostgreSQL；自动化脚本建议显式传入 `-v`。
 
-Pigsty 假定你已安装官方 PGDG 内核包，如未安装，可用如下命令：
+PGDG 默认路径为 EL 的 `/usr/pgsql-18/bin/pg_config`，以及 Debian/Ubuntu 的 `/usr/lib/postgresql/18/bin/pg_config`。包管理器负责解析 RPM/DEB 依赖；`-y` 自动确认软件包操作。
 
-```bash
-pig ext install pg18          # 安装 PostgreSQL 18 内核（除 devel 包）
-```
+## 软件包与数据库操作 {#软件包层与数据库层}
 
-## 软件包层与数据库层
-
-PIG 的主要作用范围是操作系统软件包层。明确这条边界，可以避免几种常见而危险的误解：
-
-| 命令 | 实际改变的内容 | **不会** 做的事情 |
+| 任务 | PIG 操作 | 数据库操作 |
 |:---|:---|:---|
-| `ext add` | 安装所选 RPM/DEB 包及其软件包依赖 | 执行 `CREATE EXTENSION`、修改 PostgreSQL 参数或重启 PostgreSQL |
-| `ext rm` | 移除所选 RPM/DEB 包 | 执行 `DROP EXTENSION`，或逐库检查是否仍依赖这些文件 |
-| `ext update` | 升级显式指定的操作系统软件包 | 执行 `ALTER EXTENSION UPDATE`，或迁移扩展拥有的数据库对象 |
-| `ext status` / `ext scan` | 检查所选 PostgreSQL 安装树与主机可见文件 | 证明扩展已在每个数据库中创建、运行正常，或 SQL 版本已经一致 |
-| `ext reload` | 将新版目录下载到 `~/.pig/extension.csv` | 安装或升级任何软件包、数据库扩展 |
+| 安装 | `ext add NAME` | 按要求配置预加载并执行 `CREATE EXTENSION` |
+| 升级 | `ext update NAME` | 按扩展升级说明执行 `ALTER EXTENSION ... UPDATE` |
+| 移除 | `ext rm NAME` | 先在受影响数据库中移除或迁移依赖，再卸载软件包 |
+| 检查 | `ext status` / `ext scan` 检查主机文件 | 查询 `pg_extension` 查看数据库已启用扩展 |
+| 刷新目录 | `ext reload` 更新扩展元数据 | 无 |
 
-完成软件包事务后，应先用 `pig ext info NAME` 查看预加载与 DDL 提示，再对每个目标数据库应用配置与 SQL；扩展有要求时还需重载或重启 PostgreSQL。最后应核对 `pg_available_extensions`、`pg_extension` 及扩展自己的升级文档。移除软件包前必须先做数据库依赖审计；若数据库对象仍存在就删除共享文件，相关数据库可能无法正常使用。
+`pg_available_extensions` 显示服务器可用的扩展，`pg_extension` 显示当前数据库已启用的扩展。
 
 ## ext list
 
@@ -177,11 +142,11 @@ pig ext status -v 16        # 显示 PG 16 已安装扩展
 pig ext scan [-v version]
 ```
 
-该命令扫描 PostgreSQL 控制文件及相关安装路径，反映的是主机层可用性；它不会连接所有数据库，也不会检查各数据库的 `pg_extension` 目录。
+该命令读取所选 PostgreSQL 安装目录中的控制文件及相关文件。
 
 ## ext add
 
-安装一个或多个 PostgreSQL 扩展。`pig ext add` 的同级别名包括 `pig ext install`、`pig ext ins` 与 `pig ext a`。顶层 [`pig install`](/zh/cmd/#pig-install) 是另一个原生包管理器包装命令，也支持 PostgreSQL 与扩展包 alias 翻译。
+安装一个或多个 PostgreSQL 扩展。`pig ext add` 的同级别名包括 `pig ext install`、`pig ext ins` 与 `pig ext a`。顶层 [`pig install`](/zh/cmd/#pig-install) 也接受扩展别名和普通系统软件包。
 
 ```bash
 pig ext add pg_duckdb            # 安装 pg_duckdb
@@ -190,17 +155,27 @@ pig ext add pg_duckdb -y         # 自动确认安装
 pig ext add vector postgis       # 安装多个扩展
 pig ext add postgis --plan       # 预览安装计划，不执行
 
-# 使用别名
+# 使用顶层软件包安装命令
 pig install pg_duckdb
 pig install pg_duckdb -v 18 -y
 
-# 安装 PostgreSQL 内核
-pig ext install pgsql            # 安装最新版 postgresql 内核
-pig ext a pg18                   # 安装 postgresql 18 内核包
-pig ext ins pg16                 # 安装 postgresql 16 内核包
-pig ext install pg15-core        # 安装 postgresql 15 核心包
-pig ext install pg14-main -y     # 安装 pg 14 + 常用扩展（vector, repack, wal2json）
+# 安装 PostgreSQL 软件包
+pig ext add pg18                 # 安装 PostgreSQL 18
+pig ext add pg18-client          # 仅安装客户端工具
 ```
+
+以下别名用于选择 PostgreSQL 软件包组：
+
+| 别名 | 软件包 |
+|:---|:---|
+| `pg18` | 服务端、客户端、contrib 模块与过程语言 |
+| `pg18-server` | 服务端与 contrib 模块 |
+| `pg18-client` | 客户端工具 |
+| `pg18-devel` | 开发文件 |
+| `pg18-basic` | pg_repack、wal2json 和 pgvector |
+
+将 `18` 替换为所需的大版本，也可以用 `pgsql` 配合 `-v 18`。
+安装特定软件包版本时，使用 `NAME=VERSION`，版本必须存在于已配置的仓库中。
 
 **选项：**
 
@@ -231,21 +206,21 @@ pig ext rm pgvector --plan       # 预览移除计划，不执行
 
 ## ext update
 
-将指定的已安装扩展更新到最新版。出于安全考虑，无参数 `pig ext update` 不会更新所有扩展，而是 no-op；必须显式写出要更新的目标。
+将指定软件包更新到已配置仓库提供的版本。不带参数时，命令不执行更新。
 
 ```bash
 pig ext update                   # no-op：必须显式指定目标
 pig ext update pg_duckdb         # 更新特定扩展
 pig ext update postgis timescaledb  # 更新多个扩展
 pig ext update pg_duckdb -y      # 自动确认更新
-pig ext update pg_duckdb -m      # 选择内置中国区域软件源
+pig ext update pg_duckdb -m      # 先从中国镜像刷新扩展目录
 ```
 
 **选项：**
 
 - `-v|--version`：指定 PG 大版本
 - `-y|--yes`：自动确认更新
-- `-m|--mirror`：优先使用 `pigsty.cc` 镜像作为更新来源
+- `-m|--mirror`：更新软件包前，优先从 `pigsty.cc` 镜像刷新扩展目录；软件包仍从已配置的系统仓库下载
 
 该命令不会执行 SQL 迁移。软件包升级完成后，请按扩展发布说明，在每个适用数据库中执行 `ALTER EXTENSION ... UPDATE`。
 
@@ -280,7 +255,11 @@ pig ext link null                # 取消当前 PostgreSQL 链接
 pig ext link none                # null / none / nil / nop / no 均可取消链接
 ```
 
-该命令会创建 `/usr/pgsql` 软链接，并写入 `/etc/profile.d/pgsql.sh`。
+该命令创建 `/usr/pgsql` 软链接，并写入 `/etc/profile.d/pgsql.sh`。在当前 Shell 中加载配置：
+
+```bash
+. /etc/profile.d/pgsql.sh
+```
 
 ## ext reload
 

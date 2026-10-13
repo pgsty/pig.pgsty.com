@@ -1,8 +1,8 @@
 ---
-title: "Catalog v2 Proposal: Immutable Typed Snapshots Instead of Bigger CSV"
+title: "Catalog v2 Proposal: Immutable Typed Snapshots"
 linkTitle: "Catalog v2 Proposal"
 date: 2026-08-13
-lastmod: 2026-08-28
+lastmod: 2026-10-13
 description: "A proposed verifiable Catalog model with typed targets, content-addressed snapshots, explicit activation, project pins, and offline import."
 tags: [catalog, repo, ext, cli]
 weight: 86
@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **Decision date:** 2026-08-13<br>
-> **Status:** Pre-implementation proposal; security mechanism, overlay scope, packaging, and path ADRs remain open.<br>
+> **Status:** Proposal; security mechanism, overlays, packaging, and path layout remain open.<br>
 > **Current reference:** [`pig ext`](/ext/) and [`pig repo`](/repo/) describe the v1 Catalog behavior.<br>
 > **Scope:** A candidate PIG 2.0 publication and consumption model for product metadata, not Inventory or live system state.
 
@@ -35,7 +35,7 @@ the extension matrix compresses several independent identities into one record. 
 updates make it difficult to prove that repository, package, extension, and compatibility data
 belong to the same publication event.
 
-Catalog v2 is therefore a publication and trust problem, not merely a new serialization format.
+Catalog v2 must define how related data is published, verified, and activated together.
 
 ## Alternatives considered {#alternatives}
 
@@ -108,14 +108,14 @@ and projects, symlink replacement, disk-full and concurrent activation, package 
 semantics, project survival after global-cache deletion, and parity migration of the current
 extension and availability corpus.
 
-The current source baseline remains
-[`v1.8.0`](https://github.com/pgsty/pig/commit/67dac09caab843252ea4376bf16b08c5e238ff22),
-whose embedded and reloadable v1 Catalog continues to define released behavior.
+The proposal was based on
+[`v1.8.0`](https://github.com/pgsty/pig/commit/67dac09caab843252ea4376bf16b08c5e238ff22).
+[v1.9.0](https://github.com/pgsty/pig/tree/v1.9.0) still uses the embedded and independently
+reloadable v1 Catalog.
 
 ## Current status {#status}
 
-No Catalog v2 command, manifest, trust root, store layout, project lock, or migration format is a
-released PIG contract today. Typed overlays should be omitted from 2.0 if their conflict and trust
-rules cannot be proven; a complete custom signed channel is safer than loose unverified patches.
-Current installation and catalog behavior remains documented under [`pig ext`](/ext/) and
+Catalog v2 is not implemented. Security, paths, and overlay rules need decisions and tests first.
+If overlay conflict and trust rules are not ready, a complete custom signed channel can provide
+the initial customization path. Current usage is documented under [`pig ext`](/ext/) and
 [`pig repo`](/repo/).

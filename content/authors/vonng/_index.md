@@ -5,6 +5,6 @@ description: "Author of pig and founder of Pigsty."
 ---
 
 Ruohang Feng (Vonng) writes [pig](https://github.com/pgsty/pig) and maintains
-[Pigsty](https://pigsty.io/), the PostgreSQL distribution its extension catalog
-and repositories come from. He works on PostgreSQL packaging, deployment, and
-the tooling that keeps a database fleet operable.
+[Pigsty](https://pigsty.io/), a PostgreSQL distribution. PIG uses Pigsty's extension
+catalog and package repositories. He works on PostgreSQL packaging, deployment,
+and database operations tools.

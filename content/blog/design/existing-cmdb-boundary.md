@@ -2,7 +2,7 @@
 title: "Use the CMDB Pigsty Already Has"
 linkTitle: "Existing CMDB Boundary"
 date: 2026-07-18
-lastmod: 2026-08-28
+lastmod: 2026-10-13
 description: "Why PIG retired a new revision-store design and became a thin, guarded adapter to Pigsty's existing PostgreSQL CMDB."
 tags: [inventory, sty]
 weight: 60
@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **Decision date:** 2026-07-18<br>
-> **Status:** The greenfield revision store is superseded; the thin existing-CMDB adapter is implemented and remains experimental.<br>
+> **Status:** Released in [v1.6.0](/release/pig-1.6.0/) as an experimental adapter. The earlier revision-store design is superseded.<br>
 > **Current reference:** [`pig inventory cmdb`](/inventory/)<br>
 > **Scope:** Exchanging declarations with Pigsty's existing CMDB, not designing another configuration database.
 
@@ -52,7 +52,8 @@ PIG responsible for a data model owned by another project.
 - PIG connects through an explicit database target, environment configuration, or `service=meta`;
 - credentials, DSNs, SQL bodies, and declaration values never enter plans or diagnostics;
 - `check` is read-only;
-- `init` applies the existing baseline and does not claim to back up an existing database;
+- `init` replaces the `pigsty` and `pglog` schemas from the version-matched baseline and requires
+  confirmation; back up an existing database first;
 - `load` replaces declaration rows transactionally and requires explicit confirmation;
 - `dump` refuses an unexpected overwrite unless forced;
 - `enable` and `disable` edit only recognized Ansible Inventory source forms and write atomically;
@@ -61,9 +62,7 @@ PIG responsible for a data model owned by another project.
 
 ## Consequences {#impact}
 
-The correction deleted a large amount of already implemented revision-store code. That deletion
-was intentional scope recovery, not lost functionality: the removed features described a product
-PIG should not own.
+The correction removed the parallel revision-store implementation and its maintenance burden.
 
 The remaining adapter is smaller, easier to audit, and compatible with existing Pigsty operations.
 It also inherits the limits of that system: `init` needs an operator-managed backup, and loading a
@@ -81,5 +80,5 @@ source switching.
 ## Current status {#status}
 
 The existing-CMDB adapter shipped in [v1.6.0](/release/pig-1.6.0/) but remains experimental.
-Operators should back up real CMDB state before initialization or replacement and use the current
-[`pig inventory` documentation](/inventory/) rather than the historical abandoned design.
+Back up CMDB state before initialization or replacement. See the
+[`pig inventory` reference](/inventory/) for the supported workflow.

@@ -9,6 +9,6 @@ authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v0.3.0
 ---
 
-The [`pig`](/docs/) project now has a new [homepage](/docs/), along with the PostgreSQL Extension [Catalog](https://pigsty.io/ext/list).
+This release introduced a [PIG homepage](/) alongside the PostgreSQL extension [catalog](https://pigsty.io/ext/list/).
 
 {{< release-card >}}

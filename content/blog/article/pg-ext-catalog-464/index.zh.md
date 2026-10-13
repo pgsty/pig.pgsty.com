@@ -1,10 +1,9 @@
 ---
 title: "464个扩展开箱即用：新版 PG 扩展目录发布"
 date: 2026-03-08
-lastmod: 2026-08-30
+lastmod: 2026-10-13
 authors: [Vonng]
-description: >
-  今天老冯又让 Claude Code 干了一件大好事 —— 做了一个全新的 PostgreSQL 扩展目录。就放在 https://pigsty.cc/ext 这里。
+description: "第五版扩展目录将 464 个扩展的软件包元数据与使用文档放在一起。"
 tags: [ext, catalog, repo]
 ---
 
@@ -86,7 +85,11 @@ tags: [ext, catalog, repo]
 
 这个扩展目录从第一版到现在，前后经历了五个版本：
 
-1.Hugo + Docsy（初版，融合在 Pigsty 主站）2.Docsify3.Next.js4.Hugo + Hextra（独立站点 pgext.cloud）5.Hugo + Docsy（现在，回归 Pigsty 主站）
+1. Hugo + Docsy（初版，整合在 Pigsty 主站）
+2. Docsify
+3. Next.js
+4. Hugo + Hextra（独立站点 pgext.cloud）
+5. Hugo + Docsy（现在，回归 Pigsty 主站）
 
 中间那个独立站点 pgext.cloud，因为没有备案、挂在 Cloudflare 上，有国内用户反馈访问不稳定，怀疑被墙。思来想去，还是老老实实用备案过的域名来做这件事。
 
@@ -116,7 +119,7 @@ tags: [ext, catalog, repo]
 
 Hextra 是另一个轻量化的，类似 Fumadocs 的主题。我很喜欢，它对于小型项目来说非常合适，比如翻译书什么的。但是对于大型文档站点来说还是有些力不从心。但是老冯的几本书，教程，小项目都很喜欢用这个框架。
 
-这次挂在了独立站点 pgext.cloud 三，因为没有备案、挂在 Cloudflare 上，有国内用户反馈访问不稳定，怀疑被墙。思来想去，还是老老实实用备案过的域名来做这件事。
+第四版使用独立站点 pgext.cloud，没有备案，部署在 Cloudflare 上。有国内用户反馈访问不稳定，怀疑被墙。思来想去，还是老老实实用备案过的域名来做这件事。
 
 第五版： Hugo + Docsy
 
@@ -136,4 +139,4 @@ Hugo 这个框架我用了快十年，从来没让我失望过。折腾了这么
 
 ---
 
-> **归档说明（2026-08-30）：** 本文原载 [vonng.com](https://vonng.com/pg/pg-ext-catalog-464/)。文中的软件包数量、截图与上下文以原始发表日期为准；当前行为请以 [PIG 文档](/zh/docs/)和实时[扩展目录](https://pigsty.cc/ext/)为准。
+> 原文：[vonng.com](https://vonng.com/pg/pg-ext-catalog-464/)。

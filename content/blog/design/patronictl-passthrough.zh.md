@@ -2,7 +2,7 @@
 title: "让 Patronictl 自己说话"
 linkTitle: "Patronictl 透明透传"
 date: 2026-07-21
-lastmod: 2026-08-28
+lastmod: 2026-10-13
 description: "为什么 pig pt 不再镜像 Patronictl 命令树，而是只保留少量 PIG 本地辅助功能的透明启动器。"
 tags: [patroni, cli]
 weight: 80
@@ -18,7 +18,7 @@ draft: false
 ## 决策 {#decision}
 
 `pig pt` 是已安装 `patronictl` 的透明启动器。PIG 选择配置并分派少量本地辅助命令；
-其它命令 token 及其后的所有参数原样传递，保留原生提示、终端行为、输出格式与退出码。
+其它命令词及其后的所有参数原样传递，保留原生提示、终端行为、输出格式与退出码。
 
 PIG 不再维护一份持续变化的 Patronictl 命令树副本。
 
@@ -39,11 +39,11 @@ PIG 不再维护一份持续变化的 Patronictl 命令树副本。
 
 ## 契约 {#contract}
 
-- 第一个非选项命令 token 决定本地分派还是透传；
-- `set`、本地 service shortcut、`status` 与 `log` 由 PIG 拥有；
-- 其它命令和剩余 token 原样转发；
+- 第一个非选项命令词决定本地分派还是透传；
+- `set`、本地服务快捷命令、`status` 与 `log` 由 PIG 拥有；
+- 其它命令和剩余参数原样转发；
 - `pig pt -- COMMAND ...` 显式绕过本地名称冲突；
-- 包装器参数必须出现在原生命令 token 之前；
+- 包装器参数必须出现在原生命令词之前；
 - 原生 help 可以在没有本地 Patroni 配置时运行；
 - Patronictl 拥有交互提示、原生 `--format` 和退出码；
 - 会产生原生参数歧义的 PIG 全局结构化输出被明确拒绝；
@@ -51,7 +51,7 @@ PIG 不再维护一份持续变化的 Patronictl 命令树副本。
 
 ## 影响 {#impact}
 
-自动化需要采用 Patronictl 的 cluster-first 位置语法与原生输出参数。
+自动化需要采用 Patronictl 的集群名在前的位置参数语法与原生输出参数。
 部分 PIG 专有别名和结果 schema 被移除。换来的好处是：新 Patronictl 功能无需等待 PIG 发布，
 行为也不再依赖滞后的包装器实现。
 
@@ -66,4 +66,4 @@ PIG 不再维护一份持续变化的 Patronictl 命令树副本。
 ## 当前状态 {#status}
 
 透传命令语法以 Patronictl 自身文档为准；PIG 的配置选择与本地辅助功能以 [`pig pt`](/zh/pt/) 为准。
-不能用 PIG `-o json` 代替 Patronictl 原生 `--format json`。
+透传命令需要 JSON 输出时，使用 Patronictl 原生 `--format json` 参数。

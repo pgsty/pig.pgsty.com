@@ -1,10 +1,9 @@
 ---
 title: "PG扩展云：解锁 PG 生态的全部潜力"
 date: 2025-11-12
-lastmod: 2026-08-30
+lastmod: 2026-10-13
 authors: [Vonng]
-description: >
-  开源免费免翻墙，一键安装PG与431个扩展插件 14个Linux发行版 x 6大PG主版本原生 RPM/DEB。
+description: "收录 431 个 PostgreSQL 扩展的目录、原生 RPM/DEB 仓库，以及用于查找和安装软件包的 PIG 命令行工具。"
 tags: [ext, repo, catalog, cli]
 ---
 
@@ -56,7 +55,7 @@ PostgreSQL 生态中拥有数量庞大的扩展，总数可能超过 1000 个。
 官方仓库不收录这些扩展有许许多多的原因 —— 比如 YUM 仓库的维护者 Devrim 就表示，绝对不会让 Rust 写的 PG 扩展进入仓库中。
 而像 plv8，pg_duckdb 这样一编译一个小时的扩展巨无霸，毫无疑问也会显著拉高仓库维护的成本，所以老冯也完全能理解。
 
-老冯曾经寄希望于 Tembo 的包管理器 trunk，或者 pgxman 之类的东西可以解决这些问题，不过似乎最后还是不自己动手上。
+老冯曾经寄希望于 Tembo 的包管理器 trunk，或者 pgxman 之类的东西可以解决这些问题，不过似乎最后还是得自己动手。
 （比如 tembo 就已经跑路去干 AI DBA 去了）。而这一干就一发不可收拾，一下子就干成了 PG 生态里最大的扩展目录与仓库。
 
 简单来说，这个扩展目录目前收录了 431 个扩展，抛开 PG 自带的 71 个扩展总共 360 个。
@@ -233,4 +232,4 @@ pgxman、pgxn 等也都一直都没啥声响和进展。
 
 ---
 
-> **归档说明（2026-08-30）：** 本文原载 [vonng.com](https://vonng.com/pg/pgext-cloud/)。文中的软件包数量、截图与上下文以原始发表日期为准；当前行为请以 [PIG 文档](/zh/docs/)和实时[扩展目录](https://pigsty.cc/ext/)为准。
+> 原文：[vonng.com](https://vonng.com/pg/pgext-cloud/)。

@@ -1,10 +1,9 @@
 ---
 title: "504 Extensions: Expand the PostgreSQL Landscape"
 date: 2026-04-13
-lastmod: 2026-08-30
+lastmod: 2026-10-13
 authors: [Vonng]
-description: >
-  One GitHub issue turned into an extension sprint. 32 new additions, 504 in total, say a lot about where PostgreSQL is headed.
+description: "How an RDKit packaging request led to 32 new extensions and a 504-entry catalog."
 tags: [ext, catalog, build]
 ---
 
@@ -55,7 +54,7 @@ That turned into this release: **32 new additions, 22 updates, and the Pigsty ex
 | **EL**       |     499 |      150 |        332 |          71 |        5 |      472 |      482 |      474 |      468 |      452 |
 | **Debian**   |     489 |      107 |        311 |          71 |       15 |      466 |      474 |      464 |      458 |      442 |
 
-Out of these 500-odd extensions, around 70 ship with PostgreSQL itself, roughly 150 are packaged by PGDG, and the remaining 330 are third-party extensions that I package and maintain myself.
+The catalog combines PostgreSQL's bundled extensions with packages from PGDG and Pigsty. The repository counts overlap: some extensions are available from more than one source.
 
 To put that in perspective: most managed PostgreSQL cloud RDS expose a few dozen extensions at best.
 Take Supabase, for example. It looks like a long list, but after you subtract the 35 contrib extensions that come with PostgreSQL, you are left with fewer than 30 third-party extensions.
@@ -146,7 +145,7 @@ The key property is composability: provenance is not a dead log string but a liv
 
 ## 3. onesparse: Billion-Edge Graph Algorithms in SQL
 
-> [`one_sparse`](https://pigsty.io/ext/e/onesparse) | [GitHub](https://github.com/OneSparse/OneSparse)
+> [`onesparse`](https://pigsty.io/ext/e/onesparse) | [GitHub](https://github.com/OneSparse/OneSparse)
 
 OneSparse wraps SuiteSparse:GraphBLAS to bring high-performance sparse linear algebra into PostgreSQL. Developer Michel Pelletier sits on the GraphBLAS C API committee; advisor Timothy A. Davis is the SuiteSparse author. The premise: **represent graphs as sparse matrices** and run BFS, PageRank, triangle centrality, and friends via matrix operations — all from SQL.
 
@@ -166,7 +165,7 @@ SELECT reduce_cols(cast_to(graph, 'int32')) AS degree FROM karate;
 SELECT pagerank(graph) FROM karate;
 ```
 
-On the GAP benchmark, BFS over a **4.3 billion-edge** graph reached **70 billion+ traversed edges per second** (48-core AMD EPYC). Targets: fraud detection on transaction graphs, social-network analysis, Graph RAG. The usual caveat applies: real usability depends on whether your load/serialization formats and the SQL planner play nicely end-to-end. Start small.
+The [published GAP benchmarks](https://onesparse.com/blog/2025/07/01/billions-of-edges-per-second-with-postgres.html#benchmarks) include graphs with up to **4.3 billion edges** and report BFS throughput above **7 billion edges per second** on some inputs. Potential uses include transaction-graph fraud detection, social-network analysis, and Graph RAG. Test data loading, serialization, and query planning with a small representative graph before scaling up.
 
 Requires **PG 18 Beta or newer**; still alpha. Apache 2.0.
 
@@ -273,7 +272,7 @@ Fits national-scale hydrology databases, basin planning, upstream/downstream pol
 
 > [`pg_stat_ch`](https://pigsty.io/ext/e/pg_stat_ch) | [GitHub](https://github.com/ClickHouse/pg_stat_ch)
 
-`pg_stat_ch` comes from ClickHouse itself (February 2025 "Postgres Week at ClickHouse", author Kaushik Iska). Where `pg_stat_statements` aggregates inside PostgreSQL, `pg_stat_ch` streams **every raw query execution event** (45 fields, fixed 4.6 KB each) out to ClickHouse for p50/p95/p99 analysis, top-query ranking, and error analytics.
+`pg_stat_ch` was [announced by ClickHouse on February 13, 2026](https://clickhouse.com/blog/pg_stat_ch-postgres-extension-stats-to-clickhouse), with Kaushik Iska as the author. Where `pg_stat_statements` aggregates inside PostgreSQL, `pg_stat_ch` streams **every raw query execution event** (45 fields, fixed 4.6 KB each) out to ClickHouse for p50/p95/p99 analysis, top-query ranking, and error analytics.
 
 Pipeline: **PG hooks → shared-memory ring buffer → background worker → ClickHouse** via native binary protocol with **LZ4 compression** (statically linked `clickhouse-cpp`). The 45 fields cover timing, row counts, buffers, WAL, CPU, JIT (PG 15+), parallel workers (PG 18+), client context, and SQLSTATE errors. On queue overflow it drops events and bumps a counter rather than applying backpressure — StatsD philosophy.
 
@@ -500,20 +499,20 @@ Natural fit for IoT: push database state changes to edge devices without middlew
 
 > [`pg_query_rewrite`](https://pigsty.io/ext/e/pg_query_rewrite) | [GitHub](https://github.com/pierreforstmann/pg_query_rewrite)
 
-`pg_query_rewrite` (Pierre Forstmann) uses the `ProcessUtility` hook to transparently replace SQL statements at runtime. Rules live in shared memory, matched by **exact string equality** — whitespace and case both matter.
+`pg_query_rewrite` (Pierre Forstmann) uses the `post_parse_analyze_hook` to rewrite parsed SQL statements. Rules live in shared memory, matched by **exact string equality** — whitespace and case both matter.
 
 ```sql
 -- Add a rewrite rule
 SELECT pgqr_add_rule('select 10;', 'select 11;');
 
 -- From here on, "select 10;" returns 11
-SELECT 10;  -- returns 11
+select 10;  -- returns 11
 
 -- Show all rules and rewrite counters
 SELECT pgqr_rules();
 ```
 
-A sharp tool with sharp edges: no parameterized statements, max ~32 KB per statement, matching is whitespace/case/semicolon-sensitive, rules do not survive restarts unless reloaded via startup SQL. Still useful for redirecting fixed SQL from legacy systems during migrations, intercepting dangerous queries, and simple query A/B tests. Default max 10 rules. PG 9.5–18.
+Statements must match exactly, including whitespace, case, and semicolons. Parameterized statements are unsupported, and each statement is limited to about 32 KB. Reload rules after a restart. This is useful for redirecting fixed SQL during migrations and for query A/B tests. Default max 10 rules. PG 9.5–18.
 
 -------
 
@@ -708,13 +707,13 @@ Pure SQL. Supports min/max aggregation and PGXN version-range validation. Useful
 
 > [`parray_gin`](https://pigsty.io/ext/e/parray_gin) | [GitHub](https://github.com/theirix/parray_gin)
 
-`parray_gin` (Eugene Seliverstov) adds **partial-match** operators for `text[]` columns backed by GIN indexes. Native GIN array operators only do exact element matching; `parray_gin` adds `@@>` for substring containment, using `pg_trgm` trigram decomposition with recheck for false positives.
+`parray_gin` (Eugene Seliverstov) adds **partial-match** operators for `text[]` columns backed by GIN indexes. Native GIN array operators only do exact element matching; `parray_gin` adds `@@>` for matching array elements against `LIKE` patterns, using `pg_trgm` trigram decomposition with recheck for false positives.
 
 ```sql
 CREATE INDEX ON test_table USING gin (val parray_gin_ops);
 
--- Match 'post' against 'postgresql'
-SELECT * FROM test_table WHERE val @@> array['post'];
+-- Match elements that start with 'post', such as 'postgresql'
+SELECT * FROM test_table WHERE val @@> array['post%'];
 
 -- LIKE-style partial containment
 SELECT * FROM test_table WHERE val @@> array['%ar%'];
@@ -889,4 +888,4 @@ Cathedrals (Apache Foundation projects) and bazaars (weekend builds) side by sid
 
 ---
 
-> **Archive note (2026-08-30):** First published on [vonng.com](https://vonng.com/en/pg/extension-504/). Package counts, screenshots, and surrounding context reflect that date. For current behavior, use the [PIG documentation](/docs/) and live [extension catalog](https://pigsty.io/ext/).
+> Originally published on [vonng.com](https://vonng.com/en/pg/extension-504/).

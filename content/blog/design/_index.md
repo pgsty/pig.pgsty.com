@@ -12,9 +12,9 @@ cascade:
   images: [/images/pig-design.webp]
 ---
 
-Design notes explain why PIG behaves the way it does. Each note identifies the decision date,
-the implementation and release boundary, alternatives that were rejected, and the current user
-documentation.
+Design notes explain the decisions and proposals behind PIG. Each note gives its date, status,
+scope, alternatives, and supporting evidence. Proposals describe directions under discussion;
+implemented and released records explain work that has reached those stages.
 
-These articles are historical and architectural context. For current command syntax and behavior,
-use the linked [PIG documentation](/docs/); for delivery history, use the [release notes](/release/).
+For command syntax and usage, use the [PIG documentation](/docs/). For changes in each version,
+use the [release notes](/release/).

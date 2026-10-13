@@ -1,39 +1,37 @@
 ---
-title: "A Packaging Patch Has Been Corrupting Valkey's Memory Accounting Since 2017"
+title: "How a Packaging Patch Broke Valkey’s Memory Accounting"
 date: 2026-08-09
-lastmod: 2026-08-30
+lastmod: 2026-10-13
 authors: [Vonng]
-description: >
-  Codex found an old Valkey bug affecting Debian's packages and every official Valkey .deb.
-  One line in a packaging patch releases a glibc allocation with Valkey's own deallocator, so the
-  server either segfaults or silently stops accepting writes until you restart it.
+description: "A packaging patch uses the wrong deallocator in Valkey. It can crash the server or trigger persistent out-of-memory errors."
 tags: [build, repo]
 ---
 
-I was updating the Redis module in Pigsty recently, adding Valkey as an alternative engine, and hit an upstream bug while packaging it.
+I was updating the Redis module in Pigsty recently, adding Valkey as an alternative engine, and found a bug in an inherited packaging patch.
 
-**If your Valkey runs on Debian or Ubuntu, and one day the disk fills up or the data directory permissions go wrong so snapshots stop saving — every failed save drops the instance's memory counter a little. Once it goes below zero it wraps to `18446744073709518664`. From then on, if you have `maxmemory` set, the server refuses every write until you restart it.**
+In affected Valkey DEB packages, failed synchronous saves can corrupt `used_memory` until it reports a value near 2^64.
+With `maxmemory` set, commands subject to its limit then return OOM errors. Restarting the server resets the counter.
 
 ```console
 > SET foo bar
 (error) OOM command not allowed when used memory > 'maxmemory'.
 > GET foo
-"bar"                          # reads are fine
+"bar"                          # a value stored before the failure
 ```
 
-There is plenty of free memory. Nothing appears in the logs. `used_memory_rss` stays normal and RSS graphs are flat. The only number moving is `used_memory`, and nobody alerts on memory usage slowly going *down*.
+There can be plenty of free memory. The log records the save failure, but not a separate memory-accounting error. `used_memory_rss` stays normal and RSS graphs are flat. The only number moving is `used_memory`, and nobody alerts on memory usage slowly going *down*.
 
-**If you built from source, or linked against the bundled jemalloc, it's blunter: one failed `SAVE` segfaults the server.**
+**A build that applies the same patch and links the bundled private jemalloc can crash on the first failed `SAVE`. Pristine upstream source does not contain the patch and is unaffected.**
 
-The cause is a single line in a packaging patch. Its lineage goes back to 2017, it was fixed once in Redis, came back in Valkey, and eventually got copied into Valkey's own release pipeline — so **every `.deb` on `download.valkey.io`**, from 7.2 through 9.1, carried it.
+The cause is a single line in a packaging patch. Its lineage goes back to 2017, it was fixed once in Redis, came back in Valkey, and eventually got copied into Valkey's own release pipeline — so **all five official DEB packaging lines examined in this investigation**—7.2, 8.0, 8.1, 9.0, and 9.1—carried it. The official RPM packaging did not.
 
-The fix is now merged. Here's how it surfaced.
+The [packaging fix](https://github.com/valkey-io/valkey-release-automation/pull/63) merged on August 7, 2026. Here is how it surfaced.
 
 ---
 
 ## What's wrong
 
-Valkey has two error paths that log the working directory when a snapshot fails to land. Upstream uses a stack buffer, so there's nothing to release.
+Valkey logs the working directory on two RDB error paths: failure to open the temporary file and failure to rename it to the final snapshot name. Upstream uses a stack buffer, so there's nothing to release.
 
 Debian's packaging patch moves it to the heap:
 
@@ -51,7 +49,7 @@ The usual reaction is "it's a free, what could go wrong". But `zfree()` isn't a 
 
 Step two is wrong unconditionally. This allocation never went through Valkey's allocator, so it was never added to `used_memory` — and `used_memory` is unsigned, so subtracting past zero wraps it.
 
-Whether steps one and three break depends on which jemalloc the binary was linked against. With the system `libjemalloc.so` (Debian, Ubuntu, and the official `.deb`s), the pointer at least belongs to the right heap, so nothing crashes and you only get the corrupted counter. With the bundled private jemalloc — upstream's default — it can't find the pointer in its own bookkeeping and dereferences null:
+Whether steps one and three break depends on which jemalloc the binary was linked against. With system `libjemalloc.so`, as used by the affected DEB packages, global `malloc()` and Valkey use the same allocator. The pointer belongs to the right heap, so nothing crashes and you only get the corrupted counter. With the bundled private jemalloc — upstream's default — it can't find the pointer in its own bookkeeping and dereferences null:
 
 ```text
 valkey-server(je_malloc_usable_size+0x68)
@@ -80,7 +78,7 @@ Once I understood the mechanism, the first thing I did was disbelieve myself: tw
 
 Then I spent longer than the technical work checking whether someone had already reported it. Worth noting one trap: two of Debian's search endpoints were broken at the time and **returned zero rows for bugs I knew existed**. Without a "this query should definitely return something" control, I'd have walked away with a confident false negative.
 
-Nobody had reported it.
+I found no dedicated Debian bug report for this Valkey defect.
 
 ## Where the line came from
 
@@ -95,15 +93,15 @@ Subject: Use get_current_dir_name over PATHMAX, etc.
 - **2017** — Chris Lamb writes the patch for Debian's **Redis** packaging.
 - **2020** — a `zfree(cwdp)` shows up in Redis's copy and blows up: [redis/redis#7927](https://github.com/redis/redis/issues/7927) and [Debian #972683](https://bugs.debian.org/972683), fixed by switching to libc `free()`.
 - Debian's Valkey packaging is **derived** from the Redis packaging, patch included.
-- Someone later notices the allocation is leaked and adds a free — writing `zfree(cwdp)` again. **The same mistake, in the same patch lineage, five years apart.**
+- In October 2024, a change to fix the leak adds `zfree(cwdp)` again. It first ships in Debian Valkey `8.0.2+dfsg1-1`; `8.0.1+dfsg1-1` is unaffected. **The same mistake, in the same patch lineage, four years apart.**
 - **March 2025** — Valkey maintainer zuiderkwast, reviewing these Debian patches, [spots the mismatch immediately](https://github.com/valkey-io/valkey/issues/1882):
 
   > ...the latter uses `malloc()` (rather than `zmalloc()`) and we later free it using `zfree()`. This means it will mess up the memory usage tracking done in zmalloc and zfree. Therefore, we may not want to take this patch, at least not unmodified.
 
   Correct diagnosis. He assumed the damage stopped at broken accounting, and the issue lost priority when jemalloc upstream was archived.
-- **April 2026** — Valkey builds an automated pipeline covering 40 platform combinations, and **copies Debian's patch set wholesale**. The official `.deb`s inherit the bug.
+- **April 2026** — Valkey builds an automated pipeline covering five version lines, four distributions, and two CPU architectures, and **copies Debian's patch set wholesale**. The official `.deb`s inherit the bug.
 
-Worth noting: that repository's test target is an **empty shell with the body commented out**. The upstream tests that catch this have never run in the official DEB build.
+The Debian packaging rules leave `override_dh_auto_test` empty, with the upstream regression-test commands commented out. The pipeline checks installation and service behavior, but those checks do not exercise the failing RDB paths.
 
 ## Reporting it
 
@@ -130,7 +128,7 @@ So if you're filing a Debian bug from a Mac: switch to plain text first (`Format
 
 **Upstream took a comment, then a PR.** zuiderkwast's year-old comment was the natural hook, so I picked up from there with what he didn't have: under the bundled allocator this is a segfault, not drift; the upstream test suite already catches it; and the official `.deb`s have it today.
 
-He replied within the day asking for a PR. The change is one line:
+He asked for a PR on August 3. The change is one line:
 
 ```diff
 -        zfree(cwdp);
@@ -139,7 +137,7 @@ He replied within the day asking for a PR. The change is one line:
 
 `zlibc_free()` exists in Valkey **for exactly this case** — it's defined specifically so callers can reach the real libc `free()`.
 
-Which also explains how `zfree` got picked in the first place. A plain `free(cwdp)` **does not compile**: Valkey deliberately marks `free()` deprecated and builds with `-Werror`. The author was almost certainly blocked by the compiler and reached for the name that looked closest.
+Which also explains how `zfree` got picked in the first place. A plain `free(cwdp)` **does not compile**: Valkey deliberately marks `free()` deprecated and builds with `-Werror`. One possible explanation is that the compiler rejected `free()` and the author chose the closest-looking name.
 
 A defensive measure that pushed someone into the hole it was guarding.
 
@@ -147,7 +145,7 @@ A defensive measure that pushed someone into the hole it was guarding.
 
 zuiderkwast approved the same day, with a question: **why keep this patch at all?** The path is only used in one error message; just go back to the stack buffer.
 
-Fair, and I'd listed dropping it as the alternative in the PR description. Since he was leaning that way, I did it downstream first — removed the patch entirely from Pigsty's Valkey and Redis packaging, rebuilt, and reported back: nothing changes for users, the error message still prints the full path, tests pass. **The problem goes away along with the patch.**
+Fair, and I'd listed dropping it as the alternative in the PR description. Since he was leaning that way, I did it downstream first — removed the patch entirely from Pigsty's Valkey and Redis packaging, rebuilt, and reported back: the shutdown tests pass, and ordinary paths still appear in the error message. If a path exceeds the stack buffer, upstream reports `unknown`. **The problem goes away along with the patch.**
 
 Then it went somewhere I didn't expect. zuiderkwast turned to the maintainers who built the pipeline:
 
@@ -157,9 +155,9 @@ Then it went somewhere I didn't expect. zuiderkwast turned to the maintainers wh
 
 That last sentence is the best summary of the whole episode.
 
-**The PR merged on 2026-08-07.** All five packaging lines are fixed. The maintainer who built the pipeline replied "Thanks for the notification. Will investigate this!" — a review of the whole patch stack is underway.
+**The PR merged on 2026-08-07.** It corrects both deallocation sites in all five packaging lines. The maintainer who built the pipeline replied "Thanks for the notification. Will investigate this!" — a review of the whole patch stack is underway.
 
-The Debian report has had no reply since August 1st, which is normal; response times there run in weeks. Still outstanding: **bookworm's Redis package has the identical defect**, which I mentioned inside the Valkey report but haven't filed separately.
+As of this article’s publication on August 9, the Debian report had received no maintainer reply. The investigation also found the same defect in **bookworm’s Redis `5:7.0.15-1~deb12u7` package**. I included that finding in the Valkey report but had not filed it separately.
 
 ## Takeaway
 
@@ -169,9 +167,9 @@ Lamb's 2017 patch was legitimate packaging hygiene. Whoever added `zfree(cwdp)` 
 
 Every step was reasonable. The result sat quietly across five product lines and four distributions.
 
-**Packaging patches are where bugs hide.** They're not in upstream's CI, not in upstream's code review, not in anyone's `git log`. They get copy-pasted across projects (Redis → Valkey) and across organizations (Debian → Valkey's own pipeline), losing a little context each time.
+**Packaging patches are where bugs hide.** They can be absent from upstream CI, upstream code review, and the source history users normally inspect. They get copy-pasted across projects (Redis → Valkey) and across organizations (Debian → Valkey's own pipeline), losing a little context each time.
 
-And the reason this surfaced at all: that test case was sitting there the whole time, creating a directory named `dump.rdb` to force exactly this failure. The official pipeline had its test target commented out, so it never ran once.
+And the reason this surfaced at all: that test case was sitting there the whole time, creating a directory named `dump.rdb` to force exactly this failure. The official DEB build had the regression-test commands commented out, so this test did not run there.
 
 Packaging is dull work. Run the tests anyway.
 
@@ -193,7 +191,7 @@ Valkey is not an obscure project anymore; it's the default Redis replacement in 
 
 So the missing ingredient was never capability. It was **patience**.
 
-Spending a full day on a footnote-grade bug in a cold error path — building a 3×3×2 build matrix, reproducing the crash thirty times, tracing a patch lineage back a decade, checking five different search endpoints to confirm nobody had reported it — does not pay off on a human time budget. It is too boring.
+Spending a full day on a footnote-grade bug in a cold error path — comparing patch states, allocators, versions, and architectures, reproducing the crash thirty times, tracing a patch lineage back a decade, checking five different search endpoints to confirm nobody had reported it — does not pay off on a human time budget. It is too boring.
 
 Which happens to be exactly the kind of work an agent is good at.
 
@@ -203,8 +201,8 @@ I should be clear that this is not "the AI does everything and I put my feet up"
 
 So the value isn't that the agent gets it right the first time. It's that **the cost of making it disprove itself over and over is low enough to be worth doing** — where a human would decide that six builds to chase a statistics counter isn't worth the afternoon.
 
-The pace of this is genuinely startling. Two years ago every step in that loop was mine to do by hand. Now I sit here handing out tasks, asking follow-up questions, and signing off — and the rest of it just runs.
+The change in pace is startling. Two years ago every step in that loop was mine to do by hand. Now I sit here handing out tasks, asking follow-up questions, and signing off — and the rest of it just runs.
 
 ---
 
-> **Archive note (2026-08-30):** First published on [vonng.com](https://vonng.com/en/db/valkey-bug/). Package counts, screenshots, and surrounding context reflect that date. For current behavior, use the [PIG documentation](/docs/) and live [extension catalog](https://pigsty.io/ext/).
+> Originally published on [vonng.com](https://vonng.com/en/db/valkey-bug/).

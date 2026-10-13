@@ -1,9 +1,9 @@
 ---
-title: "Catalog v2 提案：不可变 typed snapshot，而不是更大的 CSV"
+title: "Catalog v2 提案：不可变的分类快照"
 linkTitle: "Catalog v2 提案"
 date: 2026-08-13
-lastmod: 2026-08-28
-description: "一套候选的可验证 Catalog 模型：typed target、内容寻址 snapshot、显式激活、项目 pin 与离线导入。"
+lastmod: 2026-10-13
+description: "用分类数据文件组成可验证的 Catalog 快照，支持原子激活、项目版本锁定与离线导入。"
 tags: [catalog, repo, ext, cli]
 weight: 86
 authors: [Vonng]
@@ -11,90 +11,83 @@ draft: false
 ---
 
 > **决策日期：** 2026-08-13<br>
-> **状态：** 实现前提案；安全机制、overlay 范围、打包方式与路径 ADR 仍未决定。<br>
-> **当前参考：** [`pig ext`](/zh/ext/) 与 [`pig repo`](/zh/repo/)描述 v1 Catalog 行为。<br>
-> **范围：** PIG 2.0 产品元数据的候选发布与消费模型，不包含 Inventory 或实时系统状态。
+> **状态：** 提案；安全机制、覆盖规则、打包方式与路径布局待定。<br>
+> **当前参考：** [`pig ext`](/zh/ext/) 与 [`pig repo`](/zh/repo/)<br>
+> **范围：** PIG 2.0 产品元数据的发布与读取模型。
 
 ## 决策 {#decision}
 
-Catalog v2 应当是一份由多个 typed target 组成的不可变、可验证 snapshot。
-Manifest 将平台、仓库、路由、package alias、扩展、兼容性、Pigsty release 与公钥元数据绑定到精确字节。
-所有候选 target 一起校验，通过同一个 pointer 激活，避免新仓库 Catalog 与旧扩展矩阵被静默混装。
+Catalog v2 将产品元数据分成多个有类型的数据文件，组成一份不可变、可验证的快照。
+清单文件（manifest）记录平台、仓库、路由、包别名、扩展、兼容性、Pigsty 版本与公钥数据的
+长度和哈希。所有文件一起校验，通过同一个指针激活，避免混用不同版本的仓库与扩展矩阵。
 
-Snapshot digest 是最终身份。Package、system、user、portable 与 project scope 保存或选择的是同一份
-已验证内容，而不是把无关 base snapshot 合并成一份人工 Catalog。
+快照以内容摘要标识。系统、用户、便携环境与项目都选择完整快照，并从各自的存储位置读取。
 
 ## 背景 {#context}
 
-v1 Catalog 很实用，但相关事实散布在 embedded CSV、repository YAML、Pigsty 变量、生成站点和 reload 路径中。
-部分字段重复维护可推导信息，extension matrix 也把几个独立身份压缩到同一条记录。
-独立更新后，很难证明 repository、package、extension 与 compatibility 数据来自同一次发布。
+v1 Catalog 的相关信息分布在内嵌 CSV、仓库 YAML、Pigsty 变量、生成站点与更新流程中。
+部分字段可以推导，却仍需重复维护；扩展矩阵也把项目、版本与包等不同对象压在同一条记录里。
+独立更新后，很难确认这些数据来自同一次发布。
 
-因此，Catalog v2 首先是发布与信任问题，而不仅是换一种序列化格式。
+Catalog v2 要解决的是数据如何一起发布、校验和启用。
 
 ## 考虑过的方案 {#alternatives}
 
-- **制作更大的 `extension.csv` 或一个巨型 YAML。** 不同 target 类型演进速度不同，也无法独立流式处理并整体激活。
-- **立即使用 SQLite、protobuf 或定制二进制矩阵。** 当前数据量没有证明值得承担新的运行时与调试成本。
-- **按字段合并 system、user、project base snapshot。** 结果没有单一 publisher、digest、兼容声明或签名。
-- **只把 active 或 project pin 内容放在 cache。** 删除缓存不能破坏持久的用户或项目决定。
-- **允许 user file 遮蔽官方 trust root。** 安全 policy 是约束，不是普通的后写覆盖偏好。
-- **后台静默更新并激活。** 元数据变化可能改变包解析，必须是可观察操作。
+- **扩大 `extension.csv` 或改用一个大 YAML。** 不同数据类型需要独立的结构和校验规则。
+- **立即使用 SQLite、protobuf 或定制二进制格式。** 当前数据量尚不需要增加这类运行和调试成本。
+- **按字段合并系统、用户与项目基础快照。** 合并结果缺少单一发布者、摘要、兼容声明与签名。
+- **只在缓存中保存当前快照和项目锁定版本。** 清理缓存会破坏持久选择。
+- **让用户文件覆盖官方信任根。** 用户偏好不应削弱系统的安全策略。
+- **后台静默更新并启用。** 元数据变化会改变包解析结果，用户需要知道何时发生了更新。
 
 ## 契约 {#contract}
 
-候选 snapshot 契约是：
+提案规定：
 
-- Manifest 与小型 target 使用确定性 UTF-8 JSON，大型稀疏 target 使用 JSONL；
-- 直接校验原始 manifest bytes 与 target length/hash，避免 parse 后重新序列化产生歧义；
-- Manifest 包含 schema、单调安全版本、创建时间、过期时间、channel 和 PIG/Pigsty 兼容范围；
-- 始终提供 embedded rescue baseline；
-- package-owned baseline、durable snapshot store、可变状态 pointer 与可清理下载 cache 使用不同路径；
-- Linux 遵循 FHS/XDG，macOS 使用 Application Support 与 Caches，portable `PIG_HOME` 仍区分
-  config、data、state、cache 与 run；
-- project lock 记录 snapshot 身份和有序 overlay，已验证 snapshot 物化到持久 project support data；
-- 选择 digest 与寻找该 digest 的 bytes 是两个独立算法；
-- 低层 scope 只能收紧 system security policy，不能静默放宽；
-- 更新下载到私有 staging，校验每一层，sync 后移动到内容寻址 store，再原子替换 active pointer；
-- 失败时保留此前 active snapshot；
-- user/system active channel 更新不会移动 project pin；
-- 离线导出包含验证元数据和公开 trust material，绝不包含私钥；
-- 旧 `ext reload` 与 `repo reload` 可以在一个兼容周期内映射到整体 snapshot update，
-  但不能分别激活 target。
+- 清单与小型数据文件使用确定性的 UTF-8 JSON，大型稀疏数据使用 JSONL。
+- 直接校验清单原始字节，以及数据文件的长度和哈希，避免重新序列化产生歧义。
+- 清单包含格式版本、单调递增的安全版本、创建与过期时间、发布通道及 PIG/Pigsty 兼容范围。
+- 内嵌一份可用于恢复的基础快照。
+- 将包管理器维护的基础快照、持久快照存储、可变状态指针与下载缓存分开存放。
+- Linux 遵循 FHS/XDG，macOS 使用 Application Support 与 Caches。便携模式下的 `PIG_HOME`
+  也分别存放配置、数据、状态、缓存与运行文件。
+- 项目锁定文件记录快照身份与有序覆盖层；项目自身持久保存已验证的快照数据。
+- 将“选择哪个摘要”与“到哪里读取对应数据”分成两个步骤。
+- 用户与项目只能收紧系统安全策略。
+- 更新先下载到私有暂存目录，逐层校验并同步到磁盘，再移入按内容寻址的存储，最后原子替换激活指针。
+- 更新失败保留原快照；用户或系统通道更新不改变项目锁定版本。
+- 离线导出包含验证元数据和公开信任材料，不包含私钥。
+- 在一个兼容周期内，`ext reload` 与 `repo reload` 可以映射到完整快照更新；各数据文件统一激活。
 
-运行时 Catalog 明确不包含 Inventory、凭据、实时探测、已安装包状态、Ansible event、provider state、
-危险操作确认和不属于产品决策的短期波动指标。
+Inventory、凭据、实时探测、已安装包状态、Ansible 事件、基础设施状态、操作确认与短期指标
+继续由各自的系统管理。
 
 ## 影响 {#impact}
 
-Typed target 让所有权与校验更清晰，内容寻址让 rollback 与 airgap import 可审计。
-Project materialization 避免部署依赖某个用户的全局 cache。独立 OS package 可以更新只读 baseline，
-而不改变 active user selection。
+分类数据文件便于确定维护职责和校验规则，内容寻址便于回滚与离线导入。
+项目自带所需快照后，部署不再依赖某个用户的全局缓存。系统软件包更新基础快照时，
+用户已选择的快照保持不变。
 
-代价是一套更大的发布协议：key rotation、expiry、rollback protection、GC、路径权限、迁移、
-包管理器生命周期、overlay 冲突与跨仓 generator 都会成为兼容敏感工作。
+这需要同时设计密钥轮换、过期、回滚保护、垃圾回收、路径权限、迁移、包管理器生命周期、
+覆盖冲突与跨仓库生成流程。
 
-Extension 模型也必须分离 SQL extension 身份、上游项目、distribution/build unit、版本化 release、
-OS package offer、目标可用性和展示 policy。Aggregate platform support、`required_by` 等派生字段应由
-generator 计算，而不是维护第二份事实。
+扩展模型还需区分 SQL 扩展、上游项目、构建单元、发布版本、操作系统软件包、目标平台可用性
+与展示规则。平台支持汇总、`required_by` 等派生字段由生成器计算。
 
 ## 验证与演进 {#verification}
 
-实现前必须通过 ADR 在 go-tuf 与最小 signed manifest 之间作出选择。
-两个候选必须通过同一组威胁测试：坏签名、过期元数据、回滚、target 替换、snapshot 混装、截断下载与离线验证。
-如果都不能通过，Catalog v2 就不能作为 2.0 发布功能。
+实现前需比较 go-tuf 与最小签名清单方案，记录安全机制的选择。
+两者均需通过错误签名、元数据过期、回滚、文件替换、快照混装、下载截断与离线验证测试。
 
-其它门槛覆盖 FHS/XDG/macOS/portable 路径、root 与非 root 权限、只读 home/project、符号链接替换、
-磁盘写满与并发激活、package upgrade/remove 语义、删除全局 cache 后 project 仍能工作，
-以及当前扩展和可用矩阵的无损迁移。
+其余测试覆盖各平台路径、root 与普通用户权限、只读目录、符号链接替换、磁盘写满、并发激活、
+包升级与卸载、删除全局缓存后的项目运行，以及现有扩展和可用性数据的完整迁移。
 
-当前源码基线仍是
-[`v1.8.0`](https://github.com/pgsty/pig/commit/67dac09caab843252ea4376bf16b08c5e238ff22)，
-其 embedded 与可 reload 的 v1 Catalog 继续定义已发布行为。
+本提案形成时的源码基线为
+[`v1.8.0`](https://github.com/pgsty/pig/commit/67dac09caab843252ea4376bf16b08c5e238ff22)。
+[v1.9.0](https://github.com/pgsty/pig/tree/v1.9.0) 仍使用内嵌与可独立更新的 v1 Catalog。
 
 ## 当前状态 {#status}
 
-今天没有任何 Catalog v2 命令、manifest、trust root、store 布局、project lock 或迁移格式属于已发布 PIG 契约。
-如果 typed overlay 的冲突与信任规则无法得到证明，应从 2.0 中删去；完整自定义签名 channel
-比松散、未验证的 patch 更安全。当前安装与 Catalog 行为仍以 [`pig ext`](/zh/ext/) 和
-[`pig repo`](/zh/repo/)为准。
+Catalog v2 尚未实现。安全机制、路径与覆盖规则需要先完成决策和验证。
+如果覆盖层的冲突与信任规则尚不成熟，可以先采用完整的自定义签名通道。
+当前用法见 [`pig ext`](/zh/ext/) 与 [`pig repo`](/zh/repo/)。

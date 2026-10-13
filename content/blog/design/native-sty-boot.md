@@ -2,7 +2,7 @@
 title: "Bootstrapping a Pigsty Controller as a Recoverable Transaction"
 linkTitle: "Native sty boot"
 date: 2026-08-14
-lastmod: 2026-08-28
+lastmod: 2026-10-13
 description: "Why pig sty boot resolves sources before elevation, separates hard failures from finishing warnings, and restores repositories after failed setup."
 tags: [sty, repo, install]
 weight: 90
@@ -70,8 +70,7 @@ The native workflow is larger than a script launcher, but its side effects and r
 visible. It can stage offline content on an already usable controller and gives automation a
 stable result without hiding optional problems.
 
-The command still cannot prove a deployed Pigsty environment. Controller readiness, Inventory
-generation, deployment, and live service validation remain separate gates.
+After bootstrap, generate the Inventory, deploy the selected services, and check their status.
 
 ## Verification and evolution {#verification}
 
@@ -82,13 +81,12 @@ permission checks, restricted extraction, sudo re-exec, repository rollback, loc
 Ansible/Python readiness, localhost SSH, initialization, warning classification, and structured
 results. The release page records delivery in v1.8.0.
 
-An unreleased post-v1.8 refinement extends the offline bundle path to preserve multiple safe
-top-level repositories. It keeps the existing sentinel contract and deliberately does not add a
-manifest or recovery journal. This refinement is implemented and locally tested, but is not part
-of the v1.8.0 release claim above.
+The offline-bundle refinement in
+[`8fa3abb`](https://github.com/pgsty/pig/commit/8fa3abb136ac5afeb9c58e24383c7b575a42c3b8)
+preserves multiple validated top-level repositories and retains the `repo_complete` marker.
+It shipped in [v1.8.1](/release/pig-1.8.1/).
 
 ## Current status {#status}
 
-`pig sty boot` prepares the controller; it does not run `deploy.yml` or prove database services.
-Use the current [`pig sty` documentation](/sty/) for source modes, environment controls, and next
-steps.
+`pig sty boot` prepares the controller. Run deployment separately after configuring the Inventory.
+See [`pig sty`](/sty/) for source modes, environment controls, and next steps.

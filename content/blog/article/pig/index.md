@@ -2,43 +2,48 @@
 title: Pig, The Postgres Extension Wizard
 linkTitle: "Pig - The Postgres Extension Wizard"
 date: 2024-12-29
-lastmod: 2026-08-30
+lastmod: 2026-10-13
 authors: [Vonng]
 description: Why would we need yet another package manager for PostgreSQL & extensions?
 tags: [cli, ext, repo, postgres]
 ---
 
-Ever wished installing or upgrading PostgreSQL extensions didn’t feel like digging through outdated readmes, cryptic configure scripts, or random GitHub forks & patches? The painful truth is that Postgres’s richness of extension often comes at the cost of complicated setups—especially if you’re juggling multiple distros or CPU architectures.
+PIG is a Go command-line tool for installing PostgreSQL and extensions through the system package
+manager. It selects packages for the operating system, CPU architecture, and PostgreSQL version,
+then uses APT, YUM, or DNF to install them.
 
-Enter **Pig**, a Go-based package manager built to tame Postgres and its ecosystem of [440+](https://pgext.cloud/list) extensions in one fell swoop. TimescaleDB, Citus, PGVector, 20+ Rust extensions, plus every must-have piece to [self-host](https://pigsty.io/docs/app/supabase/) Supabase — Pig’s unified CLI makes them all effortlessly accessible. It cuts out messy source builds and half-baked repos, offering version-aligned RPM/DEB packages that work seamlessly across Debian, Ubuntu, and RedHat flavors. No guesswork, no drama.
+The extension repository supplies native RPM and DEB packages, including TimescaleDB, Citus,
+pgvector, and Rust extensions. It follows PGDG packaging conventions so these packages can be used
+with the standard PostgreSQL packages.
 
-Instead of reinventing the wheel, Pig piggyback your system’s native package manager (APT, YUM, DNF) and follow official PGDG packaging conventions to ensure a glitch-free fit. That means you don’t have to choose between “the right way” and “the quick way”; Pig respects your existing repos, aligns with standard OS best practices, and fits neatly alongside other packages you already use.
+I built PIG to make that repository easier to use. You can search by extension name, inspect its
+metadata, and install the matching package without assembling package names yourself.
 
-Ready to give your Postgres superpowers without the usual hassle? Check out **[GitHub](https://github.com/pgsty/pig)** for documentation, installation steps, and a peek at its massive [extension list](https://pgext.cloud/list). Then, watch your local Postgres instance transform into a powerhouse of specialized modules—no black magic is required. If [the future of Postgres is unstoppable extensibility](https://medium.com/@fengruohang/postgres-is-eating-the-database-world-157c204dcfc4), Pig is the genie that helps you unlock it. Honestly, nobody ever complained that they had *too many* extensions.
-
-[PIG v0.1 Release](https://github.com/pgsty/pig) | [GitHub Repo](https://github.com/pgsty/pig) | Blog: [The Idea Way to deliver PG Extensions](https://medium.com/@fengruohang/the-idea-way-to-deliver-postgresql-extensions-35646464bb71)
+[PIG v0.1 release](https://github.com/pgsty/pig/releases/tag/v0.1.0) ·
+[Source code](https://github.com/pgsty/pig) ·
+[The ideal way to deliver PostgreSQL extensions](/article/pg-ext-repo/)
 
 -------
 
 ## Get Started
 
-[Install](#get-started) the `pig` package itself with scripts or the traditional yum/apt way.
+Install the `pig` package with the installer or the system package manager.
 
 ```bash
 curl -fsSL https://repo.pigsty.io/pig | bash
 ```
 
-Then it's ready to use; assume you want to install the [`pg_duckdb`](https://pgext.cloud/e/pg_duckdb) extension:
+Then it's ready to use; assume you want to install the [`pg_duckdb`](https://pigsty.io/ext/e/pg_duckdb/) extension:
 
 ```bash
 $ pig repo add pigsty pgdg -u  # add pgdg & pigsty repo, update cache
-$ pig repo set -u              # overwrite all existing repos, brute but effective
+$ pig repo set -u              # replace the existing repository configuration
 
 $ pig ext install pg17         # install native PGDG PostgreSQL 17 kernels packages
 $ pig ext install pg_duckdb    # install the pg_duckdb extension (for current pg17)
 ```
 
-### **Extension Management**
+### Extension management
 
 ```bash
 pig ext list    [query]      # list & search extension
@@ -52,7 +57,7 @@ pig ext link    [ext...]     # link postgres installation to path
 pig ext build   [ext...]     # setup building env for extension
 ```
 
-### **Repo Management**
+### Repository management
 
 ```bash
 pig repo list                    # available repo list             (info)
@@ -68,4 +73,4 @@ pig repo cache                   # cache repo as offline package   (root)
 
 ---
 
-> **Archive note (2026-08-30):** First published on [vonng.com](https://vonng.com/en/pg/pig/). Package counts, screenshots, and surrounding context reflect that date. For current behavior, use the [PIG documentation](/docs/) and live [extension catalog](https://pigsty.io/ext/).
+> Originally published on [vonng.com](https://vonng.com/en/pg/pig/).

@@ -1,10 +1,9 @@
 ---
 title: "卡脖子：PGDG切断镜像站同步通道"
 date: 2025-07-07
-lastmod: 2026-08-30
+lastmod: 2026-10-13
 authors: [Vonng]
-description: >
-  PGDG 切断 FTP rsync 同步通道，全球镜像站普遍断连，这次还真是卡了一把全球用户的脖子。
+description: "调查 PostgreSQL 关闭 FTP 与 rsync 同步服务后，镜像站长期未更新的问题。"
 tags: [repo, install]
 ---
 
@@ -12,13 +11,13 @@ tags: [repo, install]
 
 ![清华 TUNA PostgreSQL 镜像停留在旧同步时间](/article/pg-mirror-break/tsinghua.webp)
 
-仔细一看，发现国内的镜像站点都与 PostgreSQL 上游仓库失去同步了：清华大学开源软件镜像站（TUNA）最后一次成功同步是5月16号，而阿里云阿里云镜像站最后的同步时间戳是 2025 年 3-31。国外的镜像站，比如 mirrors.xtom.de 也出现了这种问题，最后一次同步是 6月20日，但也明显可以看出手动更新与脱离同步的痕迹。
+仔细一看，发现国内的镜像站点都与 PostgreSQL 上游仓库失去同步了：清华大学开源软件镜像站（TUNA）最后一次成功同步是5月16号，而阿里云镜像站最后的同步时间戳是 2025 年 3-31。国外的镜像站，比如 mirrors.xtom.de 也出现了这种问题，最后一次同步是 6月20日，但也明显可以看出手动更新与脱离同步的痕迹。
 
 ![阿里云 PostgreSQL 镜像停留在旧同步时间](/article/pg-mirror-break/aliyun.webp)
 
 我搜索了一下，发现了在 PostgreSQL 邮件列表里 5月20日已经有韩国镜像站的维护者问了这个问题了，镜像站的维护者问之前用 rsync 同步 PGDG 官方仓库怎么突然断了？
 
-PostgreSQL 贡献者之一的 Dave Page 回复到因为有大量的非法流量涌入 —— 他们决定永久关闭了原来非正式的 FTP 服务器，不再提供 rsync 同步选项，只允许通过 HTTP 访问了。
+PostgreSQL 贡献者之一的 Dave Page 回复道因为有大量的非法流量涌入 —— 他们决定永久关闭了原来非正式的 FTP 服务器，不再提供 rsync 同步选项，只允许通过 HTTP 访问了。
 
 [![PostgreSQL 邮件列表中宣布关闭 FTP 与 rsync 的回复](/article/pg-mirror-break/maillist.webp)](https://www.postgresql.org/message-id/CA%2BOCxoz3p4LqyE4aNb3M8gs2GND25ET%3DEMQ-KSrZ%2BB1WRSdT4Q%40mail.gmail.com)
 
@@ -28,9 +27,9 @@ PostgreSQL 作为世界上最流行的数据库软件，绝大多数用户都是
 
 ![PGDG 仓库流量与服务器架构](/article/pg-mirror-break/ftp-org.webp)
 
-> [PGConf.dev 2025：PostgreSQL 监控功能的设计与实现](https://www.pgevents.ca/events/pgconfdev2025/schedule/session/385-designing-and-implementing-a-monitoring-feature-in-postgresql/)
+> [PGConf.dev 2025：postgresql.org 幕后的基础设施](https://www.pgevents.ca/events/pgconfdev2025/schedule/session/388-postgresqlorg-the-hidden-parts/)
 
-而且这个决定就是在 PGConf.Dev 2025 最后一天进行的，他们还有个演讲，说本来有四台服务器，现在就剩两台了，前面套了个 CDN。
+PGConf.dev 2025 的基础设施演讲介绍过这个调整：本来有四台服务器，现在剩两台，前面套了一个 CDN。
 然后一看这个流量太大吃不住，咔嚓一下 rsync / ftp 一关，全世界的 PostgreSQL 下游仓库都断了。
 老实说，老冯觉得这是一件很扯淡的事情 —— 你把这些镜像站都挡在外面，用户到时候直接涌入原始上游，那流量不是更大了么。
 
@@ -53,4 +52,4 @@ PostgreSQL 作为世界上最流行的数据库软件，绝大多数用户都是
 
 ---
 
-> **归档说明（2026-08-30）：** 本文原载 [vonng.com](https://vonng.com/pg/pg-mirror-break/)。文中的软件包数量、截图与上下文以原始发表日期为准；当前行为请以 [PIG 文档](/zh/docs/)和实时[扩展目录](https://pigsty.cc/ext/)为准。
+> 原文：[vonng.com](https://vonng.com/pg/pg-mirror-break/)。

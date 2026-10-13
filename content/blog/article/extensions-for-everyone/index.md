@@ -1,10 +1,9 @@
 ---
 title: "Extensions for Everyone"
 date: 2026-05-20
-lastmod: 2026-08-30
+lastmod: 2026-10-13
 authors: [Vonng]
-description: >
-  A field report on the PostgreSQL extension ecosystem: 1,617 discovered projects, 511 deliverable extensions, and the shared delivery layer needed to make extensibility work for users, authors, vendors, and PostgreSQL hackers.
+description: "A report on 1,617 PostgreSQL extension projects, 511 extensions available as packages, and the work needed to deliver them."
 tags: [ext, repo, catalog, build]
 ---
 
@@ -106,11 +105,11 @@ It means the ecosystem boundary is large and messy.
 
 > [06. GitHub Stars](https://vonng.com/work/extensions-for-everyone/06-github-stars.html)
 
-The first public signal is GitHub stars. Stars do not measure quality. They do not measure production usage. They also miss projects that are not hosted on GitHub at all, such as postgres and postgis.
+The first public signal is GitHub stars. Stars do not measure quality. They do not measure production usage. They also undercount projects whose main development happens outside GitHub, such as PostgreSQL and PostGIS.
 
 But stars are still useful. They show attention, reputation, and rough awareness. Familiar names appear near the top: TimescaleDB, pgvector, Citus, pg_search, pgml, pgai, pgmq, and many others.
 
-If we look at the distribution, it is extremely skewed. A few extensions get most of the attention, followed by a very long tail. It is a logarithmic distribution.
+If we look at the distribution, it is extremely skewed. A few extensions get most of the attention, followed by a very long tail. It is a long-tailed distribution.
 
 [![06. GitHub Stars](/article/extensions-for-everyone/06.webp)](https://vonng.com/work/extensions-for-everyone/06-github-stars.html)
 
@@ -120,19 +119,19 @@ If we look at the distribution, it is extremely skewed. A few extensions get mos
 
 If we group extensions by order of magnitude, we get a simple tier model.
 
-Tier zero: the magnificent four. PostGIS, TimescaleDB, pgvector, and Citus. Each has more than ten thousand stars.
+I put four widely recognized extensions in tier zero: PostGIS, TimescaleDB, pgvector, and Citus. The remaining tiers use GitHub star counts.
 
 Tier one: 44 extensions, between one thousand and ten thousand stars.
 
-Tier two: about 152 extensions, above one hundred stars.
+Tier two: about 152 extensions, between one hundred and one thousand stars.
 
-Tier three: about 373 extensions, above ten stars.
+Tier three: about 373 extensions, between ten and one hundred stars.
 
 And then a long tail of around 748 extensions below ten stars.
 
 This is not a quality ranking. Some popular projects are no longer active, such as pgml or zombodb. Some low-star extensions are quite useful.
 
-But the tiers tell us something. The visible ecosystem is much smaller than the discovered one. Adding tiers zero through three gives about 570 extensions with more than ten stars, which is close to what is actually deliverable.
+But the tiers tell us something. The visible ecosystem is much smaller than the discovered one. Adding tiers zero through three gives about 570 prominent or starred extensions, which is close to what is actually deliverable.
 
 [![07. Star Tiering](/article/extensions-for-everyone/07.webp)](https://vonng.com/work/extensions-for-everyone/07-star-tiering.html)
 
@@ -282,9 +281,9 @@ But be careful. A package with few downloads may still be important. Maybe we ne
 
 Once we have the catalog and repository, extension delivery is almost solved. You can use the operating system package manager, `dnf` or `apt`, to install directly from the PGDG and PGEXT repositories.
 
-We also have a dedicated but purely optional command-line tool called PIG. It is written in Go and is only 4 MB. The name means "piggyback on the OS package manager". It hides all the complexity and just performs the installation for users.
+We also have a dedicated but purely optional command-line tool called PIG. It is written in Go and distributed as a single executable. The name means "piggyback on the OS package manager". It resolves extension names to the packages for the selected PostgreSQL version and platform.
 
-The interesting part is that it does not only install. It can also build and deliver binary packages. If you want pg_search or pg_duckdb, just run `pig build pkg pg_search`, and it builds the package for you.
+The interesting part is that it does not only install. It can also build and deliver binary packages. After setting up the build environment, run `pig build pkg pg_search` to build pg_search, or select another supported extension such as pg_duckdb.
 
 This matters for supply-chain trust. Users can rebuild everything themselves if they want to.
 
@@ -320,7 +319,7 @@ The rest of this part is about what we learn when that explosion meets reality.
 
 > [22. PG Minor ABI Break](https://vonng.com/work/extensions-for-everyone/22-pg-minor-abi-break.html)
 
-Last year, we hit a concrete case. PostgreSQL 17.1 broke ABI compatibility during a minor upgrade. That broke certain extensions, including TimescaleDB.
+In November 2024, we hit a concrete case. PostgreSQL 17.1 broke ABI compatibility during a minor upgrade. That broke certain extensions, including TimescaleDB.
 
 In response, some maintainers switched to building for every PostgreSQL minor version. But that creates new problems. If you build for every single minor version, in-place upgrades become much harder.
 
@@ -476,4 +475,4 @@ Vonng rh@vonng.com
 
 ---
 
-> **Archive note (2026-08-30):** First published on [vonng.com](https://vonng.com/en/pg/extensions-for-everyone/). Package counts, screenshots, and surrounding context reflect that date. For current behavior, use the [PIG documentation](/docs/) and live [extension catalog](https://pigsty.io/ext/).
+> Originally published on [vonng.com](https://vonng.com/en/pg/extensions-for-everyone/).

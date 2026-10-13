@@ -32,4 +32,5 @@ cascade:
 icon: fa-solid fa-blog
 ---
 
-PIG 的文章、设计注记、发布注记与项目动态 —— Pigsty 出品的 PostgreSQL 扩展包管理器。
+PIG 的文章、设计注记与发布历史。PIG 是 Pigsty 提供的 PostgreSQL 命令行工具，
+用于管理软件仓库、扩展、数据库实例与 Pigsty 环境。

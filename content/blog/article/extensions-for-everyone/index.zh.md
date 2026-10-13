@@ -1,10 +1,9 @@
 ---
 title: "人人可用的 PG 扩展"
 date: 2026-05-20
-lastmod: 2026-08-30
+lastmod: 2026-10-13
 authors: [Vonng]
-description: >
-  介绍 PostgreSQL 扩展生态，并讨论其交付问题 —— 一个共享的交付层，如何同时让用户、扩展作者、厂商和 PostgreSQL 内核开发者受益。
+description: "从 1,617 个 PostgreSQL 扩展项目、511 个已打包扩展出发，讨论如何把扩展交付给用户。"
 tags: [ext, repo, catalog, build]
 ---
 
@@ -106,11 +105,11 @@ PostgreSQL 到底有多少扩展？社区里有一个很有名的、由大家共
 
 > [06. GitHub 星标](https://vonng.com/work/extensions-for-everyone/06-github-stars.html)
 
-第一个公开信号是 GitHub 星标。星标不能衡量质量，也不能衡量生产使用情况，而且会漏掉那些根本不托管在 GitHub 上的项目，比如 postgres 和 postgis。
+第一个公开信号是 GitHub 星标。星标不能衡量质量，也不能衡量生产使用情况，而且会低估主要开发工作不在 GitHub 上的项目，比如 PostgreSQL 和 PostGIS。
 
 但星标仍然有用。它反映了关注度、声誉和大致的认知度。排在前面的都是熟悉的名字：TimescaleDB、pgvector、Citus、pg_search、pgml、pgai、pgmq，还有很多其他项目。
 
-如果观察分布，会发现它极度倾斜。少数扩展拿走了大部分关注度，后面是一条长尾。这是一个对数分布。
+如果观察分布，会发现它极度倾斜。少数扩展拿走了大部分关注度，后面是一条长尾。这是一个长尾分布。
 
 [![06. GitHub 星标](/article/extensions-for-everyone/06.webp)](https://vonng.com/work/extensions-for-everyone/06-github-stars.html)
 
@@ -120,19 +119,19 @@ PostgreSQL 到底有多少扩展？社区里有一个很有名的、由大家共
 
 按数量级给扩展分组，就会得到一个简单的分层模型。
 
-第零层：四大天王。PostGIS、TimescaleDB、pgvector、Citus，每个都超过一万星。
+我把四个广为人知的扩展放在第零层：PostGIS、TimescaleDB、pgvector、Citus。其余层级按 GitHub 星标数划分。
 
 第一层：44 个扩展，星标在一千到一万之间。
 
-第二层：大约 152 个扩展，超过一百星。
+第二层：大约 152 个扩展，星标在一百到一千之间。
 
-第三层：大约 373 个扩展，超过十星。
+第三层：大约 373 个扩展，星标在十到一百之间。
 
 然后是约 748 个低于十星的长尾扩展。
 
 这不是质量排名。有些热门项目已经不再活跃，比如 pgml 或 zombodb。有些低星扩展反而非常有用。
 
-但这些层级说明了一件事：可见的生态要比被发现的生态小得多。把第零层到第三层加起来，大约是 570 个超过十星的扩展，和实际可交付的规模很接近。
+但这些层级说明了一件事：可见的生态要比被发现的生态小得多。把第零层到第三层加起来，大约有 570 个知名或获得星标的扩展，和实际可交付的规模很接近。
 
 [![07. 星标分层](/article/extensions-for-everyone/07.webp)](https://vonng.com/work/extensions-for-everyone/07-star-tiering.html)
 
@@ -280,9 +279,9 @@ Christoph 和 Devrim 维护的 PGDG YUM 与 APT 仓库已经完成了基础工�
 
 有了目录和仓库，扩展交付基本上就解决了。你可以直接使用系统包管理器，从 PGDG 和 PGEXT 仓库安装扩展，比如 `dnf` 或 `apt`。
 
-我们还有一个专用但完全可选的命令行工具，叫 PIG。它用 Go 编写，只有 4 MB。这个名字的含义是「piggyback on the OS package manager」，也就是借力系统包管理器。它会隐藏所有复杂度，让用户直接完成安装。
+我们还有一个专用但完全可选的命令行工具，叫 PIG。它用 Go 编写，以单个可执行文件分发。这个名字的含义是「piggyback on the OS package manager」，也就是借力系统包管理器。它将扩展名解析为所选 PostgreSQL 版本与平台对应的软件包。
 
-有意思的是，它不只是能安装，也能构建和交付二进制包。如果你想要 pg_search 或 pg_duckdb，只要运行 `pig build pkg pg_search`，它就会帮你构建包。
+有意思的是，它不只是能安装，也能构建和交付二进制包。配置好构建环境后，运行 `pig build pkg pg_search` 即可构建 pg_search，也可以选择 pg_duckdb 等其他支持的扩展。
 
 这对供应链信任很重要。用户愿意的话，可以自行重建所有东西。
 
@@ -318,7 +317,7 @@ Christoph 和 Devrim 维护的 PGDG YUM 与 APT 仓库已经完成了基础工�
 
 > [22. PG 小版本 ABI 破坏](https://vonng.com/work/extensions-for-everyone/22-pg-minor-abi-break.html)
 
-去年我们遇到过一个案例。PG 17.1 在小版本升级中破坏了 ABI，导致包括 TimescaleDB 在内的一些扩展出问题。
+2024 年 11 月，我们遇到过一个案例。PG 17.1 在小版本升级中破坏了 ABI，导致包括 TimescaleDB 在内的一些扩展出问题。
 
 作为回应，一些维护者转向为每一个 PG 小版本构建。但这又会制造新的问题。如果每个小版本都单独构建，原地升级就会变得困难得多。
 
@@ -468,4 +467,4 @@ AI 也降低了测试成本。我们可以从扩展文档驱动冒烟检查，�
 
 ---
 
-> **归档说明（2026-08-30）：** 本文原载 [vonng.com](https://vonng.com/pg/extensions-for-everyone/)。文中的软件包数量、截图与上下文以原始发表日期为准；当前行为请以 [PIG 文档](/zh/docs/)和实时[扩展目录](https://pigsty.cc/ext/)为准。
+> 原文：[vonng.com](https://vonng.com/pg/extensions-for-everyone/)。

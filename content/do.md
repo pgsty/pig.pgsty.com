@@ -1,18 +1,15 @@
 ---
 title: "pig do"
-description: "Run bounded Pigsty administrative playbook tasks with pig do"
+description: "Run Pigsty administration tasks with pig do"
 weight: 155
 icon: fas fa-list-check
 categories: [Reference]
 tags: [sty, cli]
 ---
 
-`pig do` exposes common Pigsty administrative playbooks as explicit CLI operations. It uses the
-selected Pigsty home and Inventory, builds the corresponding playbook command, and returns the
-operation through PIG's legacy structured-result adapter.
+`pig do` runs administration playbooks from the selected Pigsty directory. It uses the inventory to add clusters, create databases and users, install packages, or remove services.
 
-These commands change remote systems. Review the selected cluster, node, instance, and Inventory
-before execution. The command family does not provide a general `--plan` mode.
+Define the target configuration in the inventory first, then run the corresponding command. The commands invoke Ansible directly. This command group has no general `--plan` mode.
 
 ```bash
 pig do pgsql-add  pg-test 10.10.10.12     # add one PostgreSQL instance
@@ -29,8 +26,8 @@ pig do redis-add  redis-meta              # initialize a Redis cluster
 |:---|:---|:---|
 | `pgsql-add` | Add a PostgreSQL cluster or instances | cluster, optional IPs |
 | `pgsql-rm` | Remove a PostgreSQL cluster or instances | cluster, optional IPs |
-| `pgsql-db` | Create or update a database declaration | cluster, database |
-| `pgsql-user` | Create or update a user declaration | cluster, user |
+| `pgsql-db` | Apply a database declaration | cluster, database |
+| `pgsql-user` | Apply a user declaration | cluster, user |
 | `pgsql-ext` | Install extensions through Pigsty | cluster, optional extensions |
 | `pgsql-hba` | Refresh PostgreSQL HBA rules | cluster |
 | `pgsql-svc` | Refresh PostgreSQL service definitions | cluster |
@@ -58,18 +55,17 @@ pig do pgsql-hba pg-meta                  # refresh pg_hba rules
 pig do pgsql-svc pg-meta                  # refresh PostgreSQL services
 ```
 
-`pgsql-rm --uninstall` expands the removal scope to packages. Treat it as a separate destructive
-decision and verify that the selected hosts no longer need those packages.
+`pgsql-db` and `pgsql-user` apply existing `pg_databases` and `pg_users` declarations. They do not edit the inventory. `pgsql-rm --uninstall` also removes packages. Omit this option if the host still needs those packages.
 
-Commands whose operand is explicitly a PostgreSQL cluster validate it before running Ansible.
-PIG accepts `^[A-Za-z0-9][A-Za-z0-9-]*$`: this is Pigsty's alphanumeric-and-hyphen contract with
-an additional leading-alphanumeric CLI boundary, so an option-shaped value cannot become an
-Ansible limit. `root` and the Ansible built-in groups `all` and `ungrouped` are reserved.
-`pgsql-user` accepts Pigsty user names matching `^[a-z_][a-z0-9_@.-]{0,62}$` and reserves
-`postgres`. `pgsql-db` accepts a bounded ASCII name beginning with a letter or underscore and
-continuing with letters, digits, `_`, `@`, `.`, or `-`; this keeps Inventory lookup and generated
-path handling unambiguous without forcing database names to lowercase. Selector-oriented commands
-retain the broader selector grammar.
+### Name rules
+
+| Object | Accepted names |
+|:---|:---|
+| PostgreSQL cluster | Letters, digits, and hyphens; start with a letter or digit. `root`, `all`, and `ungrouped` are reserved. |
+| PostgreSQL user | Up to 63 characters; start with a lowercase letter or `_`, then use lowercase letters, digits, `_`, `@`, `.`, or `-`. `postgres` is reserved. |
+| Database | Up to 63 characters; start with a letter or `_`, then use letters, digits, `_`, `@`, `.`, or `-`. |
+
+These rules apply to arguments that require a cluster, user, or database name. Selector arguments support the target-selection forms below.
 
 ## Node and repository operations
 
@@ -84,7 +80,7 @@ pig do node-pkg pg-meta openssh restic     # install or update packages
 pig do repo-build                          # rebuild the infra repository
 ```
 
-Repository modules include the modules provided by the installed Pigsty release, such as `local`,
+With no selector, `node-repo` applies to every host targeted by `node.yml`. With no module, it uses the Inventory setting. Repository modules come from the installed Pigsty release, such as `local`,
 `infra`, `pgsql`, `node`, and `extra`. Check that the required repositories are available to the
 target nodes before installing packages.
 
@@ -97,7 +93,7 @@ pig do redis-rm 10.10.10.11 6379           # remove one selected instance
 pig do redis-rm redis-test --uninstall     # remove and uninstall packages
 ```
 
-As with PostgreSQL removal, `redis-rm --uninstall` broadens the change beyond service removal.
+`redis-rm --uninstall` also removes packages during node or cluster removal.
 
 ## Configuration and output
 
@@ -114,9 +110,4 @@ As with PostgreSQL removal, `redis-rm --uninstall` broadens the change beyond se
 Structured mode reports the requested operation and captured execution result. The underlying
 Ansible and playbook behavior is still determined by the installed Pigsty release.
 
-## Operational boundary
-
-`pig do` is a convenience layer over Pigsty administration playbooks. It does not replace
-Inventory review, backups, change windows, or post-change service verification. For full playbook
-variables and lifecycle semantics, use the documentation for the installed
-[Pigsty release](https://pigsty.io/docs/).
+See the [Pigsty documentation](https://pigsty.io/docs/) for full playbook variables and procedures.

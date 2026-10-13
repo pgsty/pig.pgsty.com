@@ -10,7 +10,7 @@ release_url: https://github.com/pgsty/pig/releases/tag/v0.6.1
 ---
 
 - Add el10 and debian 13 trixie support stub
-- Dedicated website: /docs/pig/
+- Launch the dedicated [PIG website](https://pig.pgsty.com/)
 - Rebuild with go 1.25 and CI/CD pipeline
 - Use PIGSTY PGDG mirror in mainland China
 - Remove unused `pgdg-el10fix` repo

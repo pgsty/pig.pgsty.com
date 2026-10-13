@@ -28,8 +28,8 @@
       <div class="landing-container">
         <div class="download-hero-copy" data-reveal>
           <p class="section-eyebrow download-eyebrow"><span class="silkscreen">RELEASE MATRIX</span><span class="eyebrow-trace" aria-hidden="true"></span></p>
-          <h1 id="download-title">{{ if $zh }}下载安装 <span>pig</span>{{ else }}Download &amp; Install <span>pig</span>{{ end }}</h1>
-          <p>{{ if $zh }}一个自包含的静态二进制，没有运行时依赖。用一行安装脚本、系统包管理器，或者直接抓对应架构的 RPM / DEB / tarball。{{ else }}One self-contained static binary, no runtime dependencies. Use the one-line installer, your system package manager, or grab the RPM, DEB, or tarball for your architecture directly.{{ end }}</p>
+          <h1 id="download-title">{{ if $zh }}下载安装 <span>pig</span>{{ else }}Download and install <span>pig</span>{{ end }}</h1>
+          <p>{{ if $zh }}PIG 提供 Linux 软件包和 Linux、macOS 二进制归档。选择与你的系统和 CPU 架构匹配的文件。{{ else }}PIG provides Linux packages and binary archives for Linux and macOS. Choose the file for your operating system and CPU architecture.{{ end }}</p>
           <div class="download-release-line">
             <span class="release-live"><i aria-hidden="true"></i>{{ if $zh }}当前版本{{ else }}CURRENT RELEASE{{ end }}</span>
             <a href="{{ $rel }}" target="_blank" rel="noopener">pig {{ $tag }} <span aria-hidden="true">↗</span></a>
@@ -59,7 +59,7 @@
               </div>
               <span class="product-choice-icon"><i class="fas fa-box-archive" aria-hidden="true"></i></span>
             </div>
-            <p>{{ if $zh }}直接下载 {{ $tag }} 的原生包与二进制归档，附 SHA-256 校验和，适合离线交付与镜像同步。{{ else }}Download the native packages and binary archives for {{ $tag }} directly, with SHA-256 checksums — for offline delivery and mirror sync.{{ end }}</p>
+            <p>{{ if $zh }}直接下载 {{ $tag }} 的原生包与二进制归档，附 SHA-256 校验和，适合离线交付与镜像同步。{{ else }}Download {{ $tag }} packages and binaries for offline installation or mirror synchronization. SHA-256 checksums are included.{{ end }}</p>
             <div class="product-platforms"><span>x86_64</span><span>aarch64</span><span>Linux</span><span>macOS</span></div>
             <strong>{{ if $zh }}打开下载矩阵{{ else }}Open the download matrix{{ end }} <i aria-hidden="true">↗</i></strong>
           </a>
@@ -74,7 +74,7 @@
           <div>
             <p class="section-eyebrow"><span class="silkscreen">01 / INSTALL</span><span class="eyebrow-trace" aria-hidden="true"></span></p>
             <h2 id="install-title">{{ if $zh }}安装 pig{{ else }}Install pig{{ end }}</h2>
-            <p>{{ if $zh }}五条路径通向同一个二进制：脚本、系统仓库、原生包、tarball、源码。选一条与你的交付边界匹配的。{{ else }}Five paths to the same binary: script, system repository, native package, tarball, source. Pick the one that matches your delivery boundary.{{ end }}</p>
+            <p>{{ if $zh }}Linux 可使用安装脚本或系统软件包，macOS 使用二进制归档。也可以从源码构建。{{ else }}Use the installer or a system package on Linux. Use a binary archive on macOS. You can also build from source.{{ end }}</p>
           </div>
           <a class="version-card" href="{{ $rel }}" target="_blank" rel="noopener">
             <span>{{ if $zh }}当前版本{{ else }}CURRENT VERSION{{ end }}</span>
@@ -102,7 +102,7 @@
               </div>
               <div class="method-grid">
                 <div class="method-main">
-                  <p>{{ if $zh }}脚本从 Pigsty 软件仓库拉取与当前系统匹配的 RPM 或 DEB，然后交给 <code>rpm</code> / <code>dpkg</code> 安装。它只负责装 <code>pig</code> 自己，不会改动 PostgreSQL 或系统仓库配置。{{ else }}The script pulls the RPM or DEB that matches the running system from the Pigsty software repository, then hands it to <code>rpm</code> / <code>dpkg</code>. It installs <code>pig</code> itself and nothing else — no PostgreSQL, no repository changes.{{ end }}</p>
+                  <p>{{ if $zh }}在有 root 或 sudo 权限的 Linux 主机上运行。脚本下载与系统匹配的 PIG 软件包，再用 <code>rpm</code> 或 <code>dpkg</code> 安装。{{ else }}Run on a Linux host with root or sudo access. The script downloads the matching PIG package and installs it with <code>rpm</code> or <code>dpkg</code>.{{ end }}</p>
                   <div class="download-subtabs" data-download-tabs>
                     <div class="download-tablist download-tablist--sub" role="tablist" aria-label="{{ if $zh }}下载源{{ else }}Download source{{ end }}">
                       <button type="button" role="tab" id="tab-script-cdn" aria-controls="script-cdn" aria-selected="true" data-download-tab="script-cdn">Cloudflare CDN</button>
@@ -134,7 +134,7 @@ pig --version</code></pre>
                     <a class="btn btn-primary" href="{{ relLangURL "start/" }}"><i class="fas fa-rocket" aria-hidden="true"></i> {{ if $zh }}快速上手{{ else }}Quick start{{ end }}</a>
                     <a class="btn btn-line" href="{{ relLangURL "install/" }}">{{ if $zh }}安装文档{{ else }}Install guide{{ end }} →</a>
                   </div>
-                  <div class="security-note"><i class="fas fa-shield-halved" aria-hidden="true"></i><span>{{ if $zh }}镜像发布可能滞后于 GitHub Release。要精确安装 {{ $tag }}，请用下面的原生包直链，并核对 <code>checksums.txt</code>。管道执行远程脚本前，可以先把脚本落盘读一遍。{{ else }}Mirror publication can lag the GitHub release. To install exactly {{ $tag }}, use the direct package links below and verify against <code>checksums.txt</code>. If piping a remote script to a shell is outside your policy, download and read it first.{{ end }}</span></div>
+                  <div class="security-note"><i class="fas fa-shield-halved" aria-hidden="true"></i><span>{{ if $zh }}脚本默认安装所选镜像的最新版本。“指定版本”标签页提供 {{ $tag }} 的安装命令。{{ else }}The script installs the latest version on the selected mirror. The “Pin a version” tab provides the command for {{ $tag }}.{{ end }}</span></div>
                 </div>
                 <div class="method-aside">
                   <div class="aside-card">
@@ -151,12 +151,12 @@ pig --version</code></pre>
             {{/* ---- 系统仓库 ---- */}}
             <section class="download-panel" id="repository" role="tabpanel" aria-labelledby="tab-repository" hidden>
               <div class="method-heading">
-                <div><span class="method-kicker">PIGSTY INFRA REPO</span><h3>{{ if $zh }}把 pig 交给系统包管理器管{{ else }}Let the system package manager own pig{{ end }}</h3></div>
+                <div><span class="method-kicker">PIGSTY INFRA REPO</span><h3>{{ if $zh }}通过系统包管理器安装{{ else }}Install with the system package manager{{ end }}</h3></div>
                 <div class="method-tags"><span>apt</span><span>dnf / yum</span><span>{{ if $zh }}可升级{{ else }}upgradable{{ end }}</span></div>
               </div>
               <div class="method-grid method-grid--single">
                 <div class="method-main">
-                  <p>{{ if $zh }}<code>pig</code> 位于 <a href="{{ $pigstyDocs }}/docs/repo/infra/" target="_blank" rel="noopener">pigsty-infra</a> 仓库。把仓库加进系统之后，安装与后续升级都走 <code>apt</code> / <code>dnf</code>，与其它系统软件一致。{{ else }}<code>pig</code> lives in the <a href="{{ $pigstyDocs }}/docs/repo/infra/" target="_blank" rel="noopener">pigsty-infra</a> repository. Once the repository is wired in, installs and upgrades go through <code>apt</code> / <code>dnf</code> like any other system package.{{ end }}</p>
+                  <p>{{ if $zh }}<code>pig</code> 位于 <a href="{{ $pigstyDocs }}/docs/repo/infra/" target="_blank" rel="noopener">pigsty-infra</a> 仓库。把仓库加进系统之后，安装与后续升级都走 <code>apt</code> / <code>dnf</code>，与其它系统软件一致。{{ else }}<code>pig</code> lives in the <a href="{{ $pigstyDocs }}/docs/repo/infra/" target="_blank" rel="noopener">pigsty-infra</a> repository. After you add the repository, installs and upgrades go through <code>apt</code> / <code>dnf</code> like any other system package.{{ end }}</p>
                   <div class="download-subtabs" data-download-tabs>
                     <div class="download-tablist download-tablist--sub" role="tablist" aria-label="{{ if $zh }}包管理器{{ else }}Package manager{{ end }}">
                       <button type="button" role="tab" id="tab-repo-apt" aria-controls="repo-apt" aria-selected="true" data-download-tab="repo-apt">APT · Debian / Ubuntu</button>
@@ -194,7 +194,7 @@ sudo dnf install -y pig</code></pre>
                     <a class="btn btn-primary" href="{{ relLangURL "repo/" }}"><i class="fas fa-warehouse" aria-hidden="true"></i> pig repo</a>
                     <a class="btn btn-line" href="{{ $pigstyDocs }}/docs/repo/" target="_blank" rel="noopener">{{ if $zh }}Pigsty 仓库文档{{ else }}Pigsty repository docs{{ end }} ↗</a>
                   </div>
-                  <div class="security-note"><i class="fas fa-triangle-exclamation" aria-hidden="true"></i><span>{{ if $zh }}上面的最小示例刻意用 <code>gpgcheck=0</code> / <code>trusted=yes</code>，这是 PIG 面向兼容性的默认口径。在受管环境里请导入并锁定签名密钥、打开签名校验，再审查包来源。{{ else }}These minimal examples deliberately use <code>gpgcheck=0</code> / <code>trusted=yes</code>, matching PIG's compatibility-oriented defaults. In a managed environment, import and pin the signing key, enable signature verification, and review package provenance first.{{ end }}</span></div>
+                  <div class="security-note"><i class="fas fa-triangle-exclamation" aria-hidden="true"></i><span>{{ if $zh }}这些配置通过 <code>gpgcheck=0</code> / <code>trusted=yes</code> 关闭该仓库的签名校验。密钥与校验配置见 <a href="{{ relLangURL "repo/" }}#repo-key">仓库参考</a>。{{ else }}These definitions disable signature checks for this repository. See the <a href="{{ relLangURL "repo/" }}#repo-key">repository reference</a> for signing-key configuration.{{ end }}</span></div>
                 </div>
               </div>
             </section>
@@ -205,10 +205,10 @@ sudo dnf install -y pig</code></pre>
                 <div><span class="method-kicker">NATIVE PACKAGES</span><h3>{{ if $zh }}{{ $tag }} 的 RPM 与 DEB 直链{{ else }}Direct RPM and DEB links for {{ $tag }}{{ end }}</h3></div>
                 <div class="method-tags"><span>RPM</span><span>DEB</span><span>SHA-256</span><span>{{ if $zh }}离线可用{{ else }}offline-ready{{ end }}</span></div>
               </div>
-              <p class="method-lead">{{ if $zh }}每个版本都同时发布 x86_64 与 aarch64 的原生包。直接下载当前版本，或去 GitHub Releases 取历史版本。{{ else }}Every release ships native packages for both x86_64 and aarch64. Download the current build directly, or use GitHub Releases for older versions.{{ end }}</p>
+              <p class="method-lead">{{ if $zh }}当前版本提供 x86_64 与 aarch64 的 RPM、DEB 软件包。历史版本可从 GitHub Releases 下载。{{ else }}The current release provides RPM and DEB packages for x86_64 and aarch64. Use GitHub Releases for older versions.{{ end }}</p>
               <div class="asset-family-grid">
                 <article class="asset-family">
-                  <div class="asset-family-head"><span>RPM</span><p>RHEL · Rocky · Alma · openEuler</p></div>
+                  <div class="asset-family-head"><span>RPM</span><p>RHEL · Rocky · AlmaLinux</p></div>
                   <a href="{{ $base }}/{{ $rpm64 }}" target="_blank" rel="noopener"><b>x86_64</b><small>{{ $rpm64 }}</small><i class="fas fa-download" aria-hidden="true"></i></a>
                   <a href="{{ $base }}/{{ $rpmA }}" target="_blank" rel="noopener"><b>aarch64</b><small>{{ $rpmA }}</small><i class="fas fa-download" aria-hidden="true"></i></a>
                 </article>
@@ -223,16 +223,14 @@ sudo dnf install -y pig</code></pre>
                   <a href="{{ $base }}/{{ $linA }}" target="_blank" rel="noopener"><b>arm64</b><small>{{ $linA }}</small><i class="fas fa-download" aria-hidden="true"></i></a>
                 </article>
               </div>
+              <p class="method-lead">{{ if $zh }}只运行与你的系统和架构对应的一组命令。运行 <code>uname -m</code> 可查看 CPU 架构：<code>x86_64</code> 对应 amd64，<code>aarch64</code> 对应 arm64。{{ else }}Run the commands for your system and architecture. Use <code>uname -m</code> to check: <code>x86_64</code> corresponds to amd64; <code>aarch64</code> corresponds to arm64.{{ end }}</p>
+              {{ range slice (dict "label" "EL / RHEL / Rocky / Alma · x86_64" "file" $rpm64 "install" "rpm -Uvh") (dict "label" "EL / RHEL / Rocky / Alma · aarch64" "file" $rpmA "install" "rpm -Uvh") (dict "label" "Debian / Ubuntu · amd64" "file" $deb64 "install" "dpkg -i") (dict "label" "Debian / Ubuntu · arm64" "file" $debA "install" "dpkg -i") }}
               <div class="download-code download-code--compact">
-                <div class="download-code-head"><span><i class="fas fa-box" aria-hidden="true"></i> {{ if $zh }}下载并安装{{ else }}download &amp; install{{ end }}</span><button type="button" data-copy-command aria-label="{{ if $zh }}复制包安装命令{{ else }}Copy package install command{{ end }}"><i class="far fa-copy" aria-hidden="true"></i><b>{{ if $zh }}复制{{ else }}Copy{{ end }}</b></button></div>
-                <pre><code># EL / RHEL / Rocky / Alma
-curl -fLO {{ $base }}/{{ $rpm64 }}
-sudo rpm -ivh {{ $rpm64 }}
-
-# Debian / Ubuntu
-curl -fLO {{ $base }}/{{ $deb64 }}
-sudo dpkg -i {{ $deb64 }}</code></pre>
+                <div class="download-code-head"><span><i class="fas fa-box" aria-hidden="true"></i> {{ .label }}</span><button type="button" data-copy-command aria-label="{{ if $zh }}复制{{ else }}Copy{{ end }} {{ .label }}"><i class="far fa-copy" aria-hidden="true"></i><b>{{ if $zh }}复制{{ else }}Copy{{ end }}</b></button></div>
+                <pre><code>curl -fLO {{ $base }}/{{ .file }}
+sudo {{ .install }} {{ .file }}</code></pre>
               </div>
+              {{ end }}
               <div class="package-footer">
                 <a href="{{ $base }}/checksums.txt" target="_blank" rel="noopener"><i class="fas fa-fingerprint" aria-hidden="true"></i> SHA-256 {{ if $zh }}校验和{{ else }}checksums{{ end }}</a>
                 <a href="https://github.com/pgsty/pig/releases" target="_blank" rel="noopener"><i class="fab fa-github" aria-hidden="true"></i> {{ if $zh }}全部历史版本{{ else }}All previous releases{{ end }}</a>
@@ -243,13 +241,13 @@ sudo dpkg -i {{ $deb64 }}</code></pre>
             {{/* ---- 二进制归档 ---- */}}
             <section class="download-panel" id="binary" role="tabpanel" aria-labelledby="tab-binary" hidden>
               <div class="method-heading">
-                <div><span class="method-kicker">STANDALONE ARCHIVES</span><h3>{{ if $zh }}解压即用的静态二进制{{ else }}Unpack-and-run static binaries{{ end }}</h3></div>
+                <div><span class="method-kicker">STANDALONE ARCHIVES</span><h3>{{ if $zh }}解压并安装二进制{{ else }}Extract and install a binary{{ end }}</h3></div>
                 <div class="method-tags"><span>Linux</span><span>macOS</span><span>tar.gz</span><span>CI</span></div>
               </div>
-              <p class="method-lead">{{ if $zh }}适合 CI、容器镜像、离线交付，以及不打算让包管理器接管的主机。macOS 上没有原生包，用这里的归档。{{ else }}For CI, container images, offline delivery, and hosts where you would rather not involve a package manager. macOS has no native package — use these archives.{{ end }}</p>
+              <p class="method-lead">{{ if $zh }}Linux 与 macOS 均可下载归档，解压后将 pig 放入 PATH 中的目录。{{ else }}Download the archive for Linux or macOS. Extract it and place pig in a directory on your PATH.{{ end }}</p>
               <div class="binary-grid">
                 <article class="binary-platform" data-platform="linux">
-                  <div><span class="platform-icon"><i class="fab fa-linux" aria-hidden="true"></i></span><h4>Linux</h4><small>glibc · {{ if $zh }}静态链接{{ else }}statically linked{{ end }}</small></div>
+                  <div><span class="platform-icon"><i class="fab fa-linux" aria-hidden="true"></i></span><h4>Linux</h4><small>{{ if $zh }}静态链接{{ else }}Statically linked{{ end }}</small></div>
                   <a href="{{ $base }}/{{ $lin64 }}" target="_blank" rel="noopener"><b>amd64</b><small>{{ $lin64 }}</small><i class="fas fa-download" aria-hidden="true"></i></a>
                   <a href="{{ $base }}/{{ $linA }}" target="_blank" rel="noopener"><b>arm64</b><small>{{ $linA }}</small><i class="fas fa-download" aria-hidden="true"></i></a>
                 </article>
@@ -266,7 +264,15 @@ tar -xzf {{ $lin64 }}
 sudo install -m 0755 pig /usr/bin/pig
 pig --version</code></pre>
               </div>
-              <div class="security-note"><i class="fas fa-fingerprint" aria-hidden="true"></i><span>{{ if $zh }}校验归档：<code>curl -fsSL {{ $base }}/checksums.txt | grep {{ $lin64 }} | sha256sum -c -</code>{{ else }}Verify an archive with <code>curl -fsSL {{ $base }}/checksums.txt | grep {{ $lin64 }} | sha256sum -c -</code>{{ end }}</span></div>
+              <div class="download-code download-code--compact">
+                <div class="download-code-head"><span><i class="fab fa-apple" aria-hidden="true"></i> macOS · Apple Silicon</span><button type="button" data-copy-command aria-label="{{ if $zh }}复制 macOS 安装命令{{ else }}Copy macOS install command{{ end }}"><i class="far fa-copy" aria-hidden="true"></i><b>{{ if $zh }}复制{{ else }}Copy{{ end }}</b></button></div>
+                <pre><code>curl -fLO {{ $base }}/{{ $macA }}
+tar -xzf {{ $macA }}
+sudo mkdir -p /usr/local/bin
+sudo install -m 0755 pig /usr/local/bin/pig
+pig version</code></pre>
+              </div>
+              <div class="security-note"><i class="fas fa-fingerprint" aria-hidden="true"></i><span>{{ if $zh }}Linux 归档校验：<code>curl -fsSL {{ $base }}/checksums.txt | grep {{ $lin64 }} | sha256sum -c -</code>{{ else }}Verify a Linux archive with <code>curl -fsSL {{ $base }}/checksums.txt | grep {{ $lin64 }} | sha256sum -c -</code>{{ end }}</span></div>
             </section>
 
             {{/* ---- 源码 ---- */}}
@@ -277,10 +283,10 @@ pig --version</code></pre>
               </div>
               <div class="method-grid">
                 <div class="method-main">
-                  <p>{{ if $zh }}pig 用 Go 写成，没有 cgo 依赖，构建过程就是 <code>go mod download</code> 加一条 <code>make build</code>。适合审计、二次开发，或者为发布矩阵之外的平台出包。{{ else }}pig is written in Go with no cgo dependency; the build is <code>go mod download</code> plus one <code>make build</code>. Use it for auditing, development, or targeting a platform outside the release matrix.{{ end }}</p>
+                  <p>{{ if $zh }}安装 Git、Make 和项目 <code>go.mod</code> 指定的 Go 工具链，再构建当前发布版本。{{ else }}Install Git, Make, and the Go toolchain specified in go.mod. Then build the current release.{{ end }}</p>
                   <div class="download-code">
                     <div class="download-code-head"><span><i class="fab fa-git-alt" aria-hidden="true"></i> git + make</span><button type="button" data-copy-command aria-label="{{ if $zh }}复制源码构建命令{{ else }}Copy source build command{{ end }}"><i class="far fa-copy" aria-hidden="true"></i><b>{{ if $zh }}复制{{ else }}Copy{{ end }}</b></button></div>
-                    <pre><code>git clone https://github.com/pgsty/pig.git
+                    <pre><code>git clone --branch {{ $tag }} https://github.com/pgsty/pig.git
 cd pig
 go mod download
 make build
@@ -288,7 +294,7 @@ make build
                   </div>
                   <div class="method-actions">
                     <a class="btn btn-primary" href="https://github.com/pgsty/pig" target="_blank" rel="noopener"><i class="fab fa-github" aria-hidden="true"></i> pgsty/pig</a>
-                    <a class="btn btn-line" href="{{ relLangURL "build/" }}">{{ if $zh }}pig build 文档{{ else }}pig build docs{{ end }} →</a>
+                    <a class="btn btn-line" href="{{ relLangURL "install/" }}">{{ if $zh }}构建与安装说明{{ else }}Build and install instructions{{ end }} →</a>
                   </div>
                 </div>
                 <div class="method-aside">
@@ -314,13 +320,13 @@ make build
         <div class="section-head section-head--compact" data-reveal>
           <p class="section-eyebrow"><span class="silkscreen">02 / TARGET MATRIX</span><span class="eyebrow-trace" aria-hidden="true"></span></p>
           <h2 class="section-title section-title--sm" id="targets-title">{{ if $zh }}pig 自己能装在哪里{{ else }}Where pig itself runs{{ end }}</h2>
-          <p class="section-subtitle">{{ if $zh }}下面是 pig 二进制自身的支持矩阵。它能装出来的 PostgreSQL 内核与扩展，覆盖范围以扩展目录中的目标标记为准。{{ else }}This is the support matrix for the pig binary itself. What it can install — kernels and extension packages — is target-specific; the catalog carries the per-target availability.{{ end }}</p>
+          <p class="section-subtitle">{{ if $zh }}以下平台提供 PIG 发布文件。PostgreSQL 与扩展包的可用性可用 <code>pig ext avail</code> 查询。{{ else }}PIG release files are available for these platforms. Use <code>pig ext avail</code> to check PostgreSQL extension package availability.{{ end }}</p>
         </div>
         <div class="topology-grid topology-grid--four" data-reveal>
           <article class="topology-featured">
             <div class="topology-head"><span>EL</span><small>rpm</small></div>
             <h3>{{ if $zh }}企业 Linux 8 / 9 / 10{{ else }}Enterprise Linux 8 / 9 / 10{{ end }}</h3>
-            <p>{{ if $zh }}RHEL、Rocky、AlmaLinux、openEuler 及其它 EL 兼容发行版，x86_64 与 aarch64 双架构。{{ else }}RHEL, Rocky, AlmaLinux, openEuler, and other EL-compatible distributions, on x86_64 and aarch64.{{ end }}</p>
+            <p>{{ if $zh }}RHEL、Rocky Linux 与 AlmaLinux，支持 x86_64 和 aarch64。{{ else }}RHEL, Rocky Linux, and AlmaLinux, on x86_64 and aarch64.{{ end }}</p>
             <b>{{ $rpm64 }}</b>
           </article>
           <article>
@@ -338,7 +344,7 @@ make build
           <article>
             <div class="topology-head"><span>MAC</span><small>tar.gz</small></div>
             <h3>macOS</h3>
-            <p>{{ if $zh }}Intel 与 Apple Silicon，用于本地检索目录、生成清单与远程编排；本机不安装 PostgreSQL 包。{{ else }}Intel and Apple Silicon — for searching the catalog, authoring inventory, and remote orchestration. It does not install PostgreSQL packages locally.{{ end }}</p>
+            <p>{{ if $zh }}Intel 与 Apple Silicon，可用于扩展目录查询、配置清单编辑等操作。PostgreSQL 包安装在 Linux 主机上执行。{{ else }}Intel and Apple Silicon, for catalog queries, inventory editing, and related tasks. Run PostgreSQL package installation on Linux hosts.{{ end }}</p>
             <b>{{ $macA }}</b>
           </article>
         </div>
@@ -352,7 +358,7 @@ make build
           <div>
             <p class="section-eyebrow"><span class="silkscreen">03 / AFTER INSTALL</span><span class="eyebrow-trace" aria-hidden="true"></span></p>
             <h2 id="after-title">{{ if $zh }}装完之后{{ else }}After the install{{ end }}</h2>
-            <p>{{ if $zh }}验证、升级、更新扩展目录，以及卸载 —— 都是一条命令。{{ else }}Verify, upgrade, refresh the catalog, uninstall — one command each.{{ end }}</p>
+            <p>{{ if $zh }}检查安装结果，按需更新程序或扩展目录。{{ else }}Check the installation. Update the executable or extension catalog as needed.{{ end }}</p>
           </div>
           <a class="version-card version-card--client" href="{{ relLangURL "cmd/" }}">
             <span>{{ if $zh }}命令参考{{ else }}COMMAND REFERENCE{{ end }}</span>
@@ -370,8 +376,8 @@ make build
           </div>
           <div>
             <i aria-hidden="true"></i>
-            <b>pig update</b>
-            <em>{{ if $zh }}升级 pig 自身；<code>-m</code> 走中国镜像，<code>-v X.Y.Z</code> 指定版本{{ else }}upgrade pig itself; <code>-m</code> uses the China mirror, <code>-v X.Y.Z</code> pins a version{{ end }}</em>
+            <b>sudo pig update</b>
+            <em>{{ if $zh }}Linux 上升级 PIG；<code>-m</code> 使用中国镜像。macOS 请下载新版归档{{ else }}upgrade PIG on Linux; <code>-m</code> uses the China mirror. On macOS, download the new archive{{ end }}</em>
           </div>
           <div>
             <i aria-hidden="true"></i>
@@ -380,8 +386,8 @@ make build
           </div>
           <div>
             <i aria-hidden="true"></i>
-            <b>apt remove pig</b>
-            <em>{{ if $zh }}EL 上用 <code>dnf remove pig</code>；二进制安装直接删 <code>/usr/bin/pig</code>{{ else }}on EL use <code>dnf remove pig</code>; a binary install is just <code>rm /usr/bin/pig</code>{{ end }}</em>
+            <b>sudo apt remove pig</b>
+            <em>{{ if $zh }}EL 上用 <code>sudo dnf remove pig</code>；归档安装删除对应路径的 pig 文件{{ else }}on EL use <code>sudo dnf remove pig</code>; for an archive install, remove the installed pig file{{ end }}</em>
           </div>
         </div>
       </div>
@@ -398,19 +404,19 @@ make build
           <a href="{{ relLangURL "start/" }}">
             <span><i class="fas fa-rocket" aria-hidden="true"></i></span>
             <h3>{{ if $zh }}快速上手{{ else }}Get started{{ end }}</h3>
-            <p>{{ if $zh }}装完 pig 之后的第一组命令：配置仓库、装内核、装扩展。{{ else }}The first set of commands after pig is installed: wire repositories, install a kernel, install extensions.{{ end }}</p>
+            <p>{{ if $zh }}安装 PostgreSQL 与 pgvector，启动测试实例并启用扩展。{{ else }}Install PostgreSQL and pgvector, start a test instance, and enable the extension.{{ end }}</p>
             <b>{{ if $zh }}打开教程{{ else }}Open the tutorial{{ end }} ↗</b>
           </a>
           <a href="{{ relLangURL "release/" }}">
             <span><i class="fas fa-clipboard-list" aria-hidden="true"></i></span>
             <h3>{{ if $zh }}发布注记{{ else }}Release notes{{ end }}</h3>
-            <p>{{ if $zh }}每个版本改了什么、加了什么、破坏了什么，一版一篇。{{ else }}What changed, what was added, and what broke — one entry per version.{{ end }}</p>
+            <p>{{ if $zh }}查看各版本的功能变化、修复与兼容性说明。{{ else }}Read the features, fixes, and compatibility changes for each version.{{ end }}</p>
             <b>{{ if $zh }}查看全部版本{{ else }}Browse every version{{ end }} ↗</b>
           </a>
           <a href="https://github.com/pgsty/pig/issues" target="_blank" rel="noopener">
             <span><i class="fab fa-github" aria-hidden="true"></i></span>
             <h3>{{ if $zh }}报告问题{{ else }}Report an issue{{ end }}</h3>
-            <p>{{ if $zh }}安装失败、目标平台缺包、可复现的行为问题，都欢迎提。{{ else }}Install failures, missing targets, and reproducible behaviour problems are all welcome.{{ end }}</p>
+            <p>{{ if $zh }}安装失败、目标平台缺包、可复现的行为问题，都欢迎提。{{ else }}Install failures, missing targets, and reproducible behavior problems are all welcome.{{ end }}</p>
             <b>GitHub Issues ↗</b>
           </a>
         </div>

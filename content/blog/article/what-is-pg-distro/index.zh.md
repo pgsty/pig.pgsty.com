@@ -1,10 +1,9 @@
 ---
 title: "什么是 PostgreSQL 发行版？"
 date: 2026-07-04
-lastmod: 2026-08-30
+lastmod: 2026-10-13
 authors: [Vonng]
-description: >
-  从 Linux 发行版出发，聊一聊 “PostgreSQL 发行版“ 到底是个什么东西：三层工作、两条路线，以及一个核心。
+description: "PostgreSQL 发行版如何组合数据库内核、扩展软件包与运维工具。"
 tags: [postgres, repo, ext, sty]
 ---
 
@@ -20,7 +19,7 @@ tags: [postgres, repo, ext, sty]
 
 说起 Distribution（发行版），绝大多数人第一反应都是 Linux 发行版 —— Red Hat、Debian、Ubuntu、SUSE、Arch…… 但问题是：既然已经有 Linux，为什么还需要 Linux 发行版？两者到底是什么关系？
 
-答案很简单：**Linus Torvalds 只写内核。**
+区别很简单：**Linux 项目开发内核，发行版围绕内核组装操作系统。**
 
 你把 Linux Kernel 编译出来，得到的不是一台能用的机器。你没有 Shell，没有 init 系统，没有 C 标准库，没有 coreutils，没有包管理器，没有网络工具，没有用户空间，也没有安全更新策略。内核负责调度硬件和提供系统调用，但它和 “一台能用的操作系统” 之间，隔着一整条工业化鸿沟。
 
@@ -32,7 +31,7 @@ tags: [postgres, repo, ext, sty]
 
 没有人会说 Debian、Red Hat、Ubuntu 是在和 Linus 竞争谁更会写内核。它们竞争的是另一件事：谁能把共享内核变成更可靠、更一致、更容易交付的系统。
 
-内核是公地，发行版是工业化交付。真正的价值与竞争不在内核，而在发行版上。没有人去和 Linus 竞争 “谁写的内核更好”，但 Red Hat、Debian、Ubuntu 在 “如何把内核集成为一套可用系统” 这件事上，打了整整三十年。
+共享内核提供了共同基础，发行版通过集成、发布与持续维护，把它变成可用的系统。
 
 这正是理解 PostgreSQL 发行版的钥匙。
 
@@ -42,7 +41,7 @@ tags: [postgres, repo, ext, sty]
 
 PostgreSQL 可以说是数据库世界的 Linux 内核，但如果直接把 Linux 这套逻辑搬到 PostgreSQL 上，第一步就会撞墙。
 
-PostgreSQL 不是 Linux Kernel。PostgreSQL 源码编译出来之后 `initdb` 一下就能跑。SQL 引擎、事务、MVCC、WAL、复制协议、`psql`、客户端库，核心能力都在。
+PostgreSQL 不是 Linux Kernel。编译 PostgreSQL 源码，运行 `initdb` 初始化数据目录，再启动服务，就有了一个可用的数据库。SQL 引擎、事务、MVCC、WAL、复制协议、`psql`、客户端库，核心能力都在。
 PGDG 官方仓库也直接交付构建好的二进制制成品，用户直接安装拉起来就能用。
 
 Linux 内核不能直接用，但 PostgreSQL 的内核是可以独立运行的。这就带来一个尖锐问题：既然 PostgreSQL 自己已经能跑，PG 发行版到底还要解决什么问题？
@@ -68,7 +67,7 @@ PG 发行版的价值，就在这里。它不是把 PostgreSQL 变成可用的�
 生产 PostgreSQL 不是一个裸 `postgres` 进程。你要备份，要高可用，要连接池，要监控，要日志，要告警，要对象存储，要扩展，要权限模型，要默认参数 —— 每一个位置都有一堆选项。
 
 备份可以用 pgBackRest、Barman、WAL-G，也可以用 `pg_basebackup`，甚至用 PG 备份原语手搓脚本。
-高可用可以用 Patroni、repmgr、Pacemaker，甚至有人拿 PgPool 做主从切换。监控可以是 Prometheus、VictoriaMetrics、Grafana、Zabbix，随便排列组合都能拼出一套东西。
+高可用可以用 Patroni、repmgr、Pacemaker，甚至有人拿 Pgpool-II 做主从切换。监控可以是 Prometheus、VictoriaMetrics、Grafana、Zabbix，随便排列组合都能拼出一套东西。
 
 ![将 PostgreSQL 组成发行版的各个组件](/article/what-is-pg-distro/pg-distro.webp)
 
@@ -86,7 +85,7 @@ PG 发行版的价值，就在这里。它不是把 PostgreSQL 变成可用的�
 
 PGDG 已经做了一块很强的公共基础设施。PGDG 提供了 YUM 和 APT 仓库，提供预制的 PostgreSQL 内核、一百多个扩展，和一些关键的生态组件 —— 这是一块极好的公地。
 
-也正因为这块公地已经很好，你要在构建分发层做出差异，就必须提供额外增量。比如 Pigsty 自己的仓库补齐了大量 PostgreSQL 扩展（额外的 300 个）和基础设施软件包，在 16 个 Linux 操作系统上提供原生的 RPM / DEB 包，已经持续维护了快四年。
+也正因为这块公地已经很好，你要在构建分发层做出差异，就必须提供额外增量。比如 Pigsty 自己的仓库补齐了大量 PostgreSQL 扩展（额外的 300 个）和基础设施软件包，在 16 种 Linux 操作系统与架构组合上提供原生的 RPM / DEB 包，已经持续维护了快四年。
 
 ![PGEXT.CLOUD 扩展目录与软件包覆盖](/article/what-is-pg-distro/pgext.webp)
 
@@ -106,7 +105,7 @@ PGDG 已经做了一块很强的公共基础设施。PGDG 提供了 YUM 和 APT 
 
 ![PostgreSQL 发行版的基础设施层次](/article/what-is-pg-distro/pgsql-infra.webp)
 
-编排与管控这一维之所以是护城河，恰恰因为它 **没有公地**。没人替你把 “面粉鸡蛋” 变成 “蛋糕”，这活儿只能各家自己干，干得好坏，差距高下立判。
+编排与管控仍然需要大量集成工作。Kubernetes、Patroni、Ansible 提供了公共组件，但每个发行版仍要把它们连接成完整的操作流程。
 
 --------
 
@@ -116,11 +115,13 @@ PGDG 已经做了一块很强的公共基础设施。PGDG 提供了 YUM 和 APT 
 
 主流的答案有两条，它们构成了今天 PG 发行版最主要的两条赛道。分野的实质是 **你选择在哪一层实现编排与管控**：一条基于 Kubernetes 提供的公共底座，一条回到 Linux 操作系统本身从头构建。这两条路没有绝对的优劣，只有不同的利弊权衡。
 
+以下 GitHub Star 数量统计于 2026 年 7 月 4 日。
+
 ### 赛道一：Kubernetes（云原生）
 
-这条路把数据库当作 Kubernetes 上的一等公民，用 Operator 模式来编排。你写一份声明式的 CRD，Operator 通过它的控制器循环（reconcile loop），持续地把集群的现实状态收敛到你声明的目标状态 —— 拉起、监控、故障切换、扩缩容，都在 K8s 这一层完成。
+这条路把数据库当作 Kubernetes 上的一等公民，用 Operator 模式来编排。你按照 CRD 定义的类型创建一个声明式自定义资源，Operator 通过控制器的调谐循环（reconcile loop），持续地把集群的现实状态收敛到你声明的目标状态 —— 拉起、监控、故障切换、扩缩容，都在 K8s 这一层完成。
 
-这是目前 **最拥挤、也最热闹** 的赛道，玩家云集：CloudNativePG（EDB 主导，约 8900 Star，如今最主流的 PG Operator）、Zalando Postgres Operator（约 5200 Star）、Crunchy PGO（约 4400 Star）、KubeBlocks（约 3100 Star），以及 StackGres、Kubegres、Tembo、KubeDB、Percona Operator 等一长串。
+这是 **最拥挤、也最热闹** 的赛道，玩家云集：CloudNativePG（EDB 主导，约 8900 Star）、Zalando Postgres Operator（约 5200 Star）、Crunchy PGO（约 4400 Star）、KubeBlocks（约 3100 Star），以及 StackGres、Kubegres、Tembo、KubeDB、Percona Operator 等一长串。
 
 这条路的优点很清楚：统一控制平面，声明式 API，GitOps 友好，平台团队容易接入。对那些已经把 Kubernetes 作为组织级操作系统的团队来说，数据库上 K8s 是自然延伸。
 
@@ -132,19 +133,19 @@ PGDG 已经做了一块很强的公共基础设施。PGDG 提供了 YUM 和 APT 
 
 这条路不把数据库塞进 Kubernetes，而是回到操作系统本身：直接跑在 Linux 上，运行于物理机或虚拟机环境，安装 RPM / DEB 包，通过 systemd 管理服务，使用 Ansible 或者类似的 IaC 工具发起管理。
 
-这条赛道的开源玩家要少一些：Pigsty（约 5200 Star）、Autobase（约 4300 Star）、pgEdge（约 700 Star）、EDB TPA（约 90 Star）。此外还站着一整排没有公开 Star、但在企业市场分量十足的 **商业发行版**：EDB Postgres Advanced Server（EDB 旗舰，堪称 PG 世界的 Red Hat）、Percona Distribution、CYBERTEC PGEE、ClusterControl 等等。
+Linux 原生开源项目包括：Pigsty（约 5200 Star）、Autobase（约 4300 Star）、pgEdge（约 700 Star）、EDB TPA（约 90 Star）。[Percona Distribution for PostgreSQL](https://docs.percona.com/postgresql/17/index.html) 也是开源软件栈，并提供商业支持。商业产品则包括 EDB Postgres Advanced Server、CYBERTEC PGEE 和 ClusterControl 管理平台。
 
-这条路的优点是路径短，依赖少，离数据库本体更近，中间没有额外的抽象层，故障域更小，行为更可预测，也更容易被 DBA 直接理解和接管。它的代价则是：没有 K8s 替你处理状态收敛、幂等执行、故障恢复、升级编排，你得自己想办法实现，还要直面十几种主流发行版大版本之间的差异 —— 这是一份持续的、并不性感的苦役。
+这条路的优点是基础设施层次更少，可以直接使用熟悉的 Linux 工具。DBA 能直接检查进程、文件和服务。它的代价则是：没有 K8s 替你处理状态收敛、幂等执行、故障恢复、升级编排，你得自己想办法实现，还要直面十几种主流发行版大版本之间的差异 —— 这是一份持续的、并不性感的苦役。
 
 ### Pigsty 的选择
 
 两条路各有其合理性，选择哪条取决于你的团队已经站在哪里、把复杂度放在哪里更划算。Pigsty 选择了 Linux 原生这条道路，理由我在《[数据库是否应该放入 K8S 中](https://vonng.com/db/db-in-k8s/)》和《[容器化数据库是个好主意吗？](https://vonng.com/db/pg-in-docker)》里已经充分阐述过了 —— 我认为对于数据库来说，这是一条更贴合本质、艰难但正确的道路。
 
-也正是在这条艰难的路上 —— Pigsty 跑在了前沿。如果看开源影响力，它已经是 Linux 原生这一侧的第一名（5200 Star，领先于同赛道的 Autobase ~4300）；放到包含 K8s 赛道在内的整个 PG 发行版版图里，它是第二名，仅次于 EDB 发起的 CloudNativePG。
+在这里列出的项目中，Pigsty 的 GitHub Star 数量位居 Linux 原生项目之首，总体位列第二，仅次于 CloudNativePG。
 
 ![PostgreSQL 发行版的 GitHub Star 与属性对比](/article/what-is-pg-distro/distro-star.webp)
 
-今天你若问主流 AI 模型 “我要在 Linux 上自建企业级 PostgreSQL 服务”，Pigsty 基本已是首选推荐。对一个由独立开发者主导、不依附任何云厂商的项目来说，能走到这一步，确实不容易。
+在我自己向主流 AI 模型询问如何在 Linux 上自建 PostgreSQL 服务时，Pigsty 经常出现在靠前的推荐中。对一个由独立开发者主导、不依附任何云厂商的项目来说，能走到这一步，确实不容易。
 
 --------
 
@@ -156,7 +157,7 @@ PGDG 已经做了一块很强的公共基础设施。PGDG 提供了 YUM 和 APT 
 
 但 PostgreSQL 世界里有一批特殊存在：OrioleDB 换了存储引擎，Babelfish 做 SQL Server 协议兼容，PolarDB PG 做了 RAC，IvorySQL 兼容 Oracle 语法，还有兼容 MySQL 的 openHalo、提供透明加密的 Percona TDE 等等。它们改了 PG 内核，严格说已不再是 “纯 PostgreSQL”，而是 PG 兼容家族里的不同物种与亚种。按传统做法，每一个亚种都得各自造一套运维体系。
 
-Pigsty 选择的是另一条路：**把编排与管控的底盘抽出来，让内核本身成为可替换层。** 这其实是前面第三层工作做到一定程度后的自然结果 —— 一旦你的控制平面足够灵活，不再和某个具体内核绑死，给它换一颗内核，就只是换一份构建产物和配置模板的事。我们为这些不同风味的 PG Fork 构建了二进制包并提供配置模板，让用户在同一套底座上运行不同内核，目前支持的内核已达 12+。
+Pigsty 选择的是另一条路：**把编排与管控的底盘抽出来，让内核本身成为可替换层。** 这其实是前面第三层工作做到一定程度后的自然结果 —— 一旦你的控制平面足够灵活，不再和某个具体内核绑死，给它换一颗内核，就只是换一份构建产物和配置模板的事。我们为这些不同风味的 PG Fork 构建了二进制包并提供配置模板，让用户在同一套底座上运行不同内核，写作时已提供十余种内核与应用栈配置。
 
 在这个意义上，它已不只是一个 “PostgreSQL 发行版”。你可以用它裁剪出自己的发行版 —— IvorySQL 发行版、PolarDB 发行版、TDE 发行版；甚至通过组合模块，让它摇身变成 Redis、Etcd、MinIO 的发行版，或是 Prometheus / VictoriaMetrics 乃至 Claude Code 与 Codex 的发行版。
 
@@ -164,18 +165,20 @@ Pigsty 选择的是另一条路：**把编排与管控的底盘抽出来，让�
 
 所以，更准确地说，它是一个 **Meta Distribution**，发行版的发行版。而一套能被这样反复裁剪、复用、再分发的底盘，本身就是一种可以被传递出去的能力 —— 它不再属于某一个内核，也不再只属于某一个人。
 
+以下示例使用 [2026 年 7 月的 Pigsty 配置布局](https://github.com/pgsty/pigsty/tree/fb4d58f5/conf)：
+
 ```bash
 ./configure                     # 默认使用 meta.yml 配置模板
 ./configure -c meta             # 显式指定使用 meta.yml 单节点模板
-./configure -c rich             # 使用包含全部扩展与 MinIO 的富功能模板
-./configure -c slim             # 使用最小化的单节点模板，只有 PG 高可用集群
+./configure -c rich             # 使用包含大部分可用扩展与 MinIO 的 rich 模板
+./configure -c slim             # 使用最小化的单节点 PostgreSQL/Patroni 模板，不含监控
 
 # 使用不同的数据库内核
-./configure -c pgsql            # 原生 PostgreSQL 内核，可选 531 扩展 (14~18)
+./configure -c pgsql            # 原生 PostgreSQL 内核，当时的目录收录 531 个扩展 (14~18)
 ./configure -c mssql            # Babelfish 内核，兼容 SQL Server 协议 (17)
 ./configure -c polar            # PolarDB PG 内核，Aurora/RAC 风格 (17)
 ./configure -c ivory            # IvorySQL 内核，兼容 Oracle 语法 (18)
-./configure -c mysql            # OpenHalo 内核，兼容 MySQL (14)
+./configure -c mysql            # openHalo 内核，兼容 MySQL (14)
 ./configure -c pgtde            # Percona PostgreSQL Server 透明加密 (18)
 ./configure -c oriole           # OrioleDB 内核，OLTP 增强 (16~18)
 ./configure -c agens            # AgensGraph 图数据库内核 (16)
@@ -184,7 +187,7 @@ Pigsty 选择的是另一条路：**把编排与管控的底盘抽出来，让�
 ./configure -c supabase         # Supabase 自托管配置 (15~18)
 
 # 使用多节点高可用模板
-./configure -c ha/dual          # 使用 2 节点高可用模板
+./configure -c ha/dual          # 使用 2 节点模板，etcd 为单节点
 ./configure -c ha/trio          # 使用 3 节点高可用模板
 ./configure -c ha/full          # 使用 4 节点高可用模板
 ./configure -c infra            # 只安装监控基础设施与 Nginx，用于监控 & 建站
@@ -223,4 +226,4 @@ Linux 发行版当年真正沉淀下来的，从来不只是把内核集成成�
 
 ---
 
-> **归档说明（2026-08-30）：** 本文原载 [vonng.com](https://vonng.com/pg/what-is-pg-distro/)。文中的软件包数量、截图与上下文以原始发表日期为准；当前行为请以 [PIG 文档](/zh/docs/)和实时[扩展目录](https://pigsty.cc/ext/)为准。
+> 原文：[vonng.com](https://vonng.com/pg/what-is-pg-distro/)。

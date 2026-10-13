@@ -2,7 +2,7 @@
 title: "为什么 PIG 默认构建调试包"
 linkTitle: "默认构建调试包"
 date: 2026-09-03
-lastmod: 2026-10-06
+lastmod: 2026-10-13
 description: "将 RPM debuginfo/debugsource 与 DEB dbgsym 从显式启用改为显式退出的构建策略决策。"
 tags: [build, cli]
 weight: 35
@@ -80,6 +80,5 @@ draft: false
 
 ## 当前状态 {#status}
 
-该实现已进入经过验证的 [v1.8.1 标签](https://github.com/pgsty/pig/tree/v1.8.1)
-与[正式发布制品](https://github.com/pgsty/pig/releases/tag/v1.8.1)。上述实现与本地验证的证据范围保持不变。
-软件仓库发布、公开文档部署与既有系统升级仍是独立交付阶段。
+已随 [v1.8.1](https://github.com/pgsty/pig/releases/tag/v1.8.1) 发布。
+用法与平台要求见文首链接的当前参考文档。

@@ -2,10 +2,9 @@
 title: "SOW: Postpartum Care for 100,000 Packages"
 linkTitle: "SOW: 100,000 Packages, One Copy Each"
 date: 2026-08-11
-lastmod: 2026-08-30
+lastmod: 2026-10-13
 authors: [Vonng]
-description: >
-  The hard part of maintaining a PostgreSQL distribution is not compiling packages. At 100,000 artifacts, deduplication, indexing, snapshots, atomic cutovers, and incremental publishing become the real challenge. SOW puts all of that into one self-contained binary, turning RPM and DEB repository management from ad hoc directory scripts into a recoverable, auditable state system.
+description: "How SOW manages more than 100,000 repository artifacts with shared package storage, snapshots, and incremental publication."
 tags: [repo, build, catalog]
 ---
 
@@ -29,7 +28,7 @@ sow create /www/pigsty
 
 For a repository you intend to maintain over time, SOW also provides Managed mode. It projects one package payload into multiple distribution views, records desired and built state, creates immutable snapshots, computes exact changesets, and publishes incremental updates to a filesystem or object store.
 
-In one sentence: **SOW puts the small job of “generating repository indexes” and the much larger job of “governing a long-lived software repository” into one self-contained binary.**
+SOW provides both repository indexing and long-term repository management in one binary.
 
 **I built this tool entirely to solve my own problems. But if you also maintain a large software repository spanning multiple Linux distributions, it should help you too—though admittedly, there probably aren't many of us.**
 
@@ -55,7 +54,7 @@ That is cumbersome enough on Linux and even uglier on macOS. You have to start d
 
 ![Pigsty replacing the RPM and DEB repository toolchains with SOW](/article/sow/pigsty-offline-diff.webp)
 
-In [Pigsty 4.5](https://vonng.com/en/pigsty/v4.5/), I removed that clutter. SOW is a self-contained binary only a few megabytes in size. It runs directly on Linux and macOS, understands both RPM and DEB package formats, and implements the APT and DNF repository specifications. It has no daemon and requires no separate language runtime.
+In [Pigsty 4.5](https://vonng.com/en/pigsty/v4.5/), I removed that clutter. SOW is a self-contained binary. It runs directly on Linux and macOS, understands both RPM and DEB package formats, and implements the APT and DNF repository specifications. It has no daemon and requires no separate language runtime.
 
 But installing fewer tools was only the surface problem. Four deeper problems convinced me to keep building SOW as the repository grew.
 
@@ -81,7 +80,7 @@ If you publish them in the wrong order, a client may see a new pointer before th
 
 The deeper problem surfaced when I wanted to add repository channels. How do you maintain beta, latest, and stable at the same time? Keep a monthly snapshot? Answer “which packages were added last Wednesday?” Roll back safely? Determine which old objects are no longer referenced by any snapshot and may be deleted?
 
-You can script each requirement in isolation. Put them together, however, and those scripts metastasize into a shadow database with no transactions, schema, or audit trail. There are already tools such as `createrepo_c`, `dpkg-scanpackages`, `reprepro`, and `aptly`, along with general-purpose synchronization and object-storage tools. But I could not find a lightweight open-source tool that brought RPM and DEB support, a single package pool, immutable snapshots, atomic publishing, and incremental delivery into one clear model.
+You can script each requirement in isolation. Put them together, however, and those scripts metastasize into a shadow database with no transactions, schema, or audit trail. There are already tools such as `createrepo_c`, `dpkg-scanpackages`, `reprepro`, and `aptly`, along with general-purpose synchronization and object-storage tools. But I could not find a lightweight open-source tool that brought RPM and DEB support, a single package pool, immutable snapshots, recoverable publishing, and incremental delivery into one clear model.
 
 Fortunately, building your own tools has never been cheaper.
 
@@ -102,15 +101,15 @@ sow create /srv/repo
 sow create /srv/repo --pigsty
 ```
 
-The RPMs and DEBs in the directory are the sole source of truth. `repodata/`, `Packages`, and `Packages.gz` are projections that can be discarded and rebuilt at any time. SOW scans top-level packages concurrently. By default, it opens each package only once, computing its SHA-256, parsing it, and extracting every fact needed for rendering in the same pass before generating metadata for both repository formats.
+The RPMs and DEBs in the directory are the sole source of truth. `repodata/`, `Packages`, and `Packages.gz` are projections that can be discarded and rebuilt at any time. SOW scans top-level packages concurrently. Without signing, it opens each package only once, computing its SHA-256, parsing it, and extracting every fact needed for rendering in the same pass before generating metadata for both repository formats.
 
-The output first goes into a private staging area on the same filesystem. SOW validates it with its own parsers before replacing the public files. Finally, it compares the file set and `stat` snapshots again to confirm that no package was added, removed, or replaced during the build. It does not rehash every large package merely for extra reassurance.
+The output first goes into a private staging area on the same filesystem. SOW validates it with its own parsers. Before replacing public files, it compares the package list and `stat` snapshots to detect changes during the build. It does not rehash every package at this stage.
 
 ![Documentation for a SOW Plain repository](/article/sow/plain-repo-docs.webp)
 
-Plain mode does not maintain an operation log or attempt heavyweight transaction recovery. If the process is interrupted, run the same `sow create` command again. The package directory is intact, the indexes are derived state, and rebuilding is cheaper than recovery.
+Plain mode does not maintain an operation log. Its file replacements are separate operations, so an interruption can leave incomplete indexes. Run the same `sow create` command again to rebuild them from the package directory. For a live service, build in a separate directory and switch it into service after the command succeeds.
 
-With `--pigsty`, SOW also writes a `repo_complete` completion marker at the very end. Until that marker exists, consumers know the repository is not ready. It is a tiny but extremely useful commit protocol.
+With `--pigsty`, SOW removes DEB `i386` packages and Patroni 3.0.4 packages, then writes a `repo_complete` marker containing the retained packages’ SHA-256 hashes. It removes an old marker before changing public files and writes the new marker last. Consumers that use this convention wait for the marker before using the repository.
 
 This mode solves Pigsty's original problem: replace two toolchains and several containers with one small binary, then quickly produce a repository that real APT, DNF, and YUM clients can consume.
 
@@ -150,7 +149,7 @@ Managed mode divides repository state into three concepts:
 
 This distinction may sound academic. In practice, it exists specifically to handle failure.
 
-Suppose you add 5,000 packages in one operation. Desired has changed, but the build is killed halfway through with `SIGKILL`. Without this separation, the system is left staring at a directory tree with no idea how far the update got. With it, SOW can state the truth: the intent has changed, the previous Built Generation remains intact and continues to serve users, and the new operation is awaiting recovery.
+Suppose you add 5,000 packages in one operation. Desired has changed, but the build is killed halfway through with `SIGKILL`. Without this separation, the system is left staring at a directory tree with no idea how far the update got. With it, SOW retains the previous completed Generation and records the interrupted operation. Recovery can determine which work remains and whether to roll back or continue.
 
 A Generation does not copy the entire repository. It stores an immutable manifest, metadata, and a set of package-payload references; many snapshots can reference the same Pool objects. The exact difference between two Generations is a Changeset: which payloads to add, which metadata to replace, which pointers to switch, and which old objects may be deleted after their retention period.
 
@@ -160,28 +159,28 @@ sow changes -r pigsty
 sow log     -r pigsty
 ```
 
-Incremental synchronization therefore no longer begins with “scan 100,000 files again.” It begins with “compare two known Generations.”
+The transfer set comes from comparing two known Generations. SOW still checks the local tree and remote inventory, but it can avoid transferring unchanged objects.
 
 ![SOW's capability matrix for Plain and Managed modes](/article/sow/sow-capabilities.webp)
 
 ---
 
-## The Secret to Atomic Cutovers: Move the Pointer Last
+## Publish the Referenced Objects Before the Pointers
 
-A software repository has no global transaction spanning multiple files or objects. SOW does not pretend otherwise. Instead, it turns publication order into a protocol whose safety can be reasoned about:
+SOW publishes repository objects in a defined order:
 
 ```text
 payload  →  metadata  →  pointer  →  delete
  objects      indexes      entry points   retired objects
 ```
 
-First, place immutable package payloads. Next, write checksum-addressed metadata and `by-hash` indexes. Only after everything is in place does SOW switch the client entry points: `repomd.xml`, `Release`, and `InRelease`. Old objects may be deleted only after the old pointers no longer reference them and both retention and evidence gates have passed.
+First, place immutable package payloads. Next, write checksum-addressed metadata and `by-hash` indexes. Then update the client entry points: `repomd.xml`, `Release`, and `InRelease`. Garbage collection removes an old object only after it is no longer needed by retained Generations or publication targets and its retention period has expired.
 
-As a result, whenever a client follows an active pointer, the content it references already exists. Within one protocol view, readers see either the complete old Generation or the complete new one, never a torn tree.
+This order makes the referenced immutable objects available before their new pointers. The whole repository does not switch in one atomic transaction: views, direct APT indexes, and detached signatures change in separate writes. A client can still need to retry during that transition.
 
-On a local POSIX filesystem, this protocol relies on same-filesystem `staging`, `fsync`, atomic `rename`, stable-path locks, and a durable operation log. Before any Managed write command begins its own work, it checks for any unfinished prior operation and recovers it. Recovery decides whether to roll back or roll forward solely from evidence already persisted on disk. If the evidence conflicts, SOW stops and fails closed rather than offering a `repair --force` command that might guess wrong.
+On a local POSIX filesystem, this protocol relies on same-filesystem `staging`, `fsync`, atomic `rename`, stable-path locks, and a durable operation log. Before any Managed write command begins its own work, it checks for any unfinished prior operation and recovers it. Recovery decides whether to roll back or roll forward solely from evidence already persisted on disk. If the recorded state conflicts, SOW stops without applying a guessed repair.
 
-Object stores do not support atomic commits across several keys. SOW therefore persists a `commit intent` first, advances the protocol pointers in deterministic order, and records an `Applied Checkpoint` for each `target`. A filesystem target and an R2 target each have their own evidence; success on the former is never mistaken for success on the latter. If R2 lacks sufficient proof for a safe conditional delete, garbage collection reports candidates but does not risk deleting remote objects.
+Object stores do not support atomic commits across several keys. SOW therefore persists a `commit intent` first, advances the protocol pointers in deterministic order, and records an `Applied Checkpoint` for each `target`. A filesystem target and an R2 target each have their own evidence; success on the former is never mistaken for success on the latter. In SOW 0.3, R2 garbage collection reports candidates and keeps the remote objects.
 
 This is the essential difference between SOW and a single `rclone sync` command. Moving files is easy. The hard parts are knowing **what to transfer, when the operation counts as committed, which direction recovery should take after failure, and what is truly safe to delete**.
 
@@ -193,11 +192,11 @@ Most of the work in SOW 0.3 was not adding more features. It was making an alrea
 
 The Plain path now reads, hashes, and parses each package in a single pass, using bounded concurrency through `--jobs`. Identical input produces byte-for-byte identical metadata. When nothing needs updating, SOW returns `no-op` and does not replace a public inode merely to bump its timestamp.
 
-The Managed path caches parsed “package facts” in SQLite, keyed by their immutable SHA-256 digest. A new package is fully authenticated and parsed once on ingestion. Later builds load facts in batches and compute the membership projection in memory. A warm build still walks the public namespace, but for unchanged Pool files it checks only the `device`, `inode`, `size`, `mtime`, and `ctime` fingerprint instead of reading every payload again. If the fingerprint drifts, SOW falls back to one authoritative SHA-256 pass and repairs the cache automatically. When you need a full cryptographic audit, run `sow check` explicitly.
+The Managed path caches parsed “package facts” in SQLite, keyed by their immutable SHA-256 digest. SOW reads each new package to calculate its digest and parse its metadata on ingestion. Later builds load facts in batches and compute the membership projection in memory. A warm build still walks the public namespace, but for unchanged Pool files it checks only the `device`, `inode`, `size`, `mtime`, and `ctime` fingerprint instead of reading every payload again. If the fingerprint drifts, SOW falls back to one authoritative SHA-256 pass and repairs the cache automatically. When you need a full cryptographic audit, run `sow check` explicitly.
 
 Optimizations like these matter only when they show up in the numbers.
 
-In the project benchmark, membership expansion for a Dist with 5,000 objects fell from about **4.1 seconds to 33 milliseconds**. At 50,000 objects, the old implementation still had not finished after ten minutes; the new one takes about **300 milliseconds**. Payload promotion now uses bounded, single-writer group commits, capped at 512 objects or 1 GiB per batch. This both reduces `fsync` storms and prevents file-descriptor use and recovery state from growing without bound as the repository expands.
+In the project benchmark, membership expansion for a Dist with 5,000 objects fell from about **4.1 seconds to 33 milliseconds**. At 50,000 objects, the new implementation finishes in **under a second**, where the old one did not finish in the benchmark. See the [v0.3.0 release notes](https://sow.pgsty.com/blog/release/sow-v0.3.0/) for the benchmark context. Payload promotion now uses bounded, single-writer group commits, capped at 512 objects or 1 GiB per batch. This both reduces `fsync` storms and prevents file-descriptor use and recovery state from growing without bound as the repository expands.
 
 These numbers are not there to decorate a benchmark slide. They simply demonstrate that once a repository truly holds 100,000 artifacts, “the state model is correct” is only the passing grade. Whether routine small changes remain cheap enough determines whether the tool stays viable over time.
 
@@ -269,10 +268,10 @@ sow create /srv/repo
 
 If you also maintain a long-lived software distribution, visit the [SOW project site](https://sow.pgsty.com/) or go straight to the [documentation](https://sow.pgsty.com/docs/) to see what lies beneath.
 
-SOW is licensed under the [Apache-2.0 license](https://github.com/pgsty/sow/blob/main/LICENSE). The current [v0.3.0](https://github.com/pgsty/sow/releases/tag/v0.3.0) provides amd64 and arm64 archives for Linux and macOS, plus RPM and DEB packages for Linux. Get it from the [download page](https://sow.pgsty.com/download/), or browse the [source code](https://github.com/pgsty/sow).
+SOW is licensed under the [Apache-2.0 license](https://github.com/pgsty/sow/blob/main/LICENSE). The [v0.3.0](https://github.com/pgsty/sow/releases/tag/v0.3.0) release described here provides amd64 and arm64 archives for Linux and macOS, plus RPM and DEB packages for Linux. Get the latest release from the [download page](https://sow.pgsty.com/download/), or browse the [source code](https://github.com/pgsty/sow).
 
 A hundred thousand packages aren't frightening. Treating them as nothing more than a hundred thousand files is.
 
 ---
 
-> **Archive note (2026-08-30):** First published on [vonng.com](https://vonng.com/en/db/sow/). Package counts, screenshots, and surrounding context reflect that date. For current behavior, use the [PIG documentation](/docs/) and live [extension catalog](https://pigsty.io/ext/).
+> Originally published on [vonng.com](https://vonng.com/en/db/sow/).

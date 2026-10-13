@@ -32,4 +32,5 @@ cascade:
 icon: fa-solid fa-blog
 ---
 
-Articles, design notes, release notes, and project news for PIG — the PostgreSQL extension package manager by Pigsty.
+Articles, design decisions, and release history for PIG, the PostgreSQL command-line tool from
+Pigsty. PIG manages repositories, extensions, database instances, and Pigsty environments.

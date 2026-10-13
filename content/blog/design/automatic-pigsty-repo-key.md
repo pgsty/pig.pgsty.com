@@ -2,7 +2,7 @@
 title: "Install the Pigsty Repository Key Automatically"
 linkTitle: "Automatic Pigsty Key"
 date: 2026-10-04
-lastmod: 2026-10-06
+lastmod: 2026-10-13
 description: "Prepare the Pigsty key best-effort, reuse existing files, and fall back with a warning unless repository metadata explicitly names a key."
 tags: [repo, sty]
 weight: 95
@@ -124,8 +124,5 @@ RPM import tests use an isolated copy of the guest's RPM database.
 
 ## Current status {#status}
 
-The implementation is present in the verified [v1.9.0 tag](https://github.com/pgsty/pig/tree/v1.9.0)
-and its [published release artifacts](https://github.com/pgsty/pig/releases/tag/v1.9.0).
-The implementation and local checks described above remain the scope of the evidence.
-Repository publication, public documentation deployment, and upgrades of existing systems
-remain separate gates.
+Released in [v1.9.0](https://github.com/pgsty/pig/releases/tag/v1.9.0).
+See the current reference linked above for usage and platform requirements.

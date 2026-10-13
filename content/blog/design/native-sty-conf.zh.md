@@ -2,8 +2,8 @@
 title: "先编译和校验，再提交：原生 sty conf 流水线"
 linkTitle: "原生 sty conf"
 date: 2026-02-18
-lastmod: 2026-08-28
-description: "为什么 pig sty conf 把 Inventory 生成视为带路径安全、结构化变更、秘密纪律和原子输出的编译流水线。"
+lastmod: 2026-10-13
+description: "pig sty conf 如何校验模板、修改配置、保护凭据，并原子写入 Inventory。"
 tags: [sty, inventory]
 weight: 15
 authors: [Vonng]
@@ -21,7 +21,7 @@ draft: false
 校验完整候选文件，并且只在所有必要阶段成功后原子提交输出。
 
 命令不调用旧 `configure` 脚本，也不回退到原始 Shell 执行。
-结构化结果报告选中的输入、实际选择、变更类型与告警，但不返回生成的秘密值。
+结构化结果报告选中的输入、实际选择、变更类型与告警，但不返回生成的凭据值。
 
 ## 背景 {#context}
 
@@ -53,18 +53,18 @@ draft: false
 
 ## 影响 {#impact}
 
-该命令只支持定义明确的一组模板和变更，不提供任意编辑能力。
-这个限制是刻意的：已有 Inventory 属于无损 `pig inventory` 工作流，`sty conf` 则拥有从已知模板进行可复现编译的职责。
+使用 `sty conf` 从已知模板生成新 Inventory。编辑已有 Inventory 时，使用无损的
+`pig inventory` 工作流。
 
-固定版本模板保留自己的实际版本；通用版本请求无法应用时产生告警，而不是报告请求版本却生成另一个版本。
+固定版本模板保留原版本；请求了冲突的版本时，命令给出告警。
 
 ## 验证与演进 {#verification}
 
-原生 configure 方向最早记录于 2026-02-18，生产实现收敛于
+原生 configure 方案最早记录于 2026-02-18，生产实现收敛于
 [`74e084e`](https://github.com/pgsty/pig/commit/74e084e)，
 最终契约同步提交为 [`adc4260`](https://github.com/pgsty/pig/commit/adc4260)。
 测试覆盖目录穿越与别名、同时 IP 映射、域名边界、交互与关闭输入选择、版本处理、代理和区域变更、
-秘密生成与脱敏、预检顺序、校验失败、权限与原子写入。
+凭据生成与脱敏、预检顺序、校验失败、权限与原子写入。
 
 ## 当前状态 {#status}
 

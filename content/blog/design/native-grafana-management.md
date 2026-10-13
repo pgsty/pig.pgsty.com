@@ -2,8 +2,8 @@
 title: "A Bounded Grafana Client Instead of Dashboard Shell Scripts"
 linkTitle: "Native Grafana Management"
 date: 2026-07-18
-lastmod: 2026-08-28
-description: "Why pig sty grafana owns a small HTTP contract for dashboard lifecycle, preferences, and safe cleanup without becoming a general Grafana administration client."
+lastmod: 2026-10-13
+description: "How pig sty grafana manages dashboards and preferences through a native HTTP client."
 tags: [sty]
 weight: 70
 authors: [Vonng]
@@ -11,73 +11,71 @@ draft: false
 ---
 
 > **Decision date:** 2026-07-18<br>
-> **Status:** Implemented in v1.6.0; Grafana dashboard schema v2 support followed in v1.6.2.<br>
+> **Status:** Released in [v1.6.0](/release/pig-1.6.0/); dashboard schema v2 support followed in [v1.6.2](/release/pig-1.6.2/).<br>
 > **Current reference:** [`pig sty grafana`](/sty/#sty-grafana)<br>
-> **Scope:** Pigsty-owned dashboard folders, dashboards, and UI preferences; not general Grafana provisioning.
+> **Scope:** Dashboard import, export, cleanup, and selected organization and user preferences.
 
 ## Decision {#decision}
 
-PIG should manage the Grafana assets that ship with Pigsty through a bounded native HTTP client.
-It may inspect readiness, list managed assets, load or initialize dashboards, dump them, remove only
-owned dashboards, and adjust the supported language and style preferences.
+PIG uses a native HTTP client to manage Grafana dashboards. Local JSON paths select a dashboard,
+a folder, or a complete dashboard directory. This gives load, dump, and cleanup a common selection
+model and lets users preview destructive work.
 
-The command must not grow into a general Grafana administration API. Datasources, organizations,
-users, arbitrary folders, plugins, and unrelated dashboards remain outside its ownership.
+The default directory is the Pigsty dashboard bundle. Users can select another compatible directory.
+Cleanup normally selects dashboard UIDs declared by the local files; explicit `clean --all` selects
+all dashboards and folders in the active Grafana organization.
 
 ## Context {#context}
 
-Legacy dashboard workflows were tied to scripts and local file layout. They offered little
-structured evidence about which endpoint was contacted, what assets were owned, or why a partial
-failure occurred. At the same time, calling the full Grafana API without a narrow ownership model
-could delete user content or expose credentials in arguments and diagnostics.
-
-A native client was justified only if its network, authentication, ownership, and result boundaries
-were explicit.
+The previous shell scripts depended on local file layout and offered limited detail about partial
+failures. Moving these operations into PIG makes timeouts, authentication, path validation, and
+results consistent. A local declaration also provides a precise default cleanup scope.
 
 ## Alternatives considered {#alternatives}
 
-- **Keep shell scripts as the public interface.** Rejected because timeout, redirect, response-size,
-  redaction, and structured-result behavior would remain inconsistent.
-- **Expose arbitrary Grafana API calls.** Rejected because it would make PIG a second Grafana CLI
-  without a stable product boundary.
-- **Delete by folder name alone.** Rejected because names are not sufficient proof of ownership.
-- **Embed a demo password.** Rejected because default credentials become long-lived secrets and
-  encourage unsafe automation.
+- **Keep shell scripts as the public interface.** Network limits, redaction, and structured results
+  would remain split across scripts.
+- **Expose arbitrary Grafana API calls.** PIG only needs dashboard operations and a few preferences.
+- **Select cleanup targets by folder name.** Names can collide. The selected JSON files provide
+  dashboard UIDs; folders are removed only after they are empty.
+- **Embed a default password.** Credentials belong in user configuration.
 
 ## Contract {#contract}
 
-- every request has bounded connection and response behavior;
-- unsafe redirects and oversized responses are refused;
-- public health is checked before authenticated operations;
-- credentials come from explicit safe inputs, environment, or Inventory resolution, with no
-  embedded default password;
-- command-line passwords are documented as an emergency path because argv and shell history may
-  expose them;
-- errors and structured results never contain credentials or response bodies;
-- load and init operate on Pigsty's known dashboard bundle;
-- clean removes only assets proven to be PIG/Pigsty-owned;
-- language and style accept a fixed vocabulary and map `auto` to Grafana's system preference;
-- schema v1 and schema v2 dashboard representations are normalized at the client boundary.
+- Limit request duration and response size, and reject unsafe redirects.
+- Check public health before authentication. `info` can return health alone when no password is set.
+- Resolve credentials from explicit inputs, environment, or Inventory; omit them and response
+  bodies from diagnostics and structured results.
+- `list` lists all dashboards in the active organization.
+- `load` validates and imports the selected local files without deleting live dashboards.
+- `boot` selects the existing `pigsty` dashboard as home, stars it, and names the organization Pigsty.
+- `init` loads a complete dashboard directory and runs `boot` only after every load succeeds.
+- `dump` exports the selected remote scope as deterministic JSON with atomic file writes.
+- `clean` deletes locally declared UIDs and then empty folders. `--all` explicitly selects the
+  entire active organization. Both modes show a plan and require confirmation.
+- `lang` and `style` update the selected preference for the organization and current user.
+  Style `auto` maps to Grafana's `system` value.
+- Normalize supported dashboard schema v1 and v2 representations when reading and writing them.
 
 ## Consequences {#impact}
 
-The native client produces better plans, error classification, and automation results, but it must
-track the small Grafana API surface it owns. Supporting a new dashboard schema is acceptable;
-supporting unrelated Grafana resources is not implied.
+Load and cleanup use the same local declarations, so users can operate on one dashboard or folder.
+A matching UID identifies the target; it does not prove that PIG originally created it. Users must
+review the cleanup plan, especially when selecting `--all`.
 
-Operators can use another Grafana client for general administration without PIG claiming authority
-over those resources.
+Datasource provisioning, plugin installation, and user administration remain in Grafana's own tools.
 
 ## Verification and evolution {#verification}
 
-The native dashboard workflow landed in
-[`3060485`](https://github.com/pgsty/pig/commit/3060485). Tests cover health, authentication,
-timeouts, redirects, size limits, ownership checks, preference requests, redaction, partial
-failures, and load/dump behavior. Dashboard schema v2 support followed in
-[`67f6e3b`](https://github.com/pgsty/pig/commit/67f6e3b) and shipped in v1.6.2.
+The native workflow landed in
+[`3060485`](https://github.com/pgsty/pig/commit/3060485). Dashboard schema v2 support followed in
+[`67f6e3b`](https://github.com/pgsty/pig/commit/67f6e3b).
+The [released tests](https://github.com/pgsty/pig/blob/v1.9.0/cli/sty/grafana_test.go)
+cover health-only operation, authentication, load scopes, bootstrap ordering, export stability,
+preference updates, local UID cleanup, explicit full cleanup, and changed-plan rejection.
+HTTP-client tests cover timeouts, redirects, response limits, and redaction.
 
 ## Current status {#status}
 
-`pig sty grafana` is the supported PIG entry point for the bounded Pigsty dashboard lifecycle.
-Use the current [`pig sty` reference](/sty/) for commands and credentials; use Grafana-native tools
-for resources outside this ownership boundary.
+The dashboard workflow is released. See [`pig sty grafana`](/sty/#sty-grafana) for path selection,
+credentials, and cleanup examples.

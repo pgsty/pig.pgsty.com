@@ -2,7 +2,7 @@
 title: "Let Patronictl Speak for Itself"
 linkTitle: "Patronictl Passthrough"
 date: 2026-07-21
-lastmod: 2026-08-28
+lastmod: 2026-10-13
 description: "Why pig pt stopped mirroring Patronictl's command tree and became a transparent launcher with only a few PIG-owned local helpers."
 tags: [patroni, cli]
 weight: 80
@@ -77,5 +77,4 @@ The final help-path refinement landed before v1.6.0.
 ## Current status {#status}
 
 Use Patronictl's own documentation for forwarded command grammar and [`pig pt`](/pt/) for PIG's
-config selection and local helpers. Do not assume PIG `-o json` can replace Patronictl's native
-`--format json`.
+config selection and local helpers. For JSON output from a forwarded command, use Patronictl's native `--format json` option.

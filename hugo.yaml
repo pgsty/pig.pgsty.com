@@ -2,7 +2,7 @@
 # Basics
 #=======================================#
 baseURL: https://pig.pgsty.com/
-title: PIG - Packager Index Gateway
+title: PIG - PostgreSQL package manager
 defaultContentLanguage: en
 defaultContentLanguageInSubdir: false
 enableRobotsTXT: true
@@ -40,7 +40,7 @@ languages:
     weight: 1
     title: PIG
     params:
-      description: "PIG: the PostgreSQL extension package manager. Install PostgreSQL 14-18 and 600 cataloged extension packages with native APT/DNF workflows."
+      description: "PIG is a PostgreSQL package manager. Find extension packages, configure repositories, and install with apt or dnf."
       time_format_blog: 'January 02, 2006'
       copyright:
         authors: '[Ruohang Feng](https://vonng.com) ([Vonng](https://github.com/Vonng)) @ [PGSTY](https://pgsty.com)'
@@ -111,7 +111,7 @@ languages:
     weight: 2
     title: PIG
     params:
-      description: "PIG：PostgreSQL 扩展包管理器，通过原生 APT/DNF 工作流安装 PostgreSQL 14-18 与目录中的 600 个扩展包。"
+      description: "PIG 是 PostgreSQL 包管理器，用于查找扩展包、配置软件仓库，并通过 apt 或 dnf 安装。"
       time_format_blog: '2006年01月02日'
       copyright:
         authors: '[冯若航](https://vonng.com)（[Vonng](https://github.com/Vonng)）@ [PGSTY](https://pgsty.com)'
@@ -263,7 +263,7 @@ services:
 # Site parameters
 #=======================================#
 params:
-  description: "PIG is a PostgreSQL extension package manager: resolve and install PostgreSQL kernels and cataloged extension packages on EL, Debian, and Ubuntu with one self-contained CLI."
+  description: "PIG is a PostgreSQL package manager. Find extension packages, configure repositories, and install with apt or dnf."
   images:
     - img/pig-social-card.png
   # OINK 文档 chrome 使用 PIG 的站点品牌图；静态路径会由主题自动解析。
@@ -271,7 +271,7 @@ params:
   wordmark: img/pig-word.svg
   version: 1.9.0            # pig 最新版本号（= internal/config.PigVersion），正文用 {{< param version >}}
   pigsty_version: 4.5.0     # pig 内置的 Pigsty 版本（= internal/config.PigstyVersion）
-  pgext_count: 600          # Pigsty 已打包 PG 扩展数量，正文用 {{< param pgext_count >}}
+  pgext_count: 600          # 内嵌扩展目录条目数（含保留记录），正文用 {{< param pgext_count >}}
   # 页脚版权行（OINK footer/copyright.html 会按 Markdown 渲染 authors）。
   # 中英两版署名不同，各自写在下面的 languages 块里。
   copyright:

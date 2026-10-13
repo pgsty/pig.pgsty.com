@@ -7,55 +7,16 @@ categories: [参考]
 tags: [postgres]
 ---
 
-`pig pg` 命令（别名 `pig postgres`）用于管理本地 PostgreSQL 服务器和数据库。它封装了 `pg_ctl`、`psql`、`vacuumdb` 等本地原语；集群级 Patroni 操作请使用 `pig pt`，编排式 PITR 请使用 `pig pitr`。
+`pig postgres`（别名 `pig pg`）管理本地 PostgreSQL 实例和数据库，
+用于初始化与控制实例、执行 SQL、维护表和创建数据库副本。
+Patroni 集群操作使用 [`pig pt`](/zh/pt/)，pgBackRest 恢复流程使用 [`pig pitr`](/zh/pitr/)。
 
-```bash
-pig pg - Local PostgreSQL primitives (pg_ctl / psql / local files).
-
-Server Control (via pg_ctl):
-  pig pg init     [-v ver] [-D datadir]     initialize data directory
-  pig pg start    [-D datadir]              start PostgreSQL server
-  pig pg stop     [-D datadir] [-m fast]    stop PostgreSQL server
-  pig pg restart  [-D datadir] [-m fast]    restart PostgreSQL server
-  pig pg reload   [-D datadir]              reload configuration
-  pig pg status   [-D datadir]              show server status
-  pig pg promote  [-D datadir]              promote standby to primary
-  pig pg role     [-D datadir] [-V]         detect instance role (primary/replica)
-
-Service Management (via systemctl):
-  pig pg svc start                          start postgres systemd service
-  pig pg svc stop                           stop postgres systemd service
-  pig pg svc restart                        restart postgres systemd service
-  pig pg svc reload                         reload postgres systemd service
-  pig pg svc status                         show postgres service status
-
-Connection & Query:
-  pig pg psql     [db] [-c cmd]             connect to database via psql
-  pig pg ps       [-a] [-u user]            show current connections
-  pig pg kill     [-x] [-u user]            terminate connections (dry-run by default)
-  pig pg clone    <src> [dst]               clone database with CREATE DATABASE TEMPLATE
-
-Database Maintenance:
-  pig pg vacuum   [db] [-a] [-t table]      vacuum tables
-  pig pg analyze  [db] [-a] [-t table]      analyze tables
-  pig pg freeze   [db] [-a] [-t table]      vacuum freeze tables
-  pig pg repack   [db] [-a] [-t table]      repack tables (online rebuild)
-
-Tuning:
-  pig pg tune     [-p profile]              generate optimized parameters
-
-Instance Fork:
-  pig pg fork init <name> [-D datadir]      fork PGDATA into /pg/data-<name>
-  pig pg fork list                          list managed forks
-  pig pg fork start|stop|rm <name>          manage fork lifecycle
-
-Utilities:
-  pig pg log <list|tail|cat|less|grep>      view PostgreSQL logs
-```
+命令以 PostgreSQL 操作系统用户运行，通常为 `postgres`。先安装 PostgreSQL。
+初始化新数据目录前，为该用户准备可写的父目录，或创建归该用户所有的空目录。
 
 ## 命令概览
 
-**服务控制**（pg_ctl 封装）：
+**实例控制**：
 
 | 命令           | 别名           | 描述            | 备注                 |
 |:-------------|:-------------|:--------------|:-------------------|
@@ -76,16 +37,16 @@ Utilities:
 | `pg psql`  | `sql, connect`  | 连接到数据库  | 封装 psql                                      |
 | `pg ps`    | `activity, act` | 显示当前连接  | 查询 pg_stat_activity                          |
 | `pg kill`  | `k`             | 终止连接    | 默认 dry-run 模式                                |
-| `pg clone` |                 | 克隆单个数据库 | `CREATE DATABASE ... TEMPLATE ... FILE_COPY` |
+| `pg clone` |                 | 克隆单个数据库 | `CREATE DATABASE ... TEMPLATE ...` |
 {.full-width}
 
 **数据库维护**：
 
 | 命令           | 别名        | 描述    | 备注                         |
 |:-------------|:----------|:------|:---------------------------|
-| `pg vacuum`  | `vac, vc` | 清理表   | 封装 vacuumdb                |
-| `pg analyze` | `ana, az` | 分析表   | 封装 vacuumdb --analyze-only |
-| `pg freeze`  |           | 冻结清理表 | 封装 vacuumdb --freeze       |
+| `pg vacuum`  | `vac, vc` | 清理表   | 执行 SQL `VACUUM`                |
+| `pg analyze` | `ana, az` | 分析表   | 执行 SQL `ANALYZE` |
+| `pg freeze`  |           | 冻结清理表 | 执行 SQL `VACUUM (FREEZE)`       |
 | `pg repack`  | `rp`      | 在线重整表 | 需要 pg_repack 扩展            |
 {.full-width}
 
@@ -131,45 +92,17 @@ Utilities:
 | `pg svc status`  | `st, stat`       | 显示服务状态         |
 {.full-width}
 
-## 快速入门
+## 连接实例 {#快速入门}
+
+对于数据目录为 `/pg/data` 的运行中实例，先查看状态，再连接数据库：
 
 ```bash
-# 服务控制
-pig pg init                       # 初始化数据目录
-pig pg start                      # 启动 PostgreSQL
-pig pg status                     # 查看状态
-pig pg stop                       # 停止 PostgreSQL
-pig pg restart                    # 重启 PostgreSQL
-pig pg reload                     # 重载配置
-
-# 连接与查询
-pig pg psql                       # 连接到 postgres 数据库
-pig pg psql mydb                  # 连接到指定数据库
-pig pg ps                         # 查看当前连接
-pig pg kill -x                    # 终止连接（需要 -x 确认执行）
-pig pg clone meta meta_fork       # 克隆单个数据库
-
-# 数据库维护
-pig pg vacuum mydb                # 清理指定数据库
-pig pg analyze mydb               # 分析指定数据库
-pig pg repack mydb                # 在线重整数据库
-
-# 参数调优
-pig pg tune                       # 自动探测硬件并生成调优参数
-pig pg tune -p olap               # 使用 OLAP 负载画像
-pig pg tune -c 8 -m 32768 -d 500  # 手工覆盖 CPU / 内存 / 磁盘
-
-# 实例 Fork
-pig pg fork dev                   # 创建 /pg/data-dev
-pig pg fork init dev --start      # 创建并启动 fork，自动分配高位端口
-pig pg fork init dev -s --dst-port 15433  # 创建并在指定端口启动
-pig pg fork list                  # 列出 /pg/data-* fork
-
-# 日志查看
-pig pg log tail                   # 实时查看最新日志
-pig pg log list --log-dir /var/log/pg  # 使用自定义日志目录
-pig pg log grep ERROR             # 搜索日志
+pig pg status -D /pg/data
+pig pg psql -D /pg/data
 ```
+
+请使用实例的实际数据目录。在 `psql` 中执行 SQL，输入 `\q` 退出。
+安装 PostgreSQL 并创建测试实例的步骤见[快速上手](/zh/start/)。
 
 ## 全局参数
 
@@ -179,14 +112,21 @@ pig pg log grep ERROR             # 搜索日志
 |:------------|:-----|:-----------|:----------------------------|
 | `--version` | `-v` | 自动检测       | PostgreSQL 主版本号（形如 18，17）   |
 | `--data`    | `-D` | `/pg/data` | 数据目录路径                      |
-| `--dbsu`    | `-U` | `postgres` | 数据库超级用户（或 `$PIG_DBSU` 环境变量） |
+| `--dbsu`    | `-U` | `postgres` | PostgreSQL 操作系统用户；`$PIG_DBSU` 可覆盖默认值 |
 {.full-width}
+
+使用 `pig pg svc ...` 控制 `postgres` systemd 服务。
+使用 `start`、`stop` 等实例命令，通过 `pg_ctl` 操作 `-D` 指定的目录。
+
+`-D` 为实例操作选择数据目录，并将 `pg psql` 连接绑定到该实例。
+对于 `pg ps`、`pg kill` 和表维护命令，`-D` 只用于选择 PostgreSQL 安装，不设置 SQL 连接的端口或 socket。
+需要其他连接目标时，使用原生客户端并显式指定连接参数。`pg clone` 和 `pg fork` 各有独立的端口参数。
 
 **版本检测逻辑：**
 
 1. 如果指定了 `-v`，使用指定 PG 大版本
 2. 否则从数据目录的 `PG_VERSION` 文件读取版本
-3. 如果都无法获取，使用 PATH 中的默认 PostgreSQL 大版本
+3. 否则使用 PIG 找到的默认 PostgreSQL 安装。
 
 ## 服务控制命令
 
@@ -194,10 +134,11 @@ pig pg log grep ERROR             # 搜索日志
 
 初始化 PostgreSQL 数据目录，封装 `initdb` 命令。
 
-- 校验和默认打开，除非使用 `-K|--no-data-checksums` 显式关闭
-- 优先使用平台无关的 C.UTF-8 内置 Locale （PG 17 及以上版本），如果不支持则优先使用系统的 C.UTF-8 / C Locale，都不满足时使用系统默认 Locale。
-- 如果数据目录已存在，命令会拒绝执行，除非使用 `-f|--force` 强制覆盖。如果数据目录上有 PostgreSQL 正在运行，即使使用 `-f|--force`，命令也会拒绝执行，以防止数据丢失
-- 您可以使用 `--` 追加额外参数给 `initdb`，例如 `--waldir=/wal` 指定 WAL 日志目录。但如果要覆盖 Locale / Encoding 等参数，建议直接使用 `initdb` 命令。
+- 使用空目录，或 PostgreSQL 操作系统用户可以创建的路径。
+- 默认启用数据校验和，使用 `-K` 关闭。
+- 编码为 UTF8。PostgreSQL 17+ 使用内置 `C.UTF-8` locale；旧版本使用系统 `C.UTF-8`，不可用时使用 `C`。
+- 已初始化的目录需要 `--force`，确认后会删除原数据。运行中的实例不能覆盖。
+- 额外 `initdb` 参数放在 `--` 之后。需要其他 locale 或编码时，直接运行 `initdb`。
 
 ```bash
 pig pg init                       # 使用默认设置初始化
@@ -213,7 +154,7 @@ pig pg init -- --waldir=/wal      # 传递额外参数给 initdb
 | 参数                   | 简写   | 默认值   | 说明                |
 |:---------------------|:-----|:------|:------------------|
 | `--no-data-checksums` | `-K` | false | 禁用数据校验和                 |
-| `--force`             | `-f` | false | 强制初始化，删除已有数据（危险！）       |
+| `--force`             | `-f` | false | 删除已初始化目录后重新初始化       |
 | `--yes`               | `-y` | false | 与 `--force` 配合时跳过覆盖确认提示 |
 {.full-width}
 
@@ -236,8 +177,8 @@ pig pg start -o json              # 结构化输出 JSON
 
 | 参数          | 简写   | 说明                      |
 |:------------|:-----|:------------------------|
-| `--log`     | `-l` | 重定向 stdout/stderr 到日志文件 |
-| `--timeout` | `-t` | 等待超时（秒）                 |
+| `--log`     | `-l` | 启动日志；默认 `/tmp/pig-pg-start.log` |
+| `--timeout` | `-t` | 等待超时（秒）；默认取 `$PGCTLTIMEOUT`，其次为 60                 |
 | `--no-wait` |      | 不等待启动完成                 |
 | `--options` | `-O` | 传递给 postgres 的选项        |
 {.full-width}
@@ -248,8 +189,8 @@ pig pg start -o json              # 结构化输出 JSON
 
 使用 `pg_ctl stop` 命令停止 PostgreSQL 服务器。
 
-请注意如果 PostgreSQL 由 Patroni 管理，直接使用 `pg_ctl stop` 停止数据库可能会导致 Patroni 认为数据库异常退出，自动重启或触发自动故障转移。
-建议在 Patroni 管理的环境中使用 `pig pt stop` 或 `pig pt svc stop` 来停止 patroni ，从而停止 PostgreSQL。
+Patroni 管理实例时，直接停止 PostgreSQL 可能触发自动重启或故障切换。
+先用 `pig pt svc stop` 停止管理进程，再检查 PostgreSQL 状态。
 
 ```bash
 pig pg stop                       # 快速停止（默认）
@@ -265,7 +206,7 @@ pig pg stop --plan                # 预览停止计划
 | 参数          | 简写   | 默认值   | 说明                         |
 |:------------|:-----|:------|:---------------------------|
 | `--mode`    | `-m` | fast  | 关闭模式：smart/fast/immediate  |
-| `--timeout` | `-t` | 60    | 等待超时（秒）                    |
+| `--timeout` | `-t` | 60    | 等待超时（秒）；默认取 `$PGCTLTIMEOUT`，其次为 60                    |
 | `--no-wait` |      | false | 不等待关闭完成                    |
 | `--plan`    |      | false | 只预览本地 `pg_ctl stop` 计划，不执行 |
 {.full-width}
@@ -305,29 +246,23 @@ pig pg reload -D /data/pg18       # 指定数据目录
 
 ### pg status
 
-显示 PostgreSQL 服务器状态。此命令不仅显示 `pg_ctl status` 的结果，还会显示 postgres 相关进程和 Pigsty 相关服务的状态。
+查看所选实例的状态：
 
 ```bash
-pig pg status                     # 查看服务状态
-pig pg st                         # 别名
-pig pg status -D /data/pg18       # 指定数据目录
+pig pg status
+pig pg status -D /data/pg18
+pig pg status -D /data/pg18 -o json
 ```
 
-**输出内容：**
+文本输出包含 `pg_ctl status`、`pg_controldata` 摘要、数据库操作系统用户的进程，以及相关服务状态。
+`postgres` 行反映所选实例的进程状态。服务行包括 `patroni`、`pgbouncer`、`vip-manager` 和 `haproxy`。
 
-1. `pg_ctl status` 输出（进程是否运行、PID 等）
-2. PostgreSQL 进程列表（`ps -u postgres`）
-3. 相关服务状态：
-   - `postgres`：PostgreSQL systemd 服务
-   - `patroni`：Patroni HA 管理服务
-   - `pgbouncer`：连接池服务
-   - `pgbackrest`：备份服务
-   - `vip-manager`：VIP 管理服务
-   - `haproxy`：负载均衡服务
+结构化输出描述所选实例，包括数据目录、版本、PID、端口和可用的控制文件信息。
 
 ### pg promote
 
-使用 `pg_ctl promote` 命令将备库提升为主库。
+将备库或暂停恢复的实例提升为可写主库。
+使用 `--plan` 查看操作。文本模式要求确认，结构化执行必须加 `--yes`。
 
 ```bash
 pig pg promote                    # 提升备库
@@ -340,7 +275,7 @@ pig pg promote -y                 # 跳过确认提示
 
 | 参数          | 简写   | 说明      |
 |:------------|:-----|:--------|
-| `--timeout` | `-t` | 等待超时（秒） |
+| `--timeout` | `-t` | 等待超时（秒）；默认取 `$PGCTLTIMEOUT`，其次为 60 |
 | `--no-wait` |      | 不等待提升完成 |
 | `--plan`    |      | 仅预览提升计划 |
 | `--yes`     | `-y` | 跳过确认提示   |
@@ -396,8 +331,10 @@ pig pg psql -f script.sql         # 执行 SQL 脚本文件
 | `--file`    | `-f` | 执行 SQL 脚本文件 |
 {.full-width}
 
-如果指定全局 `-D/--data`，`pg psql` 会以数据库超级用户读取该数据目录下的 `postmaster.pid`，并使用其中记录的端口和 Unix socket 目录连接该实例。
-若无法读取或解析 postmaster 信息，命令会直接失败，而不是静默连接到默认实例。
+指定 `-D` 时，PIG 以所选操作系统用户读取该目录的 `postmaster.pid`，
+连接其中记录的端口和 Unix socket。postmaster 信息缺失或无效时返回错误。
+
+使用 `-o json` 或 `-o yaml` 时，必须指定 `-c` 或 `-f`；交互式 psql 使用文本模式。
 
 ### pg ps
 
@@ -445,19 +382,21 @@ pig pg kill --plan                # 预览终止连接计划
 | `--database` | `-d` | 按数据库筛选 |
 | `--state` | `-s` | 按状态筛选（idle/active/idle in transaction） |
 | `--query` | `-q` | 按查询模式筛选 |
-| `--all` | `-a` | 包括复制连接 |
+| `--all` | `-a` | 包括非客户端后台进程 |
 | `--cancel` | `-c` | 取消查询而非终止连接 |
 | `--watch` | | 每 N 秒重复执行 |
 | `--plan` | | 预览执行计划，不终止连接 |
 {.full-width}
 
-**安全说明：** `--state` 和 `--query` 参数会进行标识符验证，只接受简单的字母数字模式，以防止 SQL 注入。
+`--state` 接受已知连接状态，包括 `idle in transaction`（含空格的值加引号）。
+`--query` 不区分大小写匹配查询文本。正整数 `--pid` 直接选择该进程，并优先于其他筛选参数。
+不加筛选条件时，选择其他客户端会话；`--all` 还包括非客户端后台进程。
 
 ### pg clone
 
-克隆数据库集群中的一个数据库，对于 PG 18 及以上版本优先使用 CoW 原地瞬间克隆
-
-在当前 PostgreSQL 实例内克隆一个数据库。该命令封装 `CREATE DATABASE ... TEMPLATE ... STRATEGY FILE_COPY`，并会在克隆前终止源数据库上的现有会话，语义与 Pigsty 的 `pgsql-db clone` 工作流一致。
+在同一实例内创建数据库副本。复制前会终止源库会话，因此应安排在允许中断访问的时段执行。
+命令使用 `CREATE DATABASE ... TEMPLATE`，PostgreSQL 15+ 加上 `STRATEGY FILE_COPY`；
+也支持 PostgreSQL 14，使用其默认复制方式。
 
 ```bash
 pig pg clone meta                       # 克隆 meta 为 meta_1/meta_2/...
@@ -472,28 +411,30 @@ pig pg clone meta meta_fork --plan      # 预览克隆计划
 | 参数             | 简写   | 说明                                                      |
 |:---------------|:-----|:--------------------------------------------------------|
 | `--port`       |      | PostgreSQL 端口（默认 `5432` 或 `$PG_PORT`）                   |
-| `--conn-db`    |      | 执行 `CREATE DATABASE` 的连接库，克隆 `postgres` 时默认 `template1` |
+| `--conn-db`    |      | 连接库默认为 `postgres`；克隆 `postgres` 时改用 `template1` |
 | `--owner`      |      | 克隆后尝试修改新库 owner                                         |
 | `--conn-limit` |      | 新库连接数限制（`-1` 无限制，`0` 禁止连接）                              |
 | `--plan`       |      | 仅显示执行计划                                                 |
 | `--yes`        | `-y` | 跳过确认提示                                                  |
 {.full-width}
 
-**说明：** PostgreSQL 18+ 且 `file_copy_method=clone` 可用时，数据库克隆可使用 CoW 语义；否则会退化为普通文件复制。该命令克隆的是单个数据库逻辑对象，不会创建新的 PostgreSQL 实例。
+PostgreSQL 18+ 配置 `file_copy_method=clone` 且文件系统支持时，可使用写时复制（CoW）；
+否则使用普通复制。要复制整个实例，使用 `pg fork`。
+文本模式要求确认，结构化执行必须加 `--yes`。
 
 ## 数据库维护命令
 
 ### pg vacuum
 
-清理数据库表。封装 `vacuumdb` 命令。
+通过 psql 执行 SQL `VACUUM`，默认数据库为 `postgres`。
 
 ```bash
-pig pg vacuum                     # 清理当前数据库
+pig pg vacuum                     # 清理 postgres 数据库
 pig pg vac                        # 别名
 pig pg vacuum mydb                # 清理指定数据库
 pig pg vacuum -a                  # 清理所有数据库
 pig pg vacuum mydb -t mytable     # 清理指定表
-pig pg vacuum mydb --schema myschema  # 清理指定 schema 中的表
+pig pg vacuum mydb --schema myschema -t mytable  # 清理 schema 中的指定表
 pig pg vacuum mydb --full         # VACUUM FULL（需要排他锁）
 ```
 
@@ -506,16 +447,21 @@ pig pg vacuum mydb --full         # VACUUM FULL（需要排他锁）
 | `--table`   | `-t` | 指定表名               |
 | `--verbose` | `-V` | 详细输出               |
 | `--full`    | `-F` | VACUUM FULL（需要排他锁） |
+| `--plan` | | 查看操作，不执行 |
+| `--yes` | `-y` | 跳过 VACUUM FULL 确认 |
 {.full-width}
 
-**安全说明：** `--schema` 和 `--table` 参数会进行标识符验证，只接受有效的 PostgreSQL 标识符格式。
+`vacuum` 和 `freeze` 使用 `--schema` 与 `--table` 选择一个表。
+处理整个 schema 时，使用原生 `vacuumdb --schema SCHEMA`。
+
+`--full` 重写表并获取排他锁。文本模式要求确认，结构化执行必须加 `--yes`。
 
 ### pg analyze
 
-分析数据库表以更新统计信息。
+通过 psql 执行 SQL `ANALYZE`，更新查询规划所用的统计信息。默认数据库为 `postgres`。
 
 ```bash
-pig pg analyze                    # 分析当前数据库
+pig pg analyze                    # 分析 postgres 数据库
 pig pg ana                        # 别名
 pig pg analyze mydb               # 分析指定数据库
 pig pg analyze -a                 # 分析所有数据库
@@ -534,20 +480,21 @@ pig pg analyze mydb -t mytable    # 分析指定表
 
 ### pg freeze
 
-对数据库表执行冻结清理（vacuum freeze），防止事务 ID 回卷。
+通过 psql 执行 SQL `VACUUM (FREEZE)`，冻结旧事务 ID。默认数据库为 `postgres`。
 
 ```bash
-pig pg freeze                     # 冻结清理当前数据库
+pig pg freeze                     # 冻结清理 postgres 数据库
 pig pg freeze mydb                # 冻结清理指定数据库
 pig pg freeze -a                  # 冻结清理所有数据库
 pig pg freeze mydb -t mytable     # 冻结清理指定表
 ```
 
-**选项：** 与 `pg vacuum` 相同（不含 `--full`）。
+**选项：** 与 `pg analyze` 相同。
 
 ### pg repack
 
-在线重整数据库表。需要安装 `pg_repack` 扩展。
+使用 `pg_repack` 重建表。先安装可执行文件，并在目标数据库中安装扩展。
+默认数据库为 `postgres`。
 
 ```bash
 pig pg repack mydb                # 重整数据库中所有表
@@ -575,7 +522,8 @@ pig pg repack mydb --plan         # 显示将被重整的表
 
 ### pg tune
 
-根据当前 PostgreSQL 主版本、主机硬件资源和工作负载画像，生成一组推荐的 PostgreSQL 参数。默认自动探测 CPU、内存与数据盘容量，并以文本形式输出配置项。
+根据 PostgreSQL 版本、CPU 核数、内存、磁盘容量和所选负载类型，生成内存、并行度和 WAL 参数的初始建议。
+存储计算按 SSD 假设。命令只输出建议，不修改配置文件。
 
 ```bash
 pig pg tune                       # 自动探测硬件，使用 oltp 画像
@@ -614,8 +562,8 @@ pig pg tune -o yaml               # 结构化输出 YAML
 **说明：**
 
 - 生成结果会随当前 PostgreSQL 主版本自动裁剪，例如 `io_workers` 仅会在 PG 18+ 输出。
-- 文本输出可直接重定向到配置片段，结构化输出适合自动化脚本消费。
-- 该命令当前生成建议参数，不会直接修改数据库配置文件。
+- 文本输出包含成功消息，只将参数赋值行复制到配置文件，不要将完整输出直接重定向为 PostgreSQL 配置。
+- 脚本使用 `-o json` 并读取 `data.parameters`。检查参数后，通过现有配置流程应用，按参数要求重载或重启。
 
 ## 实例 Fork
 
@@ -646,7 +594,7 @@ pig pg fork init dev --plan           # 仅显示执行计划
 | `--src-port` |      | `5432` 或 `$PG_PORT`     | 源端口                           |
 | `--start`    | `-s` | false                   | 创建后启动 fork                    |
 | `--force`    | `-f` | false                   | 覆盖已有且已停止的目标目录，并跳过确认           |
-| `--timeout`  | `-t` | 60                      | 启动等待超时（秒）                     |
+| `--timeout`  | `-t` | 60                      | 启动等待超时（秒）；默认取 `$PGCTLTIMEOUT`，其次为 60                     |
 | `--yes`      | `-y` | false                   | 跳过确认提示                        |
 | `--plan`     |      | false                   | 只显示执行计划，不执行                   |
 {.full-width}
@@ -655,7 +603,7 @@ pig pg fork init dev --plan           # 仅显示执行计划
 
 | 命令                                     | 常用参数                                                                                       | 说明                           |
 |:---------------------------------------|:-------------------------------------------------------------------------------------------|:-----------------------------|
-| `pig pg fork list`                     | `--plan`, `-o json/yaml`                                                                   | 列出托管 fork                    |
+| `pig pg fork list`                     | `-o json/yaml`                                                                   | 列出托管 fork                    |
 | `pig pg fork start <name> or --dst-data <dir>` | `--dst-data`, `--dst-port`, `-t/--timeout`, `--plan`                                | 启动已有 fork                    |
 | `pig pg fork stop <name> or --dst-data <dir>`  | `--dst-data`, `-m/--mode`, `-t/--timeout`, `--plan`                                   | 停止已有 fork                    |
 | `pig pg fork rm <name> or --dst-data <dir>`    | `--dst-data`, `--stop`, `-m/--mode`, `-t/--timeout`, `-f/--force`, `-y/--yes`, `--plan` | 删除 fork；运行中的 fork 需 `--stop` |
@@ -671,7 +619,12 @@ pig pg fork init dev --plan           # 仅显示执行计划
 
 **列出 fork：**
 
-`pig pg fork list` 扫描 `/pg/data-*` 并读取 `fork.json`。文本状态只区分 `forked` 与 `orphan`，不实时判断实例是否正在运行。
+`pig pg fork list` 扫描 `/pg/data-*`，读取 `fork.json` 并刷新运行状态。
+文本列为 `NAME`、`PORT`、`STATE`、`PID`、`AGE`、`SOURCE`、`COPY` 和 `DATA`，
+状态为 `running`、`stopped` 或 `orphan`。
+
+JSON 和 YAML 在结果的 `data` 数组中返回 fork 记录，包括源与目标连接信息、复制与备份元数据、
+管理命令和 PIG 构建信息。
 
 **结构化输出：**
 
@@ -733,7 +686,7 @@ pig pg log tail --log-dir /var/log/postgres  # 使用自定义目录
 | 参数         | 简写   | 默认值   | 说明                      |
 |:-----------|:-----|:------|:------------------------|
 | `--lines`  | `-n` | 50    | 显示的行数                   |
-| `--follow` | `-f` | false | 兼容性 no-op；`tail` 本身总是跟踪 |
+| `--follow` | `-f` | false | 兼容旧用法；`tail` 始终跟踪 |
 {.full-width}
 
 ### pg log show
@@ -787,7 +740,8 @@ pig pg log grep ERROR pg.csv      # 搜索指定日志文件
 
 ## pg svc 子命令
 
-`pg svc`（也可写作 `pg service` 或 `pg s`）提供通过 systemctl 管理 PostgreSQL 服务的功能：
+`pg svc`（也可写作 `pg service` 或 `pg s`）控制 Pigsty 使用的 `postgres` systemd 服务，要求该单元已存在。
+对于发行版提供的 `postgresql-18` 或 `postgresql@18-main` 等单元，直接使用实际单元名调用 `systemctl`。
 
 ```bash
 pig pg svc start                 # 启动 postgres 服务
@@ -808,41 +762,14 @@ pig pg svc status                # 显示服务状态
 | `pg svc status`  | `st, stat`       |
 {.full-width}
 
-## 设计说明
+## 工具与权限
 
-**与原生工具的关系：**
+PIG 使用 `initdb` 初始化数据，用 `pg_ctl` 控制实例，通过 psql 执行 SQL 和表维护，
+用 `pg_repack` 重建表，通过系统工具读取日志。需要本命令未提供的选项时，直接使用相应工具。
 
-`pig pg` 并非对 PostgreSQL 原生工具的简单封装，而是针对常用操作的上层抽象：
-
-- 服务控制命令（init/start/stop/restart/reload/promote）调用 `pg_ctl`
-- `status` 命令除了 `pg_ctl status` 外，还显示进程和相关服务状态
-- 连接管理命令（psql/ps/kill）调用 `psql`
-- clone 命令调用 SQL 创建数据库副本
-- 维护命令（vacuum/analyze）调用 `vacuumdb`
-- repack 命令调用 `pg_repack`
-- fork 命令使用 PostgreSQL 低级备份 API 与本地文件复制创建一次性物理副本
-- 日志命令调用 `tail`、`less`、`grep` 等系统工具
-- `pg svc` 命令调用 `systemctl`
-
-如需使用原生工具的完整功能，可直接调用相应命令。
-
-**权限处理：**
-
-- 如果当前用户已是 DBSU：直接执行命令
-- 如果当前用户是 root：使用 `su - postgres -c "..."` 执行
-- 其他用户：使用 `sudo -H -u postgres -- ...` 直接执行，保留原始 argv，并将 HOME 设置为目标用户目录
-
-**安全性考虑：**
-
-- `--state`、`--query`、`--schema`、`--table` 等参数都经过标识符验证，防止 SQL 注入
-- `pg kill` 默认为 dry-run 模式，避免误操作
-- `pg clone` 会终止源数据库现有会话，建议在维护窗口使用
-- `pg fork` 会拒绝危险目标路径；普通复制 fallback 会提示空间风险
-- 日志命令在权限不足时自动使用 sudo
-
-**平台支持：**
-
-此命令专为 Linux 系统设计，部分功能依赖 `systemctl`。
+当前用户是所选 PostgreSQL 操作系统用户时直接执行。
+root 使用 `su`，其他用户使用 `sudo -H -u`。服务管理使用 root 权限。
+这些命令面向 Linux，服务管理需要 systemd。
 
 ## 设计记录
 

@@ -2,7 +2,7 @@
 title: "One Grammar for Dangerous Work: PIG's Operations CLI Safety Contract"
 linkTitle: "Operations CLI Safety"
 date: 2026-07-02
-lastmod: 2026-09-03
+lastmod: 2026-10-13
 description: "How PIG separates primitives from orchestrators, makes destructive intent explicit, and prevents aliases or structured output from changing operational meaning."
 tags: [cli, postgres, pgbackrest, pitr]
 weight: 40
@@ -69,8 +69,7 @@ Some historical shorthand disappeared and some scripts had to adopt cluster-firs
 target syntax. In return, command names now preserve layer boundaries, plans correspond to real
 actions, and recovery automation cannot silently substitute a primitive for the orchestrator.
 
-The contract does not eliminate operational risk. It makes risk visible and keeps a convenience
-layer from inventing ambiguity.
+Plans show the affected resources and actions so operators can review recovery before execution.
 
 ## Verification and evolution {#verification}
 
@@ -94,11 +93,10 @@ followed by structured-argument redaction and corrected machine annotations in
 and optional operands were reflected in the machine grammar in
 [`de7ffd0`](https://github.com/pgsty/pig/commit/de7ffd0e81e500ea2f4268ca326917aa385150ca).
 The changes were exercised on Ubuntu 24.04 and Rocky Linux 9 ARM64 Farrow guests, then released
-from source commit [`e3d1eb4`](https://github.com/pgsty/pig/commit/e3d1eb4a86cedddcf49fff398fc69751e861372e)
-after the [v1.8.1 CI run](https://github.com/pgsty/pig/actions/runs/33718574084) passed.
+from source commit [`1c6f524`](https://github.com/pgsty/pig/commit/1c6f52401accc8ad6d7e8ab51248895632d7629b)
+after the [v1.8.1 CI run](https://github.com/pgsty/pig/actions/runs/33747971725) passed.
 
 ## Current status {#status}
 
 Use `pig pb restore` when you intentionally want the pgBackRest primitive and [`pig pitr`](/pitr/)
-when you want the managed recovery workflow. Current syntax, warnings, and platform requirements are
-maintained in the command reference pages rather than frozen in this historical record.
+when you want the managed recovery workflow. See the command reference pages for current syntax and platform requirements.

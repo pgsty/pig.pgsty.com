@@ -9,7 +9,7 @@ authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.1.0
 ---
 
-This version is a planned architecture-level upgrade from `v1.0.0` to `v1.1.0` (79 commits, 193 files changed),
+This release upgrades the CLI architecture from `v1.0.0` to `v1.1.0` (79 commits, 193 files changed),
 with the core goal of moving pig from a "human-friendly CLI" to an "agent-native orchestratable CLI".
 
 Seven new extensions are added, bringing the total available extensions to 451.

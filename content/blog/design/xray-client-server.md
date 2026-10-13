@@ -2,7 +2,7 @@
 title: "One-command Xray Clients and Servers"
 linkTitle: "Xray Client and Server"
 date: 2026-10-05
-lastmod: 2026-10-06
+lastmod: 2026-10-13
 description: "One-command VLESS, REALITY, and Vision client/server setup, stable server credentials, and verified proxy connectivity."
 tags: [build, cli, install]
 weight: 90
@@ -22,11 +22,11 @@ REALITY, and `xtls-rprx-vision` for the new workflow. First server setup generat
 repeated setup preserves the existing client connection contract and offers the same standard URI.
 The client takes a URI or explicit command-line parameters,
 installs Xray, configures the local listener, starts its service, and verifies the connection.
-File transfer is optional, not a prerequisite for setup.
+A URI can be pasted directly or read from a file or stdin.
 
 Retain the existing command path and `x` alias. The zero-argument command installs or verifies
 Xray. The historical `id@host:port [local]` form retains its VMess meaning and default port during
-a compatibility period; it must never silently become a VLESS connection with missing parameters.
+a compatibility period, through the existing V2Ray workflow.
 
 ## Context {#context}
 
@@ -43,13 +43,13 @@ The client UUID, short ID, and SNI match the server's corresponding fields.
 The reference Linux server listens on loopback port 9443. Nginx owns public port 443 and selects
 the backend by SNI, forwarding a PROXY protocol header. Xray accepts that header, connects to a
 REALITY target, sends allowed traffic through `freedom`, and blocks destinations matching
-`geoip:private`. This is an ingress composition, not a standalone Xray listener on port 443.
+`geoip:private`. Nginx provides the public entry point in this deployment.
 
 Inspected Pigsty RPM and DEB artifacts for both architectures provide `/usr/bin/xray`,
 `/etc/xray.json` with mode 0640 and ownership `root:xray`, an `xray:xray` service account,
 `xray.service`, and geodata in `/usr/share/xray`. Their installation scripts reload systemd without
 automatically starting or enabling the service. Public repository indexes list version
-26.3.27-1PGSTY; artifact inspection and repository listing do not prove installation on every OS.
+26.3.27-1PGSTY. Runtime tests are listed below.
 
 ## Alternatives considered {#alternatives}
 
@@ -258,66 +258,37 @@ to `127.0.0.1:9443`. Repeated setup preserves existing listeners when `--listen`
 Configuration and service management remain explicit about role, OS, ownership,
 and external ingress.
 
-The implementation stays in `cmd/build.go` and focused files under `cli/build`, reusing the
-existing plan, output, confirmation, privileged-write, and logging helpers. Current reference pages
-change only when executable behavior exists. Release notes change only at the release gate.
+The implementation uses `cmd/build.go` and focused files under `cli/build`. It reuses the
+existing plan, output, confirmation, privileged-write, and logging helpers.
 
 ## Verification and evolution {#verification}
 
-The initial review on 2026-10-05 inspected the running reference pair, Xray 26.3.27, four RPM/DEB
-package artifacts, and the previous VMess behavior. Those observations established the baseline;
-they are distinct from the following implementation acceptance.
+The implementation is recorded in
+[`d090b7c`](https://github.com/pgsty/pig/commit/d090b7c9ab9301c06f9ccb2151c732d598f0e40c),
+with ownership and service-state fixes in
+[`5d8660c`](https://github.com/pgsty/pig/commit/5d8660c8c12e6c00b77d409efd2287b8299377b1).
+Tests cover role syntax, equivalent input forms, redaction, listener defaults, credential reuse,
+export conflicts, protected files, capability selection, and plans. Full Go tests, vet, static
+analysis, dead-code and complexity checks, and repeated command/build race tests passed locally.
 
-The [source implementation](https://github.com/pgsty/pig/commit/d090b7c9ab9301c06f9ccb2151c732d598f0e40c) has focused tests for
-role grammar, URI/direct/file/stdin equivalence, strict parameter parsing, credential redaction,
-listener defaults and preservation, read-only export, malformed and ambiguous server refusal,
-server credential reuse, repeated export, protected files, capability selection, and non-mutating
-plans. `go test ./...`, `go vet ./...`, static analysis, dead-code and complexity checks, and repeated
-randomized race tests for the command/build packages passed locally.
+Runtime checks used Xray 26.3.27:
 
-A fresh Debian 13 ARM64 VM used one SSH pipeline to read the existing reference server's connection
-and run `client --from -`. PIG installed Xray 26.3.27, configured and enabled the service as `xray`,
-and passed its independent HTTP/SOCKS health checks. Additional HTTPS requests through both
-protocols returned HTTP 200. Repeating setup preserved configuration bytes and the running PID.
-A wrong-UUID replacement returned nonzero, restored the original configuration and service, and
-was followed by a successful request. The existing reference server's configuration hash and PID
-remained unchanged throughout these read-only exports and client tests.
+| Environment | Verified behavior |
+|:---|:---|
+| Fresh Debian 13 ARM64 client | Package installation; service running as `xray`; HTTP and SOCKS health checks; unchanged configuration and PID on repeat setup; rollback after a wrong UUID |
+| Fresh Debian server | Direct privileged-port listener; `0640` configuration and `0600` export; stable credentials, files, and PID on repeat setup; rollback after export failure |
+| Existing Homebrew Xray on macOS | Isolated LaunchAgent; HTTP/SOCKS connectivity; unchanged reruns; restoration of configuration and persistent disabled state after failure |
+| Existing reference server | Read-only export and client tests left its configuration hash and PID unchanged |
 
-A second fresh Debian VM exercised direct server creation, privileged-port binding as `xray`,
-mode-0640 configuration, mode-0600 export, and repeated setup. Configuration, export content, and
-PID were unchanged on the second setup. An export failure after applying a changed listener restored
-the original configuration and running service. The generated URI also established a new
-REALITY/Vision connection, including ML-DSA verification, with HTTP and SOCKS requests returning
-HTTP 200 to a reachable TLS site. This test server's local network could not reach the Google health
-endpoint; the full client setup therefore correctly failed and rolled back for that pair. The full
-one-command client acceptance passed against the existing reference server.
+The new server's exported URI completed REALITY/Vision connections with ML-DSA verification.
+HTTP and SOCKS requests to a reachable TLS site returned HTTP 200. Its network could not reach the
+Google health endpoint, so full client setup for that pair failed and rolled back. Full client
+setup passed against the existing reference server, through its Nginx/PROXY ingress.
 
-The [final review fixes](https://github.com/pgsty/pig/commit/5d8660c8c12e6c00b77d409efd2287b8299377b1) cover file ownership,
-systemd capability resets, service identity and exact startup arguments, and persistent macOS
-enablement recovery. Debian tests first reproduced an unchanged-content configuration with the
-wrong group being treated as unchanged, then verified ownership repair with identical bytes and
-subsequent setup without a restart. The direct server retained only `CAP_NET_BIND_SERVICE` in both
-the bounding and ambient sets; authentication and export content were unchanged. An isolated macOS
-LaunchAgent client using the existing Homebrew Xray also passed HTTP/SOCKS requests through the
-reference server, unchanged reruns, disabled-state recovery, and wrong-UUID rollback restoring
-both configuration and the original disabled state. Requests succeeded after rollback. The
-original macOS reference service was not taken over.
-
-These checks do not establish RPM runtime acceptance, fresh Homebrew installation, UDP forwarding,
-arbitrary Xray-version compatibility, or a newly deployed PROXY-protocol frontend.
-The reference server's existing Nginx/PROXY ingress was exercised by the successful client test;
-PIG did not modify that ingress. These additional platform and transport checks remain unverified.
-
-Current bilingual reference and this record are delivered together and checked with `make docs-check`.
-Source commits, documentation commits, push/CI, tagged artifacts, and public deployment remain
-separate completion gates.
+Runtime coverage did not include RPM installation, a fresh Homebrew installation, UDP forwarding,
+other Xray versions, or deployment of a new PROXY-protocol frontend.
 
 ## Current status {#status}
 
-The implementation is present in the verified [v1.9.0 tag](https://github.com/pgsty/pig/tree/v1.9.0)
-and its [published release artifacts](https://github.com/pgsty/pig/releases/tag/v1.9.0).
-The implementation and local checks described above remain the scope of the evidence.
-Repository publication, public documentation deployment, and upgrades of existing systems
-remain separate gates.
-
-Nginx ingress automation and credential rotation remain separate future decisions.
+Released in [v1.9.0](https://github.com/pgsty/pig/releases/tag/v1.9.0).
+Nginx ingress automation and credential rotation remain future work.

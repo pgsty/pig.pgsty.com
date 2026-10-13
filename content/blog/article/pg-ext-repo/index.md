@@ -1,15 +1,14 @@
 ---
 title: The Ideal Way to Deliver PostgreSQL Extensions
 date: 2024-11-02
-lastmod: 2026-08-30
+lastmod: 2026-10-13
 authors: [Vonng]
-description: >
-  PostgreSQL is eating the database world through extensibility. This post introduces the Pigsty extension repository, which packaged 390 PostgreSQL extensions at launch and keeps growing through the Pigsty extension catalog.
+description: "Why installing PostgreSQL extensions is difficult, and how a native RPM/DEB repository delivers 340 of them."
 tags: [ext, repo, catalog, build]
 ---
 
 [**PostgreSQL Is Eating the Database World**](https://vonng.com/en/pg/pg-eat-db-world/) through the power of **extensibility**.
-When this post was first published, the repository packaged **390** PostgreSQL extensions as RPM / DEB packages for mainstream Linux distributions.
+When this post was first published, the repository packaged **340** PostgreSQL extensions as RPM / DEB packages for mainstream Linux distributions.
 The live [Pigsty Extension Catalog](https://pigsty.io/ext/list/) has kept growing since then.
 
 I believe the PostgreSQL community has reached a consensus on the importance of extensions.
@@ -21,7 +20,7 @@ Extensions are useless if most users can’t easily install and enable them. But
 Even the largest cloud PostgreSQL vendors are struggling with this.
 They have some inherent limitations (multi-tenancy, security, licensing) that make it hard for them to fully address this issue.
 
-So here's my plan: I've created a [**repository**](https://pigsty.io/docs/pgsql/ext/repo/) that hosts [**390**](https://pigsty.io/ext/list/) of the most capable extensions in the PostgreSQL ecosystem,
+So here's my plan: I've created a [**repository**](https://pigsty.io/docs/pgsql/ext/repo/) that hosts [**340**](https://pigsty.io/ext/list/) of the most capable extensions in the PostgreSQL ecosystem,
 available as RPM / DEB packages on mainstream Linux OS distros. The goal is to take PostgreSQL one solid step closer to becoming the all-powerful database and achieve **the great alignment** between the Debian and EL OS ecosystems.
 
 > [**TL;DR: Take me to the HOW-TO part!**](#apt-repo)
@@ -76,7 +75,7 @@ And then we have alignment issues across different PostgreSQL major versions. So
 Some extensions are only available for specific PostgreSQL versions in certain distributions, and so on.
 
 These alignment issues lead to a significant number of permutations. For example, if we consider five mainstream OS distributions (el8, el9, debian12, ubuntu22, ubuntu24),
-two CPU architectures (`x86_64` and `arm64`), and six PostgreSQL major versions (12–17), that’s **60-70** RPM/DEB packages per extension, just for one extension!
+two CPU architectures (`x86_64` and `arm64`), and six PostgreSQL major versions (12–17), that’s **60** RPM/DEB build combinations per extension, just for one extension!
 
 On top of alignment, there’s the problem of **completeness**. PGXN lists over **375** extensions, but the PostgreSQL ecosystem could have as many as [**1,000+**](https://gist.github.com/joelonsql/e5aa27f8cc9bd22b8999b7de8aee9d47). The PGDG repos, however, contain only about **one-tenth** of them.
 
@@ -88,10 +87,10 @@ There are also several powerful new Rust-based extensions that PGDG doesn’t in
 ## What's the solution?
 
 Over the past six months, I’ve focused on consolidating the PostgreSQL extension ecosystem.
-Recently, I reached a milestone I’m quite happy with. I’ve created a PG YUM/APT repository with a catalog of **390** available PostgreSQL extensions.
+Recently, I reached a milestone I’m quite happy with. I’ve created a PG YUM/APT repository with a catalog of **340** available PostgreSQL extensions.
 
-Here are some key stats for the repo: It hosts **390** extensions in total. Excluding the **70** built-in extensions that come with PostgreSQL, this leaves **270** third-party extensions.
-Of these, about half are maintained by the official PGDG repos (**126** RPM, **102** DEB). The other half (**131** RPM, **143** DEB) are maintained, fixed, compiled, packaged, and distributed by myself.
+Here are some key stats for the repo: It hosts **340** extensions in total. Excluding the **70** built-in extensions that come with PostgreSQL, this leaves **270** third-party extensions.
+The PGDG repositories supply part of this set. I maintain, fix, compile, package, and distribute the additional extensions through Pigsty. The table below shows availability by repository and platform.
 
 |               OS \ Entry               | All | PGDG | PIGSTY | CONTRIB | MISC | MISS | PG17 | PG16 | PG15 | PG14 | PG13 | PG12 |
 |:--------------------------------------:|:---:|:----:|:------:|:-------:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|
@@ -195,9 +194,10 @@ Although this repo is designed to be used with Pigsty, it is **not mandatory**. 
 [![Ubuntu 22.04 support](https://img.shields.io/badge/Ubuntu-22/jammy-%23E95420?style=flat&logo=ubuntu&logoColor=%23E95420)](https://pigsty.io/ext/os/u22.x86_64/)
 [![Debian 12 support](https://img.shields.io/badge/Debian-12/bookworm-%23A81D33?style=flat&logo=debian&logoColor=%23A81D33)](https://pigsty.io/ext/os/d12.x86_64/)
 
-For Debian 11/12/13, Ubuntu 22.04/24.04/26.04, or compatible platforms, use the following commands to add the APT repo:
+For the Debian 12 and Ubuntu 22.04/24.04 targets covered here, add the APT repository as follows. See the [current repository reference](/repo/) for supported platforms and repository setup.
 
 ```bash
+sudo install -d -m 0755 /etc/apt/keyrings
 curl -fsSL https://repo.pigsty.io/key | sudo gpg --dearmor -o /etc/apt/keyrings/pigsty.gpg
 sudo tee /etc/apt/sources.list.d/pigsty-io.list > /dev/null <<EOF
 deb [signed-by=/etc/apt/keyrings/pigsty.gpg] https://repo.pigsty.io/apt/infra generic main
@@ -214,7 +214,7 @@ sudo apt update
 [![RHEL-compatible RPM packages](https://img.shields.io/badge/RPM-packages-slategray?style=flat&logo=redhat&logoColor=red)](https://pigsty.io/ext/rpm/)
 [![AlmaLinux compatible](https://img.shields.io/badge/AlmaLinux-compatible-slategray?style=flat&logo=almalinux&logoColor=black)](https://almalinux.org/)
 
-For EL 7/8/9/10 and compatible platforms, use the following commands to add the YUM repo:
+For EL 8/9 and compatible platforms, use the following commands to add the YUM repository:
 
 ```bash
 curl -fsSL https://repo.pigsty.io/key      | sudo tee /etc/pki/rpm-gpg/RPM-GPG-KEY-pigsty >/dev/null  # add gpg key
@@ -253,4 +253,4 @@ I believe my work can help PostgreSQL users worldwide and contribute to the thri
 
 ---
 
-> **Archive note (2026-08-30):** First published on [vonng.com](https://vonng.com/en/pg/pg-ext-repo/). Package counts, screenshots, and surrounding context reflect that date. For current behavior, use the [PIG documentation](/docs/) and live [extension catalog](https://pigsty.io/ext/).
+> Originally published on [vonng.com](https://vonng.com/en/pg/pg-ext-repo/).

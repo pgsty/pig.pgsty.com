@@ -22,7 +22,7 @@ Pig `v1.9.0` 新增一键配置 Xray 客户端与服务端、自动准备 Pigsty
   `127.0.0.1:12345`，首次直连服务端监听 `0.0.0.0:443`；重复执行保留已有监听端点与服务端凭据。
 - 配置、属主、权限与服务状态一致时不改写文件、不重启服务。客户端连通性检查失败会恢复
   原有受管文件与服务状态。替换不同的客户端配置需要 `--replace --yes`；两种角色均支持 `--plan`。
-- `server --export-only --export -` 只导出已有连接，不改变部署。导出文件权限为 `0600`；
+- `server --export-only --host HOST --export -` 只导出已有连接，不改变部署。导出文件权限为 `0600`；
   显式导出到 stdout 要求文本输出。普通结果与计划不包含凭据。历史 VMess 位置参数形式
   继续使用 V2Ray。
 
@@ -31,7 +31,8 @@ sudo pig build proxy server --host proxy.example.com --target www.sraoss.co.jp:4
 sudo pig build proxy client --from ./client.uri
 ```
 
-前置条件、macOS 配置、凭据处理与公网入口边界见 [**`pig build`**](https://pig.pgsty.com/zh/build/#build-proxy)。
+在服务端执行第一条命令，将 `client.uri` 安全传到客户端，再在客户端执行第二条命令。
+前置条件与 macOS 配置见 [`pig build`](/zh/build/#build-proxy)。
 
 ## 仓库签名公钥
 
@@ -52,7 +53,7 @@ sudo pig build proxy client --from ./client.uri
   `pg_statkit`、`pgtelemetry`、`pg_rusage`、`pgexporter_ext`、`pg_statvfs` 与 `libx509pq`，
   同时刷新软件包版本与平台可用性元数据。
 - 目录总数包含保留的生命周期记录。能否安装取决于扩展状态与操作系统、架构、PostgreSQL
-  版本矩阵；600 并非每个平台都能安装的扩展数量。
+  版本矩阵。使用 `pig ext avail NAME` 检查目标平台。
 - `pig build pgrx` 默认使用 `cargo-pgrx 0.19.3`；显式 `-v` 与扩展目录中的专用版本要求继续有效。
 - 延续 v1.8.1 的平台调试包默认策略。`--nodbg` 可禁用 RPM 的 `debuginfo`/`debugsource`
   与 DEB 的 `dbgsym`；`-s|--symbol` 保留为已弃用的兼容空操作。
@@ -60,8 +61,8 @@ sudo pig build proxy client --from ./client.uri
 ## 兼容性
 
 没有移除已有命令或参数。新增 Xray 角色命令使用 VLESS/REALITY/Vision，历史 VMess
-位置参数命令保持 V2Ray 行为。服务端配置成功只证明本地监听与服务就绪；防火墙、Nginx、
-云安全组与公网连通性仍由操作者单独配置和验证。
+位置参数命令保持 V2Ray 行为。服务端设置检查本地监听与服务。
+按所选公网端口配置防火墙、云安全组和所用的 Nginx 前端，再从客户端验证连接。
 
 ## 验证
 

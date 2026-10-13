@@ -1,10 +1,9 @@
 ---
 title: "PGDG Cuts Off Mirror Sync Channel"
 date: 2025-07-07
-lastmod: 2026-08-30
+lastmod: 2026-10-13
 authors: [Vonng]
-description: >
-  PGDG cuts off FTP rsync sync channels, global mirror sites universally disconnected - this time they really strangled global users' supply chain.
+description: "An investigation into stale PostgreSQL mirrors after the FTP and rsync synchronization service closed."
 tags: [repo, install]
 ---
 
@@ -31,9 +30,9 @@ This repository is hosted on just two physical machines - according to PostgreSQ
 
 ![PGDG repository traffic and server architecture](/article/pg-mirror-break/ftp-org.webp)
 
-> [PGConf.dev 2025 session: Designing and Implementing a Monitoring Feature in PostgreSQL](https://www.pgevents.ca/events/pgconfdev2025/schedule/session/385-designing-and-implementing-a-monitoring-feature-in-postgresql/)
+> [PGConf.dev 2025: postgresql.org — The hidden parts](https://www.pgevents.ca/events/pgconfdev2025/schedule/session/388-postgresqlorg-the-hidden-parts/)
 
-This decision was made on the last day of PGConf.Dev 2025, and they even had a presentation saying they originally had four servers, now down to two, with a CDN in front.
+At PGConf.dev 2025, the infrastructure presentation described a move from four servers to two, with a CDN in front.
 Then seeing this traffic was too much to handle, they just cut off rsync/ftp, and all downstream PostgreSQL repositories worldwide went dark.
 Honestly, I think this is quite ridiculous - if you block all these mirror sites, when users flood directly to the original upstream, won't the traffic be even greater?
 
@@ -61,4 +60,4 @@ But if there's a sponsor willing to support unlimited traffic high-bandwidth ser
 
 ---
 
-> **Archive note (2026-08-30):** First published on [vonng.com](https://vonng.com/en/pg/pg-mirror-break/). Package counts, screenshots, and surrounding context reflect that date. For current behavior, use the [PIG documentation](/docs/) and live [extension catalog](https://pigsty.io/ext/).
+> Originally published on [vonng.com](https://vonng.com/en/pg/pg-mirror-break/).

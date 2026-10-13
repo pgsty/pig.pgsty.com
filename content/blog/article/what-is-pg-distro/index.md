@@ -1,10 +1,9 @@
 ---
 title: "What Is a PostgreSQL Distribution?"
 date: 2026-07-04
-lastmod: 2026-08-30
+lastmod: 2026-10-13
 authors: [Vonng]
-description: >
-  Starting with Linux distributions, this essay explains what a “PostgreSQL distribution” actually is: three layers, two paths, and one core idea.
+description: "How PostgreSQL distributions combine the database kernel, extension packages, and operational tools."
 tags: [postgres, repo, ext, sty]
 ---
 
@@ -22,7 +21,7 @@ That is a good question. And the best place to begin is not databases, but opera
 
 When most people hear “distribution,” they think of Linux distributions: Red Hat, Debian, Ubuntu, SUSE, Arch, and so on. But if Linux already exists, why do we need Linux distributions? What exactly is the relationship between the two?
 
-The answer is simple: **Linus Torvalds only writes the kernel.**
+The distinction is simple: **the Linux project develops the kernel; a distribution assembles the operating system around it.**
 
 Compile the Linux kernel and you still do not have a usable machine. There is no shell, init system, C standard library, coreutils, package manager, networking toolkit, user space, or security-update policy. The kernel schedules hardware and exposes system calls, but an industrial-scale gulf separates that from “a usable operating system.”
 
@@ -32,7 +31,7 @@ A distribution, then, does not merely deliver a kernel. It delivers an integrate
 
 Nobody says Debian, Red Hat, and Ubuntu are competing with Linus over who writes the better kernel. They compete at a different task: turning a shared kernel into a system that is more reliable, consistent, and easier to ship.
 
-The kernel is a commons; the distribution is industrialized delivery. The real value and competition sit not in the kernel, but in the distribution layer. Nobody competes with Linus to write a “better kernel,” yet Red Hat, Debian, and Ubuntu have spent three decades competing over how best to integrate that kernel into a usable system.
+The shared kernel gives distributions a common foundation. Their integration, release, and maintenance work turns it into a usable system.
 
 That is the key to understanding PostgreSQL distributions.
 
@@ -42,14 +41,14 @@ That is the key to understanding PostgreSQL distributions.
 
 PostgreSQL is often described as the Linux kernel of the database world. But if you map the Linux analogy directly onto PostgreSQL, it breaks almost immediately.
 
-PostgreSQL is not the Linux kernel. Compile PostgreSQL from source, run `initdb`, and it works. The SQL engine, transactions, MVCC, WAL, replication protocol, `psql`, and client libraries are all there.
+PostgreSQL is not the Linux kernel. Compile PostgreSQL from source, run `initdb`, and start the server; you have a working database. The SQL engine, transactions, MVCC, WAL, replication protocol, `psql`, and client libraries are all there.
 The official PGDG repositories also ship prebuilt binaries that users can install and start directly.
 
 The Linux kernel is not useful on its own, but the PostgreSQL kernel can run independently. That raises an obvious question: if PostgreSQL already works by itself, what problem is a PG distribution supposed to solve?
 
 ![Linux and PostgreSQL kernel-to-distribution analogy](/article/what-is-pg-distro/kernel-distro.webp)
 
-A standalone PostgreSQL instance is an excellent database kernel. A production system, however, needs more than “it starts.” If the primary fails, what takes over? Who notices when a backup is corrupt? Can you recover an accidentally deleted row to a specific point in time?
+A standalone PostgreSQL instance is an excellent database kernel. A production system, however, needs more than “it starts.” If the primary fails, what takes over? Who notices when a backup is corrupt? Can you recover to a point before data was accidentally deleted?
 How does the connection pool redirect traffic? How are certificates rotated? How are metrics collected and alerts evaluated? How are extension versions managed? How is configuration drift corrected? How do upgrades work? How is a new replica provisioned? After recovery, what closes the loop and returns the system to a healthy steady state?
 
 Neither `initdb` nor `yum install postgresql` answers those questions.
@@ -87,7 +86,7 @@ The second layer is build and distribution. It is often underestimated because u
 
 PGDG already provides a formidable piece of public infrastructure. Its YUM and APT repositories deliver prebuilt PostgreSQL binaries, more than a hundred extensions, and several critical ecosystem components. It is an excellent commons.
 
-Precisely because that commons is so good, differentiation at the build-and-distribution layer requires something more. Pigsty's own repository, for example, fills in a large part of the missing extension catalog—another 300 extensions—along with infrastructure packages. It ships native RPM and DEB packages across 16 Linux distributions and has been maintained continuously for almost four years.
+Precisely because that commons is so good, differentiation at the build-and-distribution layer requires something more. Pigsty's own repository, for example, fills in a large part of the missing extension catalog—another 300 extensions—along with infrastructure packages. It ships native RPM and DEB packages across 16 Linux OS-and-architecture combinations and has been maintained continuously for almost four years.
 
 ![PGEXT.CLOUD extension catalog and package coverage](/article/what-is-pg-distro/pgext.webp)
 
@@ -107,7 +106,7 @@ Orchestration is the act of “cooking”: turning something static, like softwa
 
 ![PostgreSQL distribution infrastructure layers](/article/what-is-pg-distro/pgsql-infra.webp)
 
-Orchestration and control form a moat precisely because **there is no commons at this layer**. Nobody turns the flour and eggs into a cake for you. Every distribution has to do that work itself, and the difference in results is immediately obvious.
+Orchestration and control still require substantial integration. Kubernetes, Patroni, and Ansible provide shared building blocks, but each distribution must connect them into a complete operating procedure.
 
 --------
 
@@ -117,11 +116,13 @@ Once orchestration becomes the central problem, the question is: at what layer s
 
 There are two mainstream answers, and they define the two principal tracks for PG distributions today. The essential distinction is **where orchestration and control are implemented**: one path builds on Kubernetes as a common substrate; the other returns to the Linux operating system and builds upward from there. Neither is universally better. They make different tradeoffs.
 
+The GitHub star counts below are from July 4, 2026.
+
 ### Path One: Kubernetes-Native
 
 This path treats the database as a first-class citizen on Kubernetes and uses the Operator pattern for orchestration. You submit a declarative custom resource defined by a CRD, and the Operator's reconciliation loop continuously drives actual cluster state toward the desired state. Provisioning, monitoring, failover, and scaling all happen at the Kubernetes layer.
 
-This is currently **the busiest and most crowded** track. Its players include CloudNativePG, led by EDB, with roughly 8,900 stars and currently the leading PG Operator; the Zalando Postgres Operator, with about 5,200; Crunchy PGO, with about 4,400; KubeBlocks, with about 3,100; and a longer list including StackGres, Kubegres, Tembo, KubeDB, and the Percona Operator.
+This is **the busiest and most crowded** track. Its players include CloudNativePG, led by EDB, with roughly 8,900 stars; the Zalando Postgres Operator, with about 5,200; Crunchy PGO, with about 4,400; KubeBlocks, with about 3,100; and a longer list including StackGres, Kubegres, Tembo, KubeDB, and the Percona Operator.
 
 The advantages are clear: a unified control plane, a declarative API, smooth GitOps integration, and an easy interface for platform teams. For organizations that already treat Kubernetes as their operating system, putting databases on Kubernetes is a natural extension.
 
@@ -133,19 +134,19 @@ The cost is equally clear. You are not merely adding a PG Operator. You are adop
 
 This path does not put the database inside Kubernetes. It returns to the operating system: run directly on Linux, on physical or virtual machines; install RPM or DEB packages; manage services with systemd; and drive administration with Ansible or a similar infrastructure-as-code tool.
 
-There are fewer open-source players on this track: Pigsty, with roughly 5,200 stars; Autobase, with about 4,300; pgEdge, with about 700; and EDB TPA, with about 90. Alongside them is a full roster of **commercial distributions** without public star counts but with substantial enterprise weight: EDB Postgres Advanced Server—EDB's flagship and arguably the Red Hat of the PostgreSQL world—Percona Distribution, CYBERTEC PGEE, ClusterControl, and others.
+The Linux-native open-source projects include: Pigsty, with roughly 5,200 stars; Autobase, with about 4,300; pgEdge, with about 700; and EDB TPA, with about 90. [Percona Distribution for PostgreSQL](https://docs.percona.com/postgresql/17/index.html) also provides an open-source stack with commercial support. Commercial products include EDB Postgres Advanced Server, CYBERTEC PGEE, and the ClusterControl management platform.
 
-The advantages are a shorter path, fewer dependencies, and closer proximity to the database itself. There is no extra abstraction layer, the failure domain is smaller, behavior is more predictable, and DBAs can understand and take over the system directly. The cost is that Kubernetes is no longer providing desired-state reconciliation, idempotent execution, failure recovery, or upgrade orchestration. You have to implement those capabilities yourself while also confronting the differences across more than a dozen major versions of mainstream Linux distributions. It is continuous, unglamorous work.
+The advantages are fewer infrastructure layers and direct use of familiar Linux tools. DBAs can inspect the processes, files, and services themselves. The cost is that Kubernetes is no longer providing desired-state reconciliation, idempotent execution, failure recovery, or upgrade orchestration. You have to implement those capabilities yourself while also confronting the differences across more than a dozen major versions of mainstream Linux distributions. It is continuous, unglamorous work.
 
 ### Pigsty's Choice
 
 Both paths are reasonable. The right one depends on where your team already stands and where it makes sense to place the complexity. Pigsty chose the Linux-native path. I have explained the reasoning at length in [Should Databases Be Deployed in Kubernetes?](https://vonng.com/en/db/db-in-k8s/) and [Is Containerizing Databases a Good Idea?](https://vonng.com/en/db/pg-in-docker/). My view is that this path better fits the nature of databases. It is difficult, but correct.
 
-And on that difficult path, Pigsty has moved to the front of the pack. Measured by GitHub stars, it is now the leading Linux-native project, with 5,200 versus roughly 4,300 for Autobase. Across the entire PostgreSQL distribution landscape, including Kubernetes-native projects, it ranks second only to EDB's CloudNativePG.
+Among the projects listed here, Pigsty has the most GitHub stars on the Linux-native track and ranks second overall, after CloudNativePG.
 
 ![GitHub stars and attributes of PostgreSQL distributions](/article/what-is-pg-distro/distro-star.webp)
 
-Ask a mainstream AI model today, “How should I self-host an enterprise-grade PostgreSQL service on Linux?” and Pigsty is generally its first recommendation. For a project led by an independent developer and unaffiliated with any cloud vendor, reaching that point has not been easy.
+In my own queries to mainstream AI models about self-hosting PostgreSQL on Linux, Pigsty often appears among the first recommendations. For a project led by an independent developer and unaffiliated with any cloud vendor, reaching that point has not been easy.
 
 --------
 
@@ -157,7 +158,7 @@ The industry usually assumes that **a distribution is built around one fixed ker
 
 The PostgreSQL world, however, contains some unusual variants. OrioleDB replaces the storage engine. Babelfish adds SQL Server protocol compatibility. PolarDB for PostgreSQL implements a RAC-style architecture. IvorySQL supports Oracle syntax. openHalo is MySQL-compatible, while Percona TDE adds transparent encryption. These projects modify the PG kernel. Strictly speaking, they are no longer “pure PostgreSQL,” but distinct species and subspecies within the PG-compatible family. Traditionally, every variant would need to build its own operational stack.
 
-Pigsty takes another approach: **extract the orchestration and control foundation, and make the kernel itself a replaceable layer.** This is the natural consequence of taking the third layer far enough. Once the control plane is sufficiently flexible and no longer hard-wired to a specific kernel, replacing that kernel becomes a matter of swapping a build artifact and a configuration template. We build binary packages and provide configuration templates for these different PG forks, allowing users to run different kernels on the same foundation. Pigsty currently supports more than 12 kernels.
+Pigsty takes another approach: **extract the orchestration and control foundation, and make the kernel itself a replaceable layer.** This is the natural consequence of taking the third layer far enough. Once the control plane is sufficiently flexible and no longer hard-wired to a specific kernel, replacing that kernel becomes a matter of swapping a build artifact and a configuration template. We build binary packages and provide configuration templates for these different PG forks, allowing users to run different kernels on the same foundation. At the time of writing, Pigsty offers more than a dozen kernel and application-stack configurations.
 
 In that sense, Pigsty is no longer merely a “PostgreSQL distribution.” You can use it to derive a distribution of your own: an IvorySQL distribution, a PolarDB distribution, or a TDE distribution. By combining modules, you can even turn it into a distribution for Redis, Etcd, or MinIO; for Prometheus or VictoriaMetrics; or even for Claude Code and Codex.
 
@@ -165,14 +166,16 @@ In that sense, Pigsty is no longer merely a “PostgreSQL distribution.” You c
 
 More precisely, it is a **meta-distribution**: a distribution for building distributions. A foundation that can be repeatedly tailored, reused, and redistributed is itself a transferable capability. It no longer belongs to one kernel, or to one person.
 
+The following examples use the [Pigsty configuration layout from July 2026](https://github.com/pgsty/pigsty/tree/fb4d58f5/conf):
+
 ```bash
 ./configure                     # Use the meta.yml configuration template by default
 ./configure -c meta             # Explicitly use the single-node meta.yml template
-./configure -c rich             # Use the full-featured template with all extensions and MinIO
-./configure -c slim             # Use the minimal single-node template with only a PG HA cluster
+./configure -c rich             # Use the rich template with most available extensions and MinIO
+./configure -c slim             # Use the minimal single-node PostgreSQL/Patroni template, without monitoring
 
 # Use different database kernels
-./configure -c pgsql            # Vanilla PostgreSQL, with 531 optional extensions (14–18)
+./configure -c pgsql            # Vanilla PostgreSQL, with the then-current 531-entry extension catalog (14–18)
 ./configure -c mssql            # Babelfish kernel, compatible with the SQL Server protocol (17)
 ./configure -c polar            # PolarDB PG kernel, Aurora/RAC-style (17)
 ./configure -c ivory            # IvorySQL kernel, compatible with Oracle syntax (18)
@@ -185,7 +188,7 @@ More precisely, it is a **meta-distribution**: a distribution for building distr
 ./configure -c supabase         # Self-hosted Supabase configuration (15–18)
 
 # Use multi-node high-availability templates
-./configure -c ha/dual          # Use the two-node HA template
+./configure -c ha/dual          # Use the two-node template with a single etcd node
 ./configure -c ha/trio          # Use the three-node HA template
 ./configure -c ha/full          # Use the four-node HA template
 ./configure -c infra            # Install only monitoring infrastructure and Nginx, for observability and web hosting
@@ -224,4 +227,4 @@ Instead, put the ability to run a first-rate production database service back in
 
 ---
 
-> **Archive note (2026-08-30):** First published on [vonng.com](https://vonng.com/en/pg/what-is-pg-distro/). Package counts, screenshots, and surrounding context reflect that date. For current behavior, use the [PIG documentation](/docs/) and live [extension catalog](https://pigsty.io/ext/).
+> Originally published on [vonng.com](https://vonng.com/en/pg/what-is-pg-distro/).

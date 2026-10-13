@@ -1,10 +1,9 @@
 ---
 title: Forging a China-Rooted, Global PostgreSQL Distro
 date: 2025-11-27
-lastmod: 2026-08-30
+lastmod: 2026-10-13
 authors: [Vonng]
-description: >
-  PostgreSQL already won. The real battle is the distro layer. Will Chinese developers watch from the sideline or craft a PG “Ubuntu” for the world?
+description: "A talk at the eighth China PostgreSQL Ecosystem Conference: how to build a PostgreSQL distribution in China for users worldwide."
 tags: [postgres, repo, ext, build]
 ---
 
@@ -50,4 +49,4 @@ Pigsty isn’t the only answer, but it proves a point: **a single Chinese engine
 
 ---
 
-> **Archive note (2026-08-30):** First published on [vonng.com](https://vonng.com/en/pg/forge-a-pg-distro/). Package counts, screenshots, and surrounding context reflect that date. For current behavior, use the [PIG documentation](/docs/) and live [extension catalog](https://pigsty.io/ext/).
+> Originally published on [vonng.com](https://vonng.com/en/pg/forge-a-pg-distro/).

@@ -2,18 +2,17 @@
 title: "瞬间克隆 PostgreSQL 数据库，无需黑魔法"
 linkTitle: "瞬间克隆 PG 数据库，无需黑魔法"
 date: 2026-07-06
-lastmod: 2026-08-30
+lastmod: 2026-10-13
 authors: [Vonng]
-description: >
-  pig v1.5 新增 pig pg clone 与 pig pg fork，把 PostgreSQL 18 的瞬间克隆能力封装成 Agent Native CLI。
+description: "pig v1.5 新增 pig pg clone 与 pig pg fork，在命令行中提供 PostgreSQL 18 数据库克隆与实例分支。"
 tags: [postgres, cli, sty]
 ---
 
-老冯在半年前（2026-01-08）写过一篇文章《[**Git for Data：瞬间克隆 PG 数据库与实例**](https://vonng.com/pg/pg-clone/)》，介绍了 PostgreSQL 18 和 Pigsty v4.0 的一个新特性：瞬间克隆新数据库。利用文件系统 CoW 机制，以及 PG 18 的 `file_copy_method = clone` 新参数，**可以在秒级克隆一个非常大的数据库，而且不占用额外的存储**。
+老冯在半年前（2026-01-08）写过一篇文章《[**Git for Data：瞬间克隆 PG 数据库与实例**](https://vonng.com/pg/pg-clone/)》，介绍了 PostgreSQL 18 和 Pigsty v4.0 的一个新特性：瞬间克隆新数据库。利用文件系统 CoW 机制，以及 PG 18 的 `file_copy_method = clone` 新参数，**可以在秒级克隆一个非常大的数据库，初始数据块与源库共享**。
 
 这玩意儿其实非常适合 AI Agent 使用。我在《[Agent 需要什么样的数据库](https://vonng.com/db/agent-native-db/)》里提到过：极低成本的数据库克隆对于反事实推演至关重要。所以当时趁着 4.0 上线的时候，给 Pigsty 里 PG 数据库 Provisioning 的地方加上了这个功能。
 
-[![《Git for Data》旧文截图](/article/pg-pig-clone/old-post.webp)](https://vonng.com/db/agent-native-db/)
+[![《Git for Data》旧文截图](/article/pg-pig-clone/old-post.webp)](https://vonng.com/pg/pg-clone/)
 
 今天看到阿里云数据库 [发了篇文章](https://mp.weixin.qq.com/s?__biz=Mzk2NDgzOTk3NA==&mid=2247523890&idx=1&sn=fdfe899fc6f7601f586b4ba32eaf147b&scene=21#wechat_redirect)说，他们在阿里云 RDS for PostgreSQL 上支持这个功能了。老冯看了直想笑：这个动作也太慢了。说起来其实这个功能不复杂，不需要改内核，只要在 PG 18 上启用一个参数，在创建数据库的时候加一个 `STRATEGY` 参数就可以实现。说是不复杂，但想做好，还是有几个边界条件要处理。
 
@@ -31,7 +30,7 @@ tags: [postgres, cli, sty]
 
 命令会自动检测是否启用并支持瞬间克隆（目前用 Pigsty + XFS 就满足前提）。如果满足，就执行瞬间克隆；不满足，就警告、等待确认，并执行普通克隆。`-y` 可以跳过确认。
 
-只要底层用的是支持 CoW 的文件系统（比如 XFS），那么克隆一个数据库基本是常数时间耗时，通常几百毫秒，而且占用空间不会变大；只有后续真实写脏的数据块，才会真正开始占用新的空间。
+只要底层用的是支持 CoW 的文件系统（比如 XFS），那么克隆一个数据库基本是常数时间耗时，通常几百毫秒。新副本需要少量元数据空间；后续写入时，再为修改的数据块分配新空间。
 
 ## Agent Native CLI
 
@@ -43,7 +42,7 @@ tags: [postgres, cli, sty]
 
 ![pig pg clone 计划输出](/article/pg-pig-clone/clone-plan.webp)
 
-顺便一提，命令本体和 Help 输出也都可以使用 text、JSON、YAML 格式，因此 Agent 用起来会非常方便。因为它可以很轻松地用探索式方式，拿到所需的结构化帮助信息。`pig` 里所有命令都有这个功能。
+顺便一提，命令本体和 Help 输出也都可以使用 text、JSON、YAML 格式，因此 Agent 用起来会非常方便。因为它可以很轻松地用探索式方式，拿到所需的结构化帮助信息。`pg clone` 与 `pg fork` 都提供结构化结果。
 
 ![pig pg clone 结构化帮助](/article/pg-pig-clone/clone-help.webp)
 
@@ -55,9 +54,9 @@ tags: [postgres, cli, sty]
 
 ![执行 pig pg fork](/article/pg-pig-clone/fork-run.webp)
 
-这里，你只要执行 `pig pg fork dev`，就能从当前实例创建一个名为 `dev` 的实例，随机分配一个新的端口号。这个功能在误删处理的时候非常实用：你可以先临时分支一个实例（不占用额外存储），然后快速用增量 PITR 回滚验证；验证无误之后，再在主实例上执行。
+这里，你只要执行 `pig pg fork dev`，就能从当前实例创建一个名为 `dev` 的实例，随机分配一个新的端口号。这个功能在误删处理的时候非常实用：你可以先临时分支一个实例，然后快速用增量 PITR 回滚验证；验证无误之后，再在主实例上执行。
 
-顺便一提，现在使用 `pig` 做 PITR 也非常方便。比如下面，一条龙傻瓜式执行时间点恢复到特定时间点，把时间点恢复的门槛压到了地板。当然，你也可以使用 `pig pgbackrest` 精准控制每一个操作。
+顺便一提，现在使用 `pig` 做 PITR 也非常方便。比如下面，由命令协调停库、恢复与后续启动，将数据库恢复到指定时间点。当然，你也可以使用 `pig pgbackrest` 精准控制每一个操作。
 
 ![执行 pig pitr](/article/pg-pig-clone/pitr-run.webp)
 
@@ -73,4 +72,4 @@ tags: [postgres, cli, sty]
 
 ---
 
-> **归档说明（2026-08-30）：** 本文原载 [vonng.com](https://vonng.com/pg/pg-pig-clone/)。文中的软件包数量、截图与上下文以原始发表日期为准；当前行为请以 [PIG 文档](/zh/docs/)和实时[扩展目录](https://pigsty.cc/ext/)为准。
+> 原文：[vonng.com](https://vonng.com/pg/pg-pig-clone/)。

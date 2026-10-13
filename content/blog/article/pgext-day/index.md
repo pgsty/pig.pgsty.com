@@ -1,29 +1,29 @@
 ---
-title: "Postgres Extension Day - See You There!"
+title: "Postgres Extensions Day — See You There!"
 linkTitle: "PGEXT.DAY: See You at Extension Day"
 date: 2025-04-09
-lastmod: 2026-08-30
+lastmod: 2026-10-13
 authors: [Vonng]
-description: The annual PostgreSQL developer conference will be held in Montreal in May. Like the first PG Con.Dev, there's also an additional dedicated event - Postgres Extensions Day
+description: "The program for Postgres Extensions Day in Montreal on May 12, 2025."
 
 tags: [ext, repo, build]
 ---
 
-The annual PostgreSQL developer conference will be held in Montreal in May. Like the first PG Con.Dev, there's also an additional dedicated event - Postgres Extensions Day, focusing on all aspects of PG extension development, delivery, and release. The agenda has just been released with 14 sessions scheduled.
+The annual PostgreSQL developer conference, PGConf.dev, will be held in Montreal in May. Postgres Extensions Day takes place the day before it, with a focus on extension development, packaging, and release. The agenda has just been released, with 14 talks.
 
 ![PGEXT Day 2025 event banner](/article/pgext-day/featured.webp)
 
-This time, I won't just be an audience member - my talk is the first session of the afternoon: "The Missing Postgres Extension Repo and Package Manager". I'll introduce Pigsty's extension repository and the pig package manager, sharing challenges and issues encountered when building and maintaining PG extensions, and sharing experiences, lessons, and insights from Chinese developers and database vendors (solo practitioners, haha) with global developers.
+This time, I'll be speaking in the first afternoon session: "The Missing Postgres Extension Repo and Package Manager". I'll introduce Pigsty's extension repository and the PIG package manager, and discuss the work of building and maintaining PostgreSQL extensions. It is a chance to share a Chinese developer and database vendor's experience with developers from around the world — even if that vendor is a one-person shop, haha.
 
 ![PGEXT Day 2025 talk topics](/article/pgext-day/topic.webp)
 
-PGEXT DAY is scheduled for May 12, 2025, at the same location as the PG developer conference - Plaza Centre-Ville in Montreal, Quebec, Canada. The extension summit will be immediately followed by the main conference from May 12-16.
+Postgres Extensions Day is scheduled for May 12, 2025, at Plaza Centre-Ville in Montreal, Quebec, Canada. [PGConf.dev 2025](https://2025.pgconf.dev/) follows at the same venue on May 13–16.
 
 ![PGEXT Day venue at Plaza Centre-Ville in Montreal](/article/pgext-day/venue.webp)
 
 [Last year's PG developer conference in Vancouver was incredibly rewarding](https://vonng.com/en/pg/pgcondev-2024/), though there were very few participants from China. Not sure how this edition will be - if you're also going, please leave a comment and we can meet up in person!
 
-If you're interested in PostgreSQL, don't forget to register at [https://pgext.day](https://pgext.day/) - friendly reminder: while PGEXT DAY is an auxiliary event to PGCON Dev, unlike the main conference's 500 CAD ticket, attending pgext.day is free! So if you're coming to the PG developer conference, don't forget about this.
+If you plan to attend, register separately at [pgext.day](https://pgext.day/). The Postgres Extension Developers Coalition organizes this independent event. Attendance is free; a [regular PGConf.dev ticket](https://2025.pgconf.dev/registration.html) costs CAD 500 before tax.
 
 Below is the PG Extension Summit agenda - looking forward to seeing readers at the extension summit!
 
@@ -39,14 +39,14 @@ Below is the PG Extension Summit agenda - looking forward to seeing readers at t
 
 **9:00 am → 25 min**, Hannu Krosing
 
-**From pl/v8 to pl/: towards easier extension development**
+**From `pl/v8` to `pl/<any>`: towards easier extension development**
 
-[`pg_tle`](https://pigsty.io/ext/e/pg_tle/) opens new doors for developers, allowing anyone to write and deploy secure extensions without superuser privileges. It also provides hooks for trusted language functions, such as enforcing password policies. `pl/<any>` further allows using any language to write database functions, thereby implementing extensions. The main approach is writing Language Handlers in JavaScript and leveraging any language transpilable to JavaScript as PostgreSQL's embedded (or "pl/") language.
+[`pg_tle`](https://pigsty.io/ext/e/pg_tle/) lets developers write and deploy trusted-language extensions without superuser privileges. It also provides hooks for trusted language functions, such as enforcing password policies. `pl/<any>` further allows using any language to write database functions, thereby implementing extensions. The main approach is writing Language Handlers in JavaScript and using languages that can be transpiled to JavaScript as PostgreSQL's embedded (or "pl/") language.
 
 Examples include:
 
 - **pl/jsonschema**: Based on the AJV JSON Schema validation library, directly converting JSON Schema definitions into runnable validation functions, sometimes far outperforming pg_jsonschema wrapped with Rust + PGRX.
-- **pl/wasm**: Running compiled WebAssembly as standard PostgreSQL functions, with compute-intensive code achieving 2-3x native code speed.
+- **pl/wasm**: Runs compiled WebAssembly as standard PostgreSQL functions. For compute-intensive code, the [session abstract](https://pgext.day/#sz-session-900225) reports execution times about 2–3 times those of native code.
 - **pl/codelength**: Example handler that converts any source code into a function returning the original code's length.
 
 Future expansions on pl/v8 could include:
@@ -86,7 +86,7 @@ When PostgreSQL calls user-defined functions (or built-in functions), it might a
 
 When building Postgres container images, required extensions are typically bundled, but security and size concerns prevent packaging all hundreds of available extensions at once. However, different users need vastly different extension combinations, and building dedicated container images for every possible combination would exceed the number of atoms in the universe.
 
-Enter "dynamic OCI (container) images" technology, capable of real-time, on-demand generation of Postgres images containing required extensions. These images can be used in any OCI-compatible environment like Kubernetes.
+Dynamic OCI container images can be generated on demand with the required extensions. These images can be used in any OCI-compatible environment like Kubernetes.
 
 This talk will explore the concepts and technology behind dynamic container images and how to apply them for loading arbitrary extension combinations into Postgres images. The presentation will feature extensive demonstrations!
 
@@ -102,7 +102,7 @@ Writing Postgres extensions in C often feels tedious, error-prone, and repetitiv
 
 If you're considering switching to Rust, consider C++ first - using the same compiler while enjoying more safety and usability.
 
-This talk will introduce **Cppgres**: a lightweight, header-only C++20 library that streamlines and strengthens Postgres extension safety and readability. Using concepts, automatic type deduction, and other modern C++ techniques, you can write concise, efficient, maintainable extensions. Let's rediscover C++ and make Postgres extensions both safe and enjoyable!
+This talk will introduce **Cppgres**: a lightweight, header-only C++20 library for writing safer, more readable Postgres extensions. Using concepts, automatic type deduction, and other modern C++ techniques, you can write concise, efficient, maintainable extensions. The talk will show how these features apply to extension development.
 
 ------
 
@@ -124,9 +124,9 @@ This talk will focus on creating and switching MemoryContexts in real scenarios,
 
 As Postgres's role expands from storage layer to control plane, extensions orchestrating external systems (like vector search engines) must balance performance, consistency, and integration.
 
-This talk will explore designing Postgres extensions to offload computation while maintaining SQL simplicity and transactional guarantees. We'll combine real experience from pgvector-remote, diving deep into buffering, predicate pushdown, connection pooling, and VACUUM and other Postgres internals.
+This talk will explore designing Postgres extensions to offload computation while maintaining SQL simplicity and transactional guarantees. Examples from pgvector-remote cover buffering, predicate pushdown, connection pooling, and VACUUM.
 
-Perfect for engineers wanting to offload computation in Postgres while preserving SQL simplicity and performance.
+The session is aimed at engineers who want to offload computation while keeping a SQL interface.
 
 ------
 
@@ -144,7 +144,7 @@ Perfect for engineers wanting to offload computation in Postgres while preservin
 
 > Haha, that's really me.
 
-While PostgreSQL extensions are powerful and flexible, most users prefer "out-of-the-box" rather than compiling and manually building themselves. To address this pain point, I've integrated a unified repository (pigsty.io/ext/list/) packaging 200+ extensions, filling gaps in the official PGDG repository. These RPM/DEB packages support 5 Linux distributions, five major PostgreSQL versions, and x86/ARM architectures - one-stop coverage.
+While PostgreSQL extensions are powerful and flexible, most users prefer "out-of-the-box" rather than compiling and manually building themselves. I have built a [repository](https://pigsty.io/ext/list/) with packages for more than 200 extensions, filling gaps in the official PGDG repository. These RPM/DEB packages cover five Linux distributions, five major PostgreSQL versions, and x86-64/ARM64 architectures.
 
 This talk will explore building this repository, including challenges like cross-distribution compatibility, multi-architecture support, version alignment, sharing experiences, lessons, and future improvements to make PostgreSQL extension installation easier.
 
@@ -174,7 +174,7 @@ Java and C have vastly different design philosophies and memory management appro
 
 This talk will share the development journey of the **SynchDB** project, which writes C extensions on the PostgreSQL side and integrates Java-version Debezium Embedded, guiding data change streams from MySQL, SQL Server, Oracle, and other sources into PostgreSQL.
 
-We'll dive deep into key challenges and solutions when using both C and Java within one extension, including:
+The talk covers the challenges of using C and Java within one extension, including:
 
 - JNI-based cross-language calls
 - The process of embedding Debezium Embedded in C extensions
@@ -182,7 +182,7 @@ We'll dive deep into key challenges and solutions when using both C and Java wit
 - Architectural integration of two language components
 - Best practices for error handling, monitoring, and maintainability
 
-Attendees will learn how to enhance PostgreSQL's logical replication capabilities and master development essentials for fusing C and Java in single extensions.
+Attendees will learn how to bring change data from other databases into PostgreSQL and combine C and Java within one extension.
 
 ------
 
@@ -206,7 +206,7 @@ Traditional databases typically use shared memory for work areas like query exec
 
 This talk will introduce PostgreSQL's shared memory APIs exposed to extension developers (including the new DSM Registry) and how to build **Spat**: an in-memory data structure server storing data entirely in shared memory, providing Redis-like experience within PostgreSQL.
 
-Spat provides key-value storage patterns supporting strings, lists, sets, hashes, and other structures, becoming lightweight, high-speed temporary storage within PostgreSQL. We'll explore challenges and opportunities in this unconventional shared memory usage, providing insights for developers wanting to extend PostgreSQL to new heights.
+Spat provides key-value storage patterns supporting strings, lists, sets, hashes, and other structures, becoming lightweight, high-speed temporary storage within PostgreSQL. The talk will discuss the challenges of using shared memory this way.
 
 ------
 
@@ -216,7 +216,7 @@ Spat provides key-value storage patterns supporting strings, lists, sets, hashes
 
 **Scaling PostgreSQL with Citus: Distributed Data for Modern Applications**
 
-This talk will explore how the **Citus** extension transforms PostgreSQL into a horizontally scalable distributed database. We'll delve into Citus architecture, deployment as an extension, and practical production environment applications.
+This talk will explore how the **Citus** extension transforms PostgreSQL into a horizontally scalable distributed database. It covers Citus architecture, extension deployment, and production use.
 
 Content includes:
 
@@ -237,7 +237,7 @@ Now is a great time to be a PostgreSQL extension developer - the community conti
 
 Meanwhile, Postgres continues opening more extensible areas. Over the past year, several core commits made EXPLAIN, cumulative statistics, COPY, and other parts extensible, but proposals in some areas like storage still await progress.
 
-This talk will introduce recent new extensible areas (with example code) and explore possible improvements and efforts in areas not yet breakthrough, especially storage.
+This talk will introduce recent new extensible areas (with example code) and discuss areas that still need work, especially storage.
 
 ------
 
@@ -249,7 +249,7 @@ This talk will introduce recent new extensible areas (with example code) and exp
 
 ------
 
-## Reviewing 2024 PGCon.Dev
+## Looking Back at PGConf.dev 2024
 
 - [Andreas Scherbaum PostgreSQL Development Conference 2024 - Review](https://andreas.scherbaum.la/post/2024-06-14_postgresql-development-conference-2024-review/)
 - [PgCon 2024 Developer Meeting](https://wiki.postgresql.org/wiki/PgCon_2024_Developer_Meeting)
@@ -261,4 +261,4 @@ This talk will introduce recent new extensible areas (with example code) and exp
 
 ---
 
-> **Archive note (2026-08-30):** First published on [vonng.com](https://vonng.com/en/pg/pgext-day/). Package counts, screenshots, and surrounding context reflect that date. For current behavior, use the [PIG documentation](/docs/) and live [extension catalog](https://pigsty.io/ext/).
+> Originally published on [vonng.com](https://vonng.com/en/pg/pgext-day/).

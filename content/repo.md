@@ -7,33 +7,7 @@ categories: [Reference]
 tags: [repo]
 ---
 
-The `pig repo` command is a comprehensive package repository manager. It can add, remove, create, and manage repositories on RPM systems (RHEL/CentOS/Rocky/Alma) and Debian systems (Debian/Ubuntu).
-
-```bash
-pig repo - Manage Linux APT/YUM Repo
-
-  pig repo list                    # available repo list             (info)
-  pig repo info   [repo|module...] # show repo info                  (info)
-  pig repo status                  # show current repo status        (info)
-  pig repo add    [repo|module...] # add repo and modules            (root)
-  pig repo rm     [repo|module...] # remove repo & modules           (root)
-  pig repo update                  # update repo pkg cache           (root)
-  pig repo create                  # create repo on current system   (root)
-  pig repo boot                    # boot repo from offline package  (root)
-  pig repo cache                   # cache repo as offline package   (root)
-
-Examples:
-  pig repo add -ru                 # add all repo and update cache (brute but effective)
-  pig repo add pigsty -u           # gentle version, only add pigsty repo and update cache
-  pig repo add node pgdg pigsty    # essential repo to install postgres packages
-  pig repo add all                 # all = node + pgdg + pigsty
-  pig repo add all extra           # extra module has non-free and some 3rd repo for certain extensions
-  pig repo add all -m              # prefer the bundled China-region mirrors
-  pig repo update                  # update repo cache
-  pig repo create                  # update local repo /www/pigsty meta
-  pig repo boot                    # extract /tmp/pkg.tgz to /www/pigsty
-  pig repo cache                   # cache /www/pigsty into /tmp/pkg.tgz
-```
+`pig repo` manages Linux package repositories. Use it to add or remove APT/YUM/DNF sources, refresh indexes, and create or extract offline bundles. `repo create` also supports macOS through SOW.
 
 | Command | Description | Notes |
 |:---|:---|:---|
@@ -44,7 +18,7 @@ Examples:
 | `repo set` | Clear, overwrite, and update repositories | Requires sudo or root |
 | `repo rm` | Remove repositories | Requires sudo or root |
 | `repo update` | Update repository cache | Requires sudo or root |
-| `repo create` | Create local YUM/APT repository | Requires sudo or root |
+| `repo create` | Create local YUM/APT repository | Linux: sudo/root; macOS: current user |
 | `repo cache` | Create offline package from local repo | Requires sudo or root |
 | `repo boot` | Bootstrap repository from offline package | Requires sudo or root |
 | `repo reload` | Refresh repository catalog | |
@@ -52,23 +26,25 @@ Examples:
 
 ## Quick Start
 
+On a host with working OS repositories, add the PostgreSQL repositories and refresh their indexes:
+
 ```bash
-# Method 1: replacement mode — use only when PIG should own the host's repo definitions
-pig repo add all --remove --update    # remove old repos, add all required repos, update cache
-
-# Method 1 variant: one step
-pig repo set                          # = pig repo add all --remove --update
-
-# Method 2: gentle mode - only add required repos and keep current repo configuration
-pig repo add pgsql                    # add PGDG and Pigsty PGSQL repositories
-pig repo add pigsty --region=china    # add Pigsty repositories with China region
-pig repo add pgdg   --region=europe   # add PGDG repositories with Europe region
-pig repo add infra  --region=default  # add INFRA repositories with default region
-pig repo add all -m                   # explicitly select the bundled China-region mirrors
-
-# If the commands above did not use -u|--update, run this as an extra step
-pig repo update                       # update system package cache
+pig repo add pgsql -u
 ```
+
+To use the China-region mirrors, add `-m`:
+
+```bash
+pig repo add pgsql -m -u
+```
+
+To replace the host's repository configuration, use `set`. It backs up the existing definitions, adds `node`, `infra`, and `pgsql`, then refreshes the indexes:
+
+```bash
+pig repo set
+```
+
+Use `pig repo info pgsql` to inspect repository definitions. Use `pig repo status` to inspect the host's current configuration.
 
 ## Modules
 
@@ -79,14 +55,14 @@ In pig, APT/YUM repositories are organized as **modules**: groups of repositorie
 | `all` | All core modules required to install PG | `node` + `infra` + `pgsql` |
 | `pgsql` | PGDG + Pigsty PG extensions | `pigsty-pgsql` + `pgdg` |
 | `pigsty` | Pigsty Infra + PGSQL repositories | pigsty-infra, pigsty-pgsql |
-| `pgdg` | PGDG official repositories | pgdg-common, pgdg14-18 |
+| `pgdg` | PGDG official repositories | EL: pgdg-common, pgdg14-18; APT: pgdg |
 | `node` | Linux system repositories | base, updates, extras, epel, baseos, appstream... |
-| `infra` | Infrastructure component repositories | pigsty-infra, nginx, docker-ce |
+| `infra` | Infrastructure component repository | pigsty-infra |
+| `nginx` | Nginx repository | nginx |
 | `docker` | Docker repository | docker-ce |
 | `beta` | PostgreSQL 19 beta repositories | pgdg19-beta, pgdg-beta |
 | `extra` | PGDG non-free and third-party extensions | pgdg-extras, timescaledb, citus |
 | `groonga` | PGroonga repository | groonga |
-| `mssql` | WiltonDB repository (deprecated) | babelfish |
 | `percona` | Percona PG + PG_TDE | percona |
 | `llvm` | LLVM toolchain repository | llvm |
 | `kube` | Kubernetes repository | kubernetes |
@@ -99,38 +75,46 @@ In pig, APT/YUM repositories are organized as **modules**: groups of repositorie
 | `gitlab` | GitLab repository | gitlab-ce, gitlab-ee |
 {.full-width}
 
-Pig also includes APT/DNF repositories for other databases and systems such as `redis`, `kubernetes`, `grafana`, `clickhouse`, `gitlab`, `haproxy`, `mongodb`, and `mysql`.
+PIG filters each module by the current operating system and architecture. Run `pig repo list` to see the available entries.
 
-In general, `node` (Linux system repositories) and `pgsql` (PGDG + Pigsty) are required for PostgreSQL installation. The `infra` repository is optional and contains tools, IvorySQL kernel packages, and similar components. The special `all` module adds all required repositories at once and is a suitable starting point for most users.
-
-```bash
-pig repo add all      # add node, pgsql, and infra repositories
-pig repo add          # default to the all module when no argument is given
-pig repo set          # set clears/backups existing definitions and overwrites with new repo definitions
-```
+If the host already has working OS repositories, add `pgsql` for PGDG and Pigsty extension packages. `infra` supplies infrastructure tools and some PostgreSQL fork packages. `all` combines `node`, `infra`, and `pgsql`. Both `repo add` and `repo set` select `all` when no module is given.
 
 ## Repository Definitions
 
 The full repository definition bundled with Pigsty is in [`cli/repo/assets/repo.yml`](https://github.com/pgsty/pig/blob/main/cli/repo/assets/repo.yml).
 
-You can create `~/.pig/repo.yml` to explicitly modify and override pig's repository definitions. When editing repository definitions, you can add extra regional mirror URLs under `baseurl`, such as China or Europe mirrors. When `--region` is specified, pig first looks for the matching regional URL and falls back to the `default` URL if the region is unavailable. Since v1.7.0, `-m|--mirror` explicitly selects the bundled `china` definitions, including `pigsty.cc` and the maintained domestic mirrors; it no longer rewrites PGDG URLs through a runtime proxy.
+Create `~/.pig/repo.yml` to override the embedded catalog. Use the source file above as the format reference. `repo reload` updates this file, so save custom changes before a refresh.
+
+`--region` selects a regional URL from `baseurl`. If that region is absent, PIG uses `default`. `-m` selects `china`, including the Pigsty China mirror and other mirrors defined in the catalog.
 
 ### Trust and configuration ownership
 
-Repository operations change the host's software-supply configuration. Use `pig repo info MODULE` to inspect the definitions PIG would render. `repo add` preserves unrelated files unless `--remove` is supplied; `repo set` always backs up and replaces existing definitions before refreshing metadata, so it can conflict with Ansible, image-build, or other configuration owners.
+`repo add` writes the selected module files and preserves other files. `repo set` and `repo add --remove` back up and replace the existing definitions. If Ansible or another tool manages these files, keep the definitions in that tool's configuration so its next run preserves your changes.
 
-`repo add` and `repo set` prepare PIG's embedded Pigsty public key when the selected modules contain an available `pigsty-infra` or `pigsty-pgsql` repository. This includes `pigsty`, `infra`, `pgsql`, and the default `all` selection. PIG first checks whether the key file exists and reuses an existing regular file without rewriting it. If the file is missing or the check fails, including a permission error, PIG attempts installation before modifying repository definitions. Installation works offline and requires no `curl`, `gpg`, or `apt-key` command.
+### Pigsty signing key {#repo-key}
 
-- EL: `/etc/pki/rpm-gpg/RPM-GPG-KEY-pigsty`
-- Debian / Ubuntu: `/etc/apt/keyrings/pigsty.asc`
+When a module includes `pigsty-infra` or `pigsty-pgsql`, PIG reuses the existing public-key file or installs its embedded key with mode `0644`:
 
-New key files use mode `0644`. By default, installation is best-effort: failure emits a warning, recorded in structured output as `data.warnings`, and repository configuration continues. Only the selected Pigsty definitions fall back to `trusted=yes` on Debian/Ubuntu or `gpgcheck=0` and `repo_gpgcheck=0` on EL. The default key reference remains present on failure, so APT definitions added by different operations agree on `signed-by`. Other repository definitions are preserved. APT may warn and retain old indexes when the key becomes unavailable; successful configuration does not guarantee a fresh index download.
+| Platform | Public-key path |
+|:---|:---|
+| EL | `/etc/pki/rpm-gpg/RPM-GPG-KEY-pigsty` |
+| Debian / Ubuntu | `/etc/apt/keyrings/pigsty.asc` |
 
-If a selected Pigsty definition explicitly supplies a non-empty signing-key reference, preparation of that actual key is mandatory. On Debian/Ubuntu, `signed-by` must name existing regular keyring files by absolute path, separated by commas when needed; the default Pigsty path can be installed from the embedded key. On EL, PIG prepares an explicitly referenced default file if needed, then delegates the listed `gpgkey` paths or literal URLs to `rpm --import`. Preparation failure stops before backup, repository writes, or cache refresh. Explicit references are preserved and never silently downgraded. A valid custom key does not depend on the default key path. Selecting only other repositories, such as `pgdg` or `node`, does not prepare the Pigsty key.
+This step works offline. Selecting only other repositories, such as `pgdg` or `node`, does not prepare the Pigsty key.
 
-Implicit key installation only prepares the file and its repository reference; it does not import it into RPM's database or APT's global trust store. Explicit EL `gpgkey` metadata additionally requests the RPM import described above. Ordinary `repo add/set` operations preserve signature-checking settings when preparation succeeds. [`pig sty boot`](/sty/#sty-boot) enables Pigsty signature checking when key preparation succeeds and uses the same warning-and-fallback rule on implicit-key failure. See the [design decision](/design/automatic-pigsty-repo-key/).
+**Built-in repository definitions do not enforce package signatures by default**: EL uses `gpgcheck=0`; Debian/Ubuntu uses `trusted=yes`. Ordinary `repo add/set` preserves these settings. [`pig sty boot`](/sty/#sty-boot) enables Pigsty signature checks when key preparation succeeds. To require signatures, configure a trusted key and enable verification in the repository metadata.
 
-For compatibility with offline and mirrored repositories, PIG's built-in metadata defaults to `gpgcheck=0` on EL and `trusted=yes` on Debian/Ubuntu. This disables package-signature enforcement for those definitions. Since v1.7.0, ordinary EL repositories keep native DNF module filtering; only definitions that explicitly declare `module_hotfixes=1`—notably Pigsty and PGDG repositories—override module streams, and the key is removed when rendering EL7 YUM configuration. Security-sensitive deployments should install trusted keys, change the generated metadata to enforce signature verification, pin approved origins, and manage those settings through their normal configuration system.
+If implicit key installation fails, the command warns and continues. The selected Pigsty definitions use `trusted=yes`, or `gpgcheck=0` with `repo_gpgcheck=0`, and retain their default key reference. Structured results include the warning in `data.warnings`. APT may retain old indexes in this case; check the cache-update output.
+
+An explicit key reference makes preparation mandatory:
+
+- On Debian/Ubuntu, `signed-by` names existing regular keyring files by absolute path. Separate multiple paths with commas.
+- On EL, `gpgkey` contains paths or literal URLs, which PIG passes to `rpm --import`.
+- PIG can install an explicitly referenced default Pigsty key from its embedded copy.
+
+If preparation of an explicit key fails, repository configuration stops. Implicit installation prepares only the file and repository reference; explicit EL `gpgkey` also imports the key into RPM. See the [design record](/design/automatic-pigsty-repo-key/) for the rationale.
+
+EL repositories retain DNF module filtering. Definitions with `module_hotfixes=1`, including Pigsty and PGDG, bypass module streams. PIG omits this key in EL7 configuration.
 
 ## repo list
 
@@ -189,7 +173,8 @@ pig repo add pgsql -m            # explicitly select the China-region mirrors
 
 ## repo set
 
-Equivalent to `repo add --remove --update`. It clears existing repositories, sets up new ones, then updates cache.
+Back up and remove existing repository definitions, write the selected modules, then refresh package metadata.
+This is equivalent to `repo add --remove --update`. If you omit the modules, PIG uses `all`.
 
 ```bash
 pig repo set                     # replace with default repositories
@@ -198,7 +183,7 @@ pig repo set all --region=china  # use China mirror
 pig repo set -m                  # explicitly select the China-region mirrors
 ```
 
-`repo set` supports the same `--region` and `-m|--mirror` region selection as `repo add`; it always uses overwrite semantics, equivalent to `repo add all --remove --update`.
+`repo set` supports the same `--region` and `-m|--mirror` options as `repo add`.
 
 ## repo rm
 
@@ -226,8 +211,8 @@ pig repo update                  # update package cache
 
 | Platform | Equivalent Command |
 |:---:|:---|
-| EL | `dnf makecache` |
-| Debian | `apt update` |
+| EL | `dnf makecache` (`yum makecache` on EL7) |
+| Debian | `apt-get update` |
 {.full-width}
 
 ## repo create
@@ -245,15 +230,18 @@ The current implementation prefers [`sow`](https://sow.pgsty.com/docs/reference/
 sow create --pigsty --timeout 10m -- /absolute/repository/path
 ```
 
-On macOS, SOW is required, runs without `sudo`, and the default target is the current directory. On Linux, if `sow` is not installed, EL falls back to `createrepo_c` and Debian/Ubuntu falls back to `dpkg-scanpackages` from `dpkg-dev`. If neither the preferred backend nor the platform fallback is available, `pig repo create` fails. A SOW execution error is returned directly rather than retried through the legacy backend. The `10m` timeout limits the wait for SOW's directory lock; it does not cap repository indexing time.
+On macOS, install SOW first. It runs without `sudo`, and the default target is the current directory.
 
-SOW's `--pigsty` transaction:
+On Linux, if SOW is absent, PIG uses `createrepo_c` on EL or `dpkg-scanpackages` from `dpkg-dev` on Debian/Ubuntu.
+If SOW runs and fails, PIG returns the error. The `10m` timeout limits the wait for SOW's directory lock.
+
+SOW's `--pigsty` mode:
 
 1. Scans only top-level regular `.rpm` and `.deb` files—no recursion and no symlink following.
-2. Removes parsed 32-bit x86 packages (RPM `i386/i486/i586/i686`, DEB `i386`) and packages whose binary name is exactly `patroni` with upstream version exactly `3.0.4`.
-3. Builds the applicable RPM/DEB metadata atomically and writes `repo_complete` last. The marker contains SHA-256 hashes for remaining top-level packages, sorted by basename.
+2. Removes DEB packages for `i386`, and RPM/DEB packages named `patroni` with upstream version `3.0.4`.
+3. Generates RPM/DEB metadata and writes `repo_complete` last. The marker contains SHA-256 hashes for remaining top-level packages, sorted by basename.
 
-Non-package files and directories are left untouched; malformed package candidates or conflicting package coordinates make the SOW transaction fail closed. The legacy fallback has different cleanup and metadata semantics and writes an MD5 package list to `repo_complete`. After either backend exits, PIG requires `repo_complete` to exist as a regular file, but it does not validate the marker contents or hashes. Consumers that use the marker as a delivery gate should perform that verification themselves.
+SOW preserves non-package files and directories. It stops if a package cannot be parsed or package coordinates conflict. The legacy backend uses different cleanup rules and records MD5 hashes in `repo_complete`. PIG checks that this file exists; it does not check its hashes. Use the list to verify package integrity before distributing an offline bundle.
 
 ## repo cache
 
@@ -290,20 +278,15 @@ pig repo boot -d /srv            # custom target directory
 - `-p, --path`: package path, default `/tmp/pkg.tgz`
 - `-d, --dir`: target directory, default `/www/`
 
-Boot extracts into a staging directory and rejects conflicting top-level targets before committing
-anything. Within one running boot operation, additional repositories are moved first and `pigsty`
-is moved last, so its `repo_complete` marker is exposed only after the other roots were renamed.
-If the process stops before that final rename, already moved roots may remain and a retry rejects
-their target conflicts until the operator removes or moves them. This is fail-closed ordering, not
-a crash-recovery transaction. The marker is a presence sentinel; PIG does not validate its
-contents. An existing committed `pigsty` repository is reused rather than incrementally merged or
-overwritten; on that reuse path the requested package is not inspected and additional bundle roots
-are not applied. Structured output sets `reused: true` and does not report any extracted files for
-that path.
+The command extracts into a staging directory, checks target paths, then moves the repositories into place. It moves additional repositories first and `pigsty` last.
+
+- If a completed `pigsty/repo_complete` already exists at the target, PIG reuses that repository. It does not inspect the archive or import its additional repositories. Structured output sets `reused: true`.
+- A conflicting target path stops extraction. After an interrupted run, inspect and move any conflicting directories before retrying.
+- The archive must contain a regular `pigsty/repo_complete` file. PIG checks its presence, not its contents.
 
 ## repo reload
 
-Refresh repository metadata from GitHub to the latest version.
+Download the latest repository catalog from the Pigsty repository sites.
 
 ```bash
 pig repo reload                  # refresh repository catalog

@@ -8,71 +8,64 @@ categories: [Task]
 tags: [install, repo]
 ---
 
-## Script Installation
+Install PIG with the Linux installer, a system package, or a release archive. The current version is **v{{< param version >}}**. The [download page](/download/) lists all release files.
 
-The simplest way to install `pig` is to run the following installation script:
+## Script installation
 
-**Default Installation** (Cloudflare CDN):
+On Linux, run:
 
 ```bash
 curl -fsSL https://repo.pigsty.io/pig | bash
 ```
 
-**China Mirror**:
+In mainland China, use:
 
 ```bash
 curl -fsSL https://repo.pigsty.cc/pig | bash
 ```
 
-This script downloads the latest `pig` RPM/DEB package from the Pigsty [software repository](https://pigsty.io/docs/repo/) and installs it using `rpm` or `dpkg`.
-Script installation targets Linux x86_64 / aarch64 RPM or DEB distributions. On macOS, use the binary from the release tarball.
+The script detects the architecture, downloads the RPM or DEB package, and installs it with `rpm` or `dpkg`. Installation requires root or `sudo` access.
 
-## Specify Version
-
-You can request a particular version that is already published on the selected mirror by passing the version number as an argument:
-
-**Default Installation** (Cloudflare CDN):
+Check the installed version:
 
 ```bash
-curl -fsSL https://repo.pigsty.io/pig | bash -s X.Y.Z
+pig version
 ```
 
-**China Mirror**:
+To select a published version, pass its version number:
 
 ```bash
-curl -fsSL https://repo.pigsty.cc/pig | bash -s X.Y.Z
+curl -fsSL https://repo.pigsty.io/pig | bash -s {{< param version >}}
 ```
 
-Mirror publication can lag the GitHub release. For the exact current release, use the GitHub artifacts below.
+## Download release artifacts
 
-## Download Release Artifacts
+Choose a file for your operating system and architecture on the [download page](/download/#packages) or [GitHub release](https://github.com/pgsty/pig/releases/tag/v{{< param version >}}).
 
-Current `v{{< param version >}}` installation packages (`RPM`/`DEB`/tarball) are available from the [GitHub Release](https://github.com/pgsty/pig/releases/tag/v{{< param version >}}), with published hashes in [checksums.txt](https://github.com/pgsty/pig/releases/download/v{{< param version >}}/checksums.txt). Use the following direct URL pattern:
+| System | Format | Architecture names |
+|:---|:---|:---|
+| EL | RPM | `x86_64`, `aarch64` |
+| Debian, Ubuntu | DEB | `amd64`, `arm64` |
+| Linux | tar.gz | `amd64`, `arm64` |
+| macOS | tar.gz | `amd64` (Intel), `arm64` (Apple Silicon) |
 
-- `https://github.com/pgsty/pig/releases/download/v{{< param version >}}/<filename>`
+For a release archive, extract it and install the `pig` executable in a directory on your `PATH`. For example, on Apple Silicon:
 
-In this filename template, `X.Y.Z` is the current {{< param version >}} release:
-
-```filetree {title="Release assets for the current version"}
-- vX.Y.Z/
-  - pig_X.Y.Z-1_amd64.deb
-  - pig_X.Y.Z-1_arm64.deb
-  - pig-X.Y.Z-1.aarch64.rpm
-  - pig-X.Y.Z-1.x86_64.rpm
-  - pig-vX.Y.Z.linux-amd64.tar.gz
-  - pig-vX.Y.Z.linux-arm64.tar.gz
-  - pig-vX.Y.Z.darwin-amd64.tar.gz
-  - pig-vX.Y.Z.darwin-arm64.tar.gz
+```bash
+curl -fLO https://github.com/pgsty/pig/releases/download/v{{< param version >}}/pig-v{{< param version >}}.darwin-arm64.tar.gz
+tar -xzf pig-v{{< param version >}}.darwin-arm64.tar.gz
+sudo mkdir -p /usr/local/bin
+sudo install -m 0755 pig /usr/local/bin/pig
+pig version
 ```
 
-After extracting, place the binary file in your system PATH.
-The equivalent Pigsty mirror directory becomes available after repository synchronization; check the target URL before using a version-pinned installer command.
+The release includes [SHA-256 checksums](https://github.com/pgsty/pig/releases/download/v{{< param version >}}/checksums.txt). Use `sha256sum` on Linux or `shasum -a 256` on macOS to compare your downloaded file with its listed hash.
 
-## Repository Installation
+The macOS binary supports catalog queries, inventory editing, and other commands that do not need Linux package managers. Install PostgreSQL packages on a [supported Linux host](/intro/#linux-compatibility).
 
-The `pig` software is located in the [`pigsty-infra`](https://pigsty.io/docs/repo/infra/) repository. You can add this repository to your operating system and then install using the OS package manager:
+## Repository installation
 
-Choose the package-manager tab for the target host:
+To manage PIG with the system package manager, add the [Pigsty Infra repository](https://pigsty.io/docs/repo/infra/). Choose the tab for your host:
 
 ```bash {tab="APT (Debian / Ubuntu)" group="install-pig-repository" value="apt" copy="all"}
 sudo tee /etc/apt/sources.list.d/pigsty-infra.list > /dev/null <<EOF
@@ -83,54 +76,64 @@ sudo apt update
 sudo apt install -y pig
 ```
 
-```bash {tab="YUM / DNF (EL)" value="yum" copy="all"}
+```bash {tab="DNF (EL)" value="dnf" copy="all"}
 sudo tee /etc/yum.repos.d/pigsty-infra.repo > /dev/null <<-'EOF'
 [pigsty-infra]
 name=Pigsty Infra for $basearch
 baseurl=https://repo.pigsty.io/yum/infra/$basearch
-enabled = 1
-gpgcheck = 0
+enabled=1
+gpgcheck=0
 module_hotfixes=1
 EOF
 
-sudo yum makecache
-sudo yum install -y pig
+sudo dnf makecache
+sudo dnf install -y pig
 ```
 
-These minimal repository examples deliberately use `gpgcheck=0` / `trusted=yes`, matching PIG's compatibility-oriented defaults. In a security-sensitive environment, install and pin the appropriate signing key, enable signature verification, and review package provenance before adopting the repository.
+These definitions disable signature checks for the Pigsty repository. For key handling and verification settings, see [repository keys](/repo/#repo-key).
 
 ## Update
 
-To upgrade an existing `pig` version to the latest available version, use the following command:
+On Linux, update the executable with:
 
 ```bash
-pig update            # upgrade pig itself to the latest version
-pig update -m         # upgrade using the pigsty.cc mirror
-pig update -v X.Y.Z   # upgrade to a version published by the configured repository
+sudo pig update
 ```
 
-To update the extension data of an existing `pig` to the latest available version, use the following command:
+Use `-m` for the China mirror or `-v {{< param version >}}` to select that version. For an archive installation on macOS, download the new archive and replace the installed executable.
+
+Refresh the extension catalog separately:
 
 ```bash
-pig ext reload        # Update pig extension data to the latest version
+pig ext reload
 ```
+
+This updates catalog metadata, leaving installed packages unchanged.
 
 ## Uninstall
 
+Choose the command that matches your installation:
+
 ```bash
-apt remove -y pig     # Debian / Ubuntu and other Debian-based systems
-yum remove -y pig     # RHEL / CentOS / RockyLinux and other EL distributions
-rm -f /usr/bin/pig    # If installed directly from binary, just delete the binary file
+sudo apt remove pig              # Debian / Ubuntu package
+sudo dnf remove pig              # EL package
+sudo rm /usr/local/bin/pig        # Archive installed at this path
 ```
 
-## Build from Source
+If you installed the archive elsewhere, remove that executable instead. PostgreSQL and its extensions continue to run without PIG.
 
-You can also build `pig` yourself. `pig` is developed in Go and is very easy to build. The source code is hosted at [github.com/pgsty/pig](https://github.com/pgsty/pig)
+## Build from source
+
+Install Git, Make, and the Go toolchain specified in the project's [go.mod](https://github.com/pgsty/pig/blob/v{{< param version >}}/go.mod). Build the current release:
 
 ```bash
-git clone https://github.com/pgsty/pig.git; cd pig
+git clone --branch v{{< param version >}} https://github.com/pgsty/pig.git
+cd pig
 go mod download
 make build
+./pig version
 ```
 
-The published PIG CLI RPM/DEB release packages are built by the project's GitHub Actions/Goreleaser workflow. This statement applies to the PIG executable packages, not to every PostgreSQL extension package in the catalog.
+`make build` produces `./pig` for the current platform. The release workflow uses GoReleaser to produce RPM, DEB, and tar.gz files.
+
+Continue with [Getting started](/start/) to install PostgreSQL and enable an extension.

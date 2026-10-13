@@ -1,10 +1,9 @@
 ---
 title: "504 个扩展，PG 生态的天花板在哪？"
 date: 2026-04-13
-lastmod: 2026-08-30
+lastmod: 2026-10-13
 authors: [Vonng]
-description: >
-  一个 Issue ，引发扩展马拉松；32 个新扩展告诉你，PostgreSQL 正在变成什么；504 个扩展，PostgreSQL 生态的天花板在哪？
+description: "一次 RDKit 打包需求如何带来 32 个新增扩展，将目录扩展到 504 项。"
 tags: [ext, catalog, build]
 ---
 
@@ -53,7 +52,7 @@ tags: [ext, catalog, build]
 | **EL**     |     499 |      150 |        332 |          71 |        5 |      472 |      482 |      474 |      468 |      452 |
 | **Debian** |     489 |      107 |        311 |          71 |       15 |      466 |      474 |      464 |      458 |      442 |
 
-这五百个扩展中，一部分是 PG 自带的扩展（70个），PGDG 官方打包的扩展（150 个），剩下的 330 个都是老冯自己收录，打包，维护构建的第三方扩展。
+目录收录了 PostgreSQL 自带扩展，以及 PGDG 与 Pigsty 提供的软件包。仓库之间有重叠，同一个扩展可能由多个来源提供。
 基本上，Pigsty 在这个赛道上已经做到了前无古人，后无来者了。
 
 这是啥概念？一般 RDS PG 上也就是几十个扩展。比如最近火爆的 Supabase 上，去掉 PG 自带的的 35 个 Contrib 扩展，实际上也就提供了 30 个不到的第三方 PG 扩展。
@@ -144,9 +143,9 @@ ProvSQL 的价值往往体现在"可组合性"：溯源结果不是字符串日�
 
 -------
 
-## 3. one_sparse: 在 SQL 里跑十亿边级图算法
+## 3. onesparse: 在 SQL 里跑十亿边级图算法
 
-> [`one_sparse`](https://pigsty.cc/ext/e/onesparse) | [GitHub](https://github.com/OneSparse/OneSparse)
+> [`onesparse`](https://pigsty.cc/ext/e/onesparse) | [GitHub](https://github.com/OneSparse/OneSparse)
 
 OneSparse 将高性能稀疏线性代数带入 PostgreSQL，封装了 SuiteSparse:GraphBLAS 库。开发者 Michel Pelletier 是 GraphBLAS C API 委员会成员，顾问团队包括 SuiteSparse 作者 Timothy A. Davis 教授（SIAM/ACM/IEEE Fellow）。核心理念是 **将图表示为稀疏矩阵**，用矩阵乘法实现 BFS、PageRank、三角中心性等图算法——而这一切都在 SQL 中完成。
 
@@ -166,7 +165,7 @@ SELECT reduce_cols(cast_to(graph, 'int32')) AS degree FROM karate;
 SELECT pagerank(graph) FROM karate;
 ```
 
-在 GAP benchmark 上，对 **43 亿边** 的图执行 BFS 时达到了 **每秒 70 亿+边** 的吞吐量（48 核 AMD EPYC 服务器）。应用场景包括金融反欺诈（交易网络环检测）、社交网络分析、Graph RAG 等。不过，这类扩展是否"真好用"，取决于数据装载/序列化格式是否与现有管道匹配，以及算子能否与 SQL Planner/并行执行相处融洽——建议先用小规模样例把端到端链路跑通。
+[已发布的 GAP 基准测试](https://onesparse.com/blog/2025/07/01/billions-of-edges-per-second-with-postgres.html#benchmarks) 包含最多 **43 亿条边** 的图，部分输入上的 BFS 吞吐量超过 **每秒 70 亿条边**。应用场景包括交易网络反欺诈、社交网络分析与 Graph RAG。先用有代表性的小图验证数据装载、序列化和查询规划，再扩大规模。
 
 OneSparse 要求 **PG 18 Beta 或更新版本**，当前处于 Alpha 阶段。Apache 2.0 许可证。
 
@@ -270,7 +269,7 @@ SELECT pghydro.pghfn_calculatestrahlernumber();
 
 > [`pg_stat_ch`](https://pigsty.cc/ext/e/pg_stat_ch) | [GitHub](https://github.com/ClickHouse/pg_stat_ch)
 
-pg_stat_ch 由 ClickHouse 公司开发并开源（2025 年 2 月，"Postgres Week at ClickHouse"活动），作者是 Kaushik Iska。与 pg_stat_statements 在 PostgreSQL 内部做聚合统计不同，pg_stat_ch 将 **每条查询的原始执行事件**（包含 45 个字段、固定 4.6KB）实时流式导出到 ClickHouse，让所有聚合分析（p50/p95/p99、Top 查询、错误分析）在 ClickHouse 的分析引擎中完成。
+pg_stat_ch 由 ClickHouse 公司开发，于 [2026 年 2 月 13 日公布](https://clickhouse.com/blog/pg_stat_ch-postgres-extension-stats-to-clickhouse)，作者是 Kaushik Iska。与 pg_stat_statements 在 PostgreSQL 内部做聚合统计不同，pg_stat_ch 将 **每条查询的原始执行事件**（包含 45 个字段、固定 4.6KB）实时流式导出到 ClickHouse，让所有聚合分析（p50/p95/p99、Top 查询、错误分析）在 ClickHouse 的分析引擎中完成。
 
 数据管道架构为：**PostgreSQL Hooks（前台）→ 共享内存环形缓冲区 → 后台 Worker → ClickHouse**。45 个遥测字段覆盖查询计时、行数、缓冲区使用、WAL 使用、CPU 时间、JIT 指标（PG15+）、并行 Worker 统计（PG18+）、客户端上下文（应用名、IP）、错误捕获（SQLSTATE 码）等。扩展使用 ClickHouse 原生二进制协议加 **LZ4 压缩**，静态链接 clickhouse-cpp 库。为避免对 PostgreSQL 造成背压，队列溢出时丢弃事件（计数器记录丢弃数）而非减慢数据库——与 StatsD 的设计哲学一致。
 
@@ -493,14 +492,14 @@ IoT 场景尤其合适——无需外部中间件即可将数据库状态变化�
 
 > [`pg_query_rewrite`](https://pigsty.cc/ext/e/pg_query_rewrite) | [GitHub](https://github.com/pierreforstmann/pg_query_rewrite)
 
-pg_query_rewrite 由 Pierre Forstmann 开发，利用 ProcessUtility hook 实现 SQL 语句的运行时透明替换。规则基于 **精确字符串匹配**（大小写和空格敏感）存储在共享内存中。
+pg_query_rewrite 由 Pierre Forstmann 开发，通过 `post_parse_analyze_hook` 改写解析后的 SQL 语句。规则基于 **精确字符串匹配**（大小写和空格敏感）存储在共享内存中。
 
 ```sql
 -- 添加重写规则
 SELECT pgqr_add_rule('select 10;', 'select 11;');
 
 -- 此后执行 "select 10;" 将返回 11
-SELECT 10;  -- 返回 11
+select 10;  -- 返回 11
 
 -- 查看所有规则及重写计数
 SELECT pgqr_rules();
@@ -701,13 +700,13 @@ SELECT semver_parsed('1.0.0-a.1+commit-y');
 
 > [`parray_gin`](https://pigsty.cc/ext/e/parray_gin) | [GitHub](https://github.com/theirix/parray_gin)
 
-parray_gin 由 Eugene Seliverstov 开发，为 `text[]` 数组列提供基于 GIN 索引的 **部分匹配** 操作符。标准 PostgreSQL 的 GIN 数组操作符只支持精确元素匹配，parray_gin 新增的 `@@>` 操作符支持子串包含判断，底层基于 trigram 分解（复用 pg_trgm 的实现），并通过 recheck 处理 false positive。
+parray_gin 由 Eugene Seliverstov 开发，为 `text[]` 数组列提供基于 GIN 索引的 **部分匹配** 操作符。标准 PostgreSQL 的 GIN 数组操作符只支持精确元素匹配，parray_gin 新增的 `@@>` 操作符支持用 `LIKE` 模式匹配数组元素，底层基于 trigram 分解（复用 pg_trgm 的实现），并通过 recheck 处理 false positive。
 
 ```sql
 CREATE INDEX ON test_table USING gin (val parray_gin_ops);
 
 -- 'post' 子串匹配 'postgresql'
-SELECT * FROM test_table WHERE val @@> array['post'];
+SELECT * FROM test_table WHERE val @@> array['post%'];
 
 -- 支持 LIKE 模式的部分包含
 SELECT * FROM test_table WHERE val @@> array['%ar%'];
@@ -868,7 +867,7 @@ SELECT pgelog_set_param('pgelog_ttl_minutes', '2880');
 
 ## 总结
 
-这 33 个扩展背后有几条清晰的趋势线。
+这 32 个扩展背后有几条清晰的趋势线。
 
 **第一，PostgreSQL 正在通过扩展把"专业对象"内建化。** BSON、Protobuf、RDF、循环日程、化学分子、图/本体关系——这些扩展把数据库从"结构化表"推向"可查询的复杂对象存储"。权限、审计、备份、事务语义都沿用数据库基础设施，减少了数据搬运和外部服务依赖。
 
@@ -882,4 +881,4 @@ PostgreSQL 的扩展生态就是这样：既有大教堂（Apache 基金会项�
 
 ---
 
-> **归档说明（2026-08-30）：** 本文原载 [vonng.com](https://vonng.com/pg/extension-504/)。文中的软件包数量、截图与上下文以原始发表日期为准；当前行为请以 [PIG 文档](/zh/docs/)和实时[扩展目录](https://pigsty.cc/ext/)为准。
+> 原文：[vonng.com](https://vonng.com/pg/extension-504/)。

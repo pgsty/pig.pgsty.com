@@ -1,6 +1,6 @@
 ---
 title: "下载与安装 pig"
-description: "在 Linux 与 macOS 上下载 pig：一行安装脚本、APT / DNF 仓库、原生 RPM 与 DEB 包、二进制归档，以及源码构建。"
+description: "在 Linux 上通过安装脚本、APT / DNF 或 RPM / DEB 包安装 PIG。Linux 与 macOS 也可下载二进制归档。"
 type: download
 layout: landing
 translationKey: download

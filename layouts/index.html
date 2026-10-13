@@ -21,21 +21,21 @@
             <span>POSTGRESQL + EXTENSIONS → RPM / DEB</span>
           </p>
 
-          <h1 class="td-landing-hero__title pig-home-hero__title" id="hero-title">Postgres Install Guide</h1>
+          <h1 class="td-landing-hero__title pig-home-hero__title" id="hero-title">{{ if $zh }}PostgreSQL <span style="white-space: nowrap">包管理器</span>{{ else }}PostgreSQL package manager{{ end }}</h1>
 
           <p class="td-landing-hero__lead">
-            <strong>{{ if $zh }}一条命令，装好 PostgreSQL 与它的扩展。{{ else }}One command installs PostgreSQL and its extensions.{{ end }}</strong>
-            {{ if $zh }}配置原生软件仓库，按目标系统解析软件包，并通过一个静态二进制交付 RPM / DEB。{{ else }}Wire native repositories, resolve packages for the target system, and deliver RPM / DEB with one static binary.{{ end }}
+            <strong>{{ if $zh }}安装 PostgreSQL 与扩展，管理数据库日常操作。{{ else }}Install PostgreSQL and extensions. Manage everyday database operations.{{ end }}</strong>
+            {{ if $zh }}PIG 配置软件仓库、查找对应包名，再调用 apt 或 dnf 完成安装。{{ else }}PIG configures repositories, finds the matching package names, and installs them through apt or dnf.{{ end }}
           </p>
 
           <p class="td-landing-hero__note">
             <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-            <span>{{ if $zh }}{{ $metrics.packaged_extensions }} 个扩展 · PostgreSQL 14–18 · EL / Debian / Ubuntu{{ else }}{{ $metrics.packaged_extensions }} extensions · PostgreSQL 14–18 · EL / Debian / Ubuntu{{ end }}</span>
+            <span>{{ if $zh }}PostgreSQL 14–18 · EL / Debian / Ubuntu{{ else }}PostgreSQL 14–18 · EL / Debian / Ubuntu{{ end }}</span>
           </p>
 
           <div class="td-landing-hero__actions">
             <a href="{{ relLangURL "download/" }}" class="td-landing-button td-landing-button--primary"><i class="fa-solid fa-download" aria-hidden="true"></i><span>{{ if $zh }}下载{{ else }}Download{{ end }}</span></a>
-            <a href="{{ relLangURL "start/" }}" class="td-landing-button td-landing-button--ghost"><i class="fa-solid fa-book-open" aria-hidden="true"></i><span>{{ if $zh }}阅读文档{{ else }}Read the docs{{ end }}</span></a>
+            <a href="{{ relLangURL "start/" }}" class="td-landing-button td-landing-button--ghost"><i class="fa-solid fa-book-open" aria-hidden="true"></i><span>{{ if $zh }}快速上手{{ else }}Get started{{ end }}</span></a>
           </div>
         </div>
 
@@ -50,25 +50,25 @@
       <div class="landing-container">
         <div class="section-head section-head--compact" data-reveal>
           <p class="section-eyebrow"><span class="silkscreen">COVERAGE</span><span class="eyebrow-trace" aria-hidden="true"></span></p>
-          <h2 class="section-title section-title--sm" id="coverage-title">{{ if $zh }}{{ $metrics.packaged_extensions }} 个扩展条目，按目标查询{{ else }}{{ $metrics.packaged_extensions }} Extension Entries, Indexed by Target{{ end }}</h2>
+          <h2 class="section-title section-title--sm" id="coverage-title">{{ if $zh }}查找适合你的 PostgreSQL 扩展{{ else }}Find extensions for your PostgreSQL environment{{ end }}</h2>
         </div>
 
         <div class="stats-grid" data-reveal>
           <a href="{{ $ext }}/list/" class="stat-item" target="_blank" rel="noopener">
             <span class="stat-value" data-count="{{ $metrics.packaged_extensions }}">{{ lang.FormatNumber 0 $metrics.packaged_extensions }}</span>
-            <span class="stat-label">{{ if $zh }}目录扩展{{ else }}Cataloged Extensions{{ end }}</span>
+            <span class="stat-label">{{ if $zh }}收录扩展{{ else }}Extensions indexed{{ end }}</span>
           </a>
           <a href="{{ relLangURL "intro/" }}" class="stat-item">
             <span class="stat-value" data-count="{{ $metrics.pg_majors }}">{{ lang.FormatNumber 0 $metrics.pg_majors }}</span>
-            <span class="stat-label">{{ if $zh }}PostgreSQL 大版本（14-18）{{ else }}PostgreSQL Majors (14-18){{ end }}</span>
+            <span class="stat-label">{{ if $zh }}PostgreSQL 大版本（14-18）{{ else }}PostgreSQL majors (14–18){{ end }}</span>
           </a>
           <a href="{{ relLangURL "intro/" }}" class="stat-item">
             <span class="stat-value" data-count="{{ $metrics.linux_distros }}">{{ lang.FormatNumber 0 $metrics.linux_distros }}</span>
-            <span class="stat-label">{{ if $zh }}Linux 发行版大版本 × 双架构{{ else }}Linux Distro Majors × 2 Arches{{ end }}</span>
+            <span class="stat-label">{{ if $zh }}Linux 发行版版本{{ else }}Linux releases{{ end }}</span>
           </a>
-          <a href="{{ relLangURL "install/" }}" class="stat-item">
-            <span class="stat-value" data-count="{{ $metrics.database_runtime_deps }}">{{ lang.FormatNumber 0 $metrics.database_runtime_deps }}</span>
-            <span class="stat-label">{{ if $zh }}数据库运行时依赖{{ else }}Database Runtime Dependencies{{ end }}</span>
+          <a href="{{ relLangURL "intro/" }}" class="stat-item">
+            <span class="stat-value" data-count="2">2</span>
+            <span class="stat-label">{{ if $zh }}CPU 架构（x86_64 / ARM64）{{ else }}CPU architectures (x86_64 / ARM64){{ end }}</span>
           </a>
         </div>
       </div>
@@ -78,7 +78,7 @@
     <section class="landing-section modules value-proposition" id="capabilities">
       <div class="landing-container">
         <div class="section-head" data-reveal>
-          <p class="section-eyebrow"><span class="silkscreen">{{ if $zh }}价值主张{{ else }}VALUE PROPOSITION{{ end }}</span><span class="eyebrow-trace" aria-hidden="true"></span></p>
+          <p class="section-eyebrow"><span class="silkscreen">{{ if $zh }}软件包管理{{ else }}PACKAGE MANAGEMENT{{ end }}</span><span class="eyebrow-trace" aria-hidden="true"></span></p>
           <h2 class="section-title value-title">
             {{- if $zh -}}
             <span>目录</span><span>仓库</span><span>构建</span><span>安装</span>
@@ -86,7 +86,7 @@
             <span>Catalog</span><span>Repositories</span><span>Build</span><span>Install</span>
             {{- end -}}
           </h2>
-          <p class="section-subtitle">{{ if $zh }}从查目录、配仓库到按需构建和原生安装；每一步都感知目标系统、架构与 PostgreSQL 大版本。{{ else }}From catalog lookup and repository setup to on-demand builds and native installation—every step is target-aware.{{ end }}</p>
+          <p class="section-subtitle">{{ if $zh }}按操作系统、CPU 架构与 PostgreSQL 大版本查找软件包。{{ else }}Find packages for your operating system, CPU architecture, and PostgreSQL major version.{{ end }}</p>
         </div>
 
         <nav class="value-card-grid" data-reveal aria-label="{{ if $zh }}PIG 包交付工作流{{ else }}PIG package delivery workflow{{ end }}">
@@ -94,7 +94,7 @@
             <span class="value-card-top"><span class="value-card-ref">01 / INDEX</span><span class="value-card-icon"><i class="fas fa-magnifying-glass" aria-hidden="true"></i></span></span>
             <span class="value-card-body">
               <h3>{{ if $zh }}目录{{ else }}Catalog{{ end }}</h3>
-              <p>{{ if $zh }}统一索引 {{ $metrics.packaged_extensions }} 个扩展条目，按名称、PG 大版本、系统与架构锁定可用包。{{ else }}Index {{ $metrics.packaged_extensions }} extensions and resolve availability by name, PG major, OS, and architecture.{{ end }}</p>
+              <p>{{ if $zh }}查询扩展的描述、版本与可用软件包。{{ else }}Find extension descriptions, versions, and available packages.{{ end }}</p>
             </span>
             <span class="value-card-command"><code>pig ext list duckdb</code><i class="fas fa-arrow-right" aria-hidden="true"></i></span>
           </a>
@@ -103,16 +103,16 @@
             <span class="value-card-top"><span class="value-card-ref">02 / REPO</span><span class="value-card-icon"><i class="fas fa-network-wired" aria-hidden="true"></i></span></span>
             <span class="value-card-body">
               <h3>{{ if $zh }}仓库{{ else }}Repositories{{ end }}</h3>
-              <p>{{ if $zh }}生成并检查 APT / YUM 配置，按地域选择镜像；覆盖前备份现有仓库定义。{{ else }}Generate and inspect APT / YUM configuration, select regional mirrors, and back up definitions before replacement.{{ end }}</p>
+              <p>{{ if $zh }}添加 PGDG 与 Pigsty 仓库，选择区域镜像并刷新软件包元数据。{{ else }}Add PGDG and Pigsty repositories, choose a regional mirror, and refresh package metadata.{{ end }}</p>
             </span>
-            <span class="value-card-command"><code>pig repo set</code><i class="fas fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="value-card-command"><code>pig repo add pgsql -u</code><i class="fas fa-arrow-right" aria-hidden="true"></i></span>
           </a>
 
           <a href="{{ relLangURL "build/" }}" class="value-card value-card--build">
             <span class="value-card-top"><span class="value-card-ref">03 / BUILD</span><span class="value-card-icon"><i class="fas fa-hammer" aria-hidden="true"></i></span></span>
             <span class="value-card-body">
               <h3>{{ if $zh }}构建{{ else }}Build{{ end }}</h3>
-              <p>{{ if $zh }}缺少现成包时，使用项目维护的规格运行完整构建链，产出原生 RPM / DEB。{{ else }}When no package exists, run project-maintained specs through the full pipeline to produce native RPM / DEB.{{ end }}</p>
+              <p>{{ if $zh }}准备构建环境，按维护好的规格生成扩展的 RPM 或 DEB 包。{{ else }}Prepare a build host and use maintained specifications to build RPM or DEB extension packages.{{ end }}</p>
             </span>
             <span class="value-card-command"><code>pig build pkg citus</code><i class="fas fa-arrow-right" aria-hidden="true"></i></span>
           </a>
@@ -121,7 +121,7 @@
             <span class="value-card-top"><span class="value-card-ref">04 / INSTALL</span><span class="value-card-icon"><i class="fas fa-box-open" aria-hidden="true"></i></span></span>
             <span class="value-card-body">
               <h3>{{ if $zh }}安装{{ else }}Install{{ end }}</h3>
-              <p>{{ if $zh }}把扩展名、PG 大版本和主机目标翻译成原生包，由 apt / dnf 完成交付。{{ else }}Translate extension names, PG majors, and host targets into native packages delivered by apt / dnf.{{ end }}</p>
+              <p>{{ if $zh }}指定扩展名称与 PostgreSQL 大版本，由 apt 或 dnf 解析依赖并安装。{{ else }}Select an extension and PostgreSQL major version. Let apt or dnf resolve dependencies and install the packages.{{ end }}</p>
             </span>
             <span class="value-card-command"><code>pig install pg_duckdb -v 18</code><i class="fas fa-arrow-right" aria-hidden="true"></i></span>
           </a>
@@ -134,17 +134,17 @@
       <div class="landing-container">
         <div class="section-head" data-reveal>
           <p class="section-eyebrow"><span class="silkscreen">COMMAND SURFACE</span><span class="eyebrow-trace" aria-hidden="true"></span></p>
-          <h2 class="section-title">{{ if $zh }}一套 CLI，贯穿完整生命周期{{ else }}One CLI Across the Lifecycle{{ end }}</h2>
-          <p class="section-subtitle">{{ if $zh }}所有命令均可通过 <code>pig help</code> 发现；机器读取时使用命令明确支持的结构化输出。{{ else }}Every command is discoverable through <code>pig help</code>; machine consumers use structured output where supported.{{ end }}</p>
+          <h2 class="section-title">{{ if $zh }}按任务选择命令{{ else }}Choose a command for your task{{ end }}</h2>
+          <p class="section-subtitle">{{ if $zh }}用 <code>pig help</code> 查看命令，用 <code>pig help &lt;command&gt;</code> 查看具体用法。{{ else }}Use <code>pig help</code> to list commands and <code>pig help &lt;command&gt;</code> for detailed usage.{{ end }}</p>
           <div class="section-links">
-            <a href="{{ relLangURL "cmd/" }}">{{ if $zh }}命令参考{{ else }}Command Reference{{ end }} →</a>
+            <a href="{{ relLangURL "cmd/" }}">{{ if $zh }}命令参考{{ else }}Command reference{{ end }} →</a>
             <a href="{{ relLangURL "install/" }}">{{ if $zh }}安装{{ else }}Installation{{ end }} →</a>
-            <a href="{{ relLangURL "release/" }}">{{ if $zh }}发布注记{{ else }}Release Notes{{ end }} →</a>
+            <a href="{{ relLangURL "release/" }}">{{ if $zh }}发布注记{{ else }}Release notes{{ end }} →</a>
           </div>
         </div>
 
         <nav class="kernel-grid interface-grid" data-reveal aria-label="{{ if $zh }}PIG 命令界面{{ else }}PIG command surface{{ end }}">
-          <a href="{{ relLangURL "repo/" }}" class="kernel-card"><span class="kernel-icon interface-glyph">RP</span><span class="kernel-name">repo</span><span class="kernel-desc">{{ if $zh }}APT / YUM 仓库{{ else }}APT / YUM repos{{ end }}</span></a>
+          <a href="{{ relLangURL "repo/" }}" class="kernel-card"><span class="kernel-icon interface-glyph">RP</span><span class="kernel-name">repo</span><span class="kernel-desc">{{ if $zh }}APT / DNF 仓库{{ else }}APT / DNF repos{{ end }}</span></a>
           <a href="{{ relLangURL "ext/" }}" class="kernel-card"><span class="kernel-icon interface-glyph">EX</span><span class="kernel-name">ext</span><span class="kernel-desc">{{ if $zh }}扩展目录{{ else }}Extension catalog{{ end }}</span></a>
           <a href="{{ relLangURL "cmd/" }}" class="kernel-card"><span class="kernel-icon interface-glyph">IN</span><span class="kernel-name">install</span><span class="kernel-desc">{{ if $zh }}原生包安装{{ else }}Native package install{{ end }}</span></a>
           <a href="{{ relLangURL "build/" }}" class="kernel-card"><span class="kernel-icon interface-glyph">BD</span><span class="kernel-name">build</span><span class="kernel-desc">{{ if $zh }}源码构建{{ else }}Build from source{{ end }}</span></a>
@@ -153,10 +153,12 @@
           <a href="{{ relLangURL "pb/" }}" class="kernel-card"><span class="kernel-icon interface-glyph">PB</span><span class="kernel-name">pgbackrest</span><span class="kernel-desc">{{ if $zh }}备份与恢复{{ else }}Backup and restore{{ end }}</span></a>
           <a href="{{ relLangURL "pitr/" }}" class="kernel-card"><span class="kernel-icon interface-glyph">PI</span><span class="kernel-name">pitr</span><span class="kernel-desc">{{ if $zh }}时间点恢复{{ else }}Point-in-time recovery{{ end }}</span></a>
           <a href="{{ relLangURL "sty/" }}" class="kernel-card"><span class="kernel-icon interface-glyph">ST</span><span class="kernel-name">sty</span><span class="kernel-desc">{{ if $zh }}Pigsty 安装管控{{ else }}Pigsty control{{ end }}</span></a>
+          <a href="{{ relLangURL "pe/" }}" class="kernel-card"><span class="kernel-icon interface-glyph">PE</span><span class="kernel-name">pg_exporter</span><span class="kernel-desc">{{ if $zh }}监控指标与配置重载{{ else }}Metrics and configuration reload{{ end }}</span></a>
+          <a href="{{ relLangURL "do/" }}" class="kernel-card"><span class="kernel-icon interface-glyph">DO</span><span class="kernel-name">do</span><span class="kernel-desc">{{ if $zh }}Pigsty 管理剧本{{ else }}Pigsty playbooks{{ end }}</span></a>
           <a href="{{ relLangURL "inventory/" }}" class="kernel-card"><span class="kernel-icon interface-glyph">IV</span><span class="kernel-name">inventory</span><span class="kernel-desc">{{ if $zh }}配置清单{{ else }}Config inventory{{ end }}</span></a>
         </nav>
 
-        <div class="extbus-head" data-reveal><span class="silkscreen">{{ if $zh }}一行命令即可装上{{ else }}ONE COMMAND AWAY{{ end }}</span></div>
+        <div class="extbus-head" data-reveal><span class="silkscreen">{{ if $zh }}常用扩展{{ else }}POPULAR EXTENSIONS{{ end }}</span></div>
         <div class="extensions-marquee" data-reveal aria-label="{{ if $zh }}热门扩展{{ else }}Popular extensions{{ end }}">
           <div class="marquee-row" data-direction="left"><div class="marquee-content">
             {{- range slice "postgis" "vector" "timescaledb" "citus" "pg_duckdb" "pg_search" "documentdb" "pg_cron" -}}
@@ -175,7 +177,7 @@
             {{- end -}}
           </div></div>
         </div>
-        <div class="extbus-cta" data-reveal><a href="{{ $ext }}/list/" class="btn btn-line" target="_blank" rel="noopener">{{ if $zh }}浏览全部 {{ $metrics.packaged_extensions }} 个扩展{{ else }}Browse all {{ $metrics.packaged_extensions }} extensions{{ end }} →</a></div>
+        <div class="extbus-cta" data-reveal><a href="{{ $ext }}/list/" class="btn btn-line" target="_blank" rel="noopener">{{ if $zh }}浏览扩展目录{{ else }}Browse the extension catalog{{ end }} →</a></div>
       </div>
     </section>
 
@@ -185,33 +187,31 @@
       <div class="landing-container">
         <div class="section-head" data-reveal>
           <p class="section-eyebrow"><span class="silkscreen">{{ if $zh }}为什么需要它{{ else }}WHY IT EXISTS{{ end }}</span><span class="eyebrow-trace" aria-hidden="true"></span></p>
-          <h2 class="section-title">{{ if $zh }}安装扩展，不该变成一个项目{{ else }}Installing an Extension Shouldn't Be a Project{{ end }}</h2>
-          <p class="section-subtitle">{{ if $zh }}难点不在扩展本身，而在跨版本、系统与架构的可靠分发。{{ else }}The hard part is not the extension—it is reliable delivery across versions, systems, and architectures.{{ end }}</p>
+          <h2 class="section-title">{{ if $zh }}用扩展名安装软件包{{ else }}Install packages by extension name{{ end }}</h2>
+          <p class="section-subtitle">{{ if $zh }}同一个扩展在不同系统上的包名不同。PIG 负责选择对应包名。{{ else }}Package names differ across systems. PIG selects the name for your host and PostgreSQL version.{{ end }}</p>
         </div>
         <div class="promise-grid" data-reveal>
           <article class="promise-card promise-card--no">
-            <p class="silkscreen">{{ if $zh }}没有 pig 的时候{{ else }}WITHOUT PIG{{ end }}</p>
-            <h3>{{ if $zh }}每一层都要手工处理{{ else }}Manual at Every Layer{{ end }}</h3>
+            <p class="silkscreen">{{ if $zh }}同一个扩展{{ else }}ONE EXTENSION{{ end }}</p>
+            <h3>{{ if $zh }}不同系统，不同包名{{ else }}Different systems, different package names{{ end }}</h3>
             <ul>
-              <li>{{ if $zh }}寻找正确的仓库、包名或源码{{ else }}Find the right repository, package, or source{{ end }}</li>
-              <li>{{ if $zh }}逐一匹配 PG 大版本、系统与架构{{ else }}Match the PG major, OS release, and architecture{{ end }}</li>
-              <li>{{ if $zh }}没有二进制包时自行准备工具链与构建流程{{ else }}Own the toolchain and build when no binary exists{{ end }}</li>
-              <li>{{ if $zh }}换主机或升级大版本后重新执行{{ else }}Repeat the process for every host and major upgrade{{ end }}</li>
+              <li>{{ if $zh }}EL 上的 pgvector：<code>pgvector_18</code>{{ else }}pgvector on EL: <code>pgvector_18</code>{{ end }}</li>
+              <li>{{ if $zh }}Debian / Ubuntu 上：<code>postgresql-18-pgvector</code>{{ else }}On Debian / Ubuntu: <code>postgresql-18-pgvector</code>{{ end }}</li>
+              <li>{{ if $zh }}PostgreSQL 大版本变化时，包名也随之变化{{ else }}The package name also depends on the PostgreSQL major version{{ end }}</li>
             </ul>
           </article>
           <article class="promise-card">
-            <p class="silkscreen">{{ if $zh }}用 pig 之后{{ else }}WITH PIG{{ end }}</p>
-            <h3>{{ if $zh }}一套一致的工作流{{ else }}One Consistent Workflow{{ end }}</h3>
+            <p class="silkscreen">{{ if $zh }}统一安装命令{{ else }}ONE INSTALL COMMAND{{ end }}</p>
+            <h3><code>pig install vector -v 18</code></h3>
             <ul>
-              <li>{{ if $zh }}<code>repo set</code> 生成按地域选择的 apt / dnf 配置{{ else }}<code>repo set</code> writes region-aware apt / dnf configuration{{ end }}</li>
-              <li>{{ if $zh }}<code>install</code> 解析名称、PG 版本、系统与架构{{ else }}<code>install</code> resolves names, PG majors, systems, and architectures{{ end }}</li>
-              <li>{{ if $zh }}<code>build</code> 为缺包目标提供基于规格的构建路径{{ else }}<code>build</code> provides a spec-driven path when no package exists{{ end }}</li>
-              <li>{{ if $zh }}最终仍是原生 RPM / DEB，不引入数据库运行时依赖{{ else }}The result stays native RPM / DEB, with no database runtime dependency{{ end }}</li>
+              <li>{{ if $zh }}PIG 自动识别操作系统与 CPU 架构{{ else }}PIG detects the operating system and CPU architecture{{ end }}</li>
+              <li>{{ if $zh }}按指定的 PostgreSQL 版本选择包名{{ else }}It selects the package for your PostgreSQL version{{ end }}</li>
+              <li>{{ if $zh }}调用 apt 或 dnf 解析依赖并安装{{ else }}It uses apt or dnf to resolve dependencies and install{{ end }}</li>
             </ul>
           </article>
         </div>
         <p class="section-subtitle" data-reveal style="text-align:center">
-          {{ if $zh }}PIG 始终是可选工具：<a href="{{ $ext }}/repo/" target="_blank" rel="noopener">Pigsty 仓库</a> 可直接由 apt / dnf 使用，也不会成为数据库运行时依赖。{{ else }}PIG remains optional: the <a href="{{ $ext }}/repo/" target="_blank" rel="noopener">Pigsty repositories</a> work with plain apt and dnf, and PIG never becomes a database runtime dependency.{{ end }}
+          {{ if $zh }}也可以直接用 apt 或 dnf 访问 <a href="{{ $ext }}/repo/" target="_blank" rel="noopener">Pigsty 仓库</a>。PostgreSQL 运行时无需启动 PIG。{{ else }}You can also use the <a href="{{ $ext }}/repo/" target="_blank" rel="noopener">Pigsty repositories</a> with apt or dnf directly. PostgreSQL runs without a PIG service.{{ end }}
         </p>
       </div>
     </section>
@@ -220,26 +220,26 @@
     <section class="landing-section agent-native" id="automation">
       <div class="landing-container">
         <div class="section-head" data-reveal>
-          <p class="section-eyebrow"><span class="silkscreen">AGENT-NATIVE CLI</span><span class="eyebrow-trace" aria-hidden="true"></span></p>
-          <h2 class="section-title">{{ if $zh }}让 Agent 看得懂、判得清、做得稳{{ else }}Understand First. Orchestrate Safely.{{ end }}</h2>
-          <p class="section-subtitle">{{ if $zh }}PIG 不只是“能被脚本调用”：ANCS 把命令能力、风险与确认要求公开为机器可读 Schema；统一结果、上下文快照与可审阅计划，让 Agent 先理解再执行。{{ else }}PIG is more than scriptable: ANCS exposes capabilities, risk, and confirmation requirements as machine-readable schema. Unified results, context snapshots, and reviewable plans let agents understand before they act.{{ end }}</p>
+          <p class="section-eyebrow"><span class="silkscreen">{{ if $zh }}脚本与 Agent{{ else }}SCRIPTS AND AGENTS{{ end }}</span><span class="eyebrow-trace" aria-hidden="true"></span></p>
+          <h2 class="section-title">{{ if $zh }}查询命令能力，读取结构化结果{{ else }}Inspect commands and read structured results{{ end }}</h2>
+          <p class="section-subtitle">{{ if $zh }}用 JSON 帮助查询命令参数、输出能力与确认要求。备份恢复等工作流还提供执行计划，便于脚本和 Agent 在执行前检查。{{ else }}Use JSON help to inspect arguments, output support, and confirmation requirements. Recovery workflows also provide plans that scripts and agents can inspect before execution.{{ end }}</p>
         </div>
         <div class="install-options agent-native-grid" data-reveal>
-          <a href="{{ relLangURL "release/pig-1.1.0/" }}" class="install-option">
+          <a href="{{ relLangURL "cmd/" }}" class="install-option">
             <span class="install-option-icon">ANCS</span>
-            <span class="install-option-text"><b>pig -o json --help</b><i>{{ if $zh }}输出能力树与 risk / confirm / os_user 等执行边界{{ else }}Capability tree with risk, confirm, os_user, and other execution boundaries{{ end }}</i></span>
+            <span class="install-option-text"><b>pig -o json --help</b><i>{{ if $zh }}查询子命令、选项、所需用户与确认要求{{ else }}List subcommands, options, required users, and confirmations{{ end }}</i></span>
           </a>
           <a href="{{ relLangURL "cmd/" }}" class="install-option">
             <span class="install-option-icon"><i class="fas fa-satellite-dish" aria-hidden="true"></i></span>
-            <span class="install-option-text"><b>pig context -o json</b><i>{{ if $zh }}一次采集主机、PostgreSQL、Patroni、备份与扩展上下文{{ else }}One snapshot of host, PostgreSQL, Patroni, backup, and extension context{{ end }}</i></span>
+            <span class="install-option-text"><b>pig context -o json</b><i>{{ if $zh }}采集主机、PostgreSQL、Patroni、备份与扩展状态{{ else }}Collect host, PostgreSQL, Patroni, backup, and extension status{{ end }}</i></span>
           </a>
           <a href="{{ relLangURL "cmd/" }}" class="install-option">
             <span class="install-option-icon"><i class="fas fa-code" aria-hidden="true"></i></span>
-            <span class="install-option-text"><b>-o json | yaml</b><i>{{ if $zh }}统一 Result 结构、稳定状态码与机器可读输出{{ else }}Unified Result envelopes, stable status codes, and machine-readable output{{ end }}</i></span>
+            <span class="install-option-text"><b>-o json | yaml</b><i>{{ if $zh }}在支持的命令中读取 JSON 或 YAML 结果{{ else }}Read JSON or YAML results from commands that support them{{ end }}</i></span>
           </a>
           <a href="{{ relLangURL "pitr/" }}" class="install-option">
             <span class="install-option-icon"><i class="fas fa-list-check" aria-hidden="true"></i></span>
-            <span class="install-option-text"><b>--plan · --yes</b><i>{{ if $zh }}高风险动作先给计划；非交互执行要求显式确认{{ else }}Risk-sensitive actions expose plans and require explicit confirmation{{ end }}</i></span>
+            <span class="install-option-text"><b>--plan · --yes</b><i>{{ if $zh }}执行前查看恢复计划，确认后运行{{ else }}Inspect the recovery plan, then confirm execution{{ end }}</i></span>
           </a>
         </div>
       </div>
@@ -277,7 +277,7 @@
               </div>
               <span class="product-choice-icon"><i class="fas fa-box-archive" aria-hidden="true"></i></span>
             </div>
-            <p>{{ if $zh }}把 Pigsty Infra 仓库加进系统，之后 <code>apt install pig</code> / <code>dnf install pig</code> 就能装和升；也可以直接取发布压缩包里的二进制丢进 PATH。{{ else }}Add the Pigsty Infra repository, then <code>apt install pig</code> or <code>dnf install pig</code>. Or just take the binary out of the release tarball and drop it on your PATH.{{ end }}</p>
+            <p>{{ if $zh }}添加 Pigsty Infra 仓库后，用 <code>apt install pig</code> 或 <code>dnf install pig</code> 安装。Linux 与 macOS 也可下载归档，将二进制放入 PATH。{{ else }}Add the Pigsty Infra repository, then run <code>apt install pig</code> or <code>dnf install pig</code>. On Linux or macOS, you can also install the binary from a release archive.{{ end }}</p>
             <div class="product-platforms"><span>rpm</span><span>deb</span><span>tarball</span><span>macOS</span></div>
             <strong>{{ if $zh }}查看下载矩阵{{ else }}See the download matrix{{ end }} <i aria-hidden="true">↗</i></strong>
           </a>

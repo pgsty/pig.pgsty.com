@@ -1,8 +1,8 @@
 ---
-title: "PIG 2.0 Product Direction: A Proposal, Not a Release Contract"
+title: "PIG 2.0 Product Direction"
 linkTitle: "PIG 2.0 Proposal"
 date: 2026-08-13
-lastmod: 2026-10-06
+lastmod: 2026-10-13
 description: "The proposed PIG 2.0 boundary: a stable Pigsty onboarding front door, verifiable Catalog client, and thin orchestrator that keeps deployment explicit."
 tags: [cli, sty, catalog]
 weight: 85
@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **Decision date:** 2026-08-13<br>
-> **Status:** Proposal for owner review; it is not implemented and is not a PIG 2.0 release commitment.<br>
+> **Status:** Proposal for review; not implemented.<br>
 > **Current reference:** [PIG documentation](/docs/) and the current [v1.9.0 release](/release/pig-1.9.0/)<br>
 > **Scope:** Candidate product boundaries and verification gates for a future PIG 2.0 / Pigsty 5.0 line.
 
@@ -40,8 +40,7 @@ repositories and extensions, and run selected operations. Several product seams 
 - compatibility among PIG, Pigsty, Catalog schema, operating systems, and Ansible needed one release
   matrix rather than separate assumptions.
 
-The proposal treats those seams as the 2.0 problem. It does not use the major version as permission
-to rename commands or rebuild tools that already have an authority.
+The proposal focuses 2.0 work on metadata consistency and a repeatable setup workflow.
 
 ## Alternatives considered {#alternatives}
 
@@ -87,9 +86,8 @@ new durable contracts: snapshot identities, project locks, migration rules, trus
 receipts, and compatibility matrices. Those contracts increase the testing and release burden and
 must not ship as loosely coupled features.
 
-Some attractive work is intentionally optional or deferred. An Ansible event bridge is a target
-only if redaction and compatibility experiments pass. Doctor/support bundles and lab adapters are
-post-GA. EL7 support remains an owner decision rather than an implied compatibility promise.
+An Ansible event bridge depends on redaction and compatibility tests. Doctor/support bundles and
+lab adapters are deferred until after the initial release. The EL7 support level remains open.
 
 ## Verification and evolution {#verification}
 
@@ -111,7 +109,6 @@ project pin, setup command, event receipt, or 2.0 migration contract.
 
 ## Current status {#status}
 
-This is a public proposal record, not an announcement. Current users should follow the
-[v1.9.0 documentation](/docs/). Catalog v2 security selection, typed overlays, path layout details,
-EL7 support tier, event-bridge viability, and the final 2.0 scope still require explicit decisions
-and experimental evidence before implementation or release claims are appropriate.
+The proposal remains open. Decisions are still needed for Catalog security, overlays, paths,
+EL7 support, and the Ansible event bridge. Use the [current documentation](/docs/) for released
+commands.

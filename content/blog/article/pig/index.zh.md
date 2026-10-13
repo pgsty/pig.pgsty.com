@@ -2,7 +2,7 @@
 title: "小猪骑大象：PG内核与扩展包管理神器"
 linkTitle: "小猪骑大象：PG包管理神器Pig"
 date: 2024-12-23
-lastmod: 2026-08-30
+lastmod: 2026-10-13
 authors: [Vonng]
 description: >
   PostgreSQL 与 Pigsty 中长期缺失的一个包管理器 —— PIG。
@@ -13,7 +13,7 @@ tags: [cli, ext, repo, postgres]
 
 最近我在忙一个非常有趣的新项目，这两天总算弄完了。各位朋友们，给大家介绍一下这个有趣的小东西，PostgreSQL 与 Pigsty 中久久缺失的一个命令行工具，我称之为 “[**pig**](https://github.com/pgsty/pig)”。
 
-那么 pig 是干什么的？简单来说，这是一个 PostgreSQL 的包管理器，也是 PostgreSQL 与 Pigsty 中久久缺失的一个命令行工具，它可以在主流 Linux 操作系统上提供跨发行版的丝滑无缝的 PostgreSQL 安装部署体验。而且还通过国内镜像解决了下载速度慢和部分仓库被墙的问题。
+PIG 使用系统的 APT、YUM 或 DNF 安装软件包，根据 Linux 发行版、CPU 架构与 PostgreSQL 版本选择匹配的包。国内用户可以选择镜像仓库。
 
 ![PIG 包管理器与 PostgreSQL 大象](/article/pig/featured.webp)
 
@@ -38,7 +38,7 @@ curl -fsSL https://repo.pigsty.cc/pig | bash     # 中国大陆墙内镜像仓�
 
 ```bash
 $ pig repo add pigsty pgdg -u  # 添加 pgdg & pigsty 仓库并更新缓存（比较礼貌的做法）
-$ pig repo set -u              # 你也可以用这个命令直接移除所有现有Repo，并覆盖添加所有必须的Repo，粗暴但有效
+$ pig repo set -u              # 替换现有仓库配置
 
 $ pig ext install pg17         # 如果您没有安装 PostgreSQL 内核，可以使用这种方式安装 PGDG 内核包
 $ pig ext install pg_duckdb    # 默认针对当前活跃的 PG 安装扩展，例如安装：pg_duckdb 扩展（针对活跃的 PG17）
@@ -227,4 +227,4 @@ pig 只是一个小工具，真正重要的是这个工具背后的 Pigsty 扩�
 
 ---
 
-> **归档说明（2026-08-30）：** 本文原载 [vonng.com](https://vonng.com/pg/pig/)。文中的软件包数量、截图与上下文以原始发表日期为准；当前行为请以 [PIG 文档](/zh/docs/)和实时[扩展目录](https://pigsty.cc/ext/)为准。
+> 原文：[vonng.com](https://vonng.com/pg/pig/)。

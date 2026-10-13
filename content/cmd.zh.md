@@ -7,14 +7,14 @@ categories: [参考]
 tags: [cli]
 ---
 
-`pig` CLI 提供了全面的工具集，用于管理 PostgreSQL 安装、扩展、软件仓库以及从源码构建扩展。使用 `pig help <command>` 查看命令文档。
+`pig` 管理 PostgreSQL 软件包、本地数据库服务和 Pigsty 部署。按任务选择下列命令；用 `pig COMMAND --help` 查看当前程序支持的选项。
 
 - [**pig repo**](/zh/repo/)：管理软件仓库
 - [**pig ext**](/zh/ext/)：管理 PostgreSQL 扩展
 - [**pig build**](/zh/build/)：从源码构建扩展
 - **pig install**：使用原生包管理器安装包，并对 PostgreSQL 别名做翻译
 - [**pig sty**](/zh/sty/)：管理 Pigsty 安装与 Grafana 仪表盘
-- [**pig inventory**](/zh/inventory/)：检视、编辑、校验与交换 Pigsty 配置清单（v1.6.0 新增）
+- [**pig inventory**](/zh/inventory/)：检视、编辑、校验与交换 Pigsty 配置清单
 - [**pig do**](/zh/do/)：执行 Pigsty 管理 playbook 任务
 - [**pig pe**](/zh/pe/)：访问 pg_exporter 指标与配置
 - [**pig pg**](/zh/pg/)：管理本地 PostgreSQL 服务器
@@ -24,57 +24,24 @@ tags: [cli]
 - **pig context**：输出面向人工和 Agent 的环境上下文快照
 - **pig status / update / version**：查看环境、升级 pig、打印版本信息
 
-## 概览
+## 全局选项
+
+| 选项 | 用途 |
+|:---|:---|
+| `-h, --help` | 查看帮助 |
+| `-H, --home PATH` | 选择 Pigsty 安装目录 |
+| `-i, --inventory PATH` | 选择 Inventory 配置清单 |
+| `-o, --output FORMAT` | 输出格式：`text`（默认）、`json`、`yaml`、`json-pretty` |
+| `--debug` | 启用调试日志 |
+| `--log-level LEVEL` | 日志级别：`debug`、`info`（默认）、`warn`、`error`、`fatal`、`panic` |
+| `--log-path PATH` | 日志文件；默认写入终端 |
+
+PIG 自己管理的结果支持结构化输出。原始内容命令（如 `inventory show`）和透传命令（如 `pt list`）保留原生输出，具体格式见对应参考页。
 
 ```bash
-pig - PostgreSQL 的 Linux 包管理器
-
-Usage:
-  pig [command]
-
-Examples:
-
-  pig repo add -ru            # 覆盖现有仓库并更新缓存
-  pig install pg18            # 安装 PostgreSQL 18 PGDG 软件包
-  pig install pg_duckdb       # 安装指定的 PostgreSQL 扩展
-  pig install pgactive -v 18  # 为特定 PG 版本安装扩展
-
-  访问 https://pigsty.io/ext/ 获取详情
-
-PostgreSQL Extension Manager
-  build       构建 Postgres 扩展
-  ext         管理 PostgreSQL 扩展 (pgext)
-  repo        管理 Linux 软件仓库 (apt/dnf)
-
-Pigsty Management Commands
-  context     显示环境上下文快照
-  do          运行管理任务
-  inventory   检视、编辑、校验与交换 Pigsty 配置清单
-  patroni     透明运行 patronictl（附 Pigsty 服务与配置辅助）
-  pg_exporter 管理 pg_exporter 与监控指标
-  pgbackrest  管理 pgBackRest 备份与恢复
-  pitr        使用 pgBackRest 进行时间点恢复
-  postgres    管理本地 PostgreSQL 服务器与数据库
-  sty         管理 Pigsty 安装与控制器服务
-
-Additional Commands:
-  completion  生成指定 shell 的自动补全脚本
-  help        获取任何命令的帮助信息
-  install     使用原生包管理器安装软件包
-  status      显示环境状态
-  update      升级 pig 自身
-  version     显示 pig 版本信息
-
-Flags:
-      --debug              启用调试模式
-  -h, --help               获取帮助信息
-  -H, --home string        Pigsty 主目录路径
-  -i, --inventory string   配置清单路径
-      --log-level string   日志级别: debug, info, warn, error, fatal, panic (默认 "info")
-      --log-path string    日志文件路径，默认为终端输出
-  -o, --output string      输出格式：text, yaml, json, json-pretty（默认 "text"）
-
-使用 "pig [command] --help" 获取命令的详细信息。
+pig repo list
+pig ext list vector -o json
+pig help inventory edit
 ```
 
 ## pig repo
@@ -103,7 +70,7 @@ pig ext info    pg_duckdb        # 扩展详情
 pig ext status                   # 显示已安装的扩展
 pig ext add     pg_duckdb -y     # 安装扩展
 pig ext rm      old_extension    # 移除扩展
-pig ext update                   # 更新扩展
+pig ext update  pg_duckdb        # 更新指定扩展软件包
 pig ext scan                     # 扫描已安装的扩展
 pig ext import  pg_duckdb        # 下载以供离线使用
 pig ext link    17               # 链接 PG 版本到 PATH
@@ -146,7 +113,7 @@ pig install pg18                 # 安装 PostgreSQL 18 内核包组
 pig install nginx htop vim       # 安装多个系统包
 pig install unknown-package -n   # 禁用翻译，按原始包名安装
 pig install pg18 --plan          # 预览安装计划
-pig install pg_vector -y         # 自动确认安装
+pig install vector -y         # 自动确认安装
 ```
 
 ## pig sty
@@ -156,7 +123,7 @@ pig install pg_vector -y         # 自动确认安装
 ```bash
 pig sty init                     # 安装 Pigsty 到 ~/pigsty
 pig sty boot                     # 安装 Ansible 依赖
-pig sty conf                     # 生成配置
+pig sty conf -g                  # 生成配置并替换演示密码
 pig sty deploy                   # 运行部署 playbook
 pig sty list                     # 列出可用 Pigsty 版本
 pig sty get {{< param pigsty_version >}}                # 下载内置的 Pigsty 版本
@@ -166,7 +133,7 @@ pig sty grafana list             # 管理 Grafana 仪表盘（info/list/boot/loa
 ## pig inventory
 
 检视、编辑、校验、体检并与 CMDB 交换 Pigsty 配置清单（`pigsty.yml`），根级命令组，别名 `inv`，
-详情请参考 [`pig inventory`](/zh/inventory/)。（v1.6.0 新增）
+详情请参考 [`pig inventory`](/zh/inventory/)。
 
 ```bash
 pig inventory status             # 检视当前生效的清单来源
@@ -174,14 +141,14 @@ pig inventory list               # 列出清单拓扑与取值类型
 pig inventory show               # 原样显示清单 YAML（可能包含敏感信息）
 pig inventory edit               # 在 $EDITOR 中编辑清单或选中片段
 pig inventory validate           # 校验一份完整的静态 Pigsty 清单
-pig inventory check              # 检查清单、控制器与目标节点就绪状态
+pig inventory check              # 检查清单与本地控制节点
 pig inventory diff other.yml     # 对比声明差异（不输出取值）
-pig inventory cmdb check         # 与 PostgreSQL CMDB 交换（实验性）
+pig inventory cmdb check         # 检查 PostgreSQL CMDB（实验性）
 ```
 
 ## pig do
 
-执行 Pigsty 管理任务，底层调用对应的 Ansible Playbook。完整命令与安全边界见
+执行 Pigsty 管理任务，底层调用对应的 Ansible Playbook。完整命令参考见
 [`pig do`](/zh/do/)。
 
 ```bash
@@ -196,7 +163,7 @@ pig do node-pkg   <sel> [pkg...]      # 安装节点软件包
 ## pig pe
 
 访问 pg_exporter 暴露的 PostgreSQL 监控指标，默认连接 `127.0.0.1:9630`；
-legacy 端点假设与操作详情见 [`pig pe`](/zh/pe/)。
+端点与操作详情见 [`pig pe`](/zh/pe/)。
 
 ```bash
 pig pe list                    # 列出可用指标类型
@@ -286,9 +253,7 @@ pig version                      # 显示 pig 版本信息
 pig version -o json              # 结构化版本输出
 ```
 
-`pig version` 与 legacy `pig pe` HTTP 命令不读取 Pigsty 配置，因此即使
-`~/.pig/config.yml` 格式错误仍可使用。会使用配置或探测环境状态的命令（包括 `pig status`）
-仍会因错误配置而失败，避免静默忽略配置问题。
+如果 `~/.pig/config.yml` 存在语法错误，请先修正，再运行 `pig status` 等读取配置的命令。`pig version` 和 `pig pe` HTTP 命令不读取该文件，仍可使用。
 
 ## 设计记录
 

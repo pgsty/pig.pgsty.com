@@ -11,95 +11,55 @@ icon: fa-solid fa-book
 toc_root: true
 ---
 
-— **Packager Index Gateway, a PostgreSQL extension package manager**
+PIG provides commands to find, install, and build PostgreSQL extension packages. It also manages PostgreSQL, Patroni, pgBackRest, and Pigsty workflows. Package installation uses the system's `apt`, `dnf`, or `yum`.
 
-PIG is a self-contained Go command-line tool for installing, managing, and building PostgreSQL extension packages and for selected PostgreSQL/Pigsty operations. It delegates package transactions to the native operating-system tools.
-PIG is not a reinvented wheel, but rather a **PiggyBack** - a high-level abstraction layer that leverages existing Linux distribution package managers (`apt`/`dnf`).
-Its catalog maps operating systems, CPU architectures, and PostgreSQL majors to native package names, allowing you to install PG kernels and query {{< param pgext_count >}} packaged extension entries through a consistent CLI. Availability still varies by target combination.
+## Start here
 
-Many PIG-native workflows are automation-friendly: when the specific command documents support, use structured output, `--plan`, confirmation controls, and defined result codes. Passthrough, interactive, and streaming commands retain their upstream or terminal-oriented behavior.
+| Your task | Page |
+|:---|:---|
+| Install PostgreSQL and enable your first extension | [Getting started](/start/) |
+| Learn what PIG does and which platforms it supports | [Introduction](/intro/) |
+| Download, install, update, or remove PIG | [Installation](/install/) |
+| Look up commands, options, and automation features | [Command reference](/cmd/) |
 
-Please note: for extension installation, **pig is not a mandatory component**. You can still use apt/dnf package managers to directly access the [**Pigsty PGSQL**](https://pigsty.io/docs/repo/pgsql/) repository.
+## Install PostgreSQL and extensions
 
-Open search and page actions with {{< kbd "Ctrl" "K" >}} ({{< kbd "⌘" "K" >}} on macOS), or press {{< kbd "/" >}} to jump straight to commands.
-
-Assistant actions open ChatGPT or Claude only when you select them. They pass the current page's public URL and a reading prompt to that third-party service; PIG does not send the page body automatically.
-
-- [**Introduction**](/intro/): Why do we need a dedicated PG package manager?
-- [**Getting Started**](/start/): Quick start guide and examples
-- [**Installation**](/install/): Download, install, and update pig
-
-## Quick Start
-
-{{% steps %}}
-
-### Install pig
-
-Use the default Cloudflare-backed installer:
+On a Linux host with root or `sudo` access, run:
 
 ```bash
 curl -fsSL https://repo.pigsty.io/pig | bash
+sudo pig repo add pgsql --update
+sudo pig install -v 18 pg18 vector
 ```
 
-In mainland China, use the mirror endpoint:
+In mainland China, use `https://repo.pigsty.cc/pig` for the installer. These commands install PostgreSQL 18 and pgvector packages. Continue with [Getting started](/start/) to start a test instance and enable the extension with `CREATE EXTENSION vector`.
 
-```bash
-curl -fsSL https://repo.pigsty.cc/pig | bash
-```
+## Command reference
 
-See [Installation](/install/) for packages, release archives, upgrades, and removal.
+| Task | Command |
+|:---|:---|
+| Configure APT/DNF repositories | [`pig repo`](/repo/) |
+| Query the catalog, install, or update extension packages | [`pig ext`](/ext/), [`pig install`](/cmd/#pig-install) |
+| Build extension packages from source | [`pig build`](/build/) |
+| Manage local PostgreSQL instances and databases | [`pig pg`](/pg/) |
+| Manage Patroni clusters through patronictl | [`pig pt`](/pt/) |
+| Inspect or reload pg_exporter | [`pig pe`](/pe/) |
+| Back up and restore with pgBackRest | [`pig pb`](/pb/) |
+| Run point-in-time recovery | [`pig pitr`](/pitr/) |
+| Install and configure Pigsty, manage Grafana | [`pig sty`](/sty/) |
+| Read, edit, and validate Pigsty inventory | [`pig inventory`](/inventory/) |
+| Run Pigsty administration playbooks | [`pig do`](/do/) |
+| Collect host, database, and backup status | [`pig context`](/cmd/#pig-context) |
 
-### Configure package repositories
+Run `pig help <command>` for command help. For automation, use `pig -o json --help` to inspect command capabilities, then select the relevant output and plan options.
 
-On Linux, register the Pigsty and PGDG repositories once. Review the generated configuration before accepting the overwrite:
+## Find more information
 
-```bash
-pig repo set
-```
+Press {{< kbd "Ctrl" "K" >}} ({{< kbd "⌘" "K" >}} on macOS) to search the site. Press {{< kbd "/" >}} for page actions. An AI assistant action sends the public page URL and a reading prompt to the selected service.
 
-### Install PostgreSQL and extensions
+- [Design Records](/design/): implementation decisions, trade-offs, and proposals.
+- [Release notes](/release/): changes and download files for each version.
+- [Extension catalog](https://pigsty.io/ext/list/): extension descriptions and package information.
+- [GitHub Issues](https://github.com/pgsty/pig/issues): report a problem or request a feature.
 
-Install the PostgreSQL 18 kernel plus the [`pg_duckdb`](https://pigsty.io/ext/e/pg_duckdb) and `vector` extension packages:
-
-```bash
-pig install -y pg18 pg_duckdb vector
-```
-
-{{% /steps %}}
-
-These commands install host packages. Use `pig ext info NAME` and each extension's documentation to complete preload, restart, `CREATE EXTENSION`, and SQL upgrade steps in every intended database. Continue with the full [Getting Started](/start/) tutorial for catalog, alias, and inspection workflows.
-
-## Command Reference
-
-Run `pig help <command>` to get detailed help for subcommands.
-
-**Extension Management:**
-
-- [**pig repo**](/repo/): Manage software repositories
-- [**pig ext**](/ext/): Manage PG extensions
-- [**pig build**](/build/): Build extensions from source
-- [**pig install**](/cmd/#pig-install): Install PostgreSQL and extension packages through the native package manager
-
-**Pigsty Management:**
-
-- [**pig sty**](/sty/): Manage Pigsty installation and Grafana dashboards
-- [**pig inventory**](/inventory/): Inspect, edit, validate, and exchange the Pigsty inventory
-- [**pig context**](/cmd/#pig-context): Collect host, PostgreSQL, Patroni, pgBackRest, and extension context
-- [**pig do**](/do/): Run bounded Pigsty administrative playbook tasks
-- [**pig pg**](/pg/): Manage local PostgreSQL server
-- [**pig pt**](/pt/): Run patronictl transparently to manage Patroni HA clusters
-- [**pig pe**](/pe/): Inspect and reload a running pg_exporter
-- [**pig pb**](/pb/): Manage pgBackRest backup & restore
-- [**pig pitr**](/pitr/): Point-in-time recovery workflow
-
-The [Design Records](/design/) explain the decisions and trade-offs behind these command contracts.
-
-## About
-
-The `pig` CLI tool is developed by [Vonng](https://vonng.com/en/) (rh@vonng.com) and is open-sourced under the [Apache 2.0](https://github.com/pgsty/pig/blob/main/LICENSE) license.
-
-You can also check out the [**PIGSTY**](https://pgsty.com) project, which provides a complete PostgreSQL RDS DBaaS experience including extension delivery.
-
-- [**PGEXT**](https://github.com/pgsty/pgext): Extension data and management tools
-- [**PIG**](https://github.com/pgsty/pig): PostgreSQL package manager
-- [**PIGSTY**](https://github.com/pgsty/pigsty): Batteries-included PostgreSQL distribution
+PIG is developed by [Vonng](https://vonng.com/en/) and released under [Apache 2.0](https://github.com/pgsty/pig/blob/main/LICENSE). [Pigsty](https://pigsty.io/) provides PostgreSQL deployment, monitoring, backups, and high availability.

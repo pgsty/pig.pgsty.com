@@ -1,7 +1,7 @@
 ---
 title: "冷门但稀缺的技能：打包构建"
 date: 2025-08-18
-lastmod: 2026-08-30
+lastmod: 2026-10-13
 authors: [Vonng]
 description: >
   数据库领域一项不为人知，却卡脖子卡到飞起的硬技能。
@@ -14,7 +14,7 @@ tags: [build, repo]
 
 我觉得他的这个 JD 有点儿过分，DevRel + SRE + DBA + Building Engineer + PostgreSQL 专精 六边形战士，简直是照着我写的，但老冯还真没见过其他有这种组合的人，所以我还是建议他老老实实找一个精通 Debian/EL 打包的构建工程师更实际一些…。但尽管如此，我认为难度还是挺大的，因为熟悉 “打包构建” 这个技能的人，咱都不能说用”稀缺“来形容了（更稀缺的应该是 DevRel）。
 
-当然这里其实上下文语境，说的是 PostgreSQL 数据库内核/扩展在 Linux 操作系统上的构建打包。主要是 C 和 C++，还有一些 Rust，Java，Go 之类的扩展与工具。打包的产物主要是 RPM 和 DEB 包，以 APT / YUM 软件仓库的形式交付。老冯认为，这是一个相当不为人知的高价值稀缺技能。
+这里说的是 PostgreSQL 数据库内核/扩展在 Linux 操作系统上的构建打包。主要是 C 和 C++，还有一些 Rust，Java，Go 之类的扩展与工具。打包的产物主要是 RPM 和 DEB 包，以 APT / YUM 软件仓库的形式交付。老冯认为，这是一个相当不为人知的高价值稀缺技能。
 
 ## 什么时候意识到这一点？
 
@@ -44,9 +44,9 @@ tags: [build, repo]
 
 当然有人会说，哎呀，都是开源软件，你可以自己从源代码编译呀？这话说的不假，使用现代语言编写的软件已经针对打包构建流程做了很多优化了。比如，用 Go 语言写的程序就非常容易构建打包，甚至还有 goreleaser 这样的神器，可以一键帮跨平台构建所有组合，生成 RPM / DEB 包，构建并推送 Docker 镜像然后自动创建 GitHub Release ，而你让 Vibe Coding 帮你实现这样的工作流可能都要不了半个小时。
 
-但是，我们说的并不是这些，而是像 Debian，PostgreSQL 这样的巨无霸生态型项目（基本上基于 C / C++）。而且，构建打包 PostgreSQL 数据库，可不是几个 RPM 包就完事了。我这么说，现在我提供的10个发行版Linux发行版 x 5个PG大版本，再加上扩展和工具，总共有4万多个左右的 RPM/DEB 包。
+但是，我们说的并不是这些，而是像 Debian，PostgreSQL 这样的巨无霸生态型项目（基本上基于 C / C++）。而且，构建打包 PostgreSQL 数据库，可不是几个 RPM 包就完事了。我这么说，现在我提供的 10 个 Linux 发行版 × 5 个 PG 大版本，再加上扩展和工具，总共有 4 万多个 RPM/DEB 包。
 
-打包构建并不是一件轻松的工作：要处理好各种依赖，glibc，icu，openssl，PostGIS 带着的一颗硕大无朋的依赖数。各种插件依赖的各种奇奇怪怪的系统库，不同操作系统发行版甚至是大版本上的版本冲突， cmake，make，ninja，cargo 各种构建工具的用法，诸如此类。
+打包构建并不是一件轻松的工作：要处理好各种依赖，glibc，icu，openssl，PostGIS 带着的一棵硕大无朋的依赖树。各种插件依赖的各种奇奇怪怪的系统库，不同操作系统发行版甚至是大版本上的版本冲突， cmake，make，ninja，cargo 各种构建工具的用法，诸如此类。
 
 ## 你为什么不用Docker？
 
@@ -74,9 +74,9 @@ Docker 似乎是来 “解决” 打包构建的一种捷径 —— 一次构建
 
 ## 懂打包的凤毛麟角
 
-在现实实践中，老冯发现这个技能真的太稀缺了，就像尤里问我谁还懂这个，国内就甭说了，就算是全球，我知道的可能 ZoomboDB 那个作者（pgrx 作者）懂这个（被 ParadeDB 挖走了），别的我还真想不出来有谁能做好这个事情了。
+在现实实践中，老冯发现这个技能真的太稀缺了，就像尤里问我谁还懂这个，国内就甭说了，就算是全球，我知道的可能 ZomboDB 那个作者（pgrx 作者）懂这个（被 ParadeDB 挖走了），别的我还真想不出来有谁能做好这个事情了。
 
-比如说，PG 生态中，这么多扩展，能有有能力直接在发布的时候提供主流 Linux RPM / DEB 包的，我知道的就只有 ParadeDB 一家（pg_search），而他们会做这个事是因为他们发版太频繁了，我实在懒得替他们打包了，所以手把手教他们应该怎么打 RPM/DEB 包。另一个会自己打包的是 pgroonga，timescaledb，citus，但是怎么说呢，打的包和 PGDG 规范不统一，而且经常缺这个缺那个 —— 比如 citus 一直就缺 ARM 的包，Timescale 则缺几个特定的发行版，pgronnga 针对的是 Debian 自带的 PG 去打的包 —— 诸如此类。
+比如说，PG 生态中，这么多扩展，有能力直接在发布的时候提供主流 Linux RPM / DEB 包的，我知道的就只有 ParadeDB 一家（pg_search），而他们会做这个事是因为他们发版太频繁了，我实在懒得替他们打包了，所以手把手教他们应该怎么打 RPM/DEB 包。另一个会自己打包的是 pgroonga，timescaledb，citus，但是怎么说呢，打的包和 PGDG 规范不统一，而且经常缺这个缺那个 —— 比如 citus 一直就缺 ARM 的包，Timescale 则缺几个特定的发行版，PGroonga 针对的是 Debian 自带的 PG 去打的包 —— 诸如此类。
 
 再比如说国内的数据库厂商， 之前阿里云的 PolarDB for PG 和 IvorySQL 也就几个 EL RPM 包，后来我使劲儿 push 他们，总算是 Pigsty 支持的 10 个主流操作系统发行版现在都有包了。我也帮他们解决过几个低级打包错误。另外那个 MySQL 兼容的 OpenHalo，老冯干脆自己上了，替他们打好了 DEB/RPM 包。同理，Supabase 收购的 OrioleDB 看上去也没有这个能力，所以我也替他们做了 RPM / DEB ，在 Pigsty 中开箱即用。
 
@@ -94,4 +94,4 @@ Docker 似乎是来 “解决” 打包构建的一种捷径 —— 一次构建
 
 ---
 
-> **归档说明（2026-08-30）：** 本文原载 [vonng.com](https://vonng.com/misc/packaging-skill/)。文中的软件包数量、截图与上下文以原始发表日期为准；当前行为请以 [PIG 文档](/zh/docs/)和实时[扩展目录](https://pigsty.cc/ext/)为准。
+> 原文：[vonng.com](https://vonng.com/misc/packaging-skill/)。

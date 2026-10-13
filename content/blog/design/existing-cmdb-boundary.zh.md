@@ -2,8 +2,8 @@
 title: "复用 Pigsty 已经拥有的 CMDB"
 linkTitle: "既有 CMDB 边界"
 date: 2026-07-18
-lastmod: 2026-08-28
-description: "为什么 PIG 撤销全新的 revision store 设计，转而成为 Pigsty 既有 PostgreSQL CMDB 的轻量受控适配器。"
+lastmod: 2026-10-13
+description: "PIG 如何复用 Pigsty 既有 PostgreSQL CMDB，并撤销重复的版本存储设计。"
 tags: [inventory, sty]
 weight: 60
 authors: [Vonng]
@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **决策日期：** 2026-07-18<br>
-> **状态：** 全新 revision store 已被取代；复用既有 CMDB 的薄适配器已经实现，但仍为实验功能。<br>
+> **状态：** 适配器随 [v1.6.0](/zh/release/pig-1.6.0/) 发布，仍为实验功能；早期版本存储设计已被取代。<br>
 > **当前参考：** [`pig inventory cmdb`](/zh/inventory/)<br>
 > **范围：** 与 Pigsty 既有 CMDB 交换声明，而不是再设计一个配置数据库。
 
@@ -43,7 +43,7 @@ schema、装载脚本、动态 Inventory 投影和数据源切换行为。
 - PIG 通过显式数据库目标、环境配置或 `service=meta` 连接；
 - 凭据、DSN、SQL 正文与声明值不得进入计划或诊断；
 - `check` 只读；
-- `init` 应用既有基线，但不声称会备份现有数据库；
+- `init` 用匹配版本的基线替换 `pigsty` 与 `pglog` schema，并要求确认；操作前先备份现有数据库；
 - `load` 在事务内替换声明行，并要求显式确认；
 - `dump` 在没有 force 时拒绝意外覆盖；
 - `enable` 与 `disable` 只修改能够识别的 Ansible Inventory source 形式，并原子写入；
@@ -52,8 +52,7 @@ schema、装载脚本、动态 Inventory 投影和数据源切换行为。
 
 ## 影响 {#impact}
 
-纠偏删除了大量已经写出的 revision-store 代码。这是有意恢复范围，不是功能损失：
-被删除的功能描述的是一个 PIG 本就不应该拥有的产品。
+修订移除了重复的版本存储实现，也减少了维护工作。
 
 保留下来的适配器更小、更容易审计，也与现有 Pigsty 运维方式兼容。
 它同时继承既有系统的限制：`init` 需要运维人员自行备份，装载声明属于替换操作，而不是协同版本控制。
@@ -68,5 +67,4 @@ schema、装载脚本、动态 Inventory 投影和数据源切换行为。
 ## 当前状态 {#status}
 
 既有 CMDB 适配器已随 [v1.6.0](/zh/release/pig-1.6.0/) 发布，但仍为实验功能。
-在真实 CMDB 上执行初始化或替换前应自行备份，并使用当前 [`pig inventory` 文档](/zh/inventory/)，
-不要再参考已经废弃的早期设计。
+初始化或替换前先备份 CMDB。操作流程见 [`pig inventory` 文档](/zh/inventory/)。

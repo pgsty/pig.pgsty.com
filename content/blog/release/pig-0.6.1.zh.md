@@ -10,7 +10,7 @@ release_url: https://github.com/pgsty/pig/releases/tag/v0.6.1
 ---
 
 - 新增 el10 与 debian 13 trixie 的支持存根
-- 专门的新文档网站： /ext/pig/
+- 上线独立的 [PIG 文档站](https://pig.pgsty.com/zh/)
 - 使用 go 1.25 重新构建，新增 CI/CD 管道
 - 在中国大陆使用 PIGSTY PGDG 镜像
 - 移除空的 `pgdg-el10fix` 仓库

@@ -2,7 +2,7 @@
 title: "Why PIG Keeps the Cobra Command Layer Flat"
 linkTitle: "Flat Cobra Layer"
 date: 2026-06-30
-lastmod: 2026-08-28
+lastmod: 2026-10-13
 description: "The source-layout decision that keeps one top-level command in one cmd file and moves concrete behavior into cli and internal packages."
 tags: [cli]
 weight: 30
@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **Decision date:** 2026-06-30<br>
-> **Status:** Active repository architecture.<br>
+> **Status:** Implemented; the repository uses this layout for new commands.<br>
 > **Current reference:** [`pig` command overview](/cmd/) and the [source repository](https://github.com/pgsty/pig)<br>
 > **Scope:** Go source ownership and command registration, not the public command taxonomy itself.
 
@@ -51,8 +51,8 @@ decomposed by responsibility.
 
 - `cmd/root.go` owns root setup, global flags, and top-level registration;
 - `cmd/utils.go` owns shared command-layer helpers;
-- each normal top-level command has one matching top-level source file and may have one matching
-  test file;
+- each normal top-level command has one matching top-level source file; matching and focused
+  test files may accompany it;
 - Cobra code validates syntax and maps options, but does not perform the operation;
 - reusable confirmation, annotation, structured-output, and plan helpers have one implementation;
 - implementation packages accept ordinary options and return typed results or errors without
@@ -64,8 +64,8 @@ Some command files are intentionally large. The trade-off is accepted because th
 can be reviewed as a unit, while the implementation remains split below it. The rule also reduces
 file churn when aliases or flags move and gives agents a deterministic starting point.
 
-The boundary is architectural, not cosmetic: a short `cmd` file that hides business logic in
-closures is still a violation, while a long file containing only declarative command glue is not.
+Review the separation of responsibilities, not file length. Operational logic belongs in the
+implementation packages, including logic inside closures.
 
 ## Verification and evolution {#verification}
 

@@ -2,8 +2,8 @@
 title: "自动安装 Pigsty 仓库公钥"
 linkTitle: "自动安装 Pigsty 公钥"
 date: 2026-10-04
-lastmod: 2026-10-06
-description: "尽最大努力准备 Pigsty 公钥，复用已有文件；失败时告警并降级，元数据显式指定密钥时保持严格要求。"
+lastmod: 2026-10-13
+description: "配置 Pigsty 仓库时准备内嵌公钥，明确默认失败处理与显式密钥要求。"
 tags: [repo, sty]
 weight: 95
 authors: [Vonng]
@@ -99,6 +99,5 @@ sudo 创建缺失的密钥目录、内嵌公钥字节与权限一致、重复执
 
 ## 当前状态 {#status}
 
-该实现已进入经过验证的 [v1.9.0 标签](https://github.com/pgsty/pig/tree/v1.9.0)
-与[正式发布制品](https://github.com/pgsty/pig/releases/tag/v1.9.0)。上述实现与本地验证的证据范围保持不变。
-软件仓库发布、公开文档部署与既有系统升级仍是独立交付阶段。
+已随 [v1.9.0](https://github.com/pgsty/pig/releases/tag/v1.9.0) 发布。
+用法与平台要求见文首链接的当前参考文档。

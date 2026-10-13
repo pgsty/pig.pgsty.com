@@ -2,7 +2,7 @@
 title: "Compile, Validate, Then Commit: The Native sty conf Pipeline"
 linkTitle: "Native sty conf"
 date: 2026-02-18
-lastmod: 2026-08-28
+lastmod: 2026-10-13
 description: "Why pig sty conf treats Inventory generation as a bounded compiler pipeline with path safety, structural mutations, secret discipline, and atomic output."
 tags: [sty, inventory]
 weight: 15
@@ -65,12 +65,10 @@ rendering are part of the security boundary.
 
 ## Consequences {#impact}
 
-The command supports a defined family of templates and mutations rather than arbitrary editing.
-That limit is deliberate: existing Inventories belong to the lossless `pig inventory` workflow,
-while `sty conf` owns reproducible compilation from a known template.
+Use `sty conf` to generate a new Inventory from a known template. Use the lossless
+`pig inventory` workflow to edit an existing Inventory.
 
-Version-pinned templates keep their effective version and warn when a conflicting generic request
-cannot apply. This is more honest than reporting the requested version while producing another.
+Version-pinned templates keep their version and warn when a conflicting version request cannot apply.
 
 ## Verification and evolution {#verification}
 

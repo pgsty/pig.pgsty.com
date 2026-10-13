@@ -2,8 +2,8 @@
 title: "用有边界的 Grafana 客户端替代仪表盘脚本"
 linkTitle: "原生 Grafana 管理"
 date: 2026-07-18
-lastmod: 2026-08-28
-description: "为什么 pig sty grafana 只拥有仪表盘生命周期与偏好设置的一小段 HTTP 契约，而不成为通用 Grafana 管理客户端。"
+lastmod: 2026-10-13
+description: "pig sty grafana 如何通过原生 HTTP 客户端管理仪表盘与偏好设置。"
 tags: [sty]
 weight: 70
 authors: [Vonng]
@@ -11,62 +11,63 @@ draft: false
 ---
 
 > **决策日期：** 2026-07-18<br>
-> **状态：** v1.6.0 实现；Grafana dashboard schema v2 支持随后在 v1.6.2 交付。<br>
+> **状态：** 随 [v1.6.0](/zh/release/pig-1.6.0/) 发布；[v1.6.2](/zh/release/pig-1.6.2/) 加入仪表盘 schema v2 支持。<br>
 > **当前参考：** [`pig sty grafana`](/zh/sty/#sty-grafana)<br>
-> **范围：** Pigsty 拥有的仪表盘目录、仪表盘与界面偏好；不是通用 Grafana provisioning。
+> **范围：** 仪表盘导入、导出、清理，以及部分组织与用户偏好设置。
 
 ## 决策 {#decision}
 
-PIG 应通过有边界的原生 HTTP 客户端管理 Pigsty 随附的 Grafana 资产。
-它可以检查就绪状态、列出托管资产、装载或初始化仪表盘、导出仪表盘、只清理自己拥有的资产，
-并调整受支持的语言与样式偏好。
+PIG 使用原生 HTTP 客户端管理 Grafana 仪表盘。本地 JSON 路径选择单个仪表盘、一个文件夹或
+完整仪表盘目录。装载、导出与清理采用同一套选择规则，破坏性操作可以先预览。
 
-该命令不能扩张成通用 Grafana 管理 API。Datasource、organization、user、任意目录、plugin
-和无关仪表盘都不属于它的所有权。
+默认目录是 Pigsty 仪表盘集合，用户也可以选择其他符合格式的目录。
+清理默认按本地文件声明的仪表盘 UID 选择目标；显式指定 `clean --all` 时，
+目标是当前 Grafana 组织中的全部仪表盘与文件夹。
 
 ## 背景 {#context}
 
-旧仪表盘工作流依赖脚本和本地文件布局，几乎无法提供结构化证据来说明连接了哪个端点、
-哪些资产属于自己，或为什么只完成了一部分。另一方面，如果没有严格所有权模型就开放完整 Grafana API，
-可能删除用户内容，也可能在参数和诊断中泄露凭据。
-
-只有在网络、认证、所有权与结果边界都明确时，原生客户端才值得存在。
+旧 Shell 脚本依赖本地文件布局，对部分失败的说明有限。将这些操作纳入 PIG 后，
+可以统一超时、认证、路径校验与结果输出。本地声明也为默认清理提供了明确范围。
 
 ## 考虑过的方案 {#alternatives}
 
-- **继续把 Shell 脚本作为公开接口。** 超时、重定向、响应大小、脱敏和结构化结果仍会不一致。
-- **开放任意 Grafana API 调用。** 这会让 PIG 变成第二个没有稳定边界的 Grafana CLI。
-- **仅凭目录名称删除。** 名称不足以证明资产所有权。
-- **内置 demo 密码。** 默认凭据会变成长寿命秘密，并鼓励不安全自动化。
+- **继续把 Shell 脚本作为公开接口。** 网络限制、脱敏与结构化结果仍会分散在各脚本中。
+- **开放任意 Grafana API 调用。** PIG 只需要仪表盘操作与少量偏好设置。
+- **按文件夹名称选择清理目标。** 名称可能重复。本地 JSON 提供仪表盘 UID，文件夹仅在清空后删除。
+- **内置默认密码。** 凭据应由用户配置。
 
 ## 契约 {#contract}
 
-- 每个请求都有连接与响应大小边界；
-- 拒绝不安全重定向与过大响应；
-- 认证操作前先检查公开 health；
-- 凭据来自显式安全输入、环境或 Inventory，不内置默认密码；
-- 命令行密码仅作为应急路径，并明确提示 argv 与 Shell 历史风险；
-- 错误与结构化结果不包含凭据或响应正文；
-- load 与 init 只处理 Pigsty 已知的仪表盘 bundle；
-- clean 只删除能够证明由 PIG/Pigsty 拥有的资产；
-- language 与 style 接受固定词表，并把 `auto` 映射到 Grafana 的 system 偏好；
-- schema v1 与 schema v2 仪表盘表示在客户端边界完成规范化。
+- 限制请求时间与响应大小，拒绝不安全的重定向。
+- 认证前检查公开健康端点。没有密码时，`info` 可以仅返回健康状态。
+- 凭据来自显式输入、环境或 Inventory；诊断与结构化结果不包含凭据和响应正文。
+- `list` 列出当前组织的全部仪表盘。
+- `load` 校验并导入所选本地文件，不删除远端仪表盘。
+- `boot` 将已有的 `pigsty` 仪表盘设为首页并收藏，将组织命名为 Pigsty。
+- `init` 装载完整仪表盘目录，全部成功后才执行 `boot`。
+- `dump` 将所选远端内容导出为确定性的 JSON，并原子写入文件。
+- `clean` 删除本地声明的 UID，再删除空文件夹。`--all` 显式选择整个当前组织。
+  两种模式都显示计划，并要求确认。
+- `lang` 与 `style` 修改组织和当前用户的对应偏好。样式 `auto` 映射为 Grafana 的 `system`。
+- 读写时统一处理受支持的 schema v1 与 v2 仪表盘格式。
 
 ## 影响 {#impact}
 
-原生客户端提供了更好的计划、错误分类与自动化结果，但必须维护自己拥有的那一小段 Grafana API。
-支持新仪表盘 schema 是合理演进，不代表会支持无关 Grafana 资源。
+装载与清理使用同一份本地声明，用户可以只操作一个仪表盘或文件夹。
+UID 匹配用于定位目标，不代表该仪表盘最初由 PIG 创建。执行清理前应审阅计划，
+尤其是使用 `--all` 时。
 
-运维人员可以继续使用其它 Grafana 客户端完成通用管理，PIG 不会声称拥有这些资源。
+数据源配置、插件安装与用户管理继续使用 Grafana 自身工具。
 
 ## 验证与演进 {#verification}
 
-原生仪表盘工作流落地于 [`3060485`](https://github.com/pgsty/pig/commit/3060485)。
-测试覆盖 health、认证、超时、重定向、大小限制、所有权检查、偏好请求、脱敏、部分失败与 load/dump。
-Dashboard schema v2 支持随后在 [`67f6e3b`](https://github.com/pgsty/pig/commit/67f6e3b) 中加入，
-并随 v1.6.2 发布。
+原生工作流落地于 [`3060485`](https://github.com/pgsty/pig/commit/3060485)，
+[`67f6e3b`](https://github.com/pgsty/pig/commit/67f6e3b) 加入仪表盘 schema v2 支持。
+[已发布测试](https://github.com/pgsty/pig/blob/v1.9.0/cli/sty/grafana_test.go)
+覆盖仅查健康状态、认证、装载范围、初始化顺序、导出稳定性、偏好更新、本地 UID 清理、
+显式全量清理与计划变更拒绝。HTTP 客户端测试覆盖超时、重定向、响应限制与脱敏。
 
 ## 当前状态 {#status}
 
-`pig sty grafana` 是 PIG 支持的 Pigsty 仪表盘生命周期入口。
-命令和凭据规则以当前 [`pig sty` 参考文档](/zh/sty/)为准；边界之外的资源使用 Grafana 原生工具。
+仪表盘工作流已经发布。路径选择、凭据与清理示例见
+[`pig sty grafana`](/zh/sty/#sty-grafana)。
