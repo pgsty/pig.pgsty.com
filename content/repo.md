@@ -241,6 +241,8 @@ SOW's `--pigsty` mode:
 2. Removes DEB packages for `i386`, and RPM/DEB packages named `patroni` with upstream version `3.0.4`.
 3. Generates RPM/DEB metadata and writes `repo_complete` last. The marker contains SHA-256 hashes for remaining top-level packages, sorted by basename.
 
+Documentation packages such as `annobin-docs` are retained unless another cleanup rule applies; a filename containing `docs` is not a reason to delete a package.
+
 SOW preserves non-package files and directories. It stops if a package cannot be parsed or package coordinates conflict. The legacy backend uses different cleanup rules and records MD5 hashes in `repo_complete`. PIG checks that this file exists; it does not check its hashes. Use the list to verify package integrity before distributing an offline bundle.
 
 ## repo cache
