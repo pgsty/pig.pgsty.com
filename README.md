@@ -129,7 +129,7 @@ that user questions filed against `pgsty/pig` stay separate from page comments.
 
 The pinned OINK module owns the documentation and blog layouts, navigation shell, search, table
 of contents, blocks and shortcodes, styles, scripts, fonts, and third-party
-runtimes. The site imports the pinned OINK 1.2.0 release as a Hugo Module.
+runtimes. The site imports the pinned OINK 1.3.0 release as a Hugo Module.
 
 The landing page and the download page keep their bespoke visual design, but
 they render *inside* the theme shell: OINK supplies `<head>`, the navbar, the
@@ -183,7 +183,7 @@ keep local overrides limited to PIG-specific behavior.
 
 ## Local development
 
-Install Hugo Extended 0.160.1 or newer, Go, and Git. OINK vendors its runtime
+Install Hugo Extended 0.166.0 or newer, Go, and Git. OINK vendors its runtime
 assets, so this site does not require Node.js, npm, or a CDN.
 
 Debug against the latest sibling OINK checkout with an inline Hugo Module
