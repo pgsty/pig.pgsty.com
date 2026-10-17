@@ -77,6 +77,8 @@ The 2026-10-16 refinement applies the same boundary to the next candidate:
   recorded port and socket. Ambiguous metadata fails before execution. Omitting `-D` preserves
   native client connection defaults; `/pg/data` remains the default for instance operations.
   Explicit empty or whitespace-only `-D` values fail before configuration or operational work.
+  Plans, confirmation retries, and verification commands preserve the same target and operation
+  options, including an explicit `-D /pg/data`. `VACUUM FULL` plans require confirmation, as execution does.
 - Fork replacement requires matching metadata
   with an explicit target for nonempty unmanaged directories, including non-PGDATA directories.
   Empty destinations remain usable; managed forks must be replaced by name. Private paths are

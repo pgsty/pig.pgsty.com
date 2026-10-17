@@ -127,6 +127,10 @@ pig pg psql -D /pg/data
 PIG 不追加主机或端口参数，也不会将连接绑定到 `/pg/data`。
 需要显式指定仅监听 TCP 的实例时，请使用原生客户端的连接参数。`pg clone` 和 `pg fork` 保留独立的端口参数。
 
+`promote`、`vacuum`、`repack` 的计划、确认重试和验证命令保留所选的数据目录、PostgreSQL 版本
+和操作系统用户，包括显式的 `-D /pg/data`。省略 `-D` 时仍保留 SQL 客户端的默认连接方式。
+`VACUUM FULL` 计划将确认标记为必需，与实际执行一致。
+
 `PIG_NON_INTERACTIVE=1` 与 JSON/YAML 输出关闭提示输入，并使用非交互 sudo。
 原生透传保留其交互契约；`psql -f -` 等显式数据输入通道仍然可用。
 

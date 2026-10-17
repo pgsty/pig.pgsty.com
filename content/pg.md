@@ -130,6 +130,11 @@ visible to the client; PIG does not add host or port arguments or bind the conne
 To explicitly target a TCP-only instance, use the native client with connection options.
 `pg clone` and `pg fork` retain their separate port options.
 
+Plans, confirmation retries, and verification commands for `promote`, `vacuum`, and `repack`
+preserve the selected data directory, PostgreSQL version, and operating-system user. This includes
+an explicit `-D /pg/data`; omitting `-D` continues to preserve native SQL connection defaults.
+`VACUUM FULL` plans report confirmation as required, matching execution.
+
 `PIG_NON_INTERACTIVE=1` and JSON/YAML output disable prompt stdin and use non-interactive sudo.
 Native passthrough retains its interaction contract; explicit data input such as `psql -f -`
 remains available.
