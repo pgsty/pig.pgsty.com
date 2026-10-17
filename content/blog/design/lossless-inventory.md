@@ -2,7 +2,7 @@
 title: "Edit the Declaration, Preserve the Document: Lossless Pigsty Inventory"
 linkTitle: "Lossless Inventory"
 date: 2026-07-18
-lastmod: 2026-10-16
+lastmod: 2026-10-17
 description: "Why pig inventory separates YAML semantics from source bytes so scoped edits can preserve comments, ordering, anchors, and formatting."
 tags: [inventory, sty]
 weight: 50
@@ -63,6 +63,10 @@ configuration on disk. The design needed source fidelity and whole-document corr
 The 2026-10-16 acceptance refinement preserves role-name strings and structured role grants in
 `pg_users[].roles`. Editing, serialization, and CMDB export must preserve YAML 1.1 string semantics,
 including `"1:30"`; `"010"` is a regression control, not a claim of an earlier defect.
+The 2026-10-17 refinement also requires dates and timestamps supplied as strings to remain strings
+when loaded by PyYAML. Existing timestamp values retain their source bytes as opaque scalars;
+this does not add date arithmetic or normalize the document. Acceptance compares emitted types
+with an independent YAML loader, rather than relying only on PIG's own round trip.
 
 [`sty deploy`](/sty/#sty-deploy) and [`do`](/do/) consume the configuration layer's already resolved
 Inventory path. Flag and environment relative paths use the caller's cwd, quoted `~/` uses the

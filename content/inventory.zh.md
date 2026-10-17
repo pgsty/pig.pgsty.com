@@ -100,7 +100,9 @@ pig inv v --strict -o json               # 结构化输出（CI 友好）
 
 `pg_users[].roles` 支持角色名字符串，也支持包含 `name` 的对象；可选字段为
 `state`（`grant`、`revoke`、`absent`），以及允许 null 的布尔字段 `admin`、`set`、`inherit`。
-编辑、序列化和 CMDB YAML 导出保留看起来像 YAML 1.1 标量的字符串类型，包括 `"1:30"` 与 `"010"`。
+编辑、序列化和 CMDB YAML 导出保留看起来像 YAML 1.1 标量的字符串类型，包括 `"1:30"`、`"010"`
+以及作为字符串传入的日期和时间戳；必要的引号防止下游 YAML 解析器改变类型。已有的未加引号
+或显式标记为时间戳的值保留原始内容，其标量类型为不透明的 `unknown`；需要字符串时应加引号。
 `show` 和显式 CMDB 导出保留原始数据输出契约。
 
 ## inv check

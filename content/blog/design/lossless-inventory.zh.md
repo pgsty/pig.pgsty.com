@@ -2,7 +2,7 @@
 title: "编辑声明，保留文档：无损 Pigsty Inventory"
 linkTitle: "无损 Inventory"
 date: 2026-07-18
-lastmod: 2026-10-16
+lastmod: 2026-10-17
 description: "为什么 pig inventory 将 YAML 语义与源字节分离，让局部编辑能够保留注释、顺序、锚点与格式。"
 tags: [inventory, sty]
 weight: 50
@@ -54,6 +54,9 @@ Pigsty Inventory 是长期存在的运维资产，包含拓扑、调优、凭据
 2026-10-16 的验收修订保留 `pg_users[].roles` 的角色名字符串与结构化授权对象兼容。
 编辑、序列化和 CMDB 导出必须保留 YAML 1.1 字符串语义，包括 `"1:30"`；`"010"` 是回归对照，
 不代表此前必然存在损坏。
+2026-10-17 的修订进一步要求：作为字符串传入的日期与时间戳，经 PyYAML 加载后仍为字符串。
+已有时间戳值作为不透明标量保留原始内容，不增加日期运算，也不归一化整个文档。
+验收使用独立 YAML 解析器检查写出后的类型，不能仅依赖 PIG 自身的往返解析。
 
 [`sty deploy`](/zh/sty/#sty-deploy) 与 [`do`](/zh/do/) 使用配置层已经解析的 Inventory 路径。
 参数和环境中的相对路径以调用者 cwd 为基准，带引号的 `~/` 使用用户主目录，默认来源在执行时
