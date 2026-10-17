@@ -9,6 +9,8 @@ cascade:
   images: [/images/pig-release.webp]
 ---
 
+The latest stable version is [v{{< param version >}}](/release/pig-{{< param version >}}/).
+
 Release notes for every published `pig` version, newest first. Artifacts and checksums for
 each version live on its [GitHub release page](https://github.com/pgsty/pig/releases).
 
