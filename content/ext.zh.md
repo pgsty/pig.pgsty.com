@@ -255,6 +255,9 @@ pig ext import -d /www/pigsty postgis # 指定路径导入
 已解析的 `packages`、确认完成的 `downloaded` 与无法解析的 `failed` 名称。
 原生下载命令失败也可能在目标目录留下文件；失败不表示回滚，也不表示下载完整。
 
+JSON/YAML 输出及 `PIG_NON_INTERACTIVE=1` 使用非交互 sudo。提权需要密码时，命令直接失败，
+不会等待输入；请先配置适当的 sudo 权限。
+
 ## ext link
 
 将指定 PG 版本链接到系统 PATH。

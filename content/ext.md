@@ -257,6 +257,9 @@ command exits with failure. Structured output preserves `requested`, resolved `p
 confirmed `downloaded` packages, and unresolved `failed` names. A native download failure can
 also leave files in the destination; it does not imply rollback or a complete download.
 
+JSON/YAML output and `PIG_NON_INTERACTIVE=1` use non-interactive sudo. If privilege escalation
+requires a password, the command fails instead of waiting for input; configure suitable sudo access first.
+
 ## ext link
 
 Link a selected PG version into the system PATH.
