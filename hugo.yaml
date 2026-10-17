@@ -23,7 +23,7 @@ module:
   proxy: direct
   hugoVersion:
     extended: true
-    min: "0.160.1"
+    min: "0.166.0"
   imports:
     - path: github.com/pgsty/oink
       disable: false
@@ -320,6 +320,8 @@ params:
   offline_search_max_results: 12
 
   ui:
+    preset: paper
+    preset_menu: [paper, slate, ink, terminal]
     blog_index_size: 60
     # 页尾分享栏：每一项都是普通 <a href> 意图链接或本地复制按钮，
     # 不引入任何第三方脚本、样式或计数。只有单页会渲染它。

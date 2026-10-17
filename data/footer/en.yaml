@@ -16,6 +16,8 @@ columns:
       - { label: Introduction, url: /intro/ }
       - { label: Command reference, url: /cmd/ }
       - { label: Release notes, url: /release/ }
+      - { label: "PG Center", url: "https://pg.center/docs/reference/", external: true }
+      - { label: "PGSQL.CC", url: "https://pgsql.cc/docs/", external: true }
   - title: Command reference
     links:
       - { label: pig repo, url: /repo/ }
@@ -28,3 +30,5 @@ columns:
       - { label: Issues, url: 'https://github.com/pgsty/pig/issues', external: true }
       - { label: Pigsty, url: 'https://pigsty.io/', external: true }
       - { label: PGSTY, url: 'https://pgsty.com/', external: true }
+      - { label: "PGEXT.CLOUD", url: "https://pgext.cloud/", external: true }
+      - { label: "PG Exporter", url: "https://exp.pgsty.com/", external: true }
