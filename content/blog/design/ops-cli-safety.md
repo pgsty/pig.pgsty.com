@@ -77,6 +77,9 @@ The 2026-10-16 to 2026-10-17 refinements apply the same boundary to the v1.10.0 
   `requested_modules` retains the original request; `removed_repos` describes the expanded actions.
   `repo add`, `repo set`, and `repo info` also reject explicit empty names and comma-separated
   empty entries as a whole request. Only omitted operands retain the add/set default of `all`.
+  Add/set also validate module-name syntax before initializing the repository manager. Unsafe
+  names reject the whole request; syntactically valid unknown names retain additive partial
+  success, while replacement rejects them before changes.
 - With an explicit `pg -D`, SQL operations and database enumeration bind to that directory's
   recorded port and socket. Ambiguous metadata fails before execution. Omitting `-D` preserves
   native client connection defaults; `/pg/data` remains the default for instance operations.
@@ -137,6 +140,9 @@ Fixed source commits and regression tests for the committed v1.10.0 refinements 
 [status error classification](https://github.com/pgsty/pig/commit/e6cd11f59590d158749eface28a470a78e17bba4). These commits do not establish a release boundary.
 The later [maintenance database-name and `--` operand boundaries](https://github.com/pgsty/pig/commit/5cf691b7fc559a5f3dd0c9d346927188f8b63375)
 include Cobra argument-reparse tests and a real libpq target-boundary regression test.
+The [repository operand preflight](https://github.com/pgsty/pig/commit/981726b27786be78832b2c1b457e55ebf7505fe9) rejects
+unsafe module names before key preparation or repository writes and preserves partial additive
+results for syntactically valid unknown modules.
 
 The normative command specifications entered the repository in
 [`c62c0f5`](https://github.com/pgsty/pig/commit/c62c0f5). Subsequent commits aligned aliases,
