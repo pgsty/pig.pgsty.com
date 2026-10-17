@@ -95,6 +95,9 @@ The 2026-10-16 refinement applies the same boundary to the next candidate:
   success in that state; list output reports `unknown` and `runtime_unknown: true`.
   Role detection also fails on an unknown running state; file-based role evidence cannot override
   a confirmed stopped state. Forced initialization reports probe failures separately from a running conflict.
+  Plan preconditions report indeterminate runtime state as `unknown`, never a passed check with PID zero.
+  Status queries distinguish permission failures (`130201`, exit `3`) from other probe failures
+  (`130808`, exit `1`); partial data in either failure cannot establish that the instance is stopped.
 - Timeline reporting binds SQL to the selected data directory's valid PID metadata and socket.
   If that cannot be resolved, it uses that directory's `pg_controldata` or reports an unknown
   timeline. Promotion execution and the requirement to verify the primary role stay unchanged.

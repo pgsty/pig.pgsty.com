@@ -276,6 +276,10 @@ PID, port, and available control-file information.
 A missing process or a PID independently identified as a different executable is stale.
 `EPERM` alone never proves that PostgreSQL has stopped. If process identity cannot be established,
 the state remains unknown and cannot authorize forced initialization or PITR restore.
+Plans report an indeterminate running-state check as `unknown`, without a usable PID or a passed
+precondition. `pg status` returns `130201` (exit `3`) for permission failures and `130808`
+(exit `1`) for other status-probe failures, such as invalid PID metadata or unavailable process identity.
+These results have `success: false`; their partial data does not establish that PostgreSQL is stopped.
 Stale PIDs no longer make PIG report an unrelated process as PostgreSQL; `pg_ctl` and PostgreSQL
 retain their own lock-file checks and may still require operator cleanup after a crash.
 A PID file copied from another directory does not identify the selected instance.
