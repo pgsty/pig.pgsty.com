@@ -178,6 +178,9 @@ pig pg psql -D /tmp/pg-restore
    等待 `pg_is_in_recovery()` 变为 false。其他目标需要自行检查恢复进度。
 7. 输出数据验证和后续恢复步骤的命令。
 
+拒绝确认或输入到达 EOF 时，返回 `CodePITRConfirmationRequired`（`161001`，退出码 `7`），
+不会停止 Patroni 或 PostgreSQL，也不会执行恢复或启动 PostgreSQL。
+
 `--plan` 执行预检查并返回计划，需要访问配置、数据目录和备份仓库，但不会停止服务或恢复数据。
 
 ## 更多示例

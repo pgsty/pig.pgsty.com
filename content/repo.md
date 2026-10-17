@@ -79,6 +79,10 @@ PIG filters each module by the current operating system and architecture. Run `p
 
 If the host already has working OS repositories, add `pgsql` for PGDG and Pigsty extension packages. `infra` supplies infrastructure tools and some PostgreSQL fork packages. `all` combines `node`, `infra`, and `pgsql`. Both `repo add` and `repo set` select `all` when no module is given.
 
+`repo add`, `repo set`, and `repo info` accept comma-separated names and surrounding whitespace.
+Explicit empty names, including an empty argument or `node,`, reject the whole request before
+repository operations. An empty argument is not equivalent to omitting the arguments.
+
 ## Repository Definitions
 
 The full repository definition bundled with Pigsty is in [`cli/repo/assets/repo.yml`](https://github.com/pgsty/pig/blob/main/cli/repo/assets/repo.yml).
@@ -187,7 +191,16 @@ pig repo set -m                  # explicitly select the China-region mirrors
 
 ## repo rm
 
-Remove repository configuration files and back them up.
+With truly no operands, move all repository definitions to the existing backup directory.
+Explicit module operands remove only those module files; `all` expands to `node`, `pgsql`, and
+`infra`, and does not mean every file. Empty strings, whitespace-only operands, empty comma
+items, and unsafe names fail before any repository or cache operation, even in a mixed list.
+`-u` updates the cache after either a successful full backup or module removal. Backup and
+restore behavior is unchanged.
+Removing an already absent module remains successful. The summary reports how many module files
+are now absent, without claiming that every request deleted an existing file. Custom module names
+remain supported within the repository directory.
+If a full backup finds no repository files, the summary reports that there is nothing to back up.
 
 ```bash
 pig repo rm                      # remove all repositories

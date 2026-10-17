@@ -186,6 +186,9 @@ It returns an error if it cannot resolve that instance.
    wait until `pg_is_in_recovery()` is false. For other targets, verify recovery progress yourself.
 7. Print commands for data verification and the remaining recovery steps.
 
+Declining confirmation or reaching EOF returns `CodePITRConfirmationRequired` (`161001`, exit
+status `7`) before stopping Patroni or PostgreSQL, restoring data, or starting PostgreSQL.
+
 `--plan` runs the prechecks and returns the planned actions. It needs access to the configuration,
 data directory, and backup repository, but does not stop services or restore data.
 

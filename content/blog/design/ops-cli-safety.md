@@ -2,7 +2,7 @@
 title: "One Grammar for Dangerous Work: PIG's Operations CLI Safety Contract"
 linkTitle: "Operations CLI Safety"
 date: 2026-07-02
-lastmod: 2026-10-13
+lastmod: 2026-10-17
 description: "How PIG separates primitives from orchestrators, makes destructive intent explicit, and prevents aliases or structured output from changing operational meaning."
 tags: [cli, postgres, pgbackrest, pitr]
 weight: 40
@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **Decision date:** 2026-07-02<br>
-> **Status:** Released for `pg`, `pb`, `pt`, and `pitr` by v1.5.0; the 2026-08-29 `do` and `build proxy` refinements were released in [v1.8.1](/release/pig-1.8.1/).<br>
+> **Status:** Released for `pg`, `pb`, `pt`, and `pitr` by v1.5.0; the 2026-08-29 `do` and `build proxy` refinements were released in [v1.8.1](/release/pig-1.8.1/). The 2026-10-16 acceptance refinements below are Accepted for the next release, with no new release claim.<br>
 > **Current reference:** [`pig pg`](/pg/), [`pig pb`](/pb/), [`pig pitr`](/pitr/), [`pig do`](/do/), and [`pig build`](/build/)<br>
 > **Scope:** PIG-owned operational commands; transparent upstream commands retain upstream confirmation and exit behavior.
 
@@ -62,6 +62,47 @@ rendering used different definitions of success.
 - the PITR orchestrator stops the manager when required, proves PostgreSQL is stopped, restores,
   optionally starts PostgreSQL, and deliberately leaves Patroni stopped for operator verification;
 - native tools receive extra arguments only through an explicit, documented boundary.
+
+The 2026-10-16 refinement applies the same boundary to the next candidate:
+
+- Cross-user DBSU writes stage an exclusively created private sibling, use mode `0600` and the
+  executing DBSU's ownership, reject symlink/non-regular destinations, replace the exact path,
+  and clean staging on failure. Linux uses an exact-target rename; macOS uses the system Perl
+  `rename` syscall because BSD `mv` has directory-target semantics.
+- [`repo rm`](/repo/#repo-rm) validates the whole operand list before changes. Only zero operands
+  mean full backup; `all` remains `node`, `pgsql`, and `infra`.
+  `repo add`, `repo set`, and `repo info` also reject explicit empty names and comma-separated
+  empty entries as a whole request. Only omitted operands retain the add/set default of `all`.
+- With an explicit `pg -D`, SQL operations and database enumeration bind to that directory's
+  recorded port and socket. Ambiguous metadata fails before execution. Omitting `-D` preserves
+  native client connection defaults; `/pg/data` remains the default for instance operations.
+  Explicit empty or whitespace-only `-D` values fail before configuration or operational work.
+- Fork replacement requires matching metadata
+  with an explicit target for nonempty unmanaged directories, including non-PGDATA directories.
+  Empty destinations remain usable; managed forks must be replaced by name. Private paths are
+  resolved as DBSU, and unresolved aliases fail closed. The 2026-10-17 review removes the extra
+  `/pg/data` prohibition: eligibility depends on target ownership, source/destination relationships,
+  and runtime state. A conventional path cannot identify every primary and may be a legitimate fork target.
+  Forced cleanup of managed orphan directories remains supported.
+  For unmanaged removal, a permission-denied local path check retries as the selected DBSU;
+  it must establish that the target is a directory and not a symlink before deletion can proceed.
+- `EPERM` alone must not authorize `pg init --force` or PITR restore. Independent executable
+  identity may establish PID reuse; unavailable identity remains unknown. A live PID must identify
+  PostgreSQL before lifecycle commands may signal it or connection metadata may be used for SQL.
+  Unknown state carries no usable PID for force-stop escalation. Fork start must not persist
+  success in that state; list output reports `unknown` and `runtime_unknown: true`.
+  Role detection also fails on an unknown running state; file-based role evidence cannot override
+  a confirmed stopped state. Forced initialization reports probe failures separately from a running conflict.
+- Timeline reporting binds SQL to the selected data directory's valid PID metadata and socket.
+  If that cannot be resolved, it uses that directory's `pg_controldata` or reports an unknown
+  timeline. Promotion execution and the requirement to verify the primary role stay unchanged.
+- PITR cancellation and EOF return confirmation-required (`161001`, exit `7`) before service
+  stops, restore, or restart. Acceptance must execute the confirmation path and observe zero
+  lifecycle side effects.
+- `PIG_NON_INTERACTIVE` and structured execution disable prompt stdin and add sudo `-n`, including
+  legacy structured wrappers. Native passthrough and explicit data stdin retain their contracts.
+- Sensitive captured output and error details remain private. Signing-key load errors never echo
+  the supplied key. Explicit raw exports remain available on their documented text surfaces.
 
 ## Consequences {#impact}
 

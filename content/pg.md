@@ -112,17 +112,27 @@ These options apply to all `pig pg` subcommands:
 | Option | Short | Default | Description |
 |:---|:---|:---|:---|
 | `--version` | `-v` | auto-detect | PostgreSQL major version |
-| `--data` | `-D` | `/pg/data` | Data directory path |
+| `--data` | `-D` | `/pg/data` for instance operations | Data directory path |
 | `--dbsu` | `-U` | `postgres` | PostgreSQL operating-system user; `$PIG_DBSU` overrides the default |
 {.full-width}
 
 Use `pig pg svc ...` to control the `postgres` systemd unit. Use the instance commands
-(`start`, `stop`, and so on) to operate on `-D` with `pg_ctl`.
+(`start`, `stop`, and so on) to operate on `-D` with `pg_ctl`, defaulting to `/pg/data`.
+An explicit empty or whitespace-only `-D` / `--data` is a parameter error; it does not select a default target.
 
-`-D` selects a data directory for instance operations and binds `pg psql` to that instance.
-For `pg ps`, `pg kill`, and table maintenance, it selects the PostgreSQL installation but does
-not set the SQL connection port or socket. For another endpoint, use the native client with
-explicit connection options. `pg clone` and `pg fork` have their own port options.
+When `-D` is explicitly supplied, `psql`, `ps`, `kill`, `vacuum`, `analyze`, `freeze`, and `repack`
+connect to that directory's instance, including database enumeration for `--all`. Before using its recorded
+port and socket, PIG verifies that the PID is live and identifies a PostgreSQL process.
+Missing, stale, invalid, or mismatched metadata and unknown process identity fail before a SQL
+client runs, without falling back to another connection target.
+Without `-D`, these SQL commands retain native client connection defaults and any `PGHOST`/`PGPORT`
+visible to the client; PIG does not add host or port arguments or bind the connection to `/pg/data`.
+To explicitly target a TCP-only instance, use the native client with connection options.
+`pg clone` and `pg fork` retain their separate port options.
+
+`PIG_NON_INTERACTIVE=1` and JSON/YAML output disable prompt stdin and use non-interactive sudo.
+Native passthrough retains its interaction contract; explicit data input such as `psql -f -`
+remains available.
 
 **Version Detection Logic:**
 
@@ -141,7 +151,8 @@ Initialize PostgreSQL data directory. Wraps `initdb`.
 - Encoding is UTF8. PostgreSQL 17+ uses the built-in `C.UTF-8` locale. Earlier versions use
   the system `C.UTF-8` locale when available, otherwise `C`.
 - An initialized directory requires `--force`, which removes its existing data after confirmation.
-  A running instance cannot be overwritten.
+  A running instance cannot be overwritten. If its running state cannot be verified, initialization
+  fails before removal and reports the probe error instead of claiming that PostgreSQL is running.
 - Put extra `initdb` arguments after `--`. To choose another locale or encoding, run `initdb` directly.
 
 ```bash
@@ -257,7 +268,18 @@ instance's process state. Service rows cover `patroni`, `pgbouncer`, `vip-manage
 Structured output describes the selected instance, including its data directory, version,
 PID, port, and available control-file information.
 
+A missing process or a PID independently identified as a different executable is stale.
+`EPERM` alone never proves that PostgreSQL has stopped. If process identity cannot be established,
+the state remains unknown and cannot authorize forced initialization or PITR restore.
+Stale PIDs no longer make PIG report an unrelated process as PostgreSQL; `pg_ctl` and PostgreSQL
+retain their own lock-file checks and may still require operator cleanup after a crash.
+A PID file copied from another directory does not identify the selected instance.
+
 ### pg promote
+
+Timeline reporting uses the selected instance's port and socket. If its PID metadata cannot be
+resolved, PIG reads that directory's control data or leaves the timeline unknown. This does not
+change promotion execution or its primary-role success check.
 
 Promote a standby or a paused recovery instance to a writable primary.
 Use `--plan` to inspect the action. Text mode requests confirmation; structured execution requires `--yes`.
@@ -308,6 +330,10 @@ pig pg role -D /data/pg18         # Specify data directory
 2. **Bound SQL query**: Use the selected instance's port/socket and verify `data_directory` before trusting `pg_is_in_recovery()`
 3. **Data directory check**: Check for `standby.signal`, `recovery.signal`, `recovery.conf` files
 
+File-based role detection does not establish whether PostgreSQL is running. A stopped instance
+can still report its configured role, but a stale PID file never makes it appear alive.
+If the running-state probe fails, the command returns an error instead of reporting a role as verified.
+
 ## Connection & Query Commands
 
 ### pg psql
@@ -330,7 +356,9 @@ pig pg psql -f script.sql         # Execute SQL script file
 {.full-width}
 
 With `-D`, PIG reads that directory's `postmaster.pid` as the selected operating-system user.
-It connects to the recorded port and Unix socket. Missing or invalid postmaster information returns an error.
+It verifies the live process before connecting to the recorded port and Unix socket.
+A stopped or uncertain target returns an error. Without `-D`, psql retains its native connection
+defaults and any `PGHOST`/`PGPORT` visible to it.
 
 For `-o json` or `-o yaml`, specify `-c` or `-f`; interactive psql uses text mode.
 
@@ -419,6 +447,7 @@ pig pg clone meta meta_fork --plan      # Preview clone plan
 
 On PostgreSQL 18+ with `file_copy_method=clone` and a compatible filesystem, the copy can use
 copy-on-write (CoW). Otherwise it uses an ordinary copy. Use `pg fork` to copy an entire instance.
+Filesystem preflight runs as the selected database system user, including for a private `0700` data directory.
 Text mode requests confirmation; structured execution requires `--yes`.
 
 ## Database Maintenance Commands
@@ -613,13 +642,16 @@ pig pg fork init dev --plan           # Show execution plan only
 
 - When the source instance is running, the command uses PostgreSQL low-level backup APIs to create a consistent physical copy; when the source is stopped, it can perform a cold copy.
 - The command prefers CoW/reflink. If only ordinary copy is available, interactive mode warns about disk-space risk and waits for confirmation.
-- To avoid deleting source data by mistake, the target directory cannot be `/`, `/pg`, source PGDATA, or a parent/child of source PGDATA. Symlinks are resolved before checks.
+- The target cannot be `/`, `/pg`, source PGDATA, or a parent/child of source PGDATA. Symlinks are resolved before checking the source/destination relationship. `/pg/data` follows the same ownership, relationship, and runtime checks as other data directories.
+- Replacing a nonempty unmanaged target requires valid unmanaged `pg_fork` metadata in `fork.json` with an explicitly recorded `target.data` matching the directory. An arbitrary directory without `PG_VERSION` is not eligible for deletion. Missing, damaged, incomplete, or mismatched metadata is refused. An empty directory remains usable with `--force`. Managed forks must be replaced by name. A running or uncertain destination cannot be replaced. Forced removal by name still permits cleanup of a managed orphan under `/pg/data-<name>`.
+- Path validation resolves private directories as DBSU when the caller cannot traverse them; unresolved paths and source/destination aliases are refused.
+- Unmanaged fork removal checks an inaccessible target as the selected DBSU. The target must be a real directory; a symlink or failed check still prevents removal.
 - After copy, runtime and replication state is cleaned from the fork and `fork.json` is written. The new instance starts only when `-s|--start` is specified.
 - Managed forks must be managed by name. Unmanaged forks require `--dst-data` when starting, stopping, or removing.
 
 **List Forks:**
 
-`pig pg fork list` scans `/pg/data-*`, reads `fork.json`, and refreshes each managed fork's runtime state. Text output shows `NAME`, `PORT`, `STATE`, `PID`, `AGE`, `SOURCE`, `COPY`, and `DATA`; state is reported as `running`, `stopped`, or `orphan`.
+`pig pg fork list` scans `/pg/data-*`, reads `fork.json`, and refreshes each managed fork's runtime state. Text output shows `NAME`, `PORT`, `STATE`, `PID`, `AGE`, `SOURCE`, `COPY`, and `DATA`; state is reported as `running`, `stopped`, `orphan`, or `unknown`. Unknown state sets `runtime_unknown: true` in structured output without claiming that the fork has started. Lifecycle operations fail without rewriting metadata in that state.
 
 JSON and YAML put fork records in the result's `data` array. Records include source and target
 endpoints, copy and backup metadata, management commands, and PIG build metadata.

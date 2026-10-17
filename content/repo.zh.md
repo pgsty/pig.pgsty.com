@@ -79,6 +79,9 @@ pig repo set
 
 已有可用的系统软件源时，添加 `pgsql` 即可获取 PGDG 与 Pigsty 扩展包。`infra` 提供基础设施工具和部分 PostgreSQL 分支内核包。`all` 是 `node`、`infra`、`pgsql` 的组合；不带参数的 `repo add` 和 `repo set` 默认选择 `all`。
 
+`repo add`、`repo set`、`repo info` 支持逗号分隔的名称，并忽略名称两侧的空白。
+空参数、纯空白或 `node,` 中的空项会使整次请求在操作仓库前失败；显式空参数不等于省略参数。
+
 ## 仓库定义
 
 Pigsty 中可用仓库的完整定义位于 [`cli/repo/assets/repo.yml`](https://github.com/pgsty/pig/blob/main/cli/repo/assets/repo.yml)。
@@ -187,7 +190,13 @@ pig repo set -m                  # 明确选择中国区域镜像
 
 ## repo rm
 
-移除仓库配置文件并备份它们。
+真正不带参数时，将全部软件源定义移到既有备份目录。显式模块参数只删除对应模块文件；
+`all` 只展开为 `node`、`pgsql`、`infra`，不代表所有文件。空字符串、纯空白、逗号空项与
+不安全名称会在任何仓库或缓存操作前失败，混合列表也不例外。`-u` 在成功全量备份或模块删除后
+更新缓存。原有备份与恢复契约保持不变。
+目标模块文件已不存在时仍返回成功；摘要报告已确保不存在的模块数，不宣称每次请求都删除了
+既有文件。仍支持仓库目录内的自定义模块名称。
+全量备份没有找到仓库文件时，摘要明确报告没有文件需要备份。
 
 ```bash
 pig repo rm                      # 移除所有仓库
