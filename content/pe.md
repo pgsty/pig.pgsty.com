@@ -81,8 +81,9 @@ pig pe reload
 Use `-o json` or `-o yaml` for a PIG result that contains the command's text output.
 Prometheus metrics remain text inside that result.
 
-Network and response-read errors return a nonzero exit code. PIG does not check HTTP status codes
-for these commands. To make an HTTP error fail a script, call the endpoint with `curl --fail`.
+Network errors, response-read errors, and HTTP 4xx/5xx responses return a nonzero exit code.
+HTTP error details contain the status code and standard description, without the response body.
+Successful responses retain the filtering or raw text behavior described above.
 
 To install pg_exporter, use `pig ext add pg-exporter`. Configure and start the exporter before
 using `pig pe`; these commands access its HTTP API.

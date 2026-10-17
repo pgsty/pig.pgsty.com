@@ -22,6 +22,7 @@ tags: [cli]
 - [**pig pb**](/pb/): manage pgBackRest backup and restore
 - [**pig pitr**](/pitr/): run the full PITR workflow
 - **pig context**: output an environment context snapshot for humans and agents
+- **pig license**: issue and verify Pigsty licenses
 - **pig status / update / version**: inspect environment status, upgrade pig, and print version information
 
 ## Global options
@@ -173,6 +174,15 @@ pig pe stat                    # show exporter statistics
 pig pe reload                  # reload pg_exporter configuration
 pig pe --host 127.0.0.1 -p 9630 get
 ```
+
+## pig license {#license}
+
+`pig license issue <name>` delivers the newly issued license to its caller. Text output includes
+the token; JSON/YAML preserve it in `data.captured_output`. Successful issuance is an explicit
+credential-delivery operation, so that result must be stored as a credential. The signing key is
+never included in arguments, parameters, or diagnostics returned in the result. Raw key-loading
+errors are replaced with fixed messages. Parameter errors and safe signing-key failure reasons
+remain available in text, JSON, and YAML. `license status` and `license verify` do not reveal tokens.
 
 ## pig context
 

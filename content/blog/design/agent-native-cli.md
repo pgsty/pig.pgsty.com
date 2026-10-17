@@ -2,7 +2,7 @@
 title: "From Human-Friendly to Agent-Native: PIG's CLI Contract"
 linkTitle: "Agent-Native CLI"
 date: 2026-02-12
-lastmod: 2026-10-13
+lastmod: 2026-10-17
 description: "How PIG separates terminal text, structured results, execution plans, and environment context."
 tags: [cli]
 weight: 10
@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **Decision date:** 2026-02-12<br>
-> **Status:** Released in [pig v1.1.0](/release/pig-1.1.0/) and refined by later command-layer work.<br>
+> **Status:** Released in [pig v1.1.0](/release/pig-1.1.0/) and refined by later command-layer work. The 2026-10-16 refinements below are Accepted for the next release.<br>
 > **Current reference:** [`pig` command overview](/cmd/)<br>
 > **Scope:** PIG-owned commands and their machine-consumption contract; opaque passthrough commands keep their native interface.
 
@@ -59,6 +59,22 @@ The durable contract is:
 - status codes distinguish usage, confirmation, environment, dependency, and execution failures;
 - `pig context` provides a bounded environment snapshot rather than forcing consumers to infer it;
 - transparent passthroughs retain the upstream contract.
+
+The 2026-10-16 refinements apply the same contract to [`pig ext`](/ext/):
+
+- Availability checks and every summary format share matrix precedence, architecture aliases,
+  and the metadata fallback. macOS reports declared PostgreSQL support without promising packages.
+  This describes the catalog's package snapshot. Default [build targets](/build/#build-ext) retain
+  their metadata and local-installation rules independently of the matrix.
+- Partial imports return failure while preserving resolved, downloaded, and unresolved items.
+  Completed downloads remain on disk; the operation does not promise an atomic transaction.
+- [`pig pe`](/pe/) treats HTTP 4xx/5xx as failure. Error details expose the numeric status and
+  standard description, never the response body or server-supplied reason phrase.
+- [`pig license issue`](/cmd/#license) explicitly delivers a newly issued credential. Its successful
+  structured result preserves the token in `data.captured_output`. Signing-key input is omitted
+  from parameters, and raw key-loading errors are replaced with fixed messages at the command
+  boundary. Parameter errors and safe signing-key diagnostics remain readable in every output
+  format. Other sensitive command wrappers retain full output and error-detail redaction.
 
 ## Consequences {#impact}
 

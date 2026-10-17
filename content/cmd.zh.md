@@ -22,6 +22,7 @@ tags: [cli]
 - [**pig pb**](/zh/pb/)：管理 pgBackRest 备份与恢复
 - [**pig pitr**](/zh/pitr/)：进行完整 PITR 工作流
 - **pig context**：输出面向人工和 Agent 的环境上下文快照
+- **pig license**：签发和验证 Pigsty 许可证
 - **pig status / update / version**：查看环境、升级 pig、打印版本信息
 
 ## 全局选项
@@ -172,6 +173,14 @@ pig pe stat                    # 查看 exporter 统计信息
 pig pe reload                  # 重载 pg_exporter 配置
 pig pe --host 127.0.0.1 -p 9630 get
 ```
+
+## pig license {#license}
+
+`pig license issue <name>` 将新签发的许可证交付给调用方。文本输出包含 Token；JSON/YAML 在
+`data.captured_output` 中保留 Token。成功签发属于明确的凭据交付操作，应将结果作为凭据保存。
+签名私钥不会出现在结果的参数或诊断信息中，私钥加载的原始错误替换为固定文案。
+参数错误和不含私钥的签名密钥失败原因在文本、JSON、YAML 中均保留。
+`license status` 与 `license verify` 不回显 Token。
 
 ## pig context
 

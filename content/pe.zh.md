@@ -80,7 +80,7 @@ pig pe reload
 使用 `-o json` 或 `-o yaml` 获取包含命令文本输出的 PIG 结果。
 Prometheus 指标在结果中仍以文本保存。
 
-网络或响应读取失败时，命令返回非零退出码。这些命令不检查 HTTP 状态码。
-如果脚本需要在 HTTP 错误时退出，使用 `curl --fail` 访问端点。
+网络错误、响应读取失败及 HTTP 4xx/5xx 都返回非零退出码。
+HTTP 错误详情只包含状态码与标准说明，不包含响应体；正常响应保留上述筛选或原文输出行为。
 
 使用 `pig ext add pg-exporter` 安装 pg_exporter。配置并启动 exporter 后，再使用 `pig pe` 访问其 HTTP API。
