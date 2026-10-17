@@ -161,6 +161,11 @@ pig build pgrx -b                # 自动探测时包含 PostgreSQL 19 beta pg_c
 
 ## build proxy
 
+旧源码生成的无管理注释 macOS LaunchAgent，在完整内容匹配时可直接升级，无需 `--replace`。
+识别依据是完整生成内容，不能只凭管理注释接管文件。外来或修改过的服务文件仍需
+`--replace --yes`。一次性迁移注释后，相同配置重复执行不会重启服务。
+此兼容结论针对已验证的旧源码格式，不代表覆盖所有已发布二进制。
+
 为互联网访问受限的构建环境设置 Xray 客户端与服务端，保留 `x` 别名。
 不带参数的 `pig build proxy` 只安装或确认 Xray。
 设计依据见 [Xray 设计记录](/zh/design/xray-client-server/)。
@@ -302,6 +307,12 @@ pig build dep citus --pg 17,16   # 为特定 PG 版本
 ## build ext
 
 编译扩展并创建安装包。
+
+`build ext` 和 `build pkg` 未指定 `--pg` 时，沿用扩展版本元数据和平台例外规则选择版本；
+Debian/Ubuntu 还会参考本机安装的 PG 版本。包矩阵缺包或缺项不会移除构建目标，
+显式 `--pg` 继续选择指定版本。
+Debian/Ubuntu 构建保留原 `PATH` 的顺序；当前用户的 `~/.cargo/bin` 存在时，将其追加到末尾，
+保留用户已选工具链的优先级。
 
 调试包默认启用。包含编译产物的 RPM 构建通常会额外生成 `debuginfo` 与 `debugsource`，
 基于 Debhelper 的构建通常会额外生成 `dbgsym`。纯 SQL、架构无关或采用特殊配方的包可能没有

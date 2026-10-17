@@ -2,7 +2,7 @@
 title: "一键配置 Xray 客户端与服务端"
 linkTitle: "Xray 客户端与服务端"
 date: 2026-10-05
-lastmod: 2026-10-13
+lastmod: 2026-10-17
 description: "以现有可工作的客户端与服务端为参考，为 build proxy 增加配套的 VLESS、REALITY 与 Vision 初始化能力。"
 tags: [build, cli, install]
 weight: 90
@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **决策日期：** 2026-10-05<br>
-> **状态：** Released（已发布），随 [v1.9.0](/zh/release/pig-1.9.0/) 交付。<br>
+> **状态：** Released（已发布），随 [v1.9.0](/zh/release/pig-1.9.0/) 交付。 下述 2026-10-16 验收修订状态为 Accepted，面向下一次发版，不增加已发布声明。<br>
 > **当前参考：** [`pig build`](/zh/build/)、[运维安全契约](/zh/design/ops-cli-safety/)与[发布历史](/zh/release/)<br>
 > **范围：** 一键配置 Xray 客户端与服务端；Linux 客户端和服务端，以及 macOS 客户端。共享 Nginx 入口仍是独立部署边界。
 
@@ -209,6 +209,14 @@ Shell 历史或进程检查可能保留这些凭据；需要避免留存时仍�
 生成等价的 Xray 配置应覆盖参考配对的全部协议与认证字段。复现完整参考部署还需要 Nginx 的
 SNI map、接收 PROXY 头的网站后端，以及操作系统特定的服务注册。当前实现管理 Xray 及其服务设置，
 不宣称可从一个服务端 URI 还原这套 Nginx 组合。配置等价不要求逐字节保留 tag、字段顺序或安装专属名称。
+
+2026-10-16 的兼容修订接受旧渲染器生成、配置与二进制路径匹配的完整无 marker macOS plist。
+管理注释本身不足以证明归属。修改过或外来的文件需要显式替换；Linux 识别也限制为完整生成的
+两种 capability 配置。一次性迁移注释后，相同执行必须保留运行中的服务。
+
+无 marker 测试样例来自实际执行旧渲染函数。其源文件与公开可访问的
+[`v1.9.0` 源码 `9eb54888`](https://github.com/pgsty/pig/blob/9eb5488847ea34827a74c9f8bb7b2dd3778f5190/cli/build/xray.go)
+逐字节相同。这证明旧源码格式，不代表验证了某个已发布二进制。
 
 ## 影响 {#impact}
 
