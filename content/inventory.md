@@ -99,6 +99,11 @@ pig inv v --strict -o json               # structured output (CI-friendly)
 
 Validation follows Pigsty's configuration rules, including requirements for `admin_ip`, the `infra` group, and host addresses. The file must contain one YAML document with no duplicate keys. These parsing rules also apply to `show` and `edit`.
 
+`pg_users[].roles` accepts role names and objects containing `name`, optional
+`state` (`grant`, `revoke`, `absent`), and nullable boolean `admin`, `set`, and `inherit`.
+Editing, serialization, and CMDB YAML export preserve strings that look like YAML 1.1 scalars,
+including `"1:30"` and `"010"`. `show` and explicit CMDB exports retain their raw-data contract.
+
 ## inv check
 
 Readiness checks on top of static validation: by default only the inventory and local

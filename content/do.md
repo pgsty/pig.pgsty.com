@@ -20,6 +20,11 @@ pig do node-pkg   pg-meta restic          # install a package on selected nodes
 pig do redis-add  redis-meta              # initialize a Redis cluster
 ```
 
+Inventory selection is shared with [`sty deploy`](/sty/#sty-deploy). PIG passes the resolved
+source to Ansible without interpreting it again relative to Pigsty home. Missing explicit,
+environment, or default sources fail before playbook execution. Existing directory and executable
+Inventory sources remain Ansible inputs; static Inventory commands do not execute them.
+
 ## Command overview
 
 | Command | Purpose | Required arguments |

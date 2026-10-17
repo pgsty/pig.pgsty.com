@@ -20,6 +20,10 @@ pig do node-pkg   pg-meta restic          # 在选中节点安装软件包
 pig do redis-add  redis-meta              # 初始化 Redis 集群
 ```
 
+Inventory 来源与 [`sty deploy`](/zh/sty/#sty-deploy) 使用同一配置解析结果，不再按 Pigsty home
+重新解释路径。显式、环境或默认来源不存在时，在执行剧本前失败。既有的目录与可执行 Inventory
+来源仍交给 Ansible；静态 Inventory 命令不会执行它们。
+
 ## 命令总览
 
 | 命令 | 用途 | 必需参数 |

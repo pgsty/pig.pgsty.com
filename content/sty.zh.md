@@ -211,6 +211,11 @@ PIG 检查操作系统、软件包管理器、控制节点资源、SSH、sudo �
 
 ## sty deploy
 
+`sty deploy` 使用配置层已经选定的 Inventory 来源。`-i` 和 `PIGSTY_INVENTORY` 的相对路径
+以调用者工作目录为基准；带引号的 `~/` 按用户主目录展开。选定的绝对路径通过 `-i` 传给 Ansible，
+默认来源也一样；Ansible 的工作目录仍为 Pigsty home。来源不存在时失败，不静默回退。
+deploy 仍要求普通文件；动态来源的执行仍由 Ansible 负责。
+
 使用 deploy.yml 剧本部署 Pigsty。
 
 ```bash
@@ -230,8 +235,11 @@ pig sty de           # 短别名
 ```bash
 pig sty list                     # 列出近期版本
 pig sty list all                 # 列出所有可用版本
-pig sty list 4                   # 列出从 4.x 起的版本
+pig sty list 4                   # 从最新的 4.x 稳定版起列出版本
 ```
+
+版本前缀使用与 `sty get` 相同的补全规则，以最高匹配稳定版作为列表起点。
+匹配按版本分段区分，`1.1` 不会匹配 `1.10`。精确版本（含预发行版）和 `latest` 的含义不变。
 
 ## sty get
 

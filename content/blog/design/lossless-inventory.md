@@ -2,7 +2,7 @@
 title: "Edit the Declaration, Preserve the Document: Lossless Pigsty Inventory"
 linkTitle: "Lossless Inventory"
 date: 2026-07-18
-lastmod: 2026-10-13
+lastmod: 2026-10-16
 description: "Why pig inventory separates YAML semantics from source bytes so scoped edits can preserve comments, ordering, anchors, and formatting."
 tags: [inventory, sty]
 weight: 50
@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **Decision date:** 2026-07-18<br>
-> **Status:** Implemented and released in [pig v1.6.0](/release/pig-1.6.0/).<br>
+> **Status:** Implemented and released in [pig v1.6.0](/release/pig-1.6.0/). The 2026-10-16 acceptance refinements below are Accepted for the next release, with no new release claim.<br>
 > **Current reference:** [`pig inventory`](/inventory/)<br>
 > **Scope:** Static Pigsty Inventory inspection, scoped editing, validation, comparison, and safe writes.
 
@@ -59,6 +59,15 @@ configuration on disk. The design needed source fidelity and whole-document corr
 - a successful edit removes group and other permissions, preserving the owner's existing read and write permissions;
 - diagnostics, diffs, plans, and structured results omit declaration values unless a command is
   explicitly a raw text surface.
+
+The 2026-10-16 acceptance refinement preserves role-name strings and structured role grants in
+`pg_users[].roles`. Editing, serialization, and CMDB export must preserve YAML 1.1 string semantics,
+including `"1:30"`; `"010"` is a regression control, not a claim of an earlier defect.
+
+[`sty deploy`](/sty/#sty-deploy) and [`do`](/do/) consume the configuration layer's already resolved
+Inventory path. Flag and environment relative paths use the caller's cwd, quoted `~/` uses the
+user's home, and defaults remain explicit at execution. Missing sources do not fall back.
+Static inspection still never executes dynamic sources; Ansible retains its execution boundary.
 
 ## Consequences {#impact}
 

@@ -2,7 +2,7 @@
 title: "编辑声明，保留文档：无损 Pigsty Inventory"
 linkTitle: "无损 Inventory"
 date: 2026-07-18
-lastmod: 2026-10-13
+lastmod: 2026-10-16
 description: "为什么 pig inventory 将 YAML 语义与源字节分离，让局部编辑能够保留注释、顺序、锚点与格式。"
 tags: [inventory, sty]
 weight: 50
@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **决策日期：** 2026-07-18<br>
-> **状态：** 已实现并随 [pig v1.6.0](/zh/release/pig-1.6.0/) 发布。<br>
+> **状态：** 已实现并随 [pig v1.6.0](/zh/release/pig-1.6.0/) 发布。 下述 2026-10-16 验收修订状态为 Accepted，面向下一次发版，不增加已发布声明。<br>
 > **当前参考：** [`pig inventory`](/zh/inventory/)<br>
 > **范围：** 静态 Pigsty Inventory 的查看、局部编辑、校验、比较与安全写入。
 
@@ -50,6 +50,14 @@ Pigsty Inventory 是长期存在的运维资产，包含拓扑、调优、凭据
 - 拒绝符号链接与不安全路径变化；
 - 成功编辑后移除组和其他用户的权限，保留所有者原有的读写权限；
 - 除非命令明确属于原始文本输出接口，诊断、diff、计划与结构化结果都不输出声明值。
+
+2026-10-16 的验收修订保留 `pg_users[].roles` 的角色名字符串与结构化授权对象兼容。
+编辑、序列化和 CMDB 导出必须保留 YAML 1.1 字符串语义，包括 `"1:30"`；`"010"` 是回归对照，
+不代表此前必然存在损坏。
+
+[`sty deploy`](/zh/sty/#sty-deploy) 与 [`do`](/zh/do/) 使用配置层已经解析的 Inventory 路径。
+参数和环境中的相对路径以调用者 cwd 为基准，带引号的 `~/` 使用用户主目录，默认来源在执行时
+也保持显式。来源缺失不得回退。静态检查仍不执行动态来源；执行边界继续由 Ansible 负责。
 
 ## 影响 {#impact}
 

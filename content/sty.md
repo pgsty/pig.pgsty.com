@@ -216,6 +216,12 @@ See the [Pigsty configuration guide](https://pigsty.io/docs/setup/install/#confi
 
 ## sty deploy
 
+`sty deploy` uses the Inventory source already selected by configuration. `-i` and
+`PIGSTY_INVENTORY` relative paths resolve from the invoking directory; quoted `~/` expands from
+the user's home. The selected absolute path is passed with `-i`, including the default source,
+while Ansible runs in Pigsty home. A missing source fails without fallback. Deploy still
+requires a regular file; dynamic source execution remains Ansible's responsibility.
+
 Deploy Pigsty with the `deploy.yml` playbook.
 
 ```bash
@@ -235,8 +241,12 @@ List available Pigsty versions.
 ```bash
 pig sty list                     # list recent versions
 pig sty list all                 # list all available versions
-pig sty list 4                   # list versions from 4.x onward
+pig sty list 4                   # list from the latest stable 4.x version onward
 ```
+
+A version prefix selects the highest matching stable version as the starting point, using the
+same completion rule as `sty get`. Matching respects component boundaries (`1.1` does not match
+`1.10`). Exact versions, including prereleases, and `latest` keep their existing meaning.
 
 ## sty get
 

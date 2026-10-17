@@ -98,6 +98,11 @@ pig inv v --strict -o json               # 结构化输出（CI 友好）
 
 校验规则面向 Pigsty 配置，包括 `admin_ip`、`infra` 分组和主机地址要求。文件必须是单个 YAML 文档，且不能有重复键；这些解析规则同样适用于 `show` 和 `edit`。
 
+`pg_users[].roles` 支持角色名字符串，也支持包含 `name` 的对象；可选字段为
+`state`（`grant`、`revoke`、`absent`），以及允许 null 的布尔字段 `admin`、`set`、`inherit`。
+编辑、序列化和 CMDB YAML 导出保留看起来像 YAML 1.1 标量的字符串类型，包括 `"1:30"` 与 `"010"`。
+`show` 和显式 CMDB 导出保留原始数据输出契约。
+
 ## inv check
 
 在静态校验之上做就绪体检：默认只检查清单与控制器本地条件，可用 `--profile` 追加探测。
