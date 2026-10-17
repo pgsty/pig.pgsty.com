@@ -25,6 +25,25 @@ tags: [inventory, sty]
 
 使用全局 `-i, --inventory` 选择配置清单，或通过 `-H, --home` 选择 Pigsty 安装目录。未指定时，PIG 从当前配置和 Pigsty 安装目录解析清单来源。除 `show` 原样输出 YAML 外，其他命令支持 `-o json` 或 `-o yaml` 结构化结果。
 
+## 来源选择 {#source-selection}
+
+PIG 按以下优先级选择第一个已配置的来源。选中的来源缺失或无效时报告该问题，
+不会回退到另一份清单。
+
+| 优先级 | 来源 | 相对路径的基准目录 |
+|:---|:---|:---|
+| 1 | `-i, --inventory PATH` | 当前工作目录 |
+| 2 | `PIGSTY_INVENTORY` | 当前工作目录 |
+| 3 | `~/.pig/config.yml` 中的 `inventory` | 已解析的 Pigsty 安装目录 |
+| 4 | Pigsty 安装目录的 `ansible.cfg` 中的 `[defaults] inventory` | `ansible.cfg` 所在目录 |
+| 5 | `pigsty.yml` | 已解析的 Pigsty 安装目录 |
+
+PIG 在解析路径前展开 `~/`，包括 `ansible.cfg` 中带引号的路径。
+`pig inv status` 只检查选中的来源，不执行动态清单。静态 Inventory 操作要求受支持的 YAML 来源。
+[`pig do`](/zh/do/) 可以将目录或可执行清单交给 Ansible；
+[`pig sty deploy`](/zh/sty/#sty-deploy) 要求普通文件。两者都显式向 Ansible 传入解析后的路径，
+避免 Ansible 静默选择另一份默认清单。
+
 ## 快速入门
 
 ```bash

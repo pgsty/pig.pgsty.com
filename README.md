@@ -231,7 +231,7 @@ language-local search indexes consumed by the shared OINK command palette.
 - Version numbers come from site params, not prose:
   `{{< param version >}}` is the `pig` version,
   `{{< param pigsty_version >}}` is the embedded Pigsty version, and
-  `{{< param pgext_count >}}` is the packaged extension count. Keep them in
+  `{{< param pgext_count >}}` is the catalog entry count, including SQL utilities and retained records. Keep them in
   sync with `internal/config/config.go` in the `pig` repository.
 
 ## License

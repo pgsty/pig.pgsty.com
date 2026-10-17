@@ -73,9 +73,9 @@ PGDG 默认路径为 EL 的 `/usr/pgsql-18/bin/pg_config`，以及 Debian/Ubuntu
 ```bash
 pig ext list                     # 列出所有扩展
 pig ext list duck                # 搜索包含 "duck" 的扩展
-pig ext list -v 18               # 按 PG 版本筛选
+pig ext list -v 18               # 按 PG 18 判断可用性
 pig ext ls olap                  # 列出 olap 类别扩展
-pig ext ls gis -v 16             # 列出 PG 16 的 GIS 类扩展
+pig ext ls gis -v 16             # 列出 GIS 条目及其在 PG 16 上的可用性
 pig ext ls rag                   # 列出 RAG 类别扩展
 ```
 
@@ -83,7 +83,7 @@ pig ext ls rag                   # 列出 RAG 类别扩展
 
 **选项：**
 
-- `-v|--version`：按 PG 版本筛选
+- `-v|--version`：指定判断可用性时使用的 PG 版本；不可用的条目仍会列出
 - `--pkg`：显示包名而非扩展名，仅列出主导扩展
 
 **Status 列说明：**
@@ -154,6 +154,8 @@ pig ext scan [-v version]
 ```
 
 该命令读取所选 PostgreSQL 安装目录中的控制文件及相关文件。
+同时按目录元数据匹配共享库名称，因此没有控制文件的条目也可以显示为已安装，
+但这不意味着该条目支持 `CREATE EXTENSION`。
 
 ## ext add
 
@@ -254,6 +256,9 @@ pig ext import -d /www/pigsty postgis # 指定路径导入
 部分名称无法解析时，已解析出的包仍会下载，但命令以失败退出。结构化结果保留 `requested`、
 已解析的 `packages`、确认完成的 `downloaded` 与无法解析的 `failed` 名称。
 原生下载命令失败也可能在目标目录留下文件；失败不表示回滚，也不表示下载完整。
+
+Debian/Ubuntu 上，`<virtual-package>` 这样的虚拟依赖标记不会加入下载包名列表，
+真实软件包依赖仍参与下载。
 
 JSON/YAML 输出及 `PIG_NON_INTERACTIVE=1` 使用非交互 sudo。提权需要密码时，命令直接失败，
 不会等待输入；请先配置适当的 sudo 权限。

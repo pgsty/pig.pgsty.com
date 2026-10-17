@@ -39,6 +39,12 @@ tags: [cli]
 
 PIG-owned results support structured output. Raw-content commands such as `inventory show` and passthrough commands such as `pt list` retain their native output. See the command reference for details.
 
+Structured results keep diagnostics and wrapped-tool chatter on stderr. JSON/YAML output and
+`PIG_NON_INTERACTIVE=1` disable prompt input in PIG-owned command adapters and use `sudo -n`;
+they do not supply destructive-operation confirmation. Pass `--yes` where required.
+Documented data input, such as `pig pg psql -f -`, remains available. Native Patronictl
+forwarding retains its own interaction and output contract and rejects PIG structured-output modes.
+
 ```bash
 pig repo list
 pig ext list vector -o json
@@ -263,6 +269,9 @@ pig update -v X.Y.Z              # upgrade to a version published by the configu
 pig version                      # show pig version information
 pig version -o json              # structured version output
 ```
+
+`pig update` uses the native package manager on supported Linux distributions. On macOS,
+download the new archive and replace the executable as described in [Installation](/install/).
 
 If `~/.pig/config.yml` has a syntax error, fix it before running commands that read configuration, such as `pig status`. `pig version` and the `pig pe` HTTP commands remain available because they do not read this file.
 

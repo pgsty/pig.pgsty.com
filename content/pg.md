@@ -134,6 +134,8 @@ Plans, confirmation retries, and verification commands for `promote`, `vacuum`, 
 preserve the selected data directory, PostgreSQL version, and operating-system user. This includes
 an explicit `-D /pg/data`; omitting `-D` continues to preserve native SQL connection defaults.
 `VACUUM FULL` plans report confirmation as required, matching execution.
+Generated maintenance commands put the database name after `--`, so a name such as `--all`
+cannot become an option when the command is copied and executed.
 
 `PIG_NON_INTERACTIVE=1` and JSON/YAML output disable prompt stdin and use non-interactive sudo.
 Native passthrough retains its interaction contract; explicit data input such as `psql -f -`
@@ -461,6 +463,14 @@ Text mode requests confirmation; structured execution requires `--yes`.
 
 ## Database Maintenance Commands
 
+The `[dbname]` operand of `vacuum`, `analyze`, `freeze`, and `repack` accepts a database name.
+Values containing `=` or starting with `postgres://` or `postgresql://` are rejected as connection
+strings before planning, confirmation, or execution; errors do not echo the value.
+With `--all`, `vacuum`, `analyze`, and `freeze` validate the full database list before any maintenance runs.
+Use the native client when you need a connection string. Spaces and non-ASCII database names remain supported.
+For names beginning with `-`, put all options first and use `--` before the name, for example
+`pig pg vacuum --full --plan -- --all` previews the single database named `--all`.
+
 ### pg vacuum
 
 Run SQL `VACUUM` through psql. The default database is `postgres`.
@@ -538,7 +548,7 @@ pig pg repack -a                  # Repack all databases
 pig pg repack mydb -t mytable     # Repack specific table
 pig pg repack mydb --schema myschema  # Repack tables in schema
 pig pg repack mydb -j 4           # Use 4 parallel jobs
-pig pg repack mydb --plan         # Show tables to be repacked
+pig pg repack mydb --plan         # Preview target and command without running pg_repack
 ```
 
 **Options:**

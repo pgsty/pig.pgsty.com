@@ -39,6 +39,12 @@ tags: [cli]
 
 PIG 自己管理的结果支持结构化输出。原始内容命令（如 `inventory show`）和透传命令（如 `pt list`）保留原生输出，具体格式见对应参考页。
 
+结构化结果将诊断信息与被调用工具的普通输出放在 stderr。JSON/YAML 输出及
+`PIG_NON_INTERACTIVE=1` 禁用 PIG 命令适配器的提示输入，并使用 `sudo -n`；
+它们不代替破坏性操作的确认，需要时仍应传入 `--yes`。
+`pig pg psql -f -` 等明确的数据输入通道继续可用。原生 Patronictl 转发保留自身的交互与输出契约，
+不接受 PIG 的结构化输出模式。
+
 ```bash
 pig repo list
 pig ext list vector -o json
@@ -261,6 +267,9 @@ pig update -v X.Y.Z              # 升级到已发布在当前软件仓库中的
 pig version                      # 显示 pig 版本信息
 pig version -o json              # 结构化版本输出
 ```
+
+`pig update` 在受支持的 Linux 发行版上调用系统包管理器。macOS 请按[安装文档](/zh/install/)
+下载新版本压缩包并替换可执行文件。
 
 如果 `~/.pig/config.yml` 存在语法错误，请先修正，再运行 `pig status` 等读取配置的命令。`pig version` 和 `pig pe` HTTP 命令不读取该文件，仍可使用。
 

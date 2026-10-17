@@ -189,6 +189,11 @@ It returns an error if it cannot resolve that instance.
 Declining confirmation or reaching EOF returns `CodePITRConfirmationRequired` (`161001`, exit
 status `7`) before stopping Patroni or PostgreSQL, restoring data, or starting PostgreSQL.
 
+An indeterminate PostgreSQL runtime state is an error, not proof that the instance is stopped.
+PIG will not restore over an unverified instance or use an unverified PID for forced termination.
+After restoration, an unknown runtime state cannot count as successful startup and prevents
+follow-up SQL checks against an unverified connection target.
+
 `--plan` runs the prechecks and returns the planned actions. It needs access to the configuration,
 data directory, and backup repository, but does not stop services or restore data.
 

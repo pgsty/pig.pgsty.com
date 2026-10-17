@@ -2,7 +2,7 @@
 title: "PIG 2.0 Product Direction"
 linkTitle: "PIG 2.0 Proposal"
 date: 2026-08-13
-lastmod: 2026-10-13
+lastmod: 2026-10-17
 description: "The proposed PIG 2.0 boundary: a stable Pigsty onboarding front door, verifiable Catalog client, and thin orchestrator that keeps deployment explicit."
 tags: [cli, sty, catalog]
 weight: 85
@@ -12,7 +12,7 @@ draft: false
 
 > **Decision date:** 2026-08-13<br>
 > **Status:** Proposal for review; not implemented.<br>
-> **Current reference:** [PIG documentation](/docs/) and the current [v1.9.0 release](/release/pig-1.9.0/)<br>
+> **Current reference:** [PIG documentation](/docs/) and [release history](/release/)<br>
 > **Scope:** Candidate product boundaries and verification gates for a future PIG 2.0 / Pigsty 5.0 line.
 
 ## Decision {#decision}

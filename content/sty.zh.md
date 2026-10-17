@@ -71,8 +71,8 @@ pig sty boot -o json                 # 返回机器可读的结果与告警
 ```
 
 命令可以不带 `sudo` 直接调用：Pig 会先解析并下载显式来源，需要 root 权限时再通过 `sudo`
-进行一次自重启。设置 `PIG_NO_SUDO=1` 可禁用自动提权；设置 `PIG_NON_INTERACTIVE=1` 可让
-sudo 使用非交互模式。
+进行一次自重启。设置 `PIG_NO_SUDO=1` 可禁用自动提权。JSON/YAML 输出及
+`PIG_NON_INTERACTIVE=1` 使用非交互 sudo；提权需要密码时直接失败，不等待输入。
 
 ### 引导阶段
 
@@ -167,7 +167,7 @@ Inventory 输出文件，全局小写 `-o` 用于选择 text、JSON 或 YAML 命
 | `--domain NAME` | 只替换精确的 `i.pigsty`，不会误改 `cli.pigsty` 或 `i.pigsty.cc`；NAME 必须是合法 DNS 域名。 |
 | 小规格控制节点 | 探测到 CPU 少于四核时，将 `node_tune: oltp` 与 `pg_conf: oltp.yml` 改为对应的 `tiny` 配置。 |
 | `--region REGION` | 非默认区域会更新 `all.vars.region`；`china` 还会启用模板中已有的 Docker 与 pip 镜像值。 |
-| `--proxy` | 将非空的 `HTTP_PROXY`/`http_proxy`、`HTTPS_PROXY`（缺失时回退到 `ALL_PROXY`）、`ALL_PROXY` 与 `NO_PROXY` 写入 `all.vars.proxy_env`；必要时补充安全的默认 no-proxy 列表。 |
+| `--proxy` | 读取 `HTTP_PROXY`、`HTTPS_PROXY`、`ALL_PROXY` 与 `NO_PROXY`，每项都在大写值缺失时回退到对应的小写变量。HTTP/HTTPS 缺失时回退到 ALL_PROXY。将非空值写入 `all.vars.proxy_env`，必要时补充默认 no-proxy 列表。 |
 | `--version MAJOR` | 通用模板支持 PostgreSQL 14-18，以及显式指定的 19 beta，并选择匹配的 locale；版本固定的 `mssql`、`polar` 与 `pgNN` 模式保留模板版本并给出告警。 |
 | `--generate` | 每个已知凭据标识符生成一个 24 位随机值，并一致替换其生效值和文档化占位符。 |
 

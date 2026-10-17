@@ -306,6 +306,10 @@ pig build dep citus --pg 17,16   # for selected PG versions
 
 - `--pg`: specify one or more PostgreSQL major versions. If omitted, pig infers versions from extension metadata or local PostgreSQL installations.
 
+For a list such as `--pg 17,16`, version-specific dependency names are expanded for every
+selected major version and duplicates are removed before installation. The same dependency
+step is used by `build pkg`.
+
 ## build ext
 
 Compile extensions and create installation packages.

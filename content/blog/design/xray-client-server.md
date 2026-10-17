@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **Decision date:** 2026-10-05<br>
-> **Status:** Released in [v1.9.0](/release/pig-1.9.0/). The 2026-10-16 acceptance refinements below are Accepted for the next release, with no new release claim.<br>
+> **Status:** Released in [v1.9.0](/release/pig-1.9.0/). The 2026-10-16 refinements below are Implemented in the v1.10.0 candidate, not yet released.<br>
 > **Current reference:** [`pig build`](/build/), [operations safety](/design/ops-cli-safety/), and [release history](/release/)<br>
 > **Scope:** One-command Xray client and server setup; Linux clients and servers, plus a macOS client. Shared Nginx ingress remains a separate deployment boundary.
 
@@ -273,6 +273,10 @@ The implementation uses `cmd/build.go` and focused files under `cli/build`. It r
 existing plan, output, confirmation, privileged-write, and logging helpers.
 
 ## Verification and evolution {#verification}
+
+Fixed source commits and regression tests for the committed v1.10.0 refinements cover:
+[complete legacy service recognition](https://github.com/pgsty/pig/commit/9ab5be72360a2d1344e90df3cafd2cff2d914b2a). These commits do not establish a release boundary.
+The v1.9.0 runtime evidence below covers the original implementation.
 
 The implementation is recorded in
 [`d090b7c`](https://github.com/pgsty/pig/commit/d090b7c9ab9301c06f9ccb2151c732d598f0e40c),

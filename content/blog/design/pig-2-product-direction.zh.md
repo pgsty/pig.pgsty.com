@@ -2,7 +2,7 @@
 title: "PIG 2.0 产品方向"
 linkTitle: "PIG 2.0 提案"
 date: 2026-08-13
-lastmod: 2026-10-13
+lastmod: 2026-10-17
 description: "PIG 2.0 提案：统一 Pigsty 初始化入口，校验 Catalog，固定项目所用版本，并保留独立部署步骤。"
 tags: [cli, sty, catalog]
 weight: 85
@@ -12,7 +12,7 @@ draft: false
 
 > **决策日期：** 2026-08-13<br>
 > **状态：** 提案，待审议，尚未实现。<br>
-> **当前参考：** [PIG 文档](/zh/docs/)与当前 [v1.9.0 发布](/zh/release/pig-1.9.0/)<br>
+> **当前参考：** [PIG 文档](/zh/docs/)与[发布历史](/zh/release/)<br>
 > **范围：** 未来 PIG 2.0 / Pigsty 5.0 的候选产品边界与验证门槛。
 
 ## 决策 {#decision}

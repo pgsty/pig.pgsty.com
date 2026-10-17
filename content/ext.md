@@ -73,9 +73,9 @@ List or search extensions in the extension catalog.
 ```bash
 pig ext list                     # list all extensions
 pig ext list duck                # search extensions containing "duck"
-pig ext list -v 18               # filter by PG version
+pig ext list -v 18               # evaluate availability for PG 18
 pig ext ls olap                  # list OLAP category extensions
-pig ext ls gis -v 16             # list GIS extensions for PG 16
+pig ext ls gis -v 16             # list GIS entries with PG 16 availability
 pig ext ls rag                   # list RAG category extensions
 ```
 
@@ -83,7 +83,7 @@ Category filtering is done by passing the category name as the query. Supported 
 
 **Options:**
 
-- `-v|--version`: filter by PG version
+- `-v|--version`: select the PG version used to evaluate availability; unavailable entries remain in the list
 - `--pkg`: show package names instead of extension names, listing only leading extensions
 
 **Status column:**
@@ -155,6 +155,8 @@ pig ext scan [-v version]
 ```
 
 The command reads control files and related installation paths for the selected PostgreSQL installation.
+It also matches shared-library names against catalog metadata, so a catalog entry without a
+control file can still be reported as installed. This does not imply `CREATE EXTENSION` support.
 
 ## ext add
 
@@ -256,6 +258,9 @@ If some names cannot be resolved, successfully resolved packages are still downl
 command exits with failure. Structured output preserves `requested`, resolved `packages`,
 confirmed `downloaded` packages, and unresolved `failed` names. A native download failure can
 also leave files in the destination; it does not imply rollback or a complete download.
+
+On Debian/Ubuntu, virtual dependency markers such as `<virtual-package>` are excluded from
+the package download list; real package dependencies remain eligible.
 
 JSON/YAML output and `PIG_NON_INTERACTIVE=1` use non-interactive sudo. If privilege escalation
 requires a password, the command fails instead of waiting for input; configure suitable sudo access first.

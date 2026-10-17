@@ -181,6 +181,10 @@ pig pg psql -D /tmp/pg-restore
 拒绝确认或输入到达 EOF 时，返回 `CodePITRConfirmationRequired`（`161001`，退出码 `7`），
 不会停止 Patroni 或 PostgreSQL，也不会执行恢复或启动 PostgreSQL。
 
+PostgreSQL 运行状态无法确定时会报错，不会将其视为已经停止。
+PIG 不会覆盖恢复到状态未确认的实例，也不会用未经验证的 PID 强制终止进程。
+恢复后状态仍然未知时，不能判定启动成功，也不会向未确认的连接目标执行后续 SQL 检查。
+
 `--plan` 执行预检查并返回计划，需要访问配置、数据目录和备份仓库，但不会停止服务或恢复数据。
 
 ## 更多示例

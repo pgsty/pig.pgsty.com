@@ -72,7 +72,8 @@ pig sty boot -o json                 # machine-readable result and warnings
 
 You may invoke the command without `sudo`. Pig resolves and downloads an explicit source first,
 then re-executes itself through `sudo` once when root access is required. Set `PIG_NO_SUDO=1` to
-disable automatic elevation, or `PIG_NON_INTERACTIVE=1` to make the sudo attempt non-interactive.
+disable automatic elevation. JSON/YAML output and `PIG_NON_INTERACTIVE=1` make sudo
+non-interactive; if elevation requires a password, the command fails without waiting for input.
 
 ### Bootstrap stages
 
@@ -170,7 +171,7 @@ The command applies these changes to the template:
 | `--domain NAME` | Replaces only the exact `i.pigsty` token, not names such as `cli.pigsty` or `i.pigsty.cc`; NAME must be a valid DNS domain. |
 | small controller | When detected CPU count is below four, rewrites `node_tune: oltp` and `pg_conf: oltp.yml` to their `tiny` profiles. |
 | `--region REGION` | Updates `all.vars.region` for non-default regions. `china` also activates template-provided Docker and pip mirrors, using values already present in the template. |
-| `--proxy` | Writes non-empty `HTTP_PROXY`/`http_proxy`, `HTTPS_PROXY` (falling back to `ALL_PROXY`), `ALL_PROXY`, and `NO_PROXY` values into `all.vars.proxy_env`; a safe default no-proxy list is used when needed. |
+| `--proxy` | Reads `HTTP_PROXY`, `HTTPS_PROXY`, `ALL_PROXY`, and `NO_PROXY`, each falling back to its lowercase spelling. Missing HTTP/HTTPS values fall back to ALL_PROXY. Writes non-empty values to `all.vars.proxy_env` and supplies a default no-proxy list when needed. |
 | `--version MAJOR` | Updates generic templates for PostgreSQL 14-18, or explicit 19 beta, and selects the matching locale. Version-pinned `mssql`, `polar`, and `pgNN` modes keep their template version and report a warning. |
 | `--generate` | Generates one 24-character value per known credential identifier and consistently replaces its active values and documented placeholders. |
 

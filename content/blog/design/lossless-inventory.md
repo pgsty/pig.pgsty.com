@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **Decision date:** 2026-07-18<br>
-> **Status:** Implemented and released in [pig v1.6.0](/release/pig-1.6.0/). The 2026-10-16 acceptance refinements below are Accepted for the next release, with no new release claim.<br>
+> **Status:** Implemented and released in [pig v1.6.0](/release/pig-1.6.0/). The 2026-10-16 to 2026-10-17 refinements below are Implemented in the v1.10.0 candidate, not yet released.<br>
 > **Current reference:** [`pig inventory`](/inventory/)<br>
 > **Scope:** Static Pigsty Inventory inspection, scoped editing, validation, comparison, and safe writes.
 
@@ -84,6 +84,11 @@ Inventory can contain custom credential fields, so field names alone cannot reli
 For this reason, `show` prints the selected declaration as raw text. Metadata and validation commands omit declaration values.
 
 ## Verification and evolution {#verification}
+
+Fixed source commits and regression tests for the committed v1.10.0 refinements cover:
+[resolved sources and role grants](https://github.com/pgsty/pig/commit/7be9b2b6cd31603de0e8a564aa5e9859b936b8e3),
+[date-like string preservation](https://github.com/pgsty/pig/commit/a3ea1e50befbf412ae1267d57f1dbf1b26dd530d),
+[independent YAML consumer acceptance](https://github.com/pgsty/pig/commit/eb3fc1e4ff39318972277fd96626ffa2c449f01d). These commits do not establish a release boundary.
 
 The root Inventory contract and existing-CMDB boundary were established in
 [`ba6e678`](https://github.com/pgsty/pig/commit/ba6e678), with the implementation landing in

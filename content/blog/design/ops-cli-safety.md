@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **Decision date:** 2026-07-02<br>
-> **Status:** Released for `pg`, `pb`, `pt`, and `pitr` by v1.5.0; the 2026-08-29 `do` and `build proxy` refinements were released in [v1.8.1](/release/pig-1.8.1/). The 2026-10-16 acceptance refinements below are Accepted for the next release, with no new release claim.<br>
+> **Status:** Released for `pg`, `pb`, `pt`, and `pitr` by v1.5.0; the 2026-08-29 `do` and `build proxy` refinements were released in [v1.8.1](/release/pig-1.8.1/). The acceptance refinements below are Implemented for v1.10.0; source evidence is listed under verification. They are not yet released.<br>
 > **Current reference:** [`pig pg`](/pg/), [`pig pb`](/pb/), [`pig pitr`](/pitr/), [`pig do`](/do/), and [`pig build`](/build/)<br>
 > **Scope:** PIG-owned operational commands; transparent upstream commands retain upstream confirmation and exit behavior.
 
@@ -45,6 +45,9 @@ rendering used different definitions of success.
   coordination has additional stop, verification, and restart invariants.
 - **Return success after launching the inner command.** Rejected because the result must reflect the
   complete owned workflow.
+- **Restrict maintenance database names to ASCII identifiers.** Rejected because spaces and
+  non-ASCII names are valid inputs. Reject libpq connection-string syntax instead, and preserve
+  the positional boundary when generating commands.
 
 ## Contract {#contract}
 
@@ -63,7 +66,7 @@ rendering used different definitions of success.
   optionally starts PostgreSQL, and deliberately leaves Patroni stopped for operator verification;
 - native tools receive extra arguments only through an explicit, documented boundary.
 
-The 2026-10-16 refinement applies the same boundary to the next candidate:
+The 2026-10-16 to 2026-10-17 refinements apply the same boundary to the v1.10.0 candidate:
 
 - Cross-user DBSU writes stage an exclusively created private sibling, use mode `0600` and the
   executing DBSU's ownership, reject symlink/non-regular destinations, replace the exact path,
@@ -80,6 +83,12 @@ The 2026-10-16 refinement applies the same boundary to the next candidate:
   Explicit empty or whitespace-only `-D` values fail before configuration or operational work.
   Plans, confirmation retries, and verification commands preserve the same target and operation
   options, including an explicit `-D /pg/data`. `VACUUM FULL` plans require confirmation, as execution does.
+  The 2026-10-17 maintenance refinement rejects connection-string database operands before plans,
+  confirmation, or execution, without echoing the supplied value. A libpq connection string could
+  otherwise override the selected host/port and expose credentials. `vacuum`, `analyze`, and `freeze`
+  validate the complete enumerated database list before any maintenance starts.
+  Generated `vacuum` and `repack` commands place all options before `--` and the database name,
+  preserving a name such as `--all` as a single-database operand.
 - Fork replacement requires matching metadata
   with an explicit target for nonempty unmanaged directories, including non-PGDATA directories.
   Empty destinations remain usable; managed forks must be replaced by name. Private paths are
@@ -120,11 +129,22 @@ Plans show the affected resources and actions so operators can review recovery b
 
 ## Verification and evolution {#verification}
 
+Fixed source commits and regression tests for the committed v1.10.0 refinements cover:
+[runtime identity and SQL targets](https://github.com/pgsty/pig/commit/526410e2cbbfa9658533d179bff91a8cdc190ffd),
+[fork ownership and private paths](https://github.com/pgsty/pig/commit/9db279947ef5d2492956a482a984685e8f807c5f),
+[PITR cancellation and unknown state](https://github.com/pgsty/pig/commit/54d4bae5480a2424ec4842e64ca8e9f810e8d354),
+[plan target preservation](https://github.com/pgsty/pig/commit/da0706fa3c676b8d912b4c7a556ee58dbe8045f3),
+[status error classification](https://github.com/pgsty/pig/commit/e6cd11f59590d158749eface28a470a78e17bba4). These commits do not establish a release boundary.
+The later [maintenance database-name and `--` operand boundaries](https://github.com/pgsty/pig/commit/5cf691b7fc559a5f3dd0c9d346927188f8b63375)
+include Cobra argument-reparse tests and a real libpq target-boundary regression test.
+
 The normative command specifications entered the repository in
 [`c62c0f5`](https://github.com/pgsty/pig/commit/c62c0f5). Subsequent commits aligned aliases,
 early validation, restore targets, service semantics, and role detection. Guard tests traverse the
 Cobra tree to reject sibling and cross-layer alias collisions. Recovery tests cover plan,
 confirmation, stop escalation, side restores, restart behavior, and structured failure results.
+Maintenance regression checks must reparse generated commands with Cobra and exercise the real
+libpq client against controlled local endpoints; checking for `-h` and `-p` in argv alone is insufficient.
 
 Patroni later moved to transparent passthrough. That refinement keeps the same safety principle:
 PIG owns safeguards only for workflows it owns.

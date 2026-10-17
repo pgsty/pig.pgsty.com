@@ -130,6 +130,7 @@ PIG 不追加主机或端口参数，也不会将连接绑定到 `/pg/data`。
 `promote`、`vacuum`、`repack` 的计划、确认重试和验证命令保留所选的数据目录、PostgreSQL 版本
 和操作系统用户，包括显式的 `-D /pg/data`。省略 `-D` 时仍保留 SQL 客户端的默认连接方式。
 `VACUUM FULL` 计划将确认标记为必需，与实际执行一致。
+生成的维护命令将数据库名放在 `--` 之后，避免 `--all` 这样的库名在复制执行时变成选项。
 
 `PIG_NON_INTERACTIVE=1` 与 JSON/YAML 输出关闭提示输入，并使用非交互 sudo。
 原生透传保留其交互契约；`psql -f -` 等显式数据输入通道仍然可用。
@@ -454,6 +455,13 @@ PostgreSQL 18+ 配置 `file_copy_method=clone` 且文件系统支持时，可使
 
 ## 数据库维护命令
 
+`vacuum`、`analyze`、`freeze`、`repack` 的 `[dbname]` 参数接收数据库名。
+包含 `=` 或以 `postgres://`、`postgresql://` 开头的值会被当作连接串，在生成计划、确认和执行前拒绝；
+错误信息不回显该值。`vacuum`、`analyze`、`freeze` 使用 `--all` 时，会在任何维护操作前校验完整库名列表。
+需要连接串时，请使用原生客户端。库名仍支持空格和中文等非 ASCII 字符。
+库名以 `-` 开头时，将全部选项放在前面，再用 `--` 分隔库名；例如
+`pig pg vacuum --full --plan -- --all` 只预览名为 `--all` 的单个数据库。
+
 ### pg vacuum
 
 通过 psql 执行 SQL `VACUUM`，默认数据库为 `postgres`。
@@ -533,7 +541,7 @@ pig pg repack -a                  # 重整所有数据库
 pig pg repack mydb -t mytable     # 重整指定表
 pig pg repack mydb --schema myschema  # 重整指定 schema 中的表
 pig pg repack mydb -j 4           # 使用 4 个并行任务
-pig pg repack mydb --plan         # 显示将被重整的表
+pig pg repack mydb --plan         # 预览目标与命令，不执行 pg_repack
 ```
 
 **选项：**

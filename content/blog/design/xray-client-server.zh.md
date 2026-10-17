@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **决策日期：** 2026-10-05<br>
-> **状态：** Released（已发布），随 [v1.9.0](/zh/release/pig-1.9.0/) 交付。 下述 2026-10-16 验收修订状态为 Accepted，面向下一次发版，不增加已发布声明。<br>
+> **状态：** Released（已发布），随 [v1.9.0](/zh/release/pig-1.9.0/) 交付。 下述验收修订已实现（Implemented），纳入 v1.10.0 候选版本，尚未发布。<br>
 > **当前参考：** [`pig build`](/zh/build/)、[运维安全契约](/zh/design/ops-cli-safety/)与[发布历史](/zh/release/)<br>
 > **范围：** 一键配置 Xray 客户端与服务端；Linux 客户端和服务端，以及 macOS 客户端。共享 Nginx 入口仍是独立部署边界。
 
@@ -230,6 +230,10 @@ SNI map、接收 PROXY 头的网站后端，以及操作系统特定的服务注
 与日志辅助函数。
 
 ## 验证与演进 {#verification}
+
+v1.10.0 已提交修订的固定源码与回归测试证据包括：
+[完整旧服务定义识别](https://github.com/pgsty/pig/commit/9ab5be72360a2d1344e90df3cafd2cff2d914b2a)。这些提交不构成版本发布证据。
+下列 v1.9.0 运行验证针对原始实现。
 
 实现提交为
 [`d090b7c`](https://github.com/pgsty/pig/commit/d090b7c9ab9301c06f9ccb2151c732d598f0e40c)，

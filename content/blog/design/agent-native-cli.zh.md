@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **决策日期：** 2026-02-12<br>
-> **状态：** 随 [pig v1.1.0](/zh/release/pig-1.1.0/) 发布，之后随命令层演进调整。下述 2026-10-16 修订为 Accepted，面向下一次发版。<br>
+> **状态：** 随 [pig v1.1.0](/zh/release/pig-1.1.0/) 发布，之后随命令层演进调整。下述验收修订已实现（Implemented），纳入 v1.10.0 候选版本，尚未发布。<br>
 > **当前参考：** [`pig` 命令总览](/zh/cmd/)<br>
 > **范围：** PIG 命令的自动化接口，以及外部工具的原生透传接口。
 
@@ -78,6 +78,11 @@ stdout 纯净性需要测试，包装器也不能承诺比被委托工具更高�
 输出方式由命令决定：PIG 操作使用 PIG 结果，转发工具使用原生输出。
 
 ## 验证与演进 {#verification}
+
+v1.10.0 已提交修订的固定源码与回归测试证据包括：
+[可用性与计数](https://github.com/pgsty/pig/commit/863a271a924a1634630247643d9d96200a98572d)、
+[部分导入失败](https://github.com/pgsty/pig/commit/a0e9cc477f3834607c03620cb7c77187773218b5)、
+[exporter HTTP 失败](https://github.com/pgsty/pig/commit/2214f598101c82ffb2b3bf2a6a7dd15d6f025483)。这些提交不构成版本发布证据。
 
 最初框架随 [v1.1.0](https://github.com/pgsty/pig/releases/tag/v1.1.0) 发布。
 命令层整合提交 [`fb93602`](https://github.com/pgsty/pig/commit/fb93602) 随后删除重复包装器，

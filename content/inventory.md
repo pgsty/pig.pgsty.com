@@ -25,6 +25,25 @@ When you edit a fragment, PIG preserves the YAML content and formatting outside 
 
 Use global `-i, --inventory` to select the inventory or `-H, --home` to select the Pigsty directory. Without these options, PIG resolves the source from its configuration and the Pigsty directory. Commands support structured results with `-o json` or `-o yaml`, except `show`, which always prints the selected YAML verbatim.
 
+## Source selection {#source-selection}
+
+PIG selects the first configured source in this order. If a selected source is missing or invalid,
+PIG reports that problem instead of falling through to another inventory.
+
+| Priority | Source | Base for a relative path |
+|:---|:---|:---|
+| 1 | `-i, --inventory PATH` | Current working directory |
+| 2 | `PIGSTY_INVENTORY` | Current working directory |
+| 3 | `inventory` in `~/.pig/config.yml` | Resolved Pigsty home |
+| 4 | `[defaults] inventory` in the Pigsty home's `ansible.cfg` | Directory containing `ansible.cfg` |
+| 5 | `pigsty.yml` | Resolved Pigsty home |
+
+PIG expands `~/` before resolving the path, including a quoted path in `ansible.cfg`.
+`pig inv status` reports the selected source without executing it. Static Inventory operations
+require a supported YAML source. [`pig do`](/do/) can forward a directory or executable inventory
+to Ansible; [`pig sty deploy`](/sty/#sty-deploy) requires a regular file. Both pass the resolved
+path explicitly to Ansible, so it cannot silently select a different default.
+
 ## Quick Start
 
 ```bash

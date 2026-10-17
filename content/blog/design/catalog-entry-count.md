@@ -2,7 +2,7 @@
 title: "One Catalog Entry Count for the Website and CLI"
 linkTitle: "Catalog Entry Count"
 date: 2026-10-16
-lastmod: 2026-10-16
+lastmod: 2026-10-17
 description: "Count every catalog record consistently across the website, extension lists, availability summaries, and catalog refresh results."
 tags: [catalog, ext, cli]
 weight: 96
@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **Decision date:** 2026-10-16<br>
-> **Status:** Accepted; this decision does not establish a release boundary.<br>
+> **Status:** Implemented in the v1.10.0 candidate, not yet released.<br>
 > **Current reference:** [`pig ext` catalog count](/ext/#catalog-count)<br>
 > **Scope:** Catalog totals and default listing membership; package installation and SQL activation rules remain defined by each entry.
 
@@ -53,6 +53,9 @@ not a count of extensions enabled in a database or installable on a particular h
 
 ## Verification {#verification}
 
+Fixed source commits and regression tests for the committed v1.10.0 refinements cover:
+[catalog entry count and availability](https://github.com/pgsty/pig/commit/863a271a924a1634630247643d9d96200a98572d). These commits do not establish a release boundary.
+
 The preceding classification rule is preserved in the
 [v1.9.0 catalog source](https://github.com/pgsty/pig/blob/9eb5488847ea34827a74c9f8bb7b2dd3778f5190/cli/ext/catalog.go).
 Acceptance checks compare parsed record counts with default lists, availability summaries, and
@@ -61,6 +64,6 @@ search and package counts specific to their returned rows.
 
 ## Status {#status}
 
-Accepted on 2026-10-16. Implementation and release status require their own fixed source revision
-and tag or artifact evidence. Use the [current reference](/ext/#catalog-count) for the counting
+Accepted on 2026-10-16 and implemented with regression tests. The v1.10.0 candidate
+bundles 603 records and is not yet released. Use the [current reference](/ext/#catalog-count) for the counting
 contract and [release notes](/release/) for version boundaries.
