@@ -201,6 +201,8 @@ Removing an already absent module remains successful. The summary reports how ma
 are now absent, without claiming that every request deleted an existing file. Custom module names
 remain supported within the repository directory.
 If a full backup finds no repository files, the summary reports that there is nothing to back up.
+Structured results retain the original operands in `requested_modules`, including `all` and comma-separated
+arguments; `removed_repos` lists the expanded modules and their individual outcomes.
 
 ```bash
 pig repo rm                      # remove all repositories

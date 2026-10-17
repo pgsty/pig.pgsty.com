@@ -59,6 +59,7 @@ PostgreSQL 停止、恢复、重新启动与恢复后指引。任何别名都不
   Perl 的 `rename` 系统调用，避免 BSD `mv` 将源文件移入目录的语义。
 - [`repo rm`](/zh/repo/#repo-rm) 在变更前校验完整参数列表。只有零参数代表全量备份；
   `all` 仍只表示 `node`、`pgsql`、`infra`。
+  `requested_modules` 保留原始请求，`removed_repos` 描述展开后的执行动作。
   `repo add`、`repo set`、`repo info` 同样整次拒绝显式空名称和逗号空项；只有省略参数
   才保留 add/set 默认选择 `all` 的行为。
 - 显式指定 `pg -D` 时，SQL 操作和数据库枚举绑定到该目录记录的端口与 socket，元数据不明确时先失败。

@@ -71,6 +71,7 @@ The 2026-10-16 refinement applies the same boundary to the next candidate:
   `rename` syscall because BSD `mv` has directory-target semantics.
 - [`repo rm`](/repo/#repo-rm) validates the whole operand list before changes. Only zero operands
   mean full backup; `all` remains `node`, `pgsql`, and `infra`.
+  `requested_modules` retains the original request; `removed_repos` describes the expanded actions.
   `repo add`, `repo set`, and `repo info` also reject explicit empty names and comma-separated
   empty entries as a whole request. Only omitted operands retain the add/set default of `all`.
 - With an explicit `pg -D`, SQL operations and database enumeration bind to that directory's
