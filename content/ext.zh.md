@@ -68,7 +68,7 @@ PGDG 默认路径为 EL 的 `/usr/pgsql-18/bin/pg_config`，以及 Debian/Ubuntu
 
 ## ext list
 
-列出（或搜索）扩展目录中的可用扩展。
+列出（或搜索）扩展目录中的条目。
 
 ```bash
 pig ext list                     # 列出所有扩展
@@ -92,7 +92,18 @@ pig ext ls rag                   # 列出 RAG 类别扩展
 - `available`：扩展可用但未安装（黄色）
 - `not avail`：扩展在当前系统不可用（红色）
 
-默认扩展目录定义在 [**`cli/ext/assets/extension.csv`**](https://github.com/pgsty/pig/blob/main/cli/ext/assets/extension.csv)。
+可用性判断与 text/JSON/YAML 摘要使用同一平台、架构和 PostgreSQL 版本。平台有包矩阵时，
+以矩阵为准，缺少对应单元格即不可用；条目没有矩阵时，沿用 RPM/DEB 版本元数据与平台例外规则。
+`amd64`/`x86_64`、`arm64`/`aarch64` 分别等价。macOS 的此状态只表示声明支持的 PostgreSQL 版本，
+不表示存在可安装的 RPM/DEB 包。
+
+### 目录计数 {#catalog-count}
+
+官网与 CLI 按全部目录记录统计，包括 `pg_relation_sql` 这类已打包的 SQL 工具，以及已移除扩展的保留记录。当前内嵌目录共 {{< param pgext_count >}} 个条目。这个总数不表示每个条目都支持 `CREATE EXTENSION`，也不表示它们在所有平台上都可安装。
+
+无筛选列表包含全部记录。文本行数与 JSON/YAML 的 `data.count` 都表示实际返回的条目数；搜索统计匹配条目，`--pkg` 统计主导包记录。`ext avail` 的全局文本摘要使用完整目录总数。`ext reload` 的 `data.extension_count` 表示实际下载目录的记录数。
+
+[计数决策](/zh/design/catalog-entry-count/)说明了统一口径的原因。默认扩展目录定义在 [**`cli/ext/assets/extension.csv`**](https://github.com/pgsty/pig/blob/main/cli/ext/assets/extension.csv)。
 
 可用 `pig ext reload` 命令更新到最新扩展目录，数据将下载到 `~/.pig/extension.csv`；在线最新版目录同步发布于 [**repo.pigsty.cc/ext/data/extension.csv**](https://repo.pigsty.cc/ext/data/extension.csv)。
 
@@ -239,6 +250,10 @@ pig ext import -d /www/pigsty postgis # 指定路径导入
 **选项：**
 
 - `-d|--repo`：指定仓库目录（默认：`/www/pigsty`）
+
+部分名称无法解析时，已解析出的包仍会下载，但命令以失败退出。结构化结果保留 `requested`、
+已解析的 `packages`、确认完成的 `downloaded` 与无法解析的 `failed` 名称。
+原生下载命令失败也可能在目标目录留下文件；失败不表示回滚，也不表示下载完整。
 
 ## ext link
 

@@ -70,7 +70,7 @@ PIG 只在执行命令时运行。PostgreSQL 与已安装的扩展可以独立�
 pig ext avail vector
 ```
 
-{{< param pgext_count >}} 个目录条目中包含已移除扩展的保留记录。选择软件包时，请查看条目状态和可用矩阵。EL 7 与 Debian 11 不在当前软件包矩阵中。
+{{< param pgext_count >}} 个目录条目中包含已打包的 SQL 工具，以及已移除扩展的保留记录。官网与 CLI 使用同一[目录条目计数口径](/zh/ext/#catalog-count)。选择软件包时，请查看条目状态和可用矩阵。EL 7 与 Debian 11 不在当前软件包矩阵中。
 
 macOS 版支持目录查询、配置清单编辑等操作。PostgreSQL 软件包安装使用 Linux 包管理器。二进制下载见[安装](/zh/install/)。
 

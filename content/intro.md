@@ -70,7 +70,7 @@ Package availability varies by extension and target. On the target host, run:
 pig ext avail vector
 ```
 
-The {{< param pgext_count >}} catalog entries include retained records for removed extensions. Check the entry's status and availability before selecting a package. EL 7 and Debian 11 are outside the current package matrix.
+The {{< param pgext_count >}} catalog entries include packaged SQL utilities and retained records for removed extensions. The website and CLI use this same [catalog-entry count](/ext/#catalog-count). Check the entry's status and availability before selecting a package. EL 7 and Debian 11 are outside the current package matrix.
 
 The macOS binary supports catalog queries and commands such as inventory editing. PostgreSQL package installation uses Linux package managers. See [Installation](/install/) for the binary downloads.
 

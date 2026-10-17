@@ -92,7 +92,19 @@ Category filtering is done by passing the category name as the query. Supported 
 - `available`: extension is available but not installed
 - `not avail`: extension is not available on the current system
 
-The default extension catalog is defined in [**`cli/ext/assets/extension.csv`**](https://github.com/pgsty/pig/blob/main/cli/ext/assets/extension.csv).
+Availability and text/JSON/YAML summaries use the same platform, architecture, and PostgreSQL
+version. For platforms covered by a package matrix, that matrix takes precedence; a missing cell
+is unavailable. Catalog entries without a matrix retain RPM/DEB metadata and platform-exception
+fallbacks. `amd64`/`x86_64` and `arm64`/`aarch64` are equivalent. On macOS, this status describes
+declared PostgreSQL version support, not the availability of an RPM/DEB package.
+
+### Catalog count {#catalog-count}
+
+The website and CLI count every catalog record, including packaged SQL utilities such as `pg_relation_sql` and retained records for removed extensions. The bundled catalog currently contains {{< param pgext_count >}} entries. This total does not mean that every entry supports `CREATE EXTENSION` or is available on every platform.
+
+The unfiltered list includes every record. Its text row count and JSON/YAML `data.count` describe the rows returned; a search counts its matches, and `--pkg` counts leading package records. The global `ext avail` text summary uses the full catalog total. `ext reload` reports the number of records in the downloaded catalog through `data.extension_count`.
+
+The [counting decision](/design/catalog-entry-count/) explains this shared definition. The default extension catalog is defined in [**`cli/ext/assets/extension.csv`**](https://github.com/pgsty/pig/blob/main/cli/ext/assets/extension.csv).
 
 Use `pig ext reload` to refresh to the latest catalog. The downloaded catalog is stored at `~/.pig/extension.csv`; the latest online catalog is also published at [**repo.pigsty.io/ext/data/extension.csv**](https://repo.pigsty.io/ext/data/extension.csv).
 
@@ -239,6 +251,11 @@ pig ext import -d /www/pigsty postgis # import to a selected path
 **Options:**
 
 - `-d|--repo`: local repository directory (default: `/www/pigsty`)
+
+If some names cannot be resolved, successfully resolved packages are still downloaded, but the
+command exits with failure. Structured output preserves `requested`, resolved `packages`,
+confirmed `downloaded` packages, and unresolved `failed` names. A native download failure can
+also leave files in the destination; it does not imply rollback or a complete download.
 
 ## ext link
 
