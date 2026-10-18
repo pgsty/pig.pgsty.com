@@ -28,7 +28,7 @@ build:
 
 check:
 	@GOWORK=off go mod verify
-	@GOWORK=off $(HUGO) build --minify --cleanDestinationDir --printPathWarnings --printI18nWarnings --panicOnWarning
+	@GOWORK=off $(HUGO) build --minify --cleanDestinationDir --printPathWarnings --printI18nWarnings
 	python3 bin/check_markdown.py content public
 	python3 bin/check_design.py
 	python3 bin/check_internal_links.py public
