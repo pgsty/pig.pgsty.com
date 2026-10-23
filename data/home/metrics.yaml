@@ -3,7 +3,7 @@
 
 # Extension catalog entries bundled with PIG, including SQL utilities and retained lifecycle records.
 # Keep in sync with params.pgext_count in hugo.yaml.
-packaged_extensions: 603
+packaged_extensions: 615
 
 # PostgreSQL major versions covered by the repositories: 14, 15, 16, 17, 18.
 pg_majors: 5

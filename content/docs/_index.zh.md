@@ -11,6 +11,8 @@ icon: fa-solid fa-book
 toc_root: true
 ---
 
+当前文档版本：**v{{< param version >}}**。本次维护版本升级 Go 至 `1.27.3`，内嵌扩展目录更新为 **{{< param pgext_count >}} 个条目**，详见 [发布说明](/zh/release/pig-1.10.1/)。
+
 PIG 用统一的命令查找、安装和构建 PostgreSQL 扩展包，也提供 PostgreSQL、Patroni、pgBackRest 和 Pigsty 管理命令。软件包安装由系统的 `apt`、`dnf` 或 `yum` 完成。
 
 ## 从这里开始
