@@ -11,7 +11,7 @@ icon: fa-solid fa-book
 toc_root: true
 ---
 
-Documentation version: **v{{< param version >}}**. This maintenance release updates Go to `1.27.3` and refreshes the embedded extension catalog to **{{< param pgext_count >}} entries**. Read the [release notes](/release/pig-1.10.1/).
+Documentation version: **v{{< param version >}}**. This release adds `pg_nanotime` and refreshes extension versions and package metadata, bringing the embedded catalog to **{{< param pgext_count >}} entries**. Read the [release notes](/release/pig-1.10.2/).
 
 PIG provides commands to find, install, and build PostgreSQL extension packages. It also manages PostgreSQL, Patroni, pgBackRest, and Pigsty workflows. Package installation uses the system's `apt`, `dnf`, or `yum`.
 
