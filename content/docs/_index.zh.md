@@ -11,7 +11,7 @@ icon: fa-solid fa-book
 toc_root: true
 ---
 
-当前文档版本：**v{{< param version >}}**。本次版本新增 `pg_nanotime` 并更新扩展版本与包信息，内嵌扩展目录增至 **{{< param pgext_count >}} 个条目**，详见 [发布说明](/zh/release/pig-1.10.2/)。
+当前文档版本：**v{{< param version >}}**。本次版本新增四个扩展并更新扩展版本与包信息，内嵌扩展目录增至 **{{< param pgext_count >}} 个条目**，详见 [发布说明](/zh/release/pig-1.10.3/)。
 
 PIG 用统一的命令查找、安装和构建 PostgreSQL 扩展包，也提供 PostgreSQL、Patroni、pgBackRest 和 Pigsty 管理命令。软件包安装由系统的 `apt`、`dnf` 或 `yum` 完成。
 
