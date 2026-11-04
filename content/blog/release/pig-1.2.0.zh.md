@@ -46,6 +46,7 @@ release_url: https://github.com/pgsty/pig/releases/tag/v1.2.0
 | `babelfishpg`       | -        | 5.5.0    | 新增 BabelfishPG 包组     |
 | `babelfish`         | -        | 5.5.0    | 新增 Babelfish 兼容包      |
 | `antlr4-runtime413` | -        | 4.13     | 新增 Babelfish 依赖运行时    |
+{.wide .expand}
 
 ## 校验和
 

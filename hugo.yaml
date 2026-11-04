@@ -320,6 +320,7 @@ params:
   offline_search_max_results: 12
 
   ui:
+    compare: true
     preset: paper
     preset_menu: [paper, slate, ink, terminal]
     blog_index_size: 60

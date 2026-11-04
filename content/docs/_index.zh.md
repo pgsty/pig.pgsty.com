@@ -52,6 +52,7 @@ sudo pig install -v 18 pg18 vector
 | 读取、编辑和校验 Pigsty 配置清单 | [`pig inventory`](/zh/inventory/) |
 | 运行 Pigsty 管理剧本 | [`pig do`](/zh/do/) |
 | 采集主机、数据库与备份状态 | [`pig context`](/zh/cmd/#pig-context) |
+{.wide .expand}
 
 执行 `pig help <command>` 查看命令帮助。编写自动化脚本时，用 `pig -o json --help` 查看命令能力，再选择对应的输出与计划选项。
 

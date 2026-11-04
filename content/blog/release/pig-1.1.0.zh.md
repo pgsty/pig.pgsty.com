@@ -60,6 +60,7 @@ release_url: https://github.com/pgsty/pig/releases/tag/v1.1.0
 | pg_strict          | -            | 1.0.2         |
 | pg_track_optimizer | -            | 0.9.1         |
 | pgmb               | -            | 1.0.0         |
+{.wide .expand}
 
 ## Bug 修复
 

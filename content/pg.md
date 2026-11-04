@@ -56,7 +56,7 @@ create an empty directory with the correct ownership before running `pg init`.
 | Command | Alias | Description | Notes |
 |:--------|:------|:------------|:------|
 | `pg tune` | `tuning` | Generate PostgreSQL tuning parameters | Auto-detects hardware and supports structured output |
-{.full-width}
+{.full-width .wide .expand}
 
 **Instance Fork**:
 
@@ -68,7 +68,7 @@ create an empty directory with the correct ownership before running `pg init`.
 | `pg fork start` | | Start an existing fork | Supports managed names or unmanaged `--dst-data` directories |
 | `pg fork stop` | | Stop an existing fork | Supports shutdown mode |
 | `pg fork rm` | `remove, delete` | Remove a fork | Running forks require `--stop` |
-{.full-width}
+{.full-width .wide .expand}
 
 **Log Tools**:
 
@@ -114,7 +114,7 @@ These options apply to all `pig pg` subcommands:
 | `--version` | `-v` | auto-detect | PostgreSQL major version |
 | `--data` | `-D` | `/pg/data` for instance operations | Data directory path |
 | `--dbsu` | `-U` | `postgres` | PostgreSQL operating-system user; `$PIG_DBSU` overrides the default |
-{.full-width}
+{.full-width .wide .expand}
 
 Use `pig pg svc ...` to control the `postgres` systemd unit. Use the instance commands
 (`start`, `stop`, and so on) to operate on `-D` with `pg_ctl`, defaulting to `/pg/data`.
@@ -423,7 +423,7 @@ pig pg kill --plan                # Preview connection termination plan
 | `--cancel` | `-c` | Cancel queries instead of terminating |
 | `--watch` | | Repeat every N seconds |
 | `--plan` | | Preview execution plan without terminating connections |
-{.full-width}
+{.full-width .wide .expand}
 
 `--state` accepts known connection states, including `idle in transaction` (quote values with spaces).
 `--query` matches query text without case sensitivity. A positive `--pid` selects that process
@@ -645,7 +645,7 @@ pig pg fork init dev --plan           # Show execution plan only
 | `--timeout` | `-t` | 60 | Startup wait timeout in seconds |
 | `--yes` | `-y` | false | Skip confirmation prompt |
 | `--plan` | | false | Show execution plan only |
-{.full-width}
+{.full-width .wide .expand}
 
 **Management Commands:**
 
@@ -655,7 +655,7 @@ pig pg fork init dev --plan           # Show execution plan only
 | `pig pg fork start <name> or --dst-data <dir>` | `--dst-data`, `--dst-port`, `-t/--timeout`, `--plan` | Start existing fork |
 | `pig pg fork stop <name> or --dst-data <dir>` | `--dst-data`, `-m/--mode`, `-t/--timeout`, `--plan` | Stop existing fork |
 | `pig pg fork rm <name> or --dst-data <dir>` | `--dst-data`, `--stop`, `-m/--mode`, `-t/--timeout`, `-f/--force`, `-y/--yes`, `--plan` | Remove fork; running forks require `--stop` |
-{.full-width}
+{.full-width .wide .expand}
 
 **Behavior Notes:**
 

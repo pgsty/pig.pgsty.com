@@ -156,6 +156,7 @@ VLESS 入站。
 | 客户端 `--pqv` | `streamSettings.realitySettings.mldsa65Verify` | 从 `streamSettings.realitySettings.mldsa65Seed` 派生 |
 | 服务端 `--target` | 没有直接对应字段，SNI 需兼容 | `streamSettings.realitySettings.target` |
 | 服务端 `--proxy-protocol` | 无对应字段 | `streamSettings.rawSettings.acceptProxyProtocol: true` |
+{.wide .expand}
 
 参考服务端保持 `realitySettings.xver: 0`：接收 Nginx 的 PROXY 头，与向 REALITY target
 发送 PROXY 头是不同设置。模板默认值保留参考配对的 flow、传输安全、日志、关闭 multiplexing、

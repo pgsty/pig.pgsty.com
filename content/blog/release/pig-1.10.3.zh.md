@@ -21,6 +21,7 @@ PIG `v1.10.3` 更新内嵌 PostgreSQL 扩展目录，从 **616 个条目增至 6
 | `pg_agent_gate` | `0.3.0` | 18 | 面向 Agent 角色的 SQL 提议、校验、受控执行与人工审批门 |
 | `pg_integrity_checksums` | `2.0.0` | 14–18 | 为 PostgreSQL 页面、行、表、索引和数据库提供物理与逻辑校验和 |
 | `pg_stat_tcpinfo` | `1.1` | 14–18 | Linux TCP 连接统计、延迟与重传观测 |
+{.wide .expand}
 
 这些记录描述的是目录与软件包可用性；实际可安装性仍取决于目标 PostgreSQL
 大版本、操作系统、架构和软件仓库快照。

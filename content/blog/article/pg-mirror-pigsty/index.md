@@ -36,6 +36,7 @@ At that time, Germany's xTom appeared to update its mirror manually each month. 
 | YANDEX          | Russia  | **2025-08-13**    | [mirror](https://mirror.yandex.ru/mirrors/postgresql/)                                  |
 | XTOM            | Germany | **2025-07-24**    | [mirror](https://mirrors.xtom.de/postgresql/)                                           |
 | PIGSTY          | China   | **2025-08-14**    | [repository docs](https://pigsty.io/docs/repo/)                                        |
+{.wide .expand}
 
 ## Mirrors "Stop Updating"
 

@@ -53,6 +53,7 @@ That turned into this release: **32 new additions, 22 updates, and the Pigsty ex
 | **Total**    |     504 |      155 |        332 |          71 |        0 |      481 |      488 |      479 |      473 |      457 |
 | **EL**       |     499 |      150 |        332 |          71 |        5 |      472 |      482 |      474 |      468 |      452 |
 | **Debian**   |     489 |      107 |        311 |          71 |       15 |      466 |      474 |      464 |      458 |      442 |
+{.wide .expand}
 
 The catalog combines PostgreSQL's bundled extensions with packages from PGDG and Pigsty. The repository counts overlap: some extensions are available from more than one source.
 

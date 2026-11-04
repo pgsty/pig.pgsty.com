@@ -56,6 +56,7 @@ It hardens the `pig build` pipeline and extends catalog/alias coverage, increasi
 | `snowflake`           | 2.4     | pgEdge Snowflake-style ID generator                |
 | `spock`               | 5.0.5   | pgEdge multi-master logical replication extension  |
 | `lolor`               | 1.2.2   | pgEdge logical-replication-friendly large objects  |
+{.wide .expand}
 
 ## Full Commit List (`v1.2.0..v1.3.0`)
 

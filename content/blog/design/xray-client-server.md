@@ -176,6 +176,7 @@ relative to its VLESS outbound; server paths are relative to its VLESS inbound.
 | Client `--pqv` | `streamSettings.realitySettings.mldsa65Verify` | Derived from `streamSettings.realitySettings.mldsa65Seed` |
 | Server `--target` | No direct client field; SNI must be compatible | `streamSettings.realitySettings.target` |
 | Server `--proxy-protocol` | No client field | `streamSettings.rawSettings.acceptProxyProtocol: true` |
+{.wide .expand}
 
 The reference server keeps `realitySettings.xver: 0`: accepting a PROXY header from Nginx and
 forwarding a PROXY header to the REALITY target are different settings. Template defaults preserve

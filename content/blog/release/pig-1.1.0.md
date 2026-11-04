@@ -60,6 +60,7 @@ Seven new extensions are added, bringing the total available extensions to 451.
 | pg_strict          | -            | 1.0.2         |
 | pg_track_optimizer | -            | 0.9.1         |
 | pgmb               | -            | 1.0.0         |
+{.wide .expand}
 
 ## Bug Fixes
 

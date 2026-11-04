@@ -55,6 +55,7 @@ release_url: https://github.com/pgsty/pig/releases/tag/v1.3.0
 | `snowflake`          | 2.4   | pgEdge Snowflake ID 生成扩展    |
 | `spock`              | 5.0.5 | pgEdge 多主逻辑复制扩展             |
 | `lolor`              | 1.2.2 | pgEdge 大对象逻辑复制兼容扩展          |
+{.wide .expand}
 
 ## 完整提交列表（`v1.2.0..v1.3.0`）
 

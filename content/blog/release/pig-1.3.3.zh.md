@@ -40,6 +40,7 @@ release_url: https://github.com/pgsty/pig/releases/tag/v1.3.3
 | `postgresbson`   |        | 2.0.2  | 新增，PG14-18    |
 | `rdf_fdw`        |        | 2.4.0  | 新增，PG14-18    |
 | `parray_gin`     |        | 1.4.0  | 新增，PG14-18    |
+{.wide .expand}
 
 ## 校验和
 

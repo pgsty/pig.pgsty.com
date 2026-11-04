@@ -22,6 +22,7 @@ compatibility, and availability metadata.
 | `pg_agent_gate` | `0.3.0` | 18 | SQL proposal, verification, and execution gate with human approval for agent roles |
 | `pg_integrity_checksums` | `2.0.0` | 14–18 | Physical and logical checksums for PostgreSQL pages, rows, tables, indexes, and databases |
 | `pg_stat_tcpinfo` | `1.1` | 14–18 | Linux TCP connection statistics, latency, and retransmission metrics |
+{.wide .expand}
 
 These records describe catalog and package availability; actual installability
 still depends on the target PostgreSQL major, operating system, architecture,
