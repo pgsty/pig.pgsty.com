@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **Decision date:** 2026-11-06<br>
-> **Status:** Implemented in source commit [`7c069dc`](https://github.com/pgsty/pig/commit/7c069dcdc47a9fb51acd56a06dd2a4132723e6dd); not released.<br>
+> **Status:** Implemented in source commit [`7c069dc`](https://github.com/pgsty/pig/commit/7c069dcdc47a9fb51acd56a06dd2a4132723e6dd); released in [v1.10.4](https://github.com/pgsty/pig/releases/tag/v1.10.4).<br>
 > **Current reference:** [`pig ext` category aliases](/ext/#category-aliases)<br>
 > **Scope:** Dynamic `pgN-*` and `pgsql-*` category aliases that resolve extension package groups.
 
@@ -93,8 +93,7 @@ The catalog changes are in `cli/ext/assets/extension.csv`.
 
 The committed source was checked with `git diff --check`, `go test -shuffle=on -count=1 ./...`,
 `go vet ./...`, `go test -race -shuffle=on -count=1 ./cli/ext ./cli/install`, `staticcheck ./...`,
-the configured complexity lint, and `deadcode ./...`. This record describes an implemented source
-contract; a future release tag is separate evidence.
+the configured complexity lint, and `deadcode ./...`. The [v1.10.4 tag](https://github.com/pgsty/pig/tree/v1.10.4) contains this implementation; the corresponding [release notes](/release/pig-1.10.4/) record its delivery.
 
 ## Current status {#status}
 
