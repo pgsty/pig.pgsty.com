@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **决策日期：** 2026-11-06<br>
-> **状态：** 已在源码提交 [`7c069dc`](https://github.com/pgsty/pig/commit/7c069dcdc47a9fb51acd56a06dd2a4132723e6dd) 中实现，尚未发布。<br>
+> **状态：** 已在源码提交 [`7c069dc`](https://github.com/pgsty/pig/commit/7c069dcdc47a9fb51acd56a06dd2a4132723e6dd) 中实现，已随 [v1.10.4](https://github.com/pgsty/pig/releases/tag/v1.10.4) 发布。<br>
 > **当前参考：** [`pig ext` 分类别名](/zh/ext/#category-aliases)<br>
 > **范围：** 解析扩展软件包组的动态 `pgN-*` 与 `pgsql-*` 分类别名。
 
@@ -71,7 +71,7 @@ EL 上 PG14/15 pgaudit 的 Pigsty 来源条目。
 
 已提交源码通过 `git diff --check`、`go test -shuffle=on -count=1 ./...`、`go vet ./...`、
 `go test -race -shuffle=on -count=1 ./cli/ext ./cli/install`、`staticcheck ./...`、配置的复杂度检查和
-`deadcode ./...`。本记录描述已实现的源码契约；未来发布标签仍需单独作为发布证据。
+`deadcode ./...`。发布标签 [v1.10.4](https://github.com/pgsty/pig/tree/v1.10.4) 包含上述实现；对应 [发布注记](/zh/release/pig-1.10.4/) 记录了交付内容。
 
 ## 当前状态 {#status}
 
