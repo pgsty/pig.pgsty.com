@@ -5,7 +5,7 @@ pig.pgsty.com —— PIG 官网（Hugo + Docsy，与 pigsty.cc / silo.pgsty.com 
 
 ## OINK build baseline
 
-As of 2026-11-04, this site uses OINK v1.5.0, Hugo Extended 0.168.0, and Go 1.27.3.
+As of 2026-11-07, this site uses OINK v1.5.1, Hugo Extended 0.168.0, and Go 1.27.3.
 Keep CI and local builds on this baseline. Do not enable `--panicOnWarning`
 or `HUGO_PANICONWARNING`; keep warnings visible and review them. The upstream
 LibSass deprecation warning is accepted. No external Sass compiler is required.
@@ -54,7 +54,7 @@ front matter `url: /docs/xxx/`，那是回归。
 
 发新版时加一对 `pig-X.Y.Z.md` / `.zh.md`，`weight` 从最新的往下递增（最新的最小）。
 文中的 `**要点**` 这类整行加粗标签统一写成 `## 要点`，这样每篇都有目录。
-front matter 与正文的具体形态见下面「发布注记写成 OINK 1.5.0 的原生形态」。
+front matter 与正文的具体形态见下面「发布注记写成 OINK 1.5.1 的原生形态」。
 
 文档侧栏里的「版本 / Release」是 `content/_link_release.md` 这个占位页：
 `manual_link` 指向 `/release/`，`build.render: link` 表示不产出页面本身。
@@ -114,7 +114,7 @@ silo / sow / pigsty.cc 的整套模板或 `pig-*` chrome 拷回本仓库。
 `--pig-section-pad-top` 自定义属性交给 landing-v3.css 里的接缝规则，值仍然只写一处。
 下载页里的嵌套 `section`（安装方式面板、子标签面板）同理。
 
-`static/img/pig-word.svg` 是**纯文字**字标。OINK 1.5.0 的品牌是「图标 + 文字」的
+`static/img/pig-word.svg` 是**纯文字**字标。OINK 1.5.1 的品牌是「图标 + 文字」的
 组合标：图标一直在，字标是旁边可折叠的那一半。字标里再画一次猪头会重复。
 
 改 Hero 文案时注意：`.pig-hero-title` 的窄屏字号 clamp 在 `pig-v3.css` 里，
@@ -149,7 +149,7 @@ silo / sow / pigsty.cc 的整套模板或 `pig-*` chrome 拷回本仓库。
 博客索引用 OINK 默认的列表形态；站点开了 `blog_index_toggle`，工具栏里那个按钮
 可以让读者在列表 / 卡片 / 表格之间切换。
 
-### 发布注记写成 OINK 1.5.0 的原生形态
+### 发布注记写成 OINK 1.5.1 的原生形态
 
 新增一个版本时，一篇发布注记长这样（中英各一份）：
 
