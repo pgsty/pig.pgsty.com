@@ -2,7 +2,7 @@
 title: "Compile, Validate, Then Commit: The Native sty conf Pipeline"
 linkTitle: "Native sty conf"
 date: 2026-02-18
-lastmod: 2026-10-13
+lastmod: 2026-11-08
 description: "Why pig sty conf treats Inventory generation as a bounded compiler pipeline with path safety, structural mutations, secret discipline, and atomic output."
 tags: [sty, inventory]
 weight: 15
@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **Decision date:** 2026-02-18; the production contract was finalized on 2026-08-14.<br>
-> **Status:** Implemented and released in [pig v1.8.0](/release/pig-1.8.0/).<br>
+> **Status:** Native pipeline released in [pig v1.8.0](/release/pig-1.8.0/); ordered template lookup implemented locally on 2026-11-08, without a PIG release claim.<br>
 > **Current reference:** [`pig sty conf`](/sty/#sty-conf)<br>
 > **Scope:** Generating one validated static Inventory from a trusted Pigsty template; not arbitrary YAML transformation.
 
@@ -25,6 +25,10 @@ The command does not invoke the legacy `configure` script and does not fall back
 execution. Its structured result reports selected inputs, effective choices, applied change kinds,
 and warnings without returning generated secret values.
 
+The 2026-11-08 extension resolves bare template names in the same fixed order as Pigsty:
+root, `ha`, `fork`, `app`, `demo`, then `build`. Resolve once before preflight and mutation;
+the selected relative name is the mode used throughout the pipeline and in structured results.
+
 ## Context {#context}
 
 Template configuration looks simple until paths, symlinks, multiple IP placeholders, version-pinned
@@ -34,6 +38,11 @@ or truncate the destination after a late validation failure.
 
 The output Inventory may contain administrative credentials, so both file handling and result
 rendering are part of the security boundary.
+
+Pigsty groups templates into subdirectories while accepting short names such as `full`. Merely
+finding `ha/full.yml` is insufficient: build templates skip IP mapping and admin checks, and
+`fork/mssql` and `fork/polar` pin their PostgreSQL version. These rules must follow the selected
+template, regardless of the input spelling.
 
 ## Alternatives considered {#alternatives}
 
@@ -47,10 +56,21 @@ rendering are part of the security boundary.
   modes, not become a privileged file copier.
 - **Return generated passwords for convenience.** Rejected because structured logs and agent traces
   are not secret-delivery channels.
+- **Recursively search every directory or reject every duplicate basename.** Rejected in favor of
+  Pigsty's fixed precedence. Explicit paths select a particular template; unrelated directories
+  do not acquire short names automatically.
+- **Add a hard-coded alias table or use only the basename for special behavior.** Rejected because
+  the installed files determine availability, and `app/mssql` must not inherit `fork/mssql` rules.
 
 ## Contract {#contract}
 
 - templates resolve below the Pigsty configuration tree through safe relative names;
+- bare names select the first regular file under `conf/`, `conf/ha/`, `conf/fork/`, `conf/app/`,
+  `conf/demo/`, then `conf/build/`; explicit relative paths bypass probing;
+- leading `./`, the `conf/` prefix, and the `.yml` suffix are optional; traversal components are
+  rejected before path cleaning, and invalid selected content does not trigger fallback;
+- the resolved mode drives preflight, mutation, and the existing `mode`/`template_path` result
+  fields; root `mssql`/`polar` remain version-pinned for older Pigsty installations;
 - absolute paths, traversal, path escape, and direct, symlink, symlinked-parent, or hard-link
   source/output aliasing are rejected;
 - parsing and IP-collision checks precede external preflight;
@@ -70,6 +90,11 @@ Use `sty conf` to generate a new Inventory from a known template. Use the lossle
 
 Version-pinned templates keep their version and warn when a conflicting version request cannot apply.
 
+Root precedence preserves existing installations. With the standard grouped layout, `full` and
+`ha/full` select the same template, as do `oss` and `build/oss`. Short-name collisions use the
+documented order; an explicit path is the stable choice when the template tree contains duplicates.
+The resolver does not invent a compatibility alias from `fork/mysql` to `fork/halo`.
+
 ## Verification and evolution {#verification}
 
 The native configure direction was first recorded on 2026-02-18. The production refinement landed with
@@ -79,8 +104,27 @@ aliasing, simultaneous IP mapping, domain boundaries, interactive and closed-inp
 version handling, proxy and region changes, secret generation and redaction, preflight ordering,
 validation failures, permissions, and atomic writes.
 
+Ordered lookup follows Pigsty's
+[`d3f3aae`](https://github.com/pgsty/pigsty/commit/d3f3aaeeb34c10be967dd34880b67d68f34b26ff).
+The PIG implementation is recorded in
+[`ba771a5`](https://github.com/pgsty/pig/commit/ba771a587ec11a55dd43350cce4e9ce36586b308),
+including the template resolver, pinned-version handling, and accompanying regression tests.
+Validation commands are `go test ./...`, `go vet ./...`, and `make docs-check`.
+Regression coverage includes precedence, explicit paths, input normalization, canonical result
+fields, build preflight/IP behavior, and old and grouped version-pinned templates.
+
+The 2026-11-08 CLI review used all 54 `.yml` entries, including the Supabase symlink,
+from Pigsty commit `d3f3aae` above. The command was `pig sty conf MODE -H FIXTURE -r default -s -n -o json -O OUTPUT`.
+For each template, its bare, qualified, and `./conf/ha/full.yml`-style spellings produced identical inventories
+and canonical results: 162 invocations in total, with bare names also exercised through `-c`.
+Missing and invalid modes, source/output aliasing, root precedence, and explicit-path selection
+were checked separately. These checks cover configuration generation, not deployment.
+
 ## Current status {#status}
 
 Use `pig sty conf` to generate a new Inventory from a Pigsty template and
 [`pig inventory`](/inventory/) to inspect or edit an existing declaration. Current flags, modes,
 and preflight behavior live in the [`pig sty` reference](/sty/).
+The ordered lookup extension is locally implemented; the earlier release evidence applies to the
+native pipeline, not to this extension. Availability in a released binary requires a corresponding
+PIG tag or release artifact.
