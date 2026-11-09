@@ -1,7 +1,7 @@
 ---
 title: "pig do"
 description: "Run Pigsty administration tasks with pig do"
-weight: 155
+weight: 156
 icon: fas fa-list-check
 categories: [Reference]
 tags: [sty, cli]
@@ -25,7 +25,7 @@ source to Ansible without interpreting it again relative to Pigsty home. Missing
 environment, or default sources fail before playbook execution. Existing directory and executable
 Inventory sources remain Ansible inputs; static Inventory commands do not execute them.
 
-## Command overview
+## Command overview {#command-overview}
 
 | Command | Purpose | Required arguments |
 |:---|:---|:---|
@@ -46,7 +46,7 @@ Inventory sources remain Ansible inputs; static Inventory commands do not execut
 
 Run `pig do COMMAND --help` for the aliases and exact examples of one operation.
 
-## PostgreSQL operations
+## PostgreSQL operations {#postgresql-operations}
 
 ```bash
 pig do pgsql-add pg-meta                  # initialize the declared cluster
@@ -62,7 +62,7 @@ pig do pgsql-svc pg-meta                  # refresh PostgreSQL services
 
 `pgsql-db` and `pgsql-user` apply existing `pg_databases` and `pg_users` declarations. They do not edit the inventory. `pgsql-rm --uninstall` also removes packages. Omit this option if the host still needs those packages.
 
-### Name rules
+### Name rules {#name-rules}
 
 | Object | Accepted names |
 |:---|:---|
@@ -72,7 +72,7 @@ pig do pgsql-svc pg-meta                  # refresh PostgreSQL services
 
 These rules apply to arguments that require a cluster, user, or database name. Selector arguments support the target-selection forms below.
 
-## Node and repository operations
+## Node and repository operations {#node-and-repository-operations}
 
 Selectors may be cluster names, host names, IP addresses, or another selector form supported by
 the Pigsty playbook. Their meaning comes from the active Inventory.
@@ -89,7 +89,7 @@ With no selector, `node-repo` applies to every host targeted by `node.yml`. With
 `infra`, `pgsql`, `node`, and `extra`. Check that the required repositories are available to the
 target nodes before installing packages.
 
-## Redis operations
+## Redis operations {#redis-operations}
 
 ```bash
 pig do redis-add redis-meta                # initialize a declared Redis cluster
@@ -100,7 +100,7 @@ pig do redis-rm redis-test --uninstall     # remove and uninstall packages
 
 `redis-rm --uninstall` also removes packages during node or cluster removal.
 
-## Configuration and output
+## Configuration and output {#configuration-and-output}
 
 `pig do` uses the global PIG options:
 

@@ -4,7 +4,7 @@ linkTitle: "v1.1.0"
 date: 2026-02-12
 description: "451 扩展，Agent-Native CLI 框架"
 tags: [cli, patroni, build, catalog]
-weight: 141
+weight: 25
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.1.0
 ---
@@ -14,7 +14,7 @@ release_url: https://github.com/pgsty/pig/releases/tag/v1.1.0
 
 新增七个扩展，总可用扩展数量达到 451 个。
 
-## 新功能
+## 新功能 {#new-features}
 
 - Agent-native 统一输出框架落地：引入全局 `--output`（`text/yaml/json/json-pretty`），为 `ext/repo/pg/pt/pb/pitr/status/version/context` 等命令提供统一 `Result` 结构、稳定状态码与可机器解析输出。
 - 引入 ANCS（Agent Native Command Schema）元数据体系：为命令补齐 `type/volatility/parallel/risk/confirm/os_user/cost` 等语义字段，`help` 在结构化模式下可直接输出命令能力树，便于 Agent 自动发现能力与风险边界。
@@ -24,7 +24,7 @@ release_url: https://github.com/pgsty/pig/releases/tag/v1.1.0
 - 兼容层增强：对 `pg_exporter/pg_probe/do/sty` 等存量命令引入 legacy structured wrapper，在保留旧交互行为的同时提供结构化执行结果与输出捕获。
 - Pigsty 版本更新至 v4.1.0
 
-## 扩展更新
+## 扩展更新 {#extension-update}
 
 | 扩展                 | 旧版本          | 新版本           |
 |:-------------------|:-------------|:--------------|
@@ -62,7 +62,7 @@ release_url: https://github.com/pgsty/pig/releases/tag/v1.1.0
 | pgmb               | -            | 1.0.0         |
 {.wide .expand}
 
-## Bug 修复
+## Bug 修复 {#bug-fixes}
 
 - 安全修复：修复 `pig build proxy` 在异常地址输入下的解析 panic 问题。
 - 安全修复：修复 `pig pg log` 文件名路径穿越风险，阻止通过 `../../` 访问日志目录外文件。
@@ -72,7 +72,7 @@ release_url: https://github.com/pgsty/pig/releases/tag/v1.1.0
 - 扩展管理修复：`ext update` 调整为显式目标更新并修复状态漂移问题；`ext import` 将请求的 DEB 资源下载到指定 repo 目录。
 - 输出与可观察性修复：修复结构化输出 exit code 与文本渲染一致性问题；修复 `pg status` 权限处理与解析稳定性问题。
 
-## 校验和
+## 校验和 {#checksums}
 
 ```checksums
 95245dc035270df2b02cdd5d19afac57ccf4949a61b07b1b806fffde3a3b780e  pig-1.1.0-1.aarch64.rpm

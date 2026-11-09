@@ -1,10 +1,10 @@
 ---
 title: "pig v1.10.1"
 linkTitle: "v1.10.1"
-date: 2026-10-24T00:00:00+08:00
+date: 2026-10-24
 description: "升级 Go 1.27.3 修复安全问题，更新工具依赖，扩展目录增至 615 个条目。"
 tags: [build, catalog, cli]
-weight: -1
+weight: 4
 authors: [Vonng]
 draft: false
 release_url: https://github.com/pgsty/pig/releases/tag/v1.10.1
@@ -13,7 +13,7 @@ release_url: https://github.com/pgsty/pig/releases/tag/v1.10.1
 PIG `v1.10.1` 是一次安全与扩展目录维护版本：升级 Go 至 `1.27.3`，
 更新工具依赖，并将内嵌 PostgreSQL 扩展目录从 **603 个条目增至 615 个**。
 
-## 安全更新
+## 安全更新 {#security-update}
 
 - Go 工具链从 `1.27.2` 升级到 `1.27.3`。CI 与发布构建使用 `go.mod` 指定的版本。
 - 纳入 `crypto/x509` 的
@@ -24,7 +24,7 @@ PIG `v1.10.1` 是一次安全与扩展目录维护版本：升级 Go 至 `1.27.3
 Go `1.27.3` 相比 `1.27.2` 新增 **1 项安全修复**。
 更早的 Go 安全修复已包含在 PIG `v1.10.0` 使用的 `1.27.2` 基线中。
 
-## 依赖更新
+## 依赖更新 {#dependency-updates}
 
 通过限定原版本的模块替换，更新间接工具依赖：
 
@@ -35,7 +35,7 @@ Go `1.27.3` 相比 `1.27.2` 新增 **1 项安全修复**。
 | `golang.org/x/mod` | `v0.41.0` | `v0.42.0` |
 | `golang.org/x/tools` | `v0.51.0` | `v0.52.0` |
 
-## 扩展目录
+## 扩展目录 {#extension-catalog}
 
 内嵌目录现包含 **615 个条目**，相比 `v1.10.0` **新增 12 个**：
 
@@ -47,7 +47,7 @@ Go `1.27.3` 相比 `1.27.2` 新增 **1 项安全修复**。
 总数沿用 [目录条目计数口径](/zh/ext/#catalog-count)，包含已打包的 SQL 工具和已移除扩展的保留记录。
 615 不表示所有条目都支持 `CREATE EXTENSION`，也不表示它们在每个平台上都可安装。
 
-## 兼容性
+## 兼容性 {#compatibility}
 
 命令、参数与配置保持和 `v1.10.0` 兼容。
 内置 Pigsty 保持 `4.5.0`，默认 `cargo-pgrx` 保持 `0.19.3`。
@@ -56,7 +56,7 @@ Go `1.27.3` 相比 `1.27.2` 新增 **1 项安全修复**。
 请按 [安装文档](/zh/install/) 升级 PIG 可执行文件，以使用更新后的 Go 标准库；
 仅升级主机上的 Go 不会更新已经安装的 PIG 二进制。
 
-## 校验和
+## 校验和 {#checksums}
 
 ```checksums
 fbd58de4cd1fa767c6d2b15d4fcb029fe38c90a0d12db2e387b7f698b5c8a69d  pig-1.10.1-1.aarch64.rpm

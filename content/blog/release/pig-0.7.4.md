@@ -4,7 +4,7 @@ linkTitle: "v0.7.4"
 date: 2025-12-01
 description: "Update ivory/pgtde kernel and pgdg extras"
 tags: [catalog]
-weight: 181
+weight: 31
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v0.7.4
 ---
@@ -14,7 +14,7 @@ release_url: https://github.com/pgsty/pig/releases/tag/v0.7.4
 - Bump ivorysql to 5.0 (compatible with PG 18.0)
 - Bump Percona Postgres TDE Kernel to 18.1
 
-## Checksums
+## Checksums {#checksums}
 
 ```checksums
 5769b0051f04dcda22dd92b30b8effc8ddfa40097308bded76ce2b38d012ce57  pig-0.7.4-1.aarch64.rpm

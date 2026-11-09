@@ -1,10 +1,10 @@
 ---
 title: "pig v1.10.3"
 linkTitle: "v1.10.3"
-date: 2026-10-29T00:00:00+08:00
+date: 2026-10-29
 description: "Four new extensions, metadata refresh, and 620 catalog entries."
 tags: [ext, catalog]
-weight: -3
+weight: 2
 authors: [Vonng]
 draft: false
 release_url: https://github.com/pgsty/pig/releases/tag/v1.10.3
@@ -14,7 +14,7 @@ PIG `v1.10.3` refreshes the embedded PostgreSQL extension catalog from
 **616 to 620 entries**, adding four extensions and updating package, version,
 compatibility, and availability metadata.
 
-### New extensions
+## New extensions {#new-extensions}
 
 | Extension | Version | PostgreSQL support | Description |
 |:----------|:--------|:-------------------|:------------|
@@ -28,7 +28,7 @@ These records describe catalog and package availability; actual installability
 still depends on the target PostgreSQL major, operating system, architecture,
 and repository snapshot.
 
-### Version and metadata refresh
+## Version and metadata refresh {#version-and-metadata-refresh}
 
 The catalog updates existing package and extension metadata, including
 `pg_nanotime` `0.2.0` → `0.3.0`, `supautils` `3.4.4` → `4.0.0`,
@@ -38,7 +38,7 @@ The catalog updates existing package and extension metadata, including
 It also refreshes package matrices, compatibility ranges, descriptions, and
 source metadata for the maintained catalog.
 
-### Catalog count
+## Catalog count {#catalog-count}
 
 The catalog now contains **620 entries**: 617 available records and 3 retained
 removed records. The [catalog-entry counting rule](/ext/#catalog-count) includes
@@ -47,7 +47,7 @@ SQL utilities and lifecycle records; availability remains platform-specific.
 Go remains at `1.27.3`, embedded Pigsty at `4.5.0`, and default `cargo-pgrx` at
 `0.19.3`. Follow the [installation guide](/install/) to upgrade PIG.
 
-## Checksums
+## Checksums {#checksums}
 
 ```checksums
 2068ca8150df3ee837d0ba6e533ba651703c7223c14c522703ee1be9c41666ea  pig-1.10.3-1.aarch64.rpm

@@ -4,7 +4,7 @@ linkTitle: "v1.3.0"
 date: 2026-02-27
 description: "构建链路强化，扩展增至 461，新内核支持"
 tags: [catalog, build, cli, ext]
-weight: 121
+weight: 22
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.3.0
 ---
@@ -13,7 +13,7 @@ release_url: https://github.com/pgsty/pig/releases/tag/v1.3.0
 
 该版本重点围绕 `pig build` 构建链路和 `ext` 目录/别名能力增强，并将可用扩展数量从 **451** 增加到 **461**。
 
-## 主要变化
+## 主要变化 {#highlights}
 
 - 构建源码下载增强（`pig build get`）：
   - 支持从扩展 `Source` 字段解析多源码（空格/换行/Tab 分隔）并去重。
@@ -37,11 +37,11 @@ release_url: https://github.com/pgsty/pig/releases/tag/v1.3.0
 - 工程与发布：
   - 版本号提升到 `v1.3.0`（包含 `v1.2.1` 过渡提交），版权年份更新到 2026，README 同步更新到 461 扩展与最新 alias 说明。
 
-## 兼容性提醒
+## 兼容性提醒 {#compatibility-notes}
 
 - `pig ext rm/update` 结构化输出中的 `removed/updated` 字段由扩展名切换为包名；如果你的自动化逻辑按扩展别名匹配，请同步调整。
 
-## 新增扩展（451 -> 461）
+## 新增扩展（451 -> 461） {#new-extensions-451-461}
 
 | 扩展名                  | 版本    | 说明                          |
 |:---------------------|:------|:----------------------------|
@@ -57,7 +57,7 @@ release_url: https://github.com/pgsty/pig/releases/tag/v1.3.0
 | `lolor`              | 1.2.2 | pgEdge 大对象逻辑复制兼容扩展          |
 {.wide .expand}
 
-## 完整提交列表（`v1.2.0..v1.3.0`）
+## 完整提交列表（`v1.2.0..v1.3.0`） {#full-commit-list-v1-2-0-v1-3-0}
 
 - `b8ecf8d` 版本字符串更新到 1.2.1
 - `55df9a4` `build/get` 支持多源码解析与 pgedge spock 源码
@@ -75,7 +75,7 @@ release_url: https://github.com/pgsty/pig/releases/tag/v1.3.0
 - `1f88f06` 版权年份更新为 2026
 - `c804757` `v1.3.0` 发布提交
 
-## 校验和
+## 校验和 {#checksums}
 
 ```checksums
 196f32419886da095f303b1bcad2729b674abc03d412199e88a39390b2616534  pig-1.3.0-1.aarch64.rpm

@@ -18,7 +18,7 @@ pig pe stat                    # Show exporter statistics
 pig pe reload                  # Reload exporter configuration
 ```
 
-## Select an exporter
+## Select an exporter {#select-an-exporter}
 
 The default endpoint is `http://127.0.0.1:9630`. Use these options to select another instance:
 
@@ -36,7 +36,7 @@ pig pe --host 10.10.10.10 get
 PIG uses HTTP and the standard `/metrics`, `/stat`, and `/reload` paths.
 For HTTPS, authentication, client certificates, or a custom path, use an HTTP client such as `curl`.
 
-## pe get
+## pe get {#pe-get}
 
 Read `/metrics`. Print samples whose names start with `pg_`, plus their Prometheus `HELP` and `TYPE` lines.
 
@@ -51,7 +51,7 @@ To include process and runtime metrics that do not start with `pg_`, read the co
 curl -fsS http://127.0.0.1:9630/metrics
 ```
 
-## pe list
+## pe list {#pe-list}
 
 Read `/metrics`. Print one `HELP` line for each `pg_` metric family in the response.
 The list reflects the exporter's current configuration.
@@ -60,7 +60,7 @@ The list reflects the exporter's current configuration.
 pig pe list
 ```
 
-## pe stat
+## pe stat {#pe-stat}
 
 Read `/stat` and print its response. The response format depends on the installed pg_exporter version.
 
@@ -68,7 +68,7 @@ Read `/stat` and print its response. The response format depends on the installe
 pig pe stat
 ```
 
-## pe reload
+## pe reload {#pe-reload}
 
 After editing the exporter's configuration, request a reload through `/reload`:
 
@@ -76,7 +76,7 @@ After editing the exporter's configuration, request a reload through `/reload`:
 pig pe reload
 ```
 
-## Output and errors
+## Output and errors {#output-and-errors}
 
 Use `-o json` or `-o yaml` for a PIG result that contains the command's text output.
 Prometheus metrics remain text inside that result.

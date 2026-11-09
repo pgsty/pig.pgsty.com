@@ -1,10 +1,10 @@
 ---
 title: "pig v1.10.2"
 linkTitle: "v1.10.2"
-date: 2026-10-24T00:00:00+08:00
+date: 2026-10-24
 description: "Extension catalog refresh: pg_nanotime, updated packages, and 616 entries."
 tags: [ext, catalog]
-weight: -2
+weight: 3
 authors: [Vonng]
 draft: false
 release_url: https://github.com/pgsty/pig/releases/tag/v1.10.2
@@ -14,14 +14,14 @@ PIG `v1.10.2` refreshes the embedded PostgreSQL extension catalog from
 **615 to 616 entries**, adding `pg_nanotime` and updating extension versions,
 compatibility, and package availability metadata.
 
-## New extension
+## New extension {#new-extension}
 
 Add [`pg_nanotime`](https://github.com/bunko666-cloud/pg_nanotime) `0.2.0`, which
 provides nanosecond timestamp and fixed-duration interval types. The catalog
 records RPM and DEB packages for PostgreSQL **17 and 18**. Upstream classifies
 `0.2.0` as a testing release.
 
-## Version updates
+## Version updates {#version-updates}
 
 | Extension | Previous | Updated |
 |:----------|:---------|:--------|
@@ -34,7 +34,7 @@ The Citus catalog extension version is `14.3-1`; its RPM and DEB package version
 is `14.3.0`. The refresh also adds DEB availability metadata for `pg_tre` on
 PostgreSQL 17 and 18.
 
-## Catalog metadata
+## Catalog metadata {#catalog-metadata}
 
 - Update PostgreSQL compatibility, package availability, licenses, and descriptions.
 - Set the `duckdb_fdw` catalog range to PostgreSQL 15–18 and
@@ -47,7 +47,7 @@ PostgreSQL 17 and 18.
 Go remains at `1.27.3`, embedded Pigsty at `4.5.0`, and default `cargo-pgrx` at
 `0.19.3`. Follow the [installation guide](/install/) to upgrade PIG.
 
-## Checksums
+## Checksums {#checksums}
 
 ```checksums
 f07992b20b0b397d1e4bb286656b404e3c911775e98e5fc7d940ef91439f62ed  pig-1.10.2-1.aarch64.rpm

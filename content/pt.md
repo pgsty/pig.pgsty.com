@@ -16,7 +16,7 @@ Install Patroni and configure access to its cluster before running cluster opera
 Use `pig pt COMMAND --help` for native command help, or `pig pt -- --help` for patronictl root help.
 Running `pig pt` alone shows PIG's help.
 
-## Command Overview
+## Command Overview {#command-overview}
 
 **Forwarded commands** (native `patronictl`):
 
@@ -63,7 +63,7 @@ pig pt show-config pg-meta
 
 Use `pig pt status` to inspect the local service and `pig pt log -f` to follow its logs.
 
-## PIG options
+## PIG options {#pig-options}
 
 These PIG options **must precede the native command**; once the native command
 token appears, all remaining tokens belong to patronictl:
@@ -83,7 +83,7 @@ pig pt query -c 'select 1'                 # native query -c: SQL
 
 Use the full `--dbsu` option; `pig pt` has no `-U` shorthand.
 
-## Config-File Resolution
+## Config-File Resolution {#config-file-resolution}
 
 PIG selects the patronictl configuration file in this order:
 
@@ -97,7 +97,7 @@ PIG uses an explicit path or environment path even if the file is missing or unr
 It resolves relative paths before switching operating-system user. It checks the two conventional
 paths as the selected user. Service commands and native help do not need a configuration file.
 
-## Command dispatch and output
+## Command dispatch and output {#command-dispatch-and-output}
 
 PIG handles the local commands listed above. It forwards any other command and every argument
 after that command to patronictl. Put PIG options before the native command:
@@ -115,7 +115,7 @@ Use `pig pt -- COMMAND ...` to forward a command whose name matches a local comm
 The local `set`, `status`, and `service` commands support PIG structured output.
 Log output has the formats described below.
 
-## pt set
+## pt set {#pt-set}
 
 `pt set` updates the cluster selected by the configuration file:
 
@@ -123,7 +123,7 @@ Log output has the formats described below.
 pig pt set KEY=VALUE [KEY=VALUE ...] [--yes] [--plan]
 ```
 
-**Key classification**:
+Key classification rules:
 
 - These scalar Patroni dynamic keys translate to native `--set`:
   `loop_wait`, `ttl`, `retry_timeout`, `primary_race_backoff`,
@@ -153,7 +153,7 @@ pig pt set ttl=60 max_connections=200 synchronous_mode=on
 - after changing restart-required PostgreSQL parameters, PIG suggests the follow-up:
   first `pig pt list`, then `pig pt restart CLUSTER --pending` (explicit cluster required).
 
-## Service Management
+## Service Management {#service-management}
 
 `pt service` (alias `pt svc`) manages the local `patroni` systemd unit:
 
@@ -169,7 +169,7 @@ pig pt set ttl=60 max_connections=200 synchronous_mode=on
 `pt start` / `pt stop` (aliases `up` / `dn`) call the same service actions. Stopping the Patroni service may also stop PostgreSQL on this node
 (depending on Patroni configuration).
 
-### pt status
+### pt status {#pt-status}
 
 Shows combined status: systemd service state, Patroni process info, and cluster members
 from patronictl.
@@ -179,7 +179,7 @@ pig pt status
 pig pt st -o json                # structured output
 ```
 
-### pt log
+### pt log {#pt-log}
 
 View local Patroni logs. The log directory comes from `log.dir` in the selected config,
 falling back to `/pg/log/patroni`, or set it explicitly with `--log-dir`. Only `pt log` and
@@ -208,7 +208,7 @@ pig pt log grep ERROR          # search logs
 | `--log-dir` |       | auto    | Log directory         |
 {.full-width}
 
-## Migrating from v1.5.x
+## Migrating from v1.5.x {#migrating-from-v15x}
 
 When upgrading from v1.5.x, update older scripts to use patronictl syntax:
 
@@ -226,14 +226,14 @@ When upgrading from v1.5.x, update older scripts to use patronictl syntax:
 | `--dbsu -U`                            | `--dbsu` (`-U` shorthand removed)                           |
 {.full-width .wide .expand}
 
-## Requirements and privileges
+## Requirements and privileges {#requirements-and-privileges}
 
 Service commands require Linux and systemd. Log commands need readable Patroni log files.
 PIG runs patronictl as the operating-system user selected by `--dbsu`, then `$PIG_DBSU`,
 then `postgres`. It executes directly as that user, uses `su` from root, or uses `sudo -H -u`
 from another account. Service management uses root privileges.
 
-## Design record
+## Design record {#design-record}
 
 [Let Patronictl Speak for Itself](/design/patronictl-passthrough/) records why PIG stopped
 mirroring the upstream command tree and which local responsibilities remain.

@@ -5,7 +5,7 @@ date: 2026-09-03
 lastmod: 2026-10-13
 description: "The build-policy decision that makes RPM debuginfo/debugsource and DEB dbgsym output opt-out rather than opt-in."
 tags: [build, cli]
-weight: 35
+weight: 92
 authors: [Vonng]
 draft: false
 ---

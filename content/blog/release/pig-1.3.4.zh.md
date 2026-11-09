@@ -4,14 +4,14 @@ linkTitle: "v1.3.4"
 date: 2026-04-14
 description: "504 扩展更新与发布产物校验和刷新"
 tags: [catalog]
-weight: 81
+weight: 18
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.3.4
 ---
 
 扩展数量更新至 **504** 个。
 
-## 校验和
+## 校验和 {#checksums}
 
 ```checksums
 dc78def9a1e5eb483ac5df4c87f4ac0ef2018bb12b4bedff650d8ba4d58a05fd  pig-1.3.4-1.aarch64.rpm

@@ -5,7 +5,7 @@ date: 2026-10-04
 lastmod: 2026-10-13
 description: "Prepare the Pigsty key best-effort, reuse existing files, and fall back with a warning unless repository metadata explicitly names a key."
 tags: [repo, sty]
-weight: 95
+weight: 94
 authors: [Vonng]
 draft: false
 ---

@@ -18,7 +18,7 @@ So I built something different: an encyclopedia for **464 PostgreSQL extensions*
 
 ![PostgreSQL Extension Encyclopedia homepage](/article/pgext-pedia/featured.webp)
 
-## Not just a list
+## Not just a list {#not-just-a-list}
 
 There is no shortage of extension lists on the internet. What is usually missing is operational detail.
 
@@ -37,47 +37,47 @@ We also aggregated 460+ extension docs so people can browse a large portion of t
 
 ![Extension docs overview](/article/pgext-pedia/docs.webp)
 
-## 464 extensions, 16 categories
+## 464 extensions, 16 categories {#s-464-extensions-16-categories}
 
 The catalog is split into 16 major categories. If you have heard that PostgreSQL can behave like a time-series database, vector database, graph database, document store, or even emulate Oracle and SQL Server semantics, this is where you can see which extensions actually make those claims real.
 
 ![Category overview](/article/pgext-pedia/categories.webp)
 
-## Multiple ways to browse
+## Multiple ways to browse {#multiple-ways-to-browse}
 
 You can explore the catalog from multiple angles:
 
-### By repository origin
+### By repository origin {#by-repository-origin}
 
 Extensions are grouped into **PGDG**, **PIGSTY**, and **CONTRIB**.
 
 ![Browse by repository origin](/article/pgext-pedia/repos.webp)
 
-### By implementation language
+### By implementation language {#by-implementation-language}
 
 You can see how much of the ecosystem is written in C, C++, Rust, Java, Python, SQL, or plain data files.
 
 ![Browse by language](/article/pgext-pedia/languages.webp)
 
-### By license
+### By license {#by-license}
 
 MIT, Apache 2.0, PostgreSQL, BSD, GPL, AGPL, Timescale License: all of them matter in real-world adoption.
 
 ![Browse by license](/article/pgext-pedia/licenses.webp)
 
-### By extension properties
+### By extension properties {#by-extension-properties}
 
 Need `shared_preload_libraries`? Contains no SQL DDL? Conflicts with something else? Packages multiple extensions together? The directory makes those traits visible.
 
 ![Browse by extension attributes](/article/pgext-pedia/attributes.webp)
 
-### By platform
+### By platform {#by-platform}
 
 At the OS and CPU level, you can see exactly which extensions are available and which are not.
 
 ![Browse by platform matrix](/article/pgext-pedia/matrix.webp)
 
-## The full stack: directory + repo + package manager
+## The full stack: directory + repo + package manager {#the-full-stack-directory-repo-package-manager}
 
 The catalog only makes sense because it sits on top of real infrastructure:
 
@@ -87,7 +87,7 @@ The catalog only makes sense because it sits on top of real infrastructure:
 
 Together, they turn discovery, evaluation, installation, and use into a single workflow.
 
-## A few numbers
+## A few numbers {#a-few-numbers}
 
 ![Extension count statistics](/article/pgext-pedia/extstats.webp)
 
@@ -97,7 +97,7 @@ Together, they turn discovery, evaluation, installation, and use into a single w
 
 ![Package distribution statistics](/article/pgext-pedia/pkgstats.webp)
 
-## Why build this?
+## Why build this? {#why-build-this}
 
 At a glance, this looks like a documentation site. In practice, it is infrastructure for the PostgreSQL extension ecosystem.
 
@@ -105,7 +105,7 @@ Too many good extensions die in obscurity because the path from "I heard this ex
 
 My goal is simple: **come here, see what exists, pick what you want, copy one command, and use it.**
 
-## How to use it
+## How to use it {#how-to-use-it}
 
 If you already know your way around PostgreSQL and just want more packages beyond PGDG, add the Pigsty APT/DNF repository:
 
@@ -124,19 +124,19 @@ cd ~/pigsty
 ./deploy.yml
 ```
 
-## Fully open source
+## Fully open source {#fully-open-source}
 
 The website and the metadata itself are open source. If you want a copy or want to reuse the data, the source lives in [pgsty/pgext](https://github.com/pgsty/pgext).
 
 ![Open-source repo for site and metadata](/article/pgext-pedia/source.webp)
 
-## Bonus
+## Bonus {#bonus}
 
 The original post also included a related conference poster, so I kept it here as well.
 
 ![Extension for Everyone poster](/article/pgext-pedia/poster.webp)
 
-## The catalog in numbers
+## The catalog in numbers {#the-catalog-in-numbers}
 
 Extensions are the soul of PostgreSQL, and this directory is an index to that soul.
 

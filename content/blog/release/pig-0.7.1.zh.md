@@ -4,7 +4,7 @@ linkTitle: "v0.7.1"
 date: 2025-11-10
 description: "新网站，改进容器内的使用体验"
 tags: [ext]
-weight: 211
+weight: 34
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v0.7.1
 ---
@@ -17,7 +17,7 @@ release_url: https://github.com/pgsty/pig/releases/tag/v0.7.1
 - [DEB 变更日志](https://pigsty.cc/docs/repo/pgsql/deb#2025-11-10)：为几乎所有扩展新增 PG 18 支持
 - [Infra 变更日志](https://pigsty.cc/docs/repo/infra/log/)：例行更新至最新版本
 
-## 校验和
+## 校验和 {#checksums}
 
 ```checksums
 a696c9ec784e2fc248e5f3d87cc8aae4116e890f78c5997957d30593f2c85ca6  pig-0.7.1-1.aarch64.rpm

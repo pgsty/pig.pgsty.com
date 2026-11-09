@@ -4,7 +4,7 @@ linkTitle: "v1.1.0"
 date: 2026-02-12
 description: "451 extensions, Agent-Native CLI framework"
 tags: [cli, patroni, build, catalog]
-weight: 141
+weight: 25
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.1.0
 ---
@@ -14,7 +14,7 @@ with the core goal of moving pig from a "human-friendly CLI" to an "agent-native
 
 Seven new extensions are added, bringing the total available extensions to 451.
 
-## New Features
+## New Features {#new-features}
 
 - Land the unified agent-native output framework: introduce global `--output` (`text/yaml/json/json-pretty`), and provide unified `Result` structure, stable status codes, and machine-readable output for `ext/repo/pg/pt/pb/pitr/status/version/context`.
 - Introduce ANCS (Agent Native Command Schema) metadata: add semantic fields such as `type/volatility/parallel/risk/confirm/os_user/cost`, and make `help` emit a command capability tree directly in structured mode for agent-side capability and risk discovery.
@@ -24,7 +24,7 @@ Seven new extensions are added, bringing the total available extensions to 451.
 - Strengthen compatibility layer: add legacy structured wrappers for existing command groups such as `pg_exporter/pg_probe/do/sty`, preserving legacy interaction behavior while exposing structured execution results and output capture.
 - Update pigsty to `v4.1.0`.
 
-## Extension Update
+## Extension Update {#extension-update}
 
 | Extension          | Old          | New           |
 |:-------------------|:-------------|:--------------|
@@ -62,7 +62,7 @@ Seven new extensions are added, bringing the total available extensions to 451.
 | pgmb               | -            | 1.0.0         |
 {.wide .expand}
 
-## Bug Fixes
+## Bug Fixes {#bug-fixes}
 
 - Security fix: resolve parsing panic in `pig build proxy` when receiving malformed proxy addresses.
 - Security fix: resolve path traversal risk in `pig pg log`, preventing access to files outside the log directory via `../../`.
@@ -72,7 +72,7 @@ Seven new extensions are added, bringing the total available extensions to 451.
 - Extension management fixes: adjust `ext update` to explicit-target updates and fix status drift issues; ensure `ext import` downloads requested DEB resources to the specified repo directory.
 - Output/observability fixes: align structured output exit code behavior with text mode rendering; improve permission handling and parsing stability in `pg status`.
 
-## Checksums
+## Checksums {#checksums}
 
 ```checksums
 95245dc035270df2b02cdd5d19afac57ccf4949a61b07b1b806fffde3a3b780e  pig-1.1.0-1.aarch64.rpm

@@ -4,14 +4,14 @@ linkTitle: "v1.0.0"
 date: 2026-01-26
 description: "New pg/pt/pb/pitr commands, availability matrix"
 tags: [patroni, pgbackrest, postgres, pitr]
-weight: 151
+weight: 26
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.0.0
 ---
 
 This release introduces three major new subcommand groups (`pig pg`, `pig pt`, `pig pb`) for managing PostgreSQL, Patroni, and pgBackRest, along with an orchestrated PITR command and enhanced extension availability display.
 
-## New Commands
+## New Commands {#new-commands}
 
 - `pig pg` - PostgreSQL instance management
   - `pg init/start/stop/restart/reload/status` - Control and manage PostgreSQL instances
@@ -38,21 +38,21 @@ This release introduces three major new subcommand groups (`pig pg`, `pig pt`, `
   - Multiple recovery targets: time, LSN, XID, restore point
   - Dry-run mode and post-recovery guidance
 
-## New Features
+## New Features {#new-features}
 
 - Add availability matrix to `pig ext avail` and `pig ext ls`
 
-## Improvements
+## Improvements {#improvements}
 
 - Unified command aliases across pg/pt/pb commands
 - Standardized error message format
 - Code refactoring and cleanup
 
-## Bug Fixes
+## Bug Fixes {#bug-fixes}
 
 - Fix missing UTIL extension category
 
-## Checksums
+## Checksums {#checksums}
 
 ```checksums
 306637079e942bcac9ccbc089cd09a80051898f8db1630269bb1acd3fbdaa872  pig-1.0.0-1.aarch64.rpm

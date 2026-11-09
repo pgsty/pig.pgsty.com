@@ -4,7 +4,7 @@ linkTitle: "v1.3.1"
 date: 2026-03-05
 description: "PG13 退役，支持窗口统一为 PG14-18，扩展增至 464"
 tags: [build, catalog]
-weight: 111
+weight: 21
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.3.1
 ---
@@ -18,7 +18,7 @@ release_url: https://github.com/pgsty/pig/releases/tag/v1.3.1
 - 修复 `pig build` 依赖/构建同步问题，rsync 增加 `--keep-dirlinks` 参数。
 - YUM 仓库中 Nginx 从 `infra` 模块拆分为独立模块索引（`nginx`）。
 
-## 校验和
+## 校验和 {#checksums}
 
 ```checksums
 196e57c7dd46cdedd90ab75965a766f74aabc3bc23ddc8fb757473647bed7b8f  pig-1.3.1-1.aarch64.rpm

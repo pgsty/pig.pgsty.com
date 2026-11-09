@@ -4,7 +4,7 @@ linkTitle: "v1.4.2"
 date: 2026-06-18
 description: "524 extensions, PG19 beta, pgrx 0.18.1, Patroni fixes"
 tags: [patroni, build, catalog, sty]
-weight: 51
+weight: 15
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.4.2
 ---
@@ -18,7 +18,7 @@ release_url: https://github.com/pgsty/pig/releases/tag/v1.4.2
 - Bump the default `pgrx` version for `pig build pgrx` from `0.18.0` to `0.18.1`.
 - Bump release metadata to `v1.4.2`, refresh Go module checksums, and add focused tests for PG19 aliases/config generation plus Patroni cluster-scope behavior.
 
-## Checksums
+## Checksums {#checksums}
 
 ```checksums
 790afe4d6622cb041b06c622bc466cb1b2960a77487f368238027fb4a3a5ef93  pig-1.4.2-1.aarch64.rpm

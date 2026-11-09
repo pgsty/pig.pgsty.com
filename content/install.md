@@ -10,7 +10,7 @@ tags: [install, repo]
 
 Install PIG with the Linux installer, a system package, or a release archive. The current version is **v{{< param version >}}**. The [download page](/download/) lists all release files.
 
-## Script installation
+## Script installation {#script-installation}
 
 On Linux, run:
 
@@ -38,7 +38,7 @@ To select a published version, pass its version number:
 curl -fsSL https://repo.pigsty.io/pig | bash -s {{< param version >}}
 ```
 
-## Download release artifacts
+## Download release artifacts {#download-release-artifacts}
 
 Choose a file for your operating system and architecture on the [download page](/download/#packages) or [GitHub release](https://github.com/pgsty/pig/releases/tag/v{{< param version >}}).
 
@@ -63,7 +63,7 @@ The release includes [SHA-256 checksums](https://github.com/pgsty/pig/releases/d
 
 The macOS binary supports catalog queries, inventory editing, and other commands that do not need Linux package managers. Install PostgreSQL packages on a [supported Linux host](/intro/#linux-compatibility).
 
-## Repository installation
+## Repository installation {#repository-installation}
 
 To manage PIG with the system package manager, add the [Pigsty Infra repository](https://pigsty.io/docs/repo/infra/). Choose the tab for your host:
 
@@ -92,7 +92,7 @@ sudo dnf install -y pig
 
 These definitions disable signature checks for the Pigsty repository. For key handling and verification settings, see [repository keys](/repo/#repo-key).
 
-## Update
+## Update {#update}
 
 On Linux, update the executable with:
 
@@ -100,7 +100,7 @@ On Linux, update the executable with:
 sudo pig update
 ```
 
-Use `-m` for the China mirror or `-v {{< param version >}}` to select that version. For an archive installation on macOS, download the new archive and replace the installed executable.
+Use `-m` (`--mirror`) for the China mirror or `-v {{< param version >}}` to select that version. For an archive installation on macOS, download the new archive and replace the installed executable.
 
 Refresh the extension catalog separately:
 
@@ -110,7 +110,7 @@ pig ext reload
 
 This updates catalog metadata, leaving installed packages unchanged.
 
-## Uninstall
+## Uninstall {#uninstall}
 
 Choose the command that matches your installation:
 
@@ -122,7 +122,7 @@ sudo rm /usr/local/bin/pig        # Archive installed at this path
 
 If you installed the archive elsewhere, remove that executable instead. PostgreSQL and its extensions continue to run without PIG.
 
-## Build from source
+## Build from source {#build-from-source}
 
 Install Git, Make, and the Go toolchain specified in the project's [go.mod](https://github.com/pgsty/pig/blob/v{{< param version >}}/go.mod). Build the current release:
 

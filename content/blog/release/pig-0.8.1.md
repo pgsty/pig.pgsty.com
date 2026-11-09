@@ -4,17 +4,17 @@ linkTitle: "v0.8.1"
 date: 2025-12-27
 description: "Restore llvmjit to the pgsql-full alias"
 tags: [ext]
-weight: 159
+weight: 28
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v0.8.1
 ---
 
-## Fix
+## Fix {#fix}
 
 - Restore `llvmjit` to the `pgsql-full` package alias after it was removed in v0.8.0.
 - Bump the release version to `v0.8.1`.
 
-## Checksums
+## Checksums {#checksums}
 
 ```checksums
 fd9291b15953e8e5f579de7e0256b88ca742e11fc0ed578bf181d2ce4cf5258c  pig-0.8.1-1.aarch64.rpm

@@ -4,7 +4,7 @@ linkTitle: "v1.3.2"
 date: 2026-03-23
 description: "例行元数据更新，新增 pg tune 命令与构建别名"
 tags: [catalog, build, ext, postgres]
-weight: 101
+weight: 20
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.3.2
 ---
@@ -16,7 +16,7 @@ release_url: https://github.com/pgsty/pig/releases/tag/v1.3.2
 - 为 `pig build get` 新增 `pdu` 与 `pgdog` 两个源码包 alias。
 - 调整 pgext.cloud 的 URL 至新版本的扩展目录 pigsty.io/ext
 
-## 校验和
+## 校验和 {#checksums}
 
 ```checksums
 d760f47652ff3e2e4a61eb7b9a68ca68665b2b36c187c52f5eaf50d2f007d8f3  pig-1.3.2-1.aarch64.rpm

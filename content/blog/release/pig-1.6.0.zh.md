@@ -4,14 +4,14 @@ linkTitle: "v1.6.0"
 date: 2026-07-28
 description: "562 个已打包扩展，pt 原生透传，inventory 与 CMDB，Grafana 管理"
 tags: [inventory, patroni, catalog, cli]
-weight: 21
+weight: 12
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.6.0
 ---
 
 Pig `v1.6.0` 是一个大版本：`pig pt` 重写为 `patronictl` 原生透传，新增根级 `pig inventory` 命令组提供 `pigsty.yml` 的无损编辑与校验（附带实验性的 PostgreSQL CMDB 交换能力），`pig sty grafana` 提供原生 Grafana 仪表盘管理，已打包扩展目录增至 562 个。
 
-## 主要变化
+## 主要变化 {#highlights}
 
 - `pig pt` 重写为 `patronictl` 原生透传：所有集群命令（`list`、`restart`、`switchover`、`failover`、`edit-config` 等）直接转发，使用原生参数、交互确认、输出与退出码，patronictl 的新功能无需等待 pig 发版即可使用。本地保留 `status`、`log`、`set`、`service/svc` 辅助命令，新增 `-c/--config-file`、`-d/--dcs-url`、`-k/--insecure` 选项与 `pig pt -- …` 逃逸写法。
 - 新增根级 `pig inventory` 命令组（别名 `inv`）：`status` / `list` / `show` / `edit` / `validate` / `check` / `diff` —— 无损 YAML 引擎逐字节保留注释、格式、键序与锚点；`edit` 先校验再原子写入，非法 YAML 不可能落盘。
@@ -21,21 +21,21 @@ Pig `v1.6.0` 是一个大版本：`pig pt` 重写为 `patronictl` 原生透传�
 - 仓库刷新：MySQL 仓库升级到 8.4 LTS，新增 Percona XtraBackup（`pxb84`）与 MySQL Tools 仓库，Kubernetes 升级到 v1.36，LLVM apt 覆盖 Debian/Ubuntu 26，Percona TDE 改用 repo.percona.com 官方源，移除 `wiltondb` 仓库。
 - 工具链：Go 1.26.5，新增原生 PostgreSQL 驱动（pgx v5），内置 Pigsty 版本 `4.4.0`。
 
-## 扩展目录
+## 扩展目录 {#extension-catalog}
 
 - 已打包扩展数量从 **531** 增加到 **562**；PGEXT.CLOUD 总目录收录 **2230** 个扩展。
 - 新增 33 个扩展，包括 `pg_lake` 家族（`pg_lake`、`pg_lake_table`、`pg_lake_engine`、`pg_lake_iceberg`、`pg_lake_copy`）、`pg_jieba`、`pg_cjk_parser`、`pg_fts`、`pgmonitor`、`pgmemento`、`pg_tiktoken_c`、`online_advisor`、`pgsqlmock`、`plx` 等。
 - 移除 2 个：`pg_analytics`、`spat`；刷新 58 个扩展版本，包括 `vector 0.8.5`、`timescaledb 2.28.3`、`pg_search 0.24.3`、`pg_tde 2.2.1`、`powa 5.2.0`。
 - 包别名与 Pigsty 同步：`kafka` 更名为 `kafka-stack`；Debian/Ubuntu 的 `postgresql` 别名收窄为仅 `postgresql-$v`（完整开发套件请用 `pgsql` / `pgsql-full`）。
 
-## 兼容性提醒
+## 兼容性提醒 {#compatibility-notes}
 
 - ⚠ `pig pt failover <name>`：位置参数现在是 **集群名** 而不是晋升候选成员 —— 请改用 `pig pt failover CLUSTER --candidate MEMBER`，升级前务必检查 failover 自动化脚本。
 - `pig pt` 位置参数改为原生的集群优先形式（`restart CLUSTER [MEMBER]`）；转发命令返回 patronictl 原生退出码、由 patronictl 自行交互确认（`-y` 不再门禁这些命令），且不再支持 `-o json`（请改用原生 `--format json`）。`pig pt config` 由 `pig pt set K=V` 与原生 `show-config` / `edit-config` 取代。
 - 结构化输出模式下，被包裹工具的输出移至 stderr，stdout 只有 JSON/YAML 信封 —— 请更新解析混合输出的脚本。
 - `pig inventory edit` 编辑成功后会将配置文件权限收紧为 0600（文件可能包含数据库凭据）。
 
-## 校验和
+## 校验和 {#checksums}
 
 ```checksums
 6899e8a3e1c0adfe8c0c177c0632b0a00821b304ed5998fcbdf28d02660c6768  pig-1.6.0-1.aarch64.rpm

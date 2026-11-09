@@ -4,12 +4,12 @@ linkTitle: "v0.8.0"
 date: 2025-12-26
 description: "440 extensions, remove sysupdate repo"
 tags: [repo, catalog, patroni]
-weight: 161
+weight: 29
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v0.8.0
 ---
 
-## Extension Updates
+## Extension Updates {#extension-updates}
 
 - Total extensions reached 440
 - New extension: [pg_ai_query](https://github.com/benodiwal/pg_ai_query) 0.1.1
@@ -24,7 +24,7 @@ release_url: https://github.com/pgsty/pig/releases/tag/v0.8.0
 - Fixed debian/ubuntu pg18 extension issues: supautils, pg_summarize, pg_vectorize, pg_tiktoken, pg_tzf, pglite_fusion, pgsmcrypto, pgx_ulid, plprql
 - Pigsty version synced to 4.0.0
 
-## Repository Updates
+## Repository Updates {#repository-updates}
 
 - Removed pgdg yum sysupdate repo due to upstream changes
 - Removed pgdg yum llvmjit package due to upstream changes
@@ -32,7 +32,7 @@ release_url: https://github.com/pgsty/pig/releases/tag/v0.8.0
 - Added priority for el repo definitions, docker repo skipped when unavailable
 - Added epel 10 / pgdg 9/10 OS minor version hotfix
 
-## Checksums
+## Checksums {#checksums}
 
 ```checksums
 e457832fb290e2f9975bf719966dc36e650bdcbf8505d319c9e0431f4c03bc9e  pig-0.8.0-1.aarch64.rpm

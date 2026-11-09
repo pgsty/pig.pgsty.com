@@ -4,18 +4,18 @@ linkTitle: "v0.9.0"
 date: 2025-12-28
 description: "重命名 sty deploy 并扩展 sty conf 参数"
 tags: [sty, ext]
-weight: 157
+weight: 27
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v0.9.0
 ---
 
-## 变更
+## 变更 {#changes}
 
 - 将 `pig sty install` 重命名为 `pig sty deploy`，使命令名称准确表达其执行 Pigsty 部署 playbook 的行为。
 - 为 `pig sty conf` 增加 `-g`、`-p` 与 `-o` 参数，与该版本中的 configure 脚本保持一致。
 - 在 `pgsql-full` 软件包别名中保留 `llvmjit`。
 
-## 校验和
+## 校验和 {#checksums}
 
 ```checksums
 ea0c098d0829720b6e364d2f2a91328876962c7f0ae94eee7bdcde0bd43313fa  pig-0.9.0-1.aarch64.rpm

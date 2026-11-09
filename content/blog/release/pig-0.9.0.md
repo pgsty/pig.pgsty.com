@@ -4,18 +4,18 @@ linkTitle: "v0.9.0"
 date: 2025-12-28
 description: "Rename sty deploy and expand sty conf options"
 tags: [sty, ext]
-weight: 157
+weight: 27
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v0.9.0
 ---
 
-## Changes
+## Changes {#changes}
 
 - Rename `pig sty install` to `pig sty deploy` so the command name reflects that it runs the Pigsty deployment playbook.
 - Add the `-g`, `-p`, and `-o` options to `pig sty conf`, aligning it with the configure script available in this release.
 - Keep `llvmjit` in the `pgsql-full` package alias.
 
-## Checksums
+## Checksums {#checksums}
 
 ```checksums
 ea0c098d0829720b6e364d2f2a91328876962c7f0ae94eee7bdcde0bd43313fa  pig-0.9.0-1.aarch64.rpm

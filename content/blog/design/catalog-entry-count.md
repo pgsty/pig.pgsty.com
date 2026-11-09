@@ -2,7 +2,7 @@
 title: "One Catalog Entry Count for the Website and CLI"
 linkTitle: "Catalog Entry Count"
 date: 2026-10-16
-lastmod: 2026-10-17
+lastmod: 2026-11-09
 description: "Count every catalog record consistently across the website, extension lists, availability summaries, and catalog refresh results."
 tags: [catalog, ext, cli]
 weight: 96
@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **Decision date:** 2026-10-16<br>
-> **Status:** Implemented in the v1.10.0 candidate, not yet released.<br>
+> **Status:** Released in [pig v1.10.0](/release/pig-1.10.0/).<br>
 > **Current reference:** [`pig ext` catalog count](/ext/#catalog-count)<br>
 > **Scope:** Catalog totals and default listing membership; package installation and SQL activation rules remain defined by each entry.
 
@@ -54,7 +54,7 @@ not a count of extensions enabled in a database or installable on a particular h
 ## Verification {#verification}
 
 Fixed source commits and regression tests for the committed v1.10.0 refinements cover:
-[catalog entry count and availability](https://github.com/pgsty/pig/commit/863a271a924a1634630247643d9d96200a98572d). These commits do not establish a release boundary.
+[catalog entry count and availability](https://github.com/pgsty/pig/commit/863a271a924a1634630247643d9d96200a98572d). This refinement shipped in [v1.10.0](https://github.com/pgsty/pig/releases/tag/v1.10.0).
 
 The preceding classification rule is preserved in the
 [v1.9.0 catalog source](https://github.com/pgsty/pig/blob/9eb5488847ea34827a74c9f8bb7b2dd3778f5190/cli/ext/catalog.go).
@@ -64,6 +64,7 @@ search and package counts specific to their returned rows.
 
 ## Status {#status}
 
-Accepted on 2026-10-16 and implemented with regression tests. The v1.10.0 candidate
-bundles 603 records and is not yet released. Use the [current reference](/ext/#catalog-count) for the counting
-contract and [release notes](/release/) for version boundaries.
+Accepted on 2026-10-16 and released in [v1.10.0](https://github.com/pgsty/pig/releases/tag/v1.10.0)
+(603 records); [v1.10.4](/release/pig-1.10.4/) bundles {{< param pgext_count >}} records. Use the
+[current reference](/ext/#catalog-count) for the counting contract and [release notes](/release/)
+for version boundaries.

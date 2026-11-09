@@ -4,7 +4,7 @@ linkTitle: "v1.3.3"
 date: 2026-04-10
 description: "481 扩展与 Go 1.26.2 更新"
 tags: [catalog]
-weight: 91
+weight: 19
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.3.3
 ---
@@ -12,7 +12,7 @@ release_url: https://github.com/pgsty/pig/releases/tag/v1.3.3
 - 扩展目录刷新，可用扩展总数增加到 **481** 个。
 - Go 工具链从 `1.26.0` 升级到 `1.26.2`。
 
-## 扩展更新
+## 扩展更新 {#extension-updates}
 
 | 扩展名              | 旧版本    | 新版本    | 备注            |
 |:-----------------|:-------|:-------|:--------------|
@@ -42,7 +42,7 @@ release_url: https://github.com/pgsty/pig/releases/tag/v1.3.3
 | `parray_gin`     |        | 1.4.0  | 新增，PG14-18    |
 {.wide .expand}
 
-## 校验和
+## 校验和 {#checksums}
 
 ```checksums
 e74418061ea975fbc3e8a89b31f274d7dc3617d12b9d681e5c8ef03584392088  pig-1.3.3-1.aarch64.rpm

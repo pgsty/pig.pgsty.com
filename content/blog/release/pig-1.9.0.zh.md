@@ -4,7 +4,7 @@ linkTitle: "v1.9.0"
 date: 2026-10-06
 description: "600 条扩展目录记录、一键 Xray 客户端与服务端、自动准备仓库公钥，以及 cargo-pgrx 0.19.3。"
 tags: [repo, build, catalog, cli]
-weight: 1
+weight: 6
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.9.0
 ---
@@ -13,7 +13,7 @@ Pig `v1.9.0` 新增一键配置 Xray 客户端与服务端、自动准备 Pigsty
 并将内置扩展目录更新为 **600 条记录**。`cargo-pgrx` 默认版本升级到 `0.19.3`，
 内置 Pigsty 版本保持 `4.5.0`。
 
-## Xray 客户端与服务端
+## Xray 客户端与服务端 {#xray-clients-and-servers}
 
 - `pig build proxy` 安装或检查 Xray；`pig build proxy client` 配置
   VLESS/REALITY/Vision HTTP/SOCKS 客户端；`pig build proxy server` 配置 Linux 服务端。
@@ -34,7 +34,7 @@ sudo pig build proxy client --from ./client.uri
 在服务端执行第一条命令，将 `client.uri` 安全传到客户端，再在客户端执行第二条命令。
 前置条件与 macOS 配置见 [`pig build`](/zh/build/#build-proxy)。
 
-## 仓库签名公钥
+## 仓库签名公钥 {#repository-keys}
 
 - `repo add`、`repo set` 与 `sty boot` 在选中仓库需要时准备内置 Pigsty 公钥。
   已有普通公钥文件直接复用；缺失的默认公钥离线写入
@@ -44,9 +44,9 @@ sudo pig build proxy client --from ./client.uri
 - 显式指定的签名公钥引用必须有效；无效或不可用的公钥在仓库替换、缓存刷新之前报错。
   EL 通过 `rpm --import` 导入显式引用。仅选择其他仓库时，不准备 Pigsty 公钥。
 
-签名检查默认值、公钥准备与元数据刷新的区别见 [**`pig repo`**](https://pig.pgsty.com/zh/repo/#仓库定义)。
+签名检查默认值、公钥准备与元数据刷新的区别见 [`pig repo`](/zh/repo/#repository-definitions)。
 
-## 扩展目录与构建默认值
+## 扩展目录与构建默认值 {#catalog-and-build-defaults}
 
 - 内置目录共 **600 条记录**，相较 v1.8.1 快照新增 22 条。新增条目包括
   `edtf_postgres`、`plphp`、`pg_lexo`、`pg_money`、`istore`、`colnames`、
@@ -58,13 +58,13 @@ sudo pig build proxy client --from ./client.uri
 - 延续 v1.8.1 的平台调试包默认策略。`--nodbg` 可禁用 RPM 的 `debuginfo`/`debugsource`
   与 DEB 的 `dbgsym`；`-s|--symbol` 保留为已弃用的兼容空操作。
 
-## 兼容性
+## 兼容性 {#compatibility}
 
 没有移除已有命令或参数。新增 Xray 角色命令使用 VLESS/REALITY/Vision，历史 VMess
 位置参数命令保持 V2Ray 行为。服务端设置检查本地监听与服务。
 按所选公网端口配置防火墙、云安全组和所用的 Nginx 前端，再从客户端验证连接。
 
-## 验证
+## 验证 {#verification}
 
 经过验证的 [v1.9.0 标签](https://github.com/pgsty/pig/tree/v1.9.0) 指向源码提交
 [`9eb5488`](https://github.com/pgsty/pig/commit/9eb5488847ea34827a74c9f8bb7b2dd3778f5190)。该精确提交通过
@@ -72,7 +72,7 @@ sudo pig build proxy client --from ./client.uri
 vet、静态分析、漏洞扫描与发布 snapshot。[Release 工作流](https://github.com/pgsty/pig/actions/runs/37484632240)
 生成八个 Linux/macOS 压缩包与 RPM/DEB 安装包，下载后已逐一验证 SHA-256。
 
-## 校验和
+## 校验和 {#checksums}
 
 ```checksums
 d0d80bd23a654308598f265ce4b4d4f78d6156c113ce6aa00f82bfc9519a180f  pig-1.9.0-1.aarch64.rpm

@@ -2,7 +2,7 @@
 title: "官网与 CLI 统一按目录条目计数"
 linkTitle: "目录条目计数"
 date: 2026-10-16
-lastmod: 2026-10-17
+lastmod: 2026-11-09
 description: "官网、扩展列表、可用性摘要和目录刷新结果统一统计全部目录记录。"
 tags: [catalog, ext, cli]
 weight: 96
@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **决策日期：** 2026-10-16<br>
-> **状态：** Implemented（已实现），纳入 v1.10.0 候选版本，尚未发布。<br>
+> **状态：** Released（已发布），随 [pig v1.10.0](/zh/release/pig-1.10.0/) 交付。<br>
 > **当前参考：** [`pig ext` 目录计数](/zh/ext/#catalog-count)<br>
 > **范围：** 目录总数与默认列表成员；包安装和 SQL 启用方式仍由各条目定义。
 
@@ -51,7 +51,7 @@ SQL 工具同时出现在默认列表和按名称搜索的结果中。输出字�
 ## 验证 {#verification}
 
 v1.10.0 已提交修订的固定源码与回归测试证据包括：
-[目录条目计数与可用性](https://github.com/pgsty/pig/commit/863a271a924a1634630247643d9d96200a98572d)。这些提交不构成版本发布证据。
+[目录条目计数与可用性](https://github.com/pgsty/pig/commit/863a271a924a1634630247643d9d96200a98572d)。该修订已随 [v1.10.0](https://github.com/pgsty/pig/releases/tag/v1.10.0) 发布。
 
 此前的分类规则保留在
 [v1.9.0 目录源码](https://github.com/pgsty/pig/blob/9eb5488847ea34827a74c9f8bb7b2dd3778f5190/cli/ext/catalog.go)
@@ -60,5 +60,5 @@ v1.10.0 已提交修订的固定源码与回归测试证据包括：
 
 ## 状态 {#status}
 
-此决策于 2026-10-16 接受，已实现并包含回归测试。v1.10.0 候选版本内嵌 603 条记录，尚未发布。
-计数契约见[当前参考](/zh/ext/#catalog-count)，版本边界见[发布注记](/zh/release/)。
+此决策于 2026-10-16 接受，随 [v1.10.0](https://github.com/pgsty/pig/releases/tag/v1.10.0) 发布（内嵌 603 条记录）；[v1.10.4](/zh/release/pig-1.10.4/) 内嵌 {{< param pgext_count >}} 条记录。
+计数契约见 [当前参考](/zh/ext/#catalog-count)，版本边界见 [发布注记](/zh/release/)。

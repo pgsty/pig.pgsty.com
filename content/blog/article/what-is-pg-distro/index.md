@@ -17,7 +17,7 @@ That is a good question. And the best place to begin is not databases, but opera
 
 --------
 
-## I. Start with Linux Distributions
+## I. Start with Linux Distributions {#i-start-with-linux-distributions}
 
 When most people hear “distribution,” they think of Linux distributions: Red Hat, Debian, Ubuntu, SUSE, Arch, and so on. But if Linux already exists, why do we need Linux distributions? What exactly is the relationship between the two?
 
@@ -37,7 +37,7 @@ That is the key to understanding PostgreSQL distributions.
 
 --------
 
-## II. Apply the Analogy to PostgreSQL—Carefully
+## II. Apply the Analogy to PostgreSQL—Carefully {#ii-apply-the-analogy-to-postgresql-carefully}
 
 PostgreSQL is often described as the Linux kernel of the database world. But if you map the Linux analogy directly onto PostgreSQL, it breaks almost immediately.
 
@@ -57,13 +57,13 @@ That is where a PG distribution earns its keep. It does not turn PostgreSQL into
 
 --------
 
-## III. The Three Layers of a PG Distribution
+## III. The Three Layers of a PG Distribution {#iii-the-three-layers-of-a-pg-distribution}
 
 A serious PG distribution has at least three jobs: selection and integration, build and distribution, and orchestration and control.
 
 All three matter, but their marginal value is not equal. The further down the list you go, the closer you get to the real battleground.
 
-### 1. Selection and Integration: Make Decisions for the User
+### 1. Selection and Integration: Make Decisions for the User {#s-1-selection-and-integration-make-decisions-for-the-user}
 
 Production PostgreSQL is not a bare `postgres` process. You need backups, high availability, connection pooling, monitoring, logging, alerting, object storage, extensions, an access-control model, and sensible defaults. Every category offers a long list of choices.
 
@@ -80,7 +80,7 @@ Selection still matters, but “I chose the right components” is no longer muc
 
 Choosing well is not enough. You also have to deliver those choices reliably.
 
-### 2. Build and Distribution: A Supply Chain Is Trust, Not a Gimmick
+### 2. Build and Distribution: A Supply Chain Is Trust, Not a Gimmick {#s-2-build-and-distribution-a-supply-chain-is-trust-not-a-gimmick}
 
 The second layer is build and distribution. It is often underestimated because users see a package name, not the unglamorous work behind it: multiple operating systems, architectures, versions, and extensions; dependency resolution; ABI compatibility; GPG signing; CVE response; repository availability; and version lifecycle management.
 
@@ -94,7 +94,7 @@ Long-term credibility in packaging, fast patching, a stable supply chain, and a 
 
 What truly separates a distribution from an “install some packages” script is the next layer: orchestration and control.
 
-### 3. Orchestration and Control: Turn Static Packages into a Living System
+### 3. Orchestration and Control: Turn Static Packages into a Living System {#s-3-orchestration-and-control-turn-static-packages-into-a-living-system}
 
 The hardest part of a distribution is orchestration and control. Judgment about component selection is converging, while build and distribution are largely defensive. Orchestration and control are where implementations are tested against one another in the real world. The challenge fits into one sentence: **How do you turn all these static packages into a dynamically running service?**
 
@@ -110,7 +110,7 @@ Orchestration and control still require substantial integration. Kubernetes, Pat
 
 --------
 
-## IV. Two Paths to Orchestration: Kubernetes-Native and Linux-Native
+## IV. Two Paths to Orchestration: Kubernetes-Native and Linux-Native {#iv-two-paths-to-orchestration-kubernetes-native-and-linux-native}
 
 Once orchestration becomes the central problem, the question is: at what layer should the control plane live?
 
@@ -118,7 +118,7 @@ There are two mainstream answers, and they define the two principal tracks for P
 
 The GitHub star counts below are from July 4, 2026.
 
-### Path One: Kubernetes-Native
+### Path One: Kubernetes-Native {#path-one-kubernetes-native}
 
 This path treats the database as a first-class citizen on Kubernetes and uses the Operator pattern for orchestration. You submit a declarative custom resource defined by a CRD, and the Operator's reconciliation loop continuously drives actual cluster state toward the desired state. Provisioning, monitoring, failover, and scaling all happen at the Kubernetes layer.
 
@@ -130,7 +130,7 @@ The cost is equally clear. You are not merely adding a PG Operator. You are adop
 
 ![CloudNativePG project homepage](/article/what-is-pg-distro/cloudnative-pg.webp)
 
-### Path Two: Linux-Native
+### Path Two: Linux-Native {#path-two-linux-native}
 
 This path does not put the database inside Kubernetes. It returns to the operating system: run directly on Linux, on physical or virtual machines; install RPM or DEB packages; manage services with systemd; and drive administration with Ansible or a similar infrastructure-as-code tool.
 
@@ -138,7 +138,7 @@ The Linux-native open-source projects include: Pigsty, with roughly 5,200 stars;
 
 The advantages are fewer infrastructure layers and direct use of familiar Linux tools. DBAs can inspect the processes, files, and services themselves. The cost is that Kubernetes is no longer providing desired-state reconciliation, idempotent execution, failure recovery, or upgrade orchestration. You have to implement those capabilities yourself while also confronting the differences across more than a dozen major versions of mainstream Linux distributions. It is continuous, unglamorous work.
 
-### Pigsty's Choice
+### Pigsty's Choice {#pigsty-s-choice}
 
 Both paths are reasonable. The right one depends on where your team already stands and where it makes sense to place the complexity. Pigsty chose the Linux-native path. I have explained the reasoning at length in [Should Databases Be Deployed in Kubernetes?](https://vonng.com/en/db/db-in-k8s/) and [Is Containerizing Databases a Good Idea?](https://vonng.com/en/db/pg-in-docker/). My view is that this path better fits the nature of databases. It is difficult, but correct.
 
@@ -150,7 +150,7 @@ In my own queries to mainstream AI models about self-hosting PostgreSQL on Linux
 
 --------
 
-## V. One Step Further: A Meta-Distribution
+## V. One Step Further: A Meta-Distribution {#v-one-step-further-a-meta-distribution}
 
 The story could end there. But Pigsty does something else that pushes at the boundary of the term “PG distribution.”
 
@@ -197,7 +197,7 @@ The following examples use the [Pigsty configuration layout from July 2026](http
 
 --------
 
-## Epilogue: A Distribution Is a Supply Chain of Trust
+## Epilogue: A Distribution Is a Supply Chain of Trust {#epilogue-a-distribution-is-a-supply-chain-of-trust}
 
 Return to the original question: what is a PostgreSQL distribution?
 

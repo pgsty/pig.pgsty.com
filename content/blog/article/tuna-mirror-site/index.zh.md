@@ -17,7 +17,7 @@ tags: [repo, build]
 
 老冯看到评论之后也做了回复：
 
-> 感谢 [回复与评论](https://vonng.com/pg/pg-mirror-pigsty/)，也感谢这些年 TUNA 以及国内各高校镜像站为开源镜像生态投入的时间和精力。我看到当时 TUNA 的 PostgreSQL 仓库已经[恢复了和上游的同步](/article/tuna-mirror-site/tuna.webp)，这一点先点个赞。
+> 感谢 [回复与评论](https://vonng.com/pg/pg-mirror-pigsty/)，也感谢这些年 TUNA 以及国内各高校镜像站为开源镜像生态投入的时间和精力。我看到当时 TUNA 的 PostgreSQL 仓库已经 [恢复了和上游的同步](/article/tuna-mirror-site/tuna.webp)，这一点先点个赞。
 >
 > 最初发现问题时，我用的是阿里云的 PostgreSQL 镜像。后来注意到 TUNA 上也存在同样的情况，就纯粹出于开源道义 [向 TUNA 邮件列表反馈问题](https://groups.google.com/g/tuna-general/c/BU8P7X3y4sI)，得到的是一句（本邮件列表是 TUNA 的邮件列表，与阿里云无关）与长期的沉默，这样的感受会体现在文章的情绪中。
 >
@@ -27,7 +27,7 @@ tags: [repo, build]
 >
 > 我的感想是：在没有服务承诺的前提下，把高校镜像当成关键生产基础设施，是一种错误的依赖方式。我自己的做法是不再把别人的开源镜像站当成上游，而是自建 PGDG 镜像，自己掌握软件供应链；再次感谢你把维护者的视角和感受说出来。这次讨论至少能帮更多用户搞清楚：**开源软件镜像站能做什么、不能指望它做什么，这本身就是有价值的。**
 
-## 老冯的感想
+## 老冯的感想 {#my-reflections}
 
 收到消息后呢，我去清华 TUNA 源上看了一眼，PostgreSQL 仓库里已经有最新的 PG 18 的包了，不过 “Last Update” 时间戳还是 2025-05-16，应该是手工同步的。
 总的来说是件大好事，除了老冯的 [PIGSTY 仓库](https://pgext.cloud) 之外，国内总算又多了一个能提供相对及时 PGDG 镜像的节点，这一点我要为 TUNA 点个赞。
@@ -58,7 +58,7 @@ tags: [repo, build]
 老冯嘴臭惯了，对云厂商说话一向不太客气，但这不意味着我不理解志愿者的难处 ——
 尤其是对于高校开源志愿者，整体上我觉得应该多一点呵护，少一点道德化的指责，这也是我后来主动调整措辞的原因。
 
-## 开源与信任
+## 开源与信任 {#open-source-and-trust}
 
 实际上老冯自己也刚刚经历过类似的事情。我也维护了几个开源项目，还有不少 PostgreSQL 生态里的工具。
 比如说 [pg_exporter](https://github.com/pgsty/pg_exporter) —— PG 的 Prometheus 指标导出器，有一些 PG 厂商也在用。
@@ -69,7 +69,7 @@ tags: [repo, build]
 > 但我不愿把希望寄托在一个维护者缺席的项目上。希望这只是暂时的，也希望他一切安好。
 > 我没有任何怨言，衷心祝愿这个项目和维护者一切顺利。
 
-![pg_exporter Issue 中关于维护响应的讨论](/article/tuna-mirror-site/pg_exporter.webp)
+![pg-exporter Issue 中关于维护响应的讨论](/article/tuna-mirror-site/pg_exporter.webp)
 
 老冯九月份在新疆自驾了一个月，没怎么用电脑，Issue 点开看过但后面就忘掉了。
 “缺乏维护” 导致这位用户对老冯的开源项目失去了信任，而他本来也许可以成为项目的贡献者。辜负了他的信任与期待，确实让老冯感到非常遗憾与愧疚。
@@ -79,7 +79,7 @@ tags: [repo, build]
 
 > “**我不愿把希望和信任寄托在一个维护者缺席的项目上**”。
 
-## 软件供应链
+## 软件供应链 {#the-software-supply-chain}
 
 在那篇《[从PG“断供”看软件供应链中的信任问题](/zh/article/pg-mirror-pigsty/)》中，老冯提出过一个观点：
 
@@ -110,7 +110,7 @@ tags: [repo, build]
 
 所以，这篇文章不是要去指责镜像站 “没有担当”，而是要提醒下游用户 —— **在严肃的生产环境里，你不能依赖一个明确说“我不提供任何保证”的上游。**
 
-## 质量与承诺
+## 质量与承诺 {#quality-and-commitments}
 
 清华 TUNA 提供的很多镜像服务是有价值的。比如 pypi 和 homebrew 镜像，我个人电脑上就一直在用，它们完全胜任“加速访问”的角色。
 在 Pigsty 的早期版本里，我也用过部分 TUNA 的 PostgreSQL 镜像。后来遇到过几次莫名其妙的 403 封禁，这对自动化部署来说不太友好，于是就全部改成阿里云的镜像了。
@@ -131,28 +131,28 @@ tags: [repo, build]
 
 --------
 
-## 广告时间
+## 广告时间 {#a-word-from-our-sponsor}
 
 写文章不打广告约等于没写，也许老冯提供的服务正好能帮到你。以下三个软件仓库免费向公众提供服务。
 它们提供由 Cloudflare 分发的全球入口，以及独立的国内入口，可以通过 PIG、APT 或 DNF 配置。
 当前地址与启用方式请参见 [Pigsty 软件仓库文档](https://pigsty.cc/docs/repo/)。
 
-### PGDG 镜像
+### PGDG 镜像 {#pgdg-mirror}
 
 定期同步 PostgreSQL 全球开发组的软件仓库，覆盖 EL 7–10、Debian 11–13 和 Ubuntu 20.04–24.04。截至本文发表的 2025 年 11 月 22 日，仓库刚完成一次同步，当时每周更新。
 
-### PIGSTY PGSQL
+### PIGSTY PGSQL {#pigsty-pgsql}
 
 这个仓库与 PGDG 配合使用，提供 [PG 内核分支与兼容方案](https://pigsty.cc/docs/pgsql/kernel/)，包括 PolarDB、IvorySQL、Babelfish、OrioleDB、OpenHaloDB、Percona TDE 和 Supabase。
 本文发表时，它提供 [437 个 PG 扩展](https://pgext.cloud/list) 和生态工具，覆盖 [14 个 Linux 发行版大版本](https://pgext.cloud/os)。
 
 ![PGEXT.CLOUD 扩展目录与可用性统计](/article/tuna-mirror-site/extensions.webp)
 
-### PIGSTY INFRA
+### PIGSTY INFRA {#pigsty-infra}
 
 提供数据库工具、Grafana、Prometheus 和各类 Exporter。下表保留 2025 年 11 月 22 日的软件包版本。
 
-#### 数据库与生态工具
+#### 数据库与生态工具 {#databases-and-ecosystem-tools}
 
 | 软件包 | 版本 |
 |---|---|
@@ -174,7 +174,7 @@ tags: [repo, build]
 | [pgschema](https://github.com/pgschema/pgschema) | 1.4.2 |
 {.wide .expand}
 
-#### Prometheus 与 Exporter
+#### Prometheus 与 Exporter {#prometheus-and-exporters}
 
 | 软件包 | 版本 |
 |---|---|
@@ -196,7 +196,7 @@ tags: [repo, build]
 | [mongodb_exporter](https://github.com/percona/mongodb_exporter) | 0.47.1 |
 {.wide .expand}
 
-#### Grafana 与日志工具
+#### Grafana 与日志工具 {#grafana-and-log-tools}
 
 | 软件包 | 版本 |
 |---|---|
@@ -209,7 +209,7 @@ tags: [repo, build]
 | [grafana-vmetrics-ds](https://github.com/VictoriaMetrics/victoriametrics-datasource/releases/) | 0.19.6 |
 | [grafana-plugins](https://github.com/pgsty/infra-pkg/tree/main/grafana-plugins) | 12.0.0 |
 
-#### 实用工具
+#### 实用工具 {#utilities}
 
 | 软件包 | 版本 |
 |---|---|

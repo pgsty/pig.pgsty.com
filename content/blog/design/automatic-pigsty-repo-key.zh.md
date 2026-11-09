@@ -5,7 +5,7 @@ date: 2026-10-04
 lastmod: 2026-10-13
 description: "配置 Pigsty 仓库时准备内嵌公钥，明确默认失败处理与显式密钥要求。"
 tags: [repo, sty]
-weight: 95
+weight: 94
 authors: [Vonng]
 draft: false
 ---
@@ -76,12 +76,12 @@ APT 不会自动发现 `/etc/apt/keyrings` 中的文件，仓库必须通过 `si
 降级会关闭这些 Pigsty 定义的签名校验，并明确报告。存在性检查成功后保留管理员已有文件，
 不校验其内容；第三方仓库的信任策略保持不变。
 密钥不可用时，APT 可能告警并沿用此前认证过的索引，因此仓库配置成功不能证明每个索引都刚刚下载。
-当前默认行为和路径以[仓库参考页](/zh/repo/)为准。
+当前默认行为和路径以 [仓库参考页](/zh/repo/) 为准。
 
 ## 验证与演进 {#verification}
 
 [自动公钥准备实现](https://github.com/pgsty/pig/blob/56f73537ac15ad5eb2520aa18ac33dab2bb862a0/cli/repo/key.go)
-与[仓库回归测试](https://github.com/pgsty/pig/blob/56f73537ac15ad5eb2520aa18ac33dab2bb862a0/cli/repo/add_key_test.go)
+与 [仓库回归测试](https://github.com/pgsty/pig/blob/56f73537ac15ad5eb2520aa18ac33dab2bb862a0/cli/repo/add_key_test.go)
 已记录在源代码提交 `56f7353` 中。本地回归测试覆盖 EL、Debian、Ubuntu
 及两种支持的架构，并检查默认选择、组合模块、已有公钥复用、存在性检查被拒、自定义模块、
 不可用仓库、默认公钥降级，以及显式密钥安装失败时不修改仓库。已有仓库替换测试继续验证回滚行为。

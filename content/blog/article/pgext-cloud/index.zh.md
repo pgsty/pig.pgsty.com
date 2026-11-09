@@ -50,7 +50,7 @@ pig install -y -v 18 pgsql postgis timescaledb pgvector pg_duckdb
 
 PostgreSQL 生态中拥有数量庞大的扩展，总数可能超过 1000 个。然而在官方 PGDG 仓库中，目前只提供了其中约 135 个扩展。
 诚然，一些耳熟能详的插件（如 PostGIS、pgvector 等）包含在官方仓库里，但还有许多强大的扩展并未被收录 ——
-例如近期炙手可热的 DuckDB-PG 融合扩展 pg_duckdb 和 pg_mooncake。老牌的 Plv8，还有 Supabase 自建所需的一系列 Rust 扩展。
+例如近期炙手可热的 DuckDB-PG 融合扩展 `pg_duckdb` 和 `pg_mooncake`。老牌的 Plv8，还有 Supabase 自建所需的一系列 Rust 扩展。
 
 官方仓库不收录这些扩展有许许多多的原因 —— 比如 YUM 仓库的维护者 Devrim 就表示，绝对不会让 Rust 写的 PG 扩展进入仓库中。
 而像 plv8，pg_duckdb 这样一编译一个小时的扩展巨无霸，毫无疑问也会显著拉高仓库维护的成本，所以老冯也完全能理解。
@@ -118,7 +118,7 @@ PGEXT.CLOUD 默认通过 Cloudflare 提供全球 CDN 加速，但 Cloudflare 在
 
 ![PGEXT.CLOUD 扩展目录首页](/article/pgext-cloud/homepage.webp)
 
-PGEXT.CLOUD 的[扩展目录](https://pgext.cloud/)汇集了前述 431 个扩展的详细信息。
+PGEXT.CLOUD 的 [扩展目录](https://pgext.cloud/) 汇集了前述 431 个扩展的详细信息。
 我们为每个扩展整理了元数据、在各操作系统和 PG 版本上的可用性矩阵，以及完整的安装、配置与加载使用说明。
 
 ![PGEXT.CLOUD 扩展安装与使用说明](/article/pgext-cloud/usage.webp)

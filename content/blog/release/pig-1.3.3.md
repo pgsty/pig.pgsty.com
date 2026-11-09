@@ -4,7 +4,7 @@ linkTitle: "v1.3.3"
 date: 2026-04-10
 description: "481 extensions and Go 1.26.2 update"
 tags: [catalog]
-weight: 91
+weight: 19
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.3.3
 ---
@@ -12,7 +12,7 @@ release_url: https://github.com/pgsty/pig/releases/tag/v1.3.3
 - Refresh extension catalog and increase total available extensions to **481**.
 - Bump Go toolchain from `1.26.0` to `1.26.2`.
 
-## Extension Updates
+## Extension Updates {#extension-updates}
 
 | Extension        | Old    | New    | Notes                    |
 |:-----------------|:-------|:-------|:-------------------------|
@@ -42,7 +42,7 @@ release_url: https://github.com/pgsty/pig/releases/tag/v1.3.3
 | `parray_gin`     |        | 1.4.0  | new, PG14-18             |
 {.wide .expand}
 
-## Checksums
+## Checksums {#checksums}
 
 ```checksums
 e74418061ea975fbc3e8a89b31f274d7dc3617d12b9d681e5c8ef03584392088  pig-1.3.3-1.aarch64.rpm

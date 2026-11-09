@@ -4,7 +4,7 @@ linkTitle: "v1.8.0"
 date: 2026-08-14
 description: "Native pig sty boot and pig sty conf workflows, with 575 packaged PostgreSQL extensions."
 tags: [sty, repo, inventory, catalog]
-weight: 2
+weight: 8
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.8.0
 ---
@@ -15,13 +15,13 @@ wrappers around the legacy `bootstrap` and `configure` shell scripts. The releas
 keeps the public catalog total at **575 packaged PostgreSQL extensions** and embeds
 Pigsty `4.5.0`.
 
-## Native `pig sty boot`
+## Native `pig sty boot` {#native-pig-sty-boot}
 
 `pig sty boot` is now one native, failure-aware controller bootstrap transaction. It does not
 execute `<PIGSTY_HOME>/bootstrap`, and its HTTP download and archive extraction paths do not
 depend on `curl`, `wget`, `tar`, or `gzip`.
 
-### Privilege and readiness
+### Privilege and readiness {#privilege-and-readiness}
 
 - The command can be launched as an ordinary user. Pig resolves and downloads an explicit source
   before a single sudo re-exec; `PIG_NO_SUDO=1` disables elevation and
@@ -32,7 +32,7 @@ depend on `curl`, `wget`, `tar`, or `gzip`.
   checking `yaml`, `jmespath`, and either `cryptography` or `OpenSSL`. A present but unusable
   Ansible binary no longer produces a false success.
 
-### Repository sources and transactions
+### Repository sources and transactions {#repository-sources-and-transactions}
 
 - Source selection covers a local archive, an HTTP(S) URL, a permission-checked automatic
   `/tmp/pkg.tgz`, an already committed `/www/pigsty` repository, and regional online
@@ -48,7 +48,7 @@ depend on `curl`, `wget`, `tar`, or `gzip`.
   automatically discovered, or committed offline source is prepared even when Ansible is already
   usable.
 
-### Finishing checks and automation
+### Finishing checks and automation {#finishing-checks-and-automation}
 
 - Pig probes controller helpers, repairs key-based SSH to `127.0.0.1` for the invoking admin user,
   and initializes a missing `~/pigsty` from online or local content when possible.
@@ -59,13 +59,13 @@ depend on `curl`, `wget`, `tar`, or `gzip`.
   manager, repository policy and rollback state, source paths, locale, SSH and initialization
   status, changes, warnings, and the next `conf`, `inventory`, and `deploy` commands.
 
-## Native `pig sty conf`
+## Native `pig sty conf` {#native-pig-sty-conf}
 
 `pig sty conf` is now a complete native Inventory compiler. It does not execute `./configure` or
 fall back to raw Shell behavior: Pig resolves one template, performs bounded structural changes,
 validates the full candidate, and only then commits the output.
 
-### Safe configuration pipeline
+### Safe configuration pipeline {#safe-configuration-pipeline}
 
 - The default template is `conf/meta.yml`; a safe slash-separated relative mode may be supplied
   positionally or with `--conf`. Absolute paths, traversal, path escape, and source/output
@@ -75,7 +75,7 @@ validates the full candidate, and only then commits the output.
 - Pig performs native Inventory validation and, when available, a bounded `ansible-inventory`
   parse. Successful output is atomically written with mode `0600`.
 
-### Structural Inventory changes
+### Structural Inventory changes {#structural-inventory-changes}
 
 - Up to ten distinct `--ip` values map simultaneously to slots `10.10.10.10` through
   `10.10.10.19`; unrelated VIPs remain intact. Without `--ip`, interface selection is explicit
@@ -92,7 +92,7 @@ validates the full candidate, and only then commits the output.
   updates active values and documented placeholders consistently. Result output lists generated
   identifiers but never secret values.
 
-### Preflight and result contract
+### Preflight and result contract {#preflight-and-result-contract}
 
 - Unless `--skip` is selected, preflight covers the platform, package manager, controller
   resources, sudo/admin access, localhost SSH, and Ansible availability. Build templates under
@@ -101,7 +101,7 @@ validates the full candidate, and only then commits the output.
   discarded addresses, requested and effective PostgreSQL versions, applied options, generated
   secret identifiers, and warnings.
 
-## Other Updates
+## Other Updates {#other-updates}
 
 - EL8 and newer package operations consistently prefer DNF, local RPM requirements are resolved
   by provider capability, fresh repository bootstraps restore the expected `/www` layout, and
@@ -111,7 +111,7 @@ validates the full candidate, and only then commits the output.
 - CI and release builds use Go `1.26.6`, pinned analysis tools and GoReleaser, dependency
   verification, workflow linting, vulnerability scanning, and a full release snapshot.
 
-## Compatibility Notes
+## Compatibility Notes {#compatibility-notes}
 
 - `pig sty boot` no longer executes `<PIGSTY_HOME>/bootstrap`. Automation that relied on
   shell-script side effects should consume the native command and its structured result.
@@ -123,7 +123,7 @@ validates the full candidate, and only then commits the output.
 - EL8 and newer use DNF. The limited EL7 compatibility catalog retains its separate legacy
   YUM path.
 
-## Checksums
+## Checksums {#checksums}
 
 ```checksums
 02fd2628810c1b00de730ece32b09dba1318be4c99a4ff1a0551740e32bf223b  pig-1.8.0-1.aarch64.rpm

@@ -4,7 +4,7 @@ linkTitle: "v1.4.2"
 date: 2026-06-18
 description: "524 个扩展，PG19 beta，pgrx 0.18.1，Patroni 修复"
 tags: [patroni, build, catalog, sty]
-weight: 51
+weight: 15
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.4.2
 ---
@@ -18,7 +18,7 @@ release_url: https://github.com/pgsty/pig/releases/tag/v1.4.2
 - `pig build pgrx` 的默认 `pgrx` 版本从 `0.18.0` 升级到 `0.18.1`。
 - 发布元数据更新到 `v1.4.2`，刷新 Go module checksum，并补充 PG19 alias / 配置生成与 Patroni cluster-scope 行为的针对性测试。
 
-## 校验和
+## 校验和 {#checksums}
 
 ```checksums
 790afe4d6622cb041b06c622bc466cb1b2960a77487f368238027fb4a3a5ef93  pig-1.4.2-1.aarch64.rpm

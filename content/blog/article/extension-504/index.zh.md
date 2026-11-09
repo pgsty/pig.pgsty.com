@@ -11,7 +11,7 @@ tags: [ext, catalog, build]
 
 --------
 
-## 从一个化学扩展说起
+## 从一个化学扩展说起 {#it-started-with-a-chemistry-extension}
 
 两天前，一位用户在 GitHub 上给我提了个 [Issue](https://github.com/pgsty/pigsty/issues/738)：他在用 RDKit —— 化学信息学领域的事实标准库，能在 PostgreSQL 里做分子结构存储、子结构检索和相似性计算。
 但他发现 PGDG 官方打包的版本缺了 InChI 功能，他自己折腾了半天，加上编译参数后总算跑通了，但还是希望 Pigsty 能原生支持。
@@ -33,13 +33,13 @@ tags: [ext, catalog, build]
 
 ---------
 
-## 趁热打铁
+## 趁热打铁 {#strike-while-the-iron-is-hot}
 
 既然手热了，我就顺便把积压已久的几个"历史疑难杂症"也一起清了。
 
 [`plv8`](https://pigsty.cc/ext/e/plv8)：V8 引擎的 PostgreSQL 绑定，之前在 EL10 上死活编译不过，这次打了好几个补丁终于搞定了稳定构建。
 
-[`duckdb_fdw`](https://pigsty.cc/ext/e/duckdb_fdw)：允许从 PG 内部读写外部 DuckDB 文件，但之前会和 DuckDB 官方的 pg_duckdb 扩展争抢共享库，我只能忍痛临时隐藏。这次把 duckdb_fdw 挂成了 pg_duckdb 的子扩展，共享同一份 libduckdb，冲突问题优雅解决，俩扩展又能并存了。
+[`duckdb_fdw`](https://pigsty.cc/ext/e/duckdb_fdw)：允许从 PG 内部读写外部 DuckDB 文件，但之前会和 DuckDB 官方的 `pg_duckdb` 扩展争抢共享库，我只能忍痛临时隐藏。这次把 `duckdb_fdw` 挂成了 `pg_duckdb` 的子扩展，共享同一份 `libduckdb`，冲突问题优雅解决，俩扩展又能并存了。
 
 然后我就想：既然工具链都热好了，不如把 PostgreSQL 生态里剩下那些值得收录但一直没啃的扩展也一并搞进来吧。
 于是就有了这次的大更新 —— 新增 32 个扩展，更新 22 个，**Pigsty 扩展仓库总数正式突破 500，达到 504 个**。
@@ -60,7 +60,7 @@ tags: [ext, catalog, build]
 
 ------
 
-## 新扩展
+## 新扩展 {#the-new-extensions}
 
 这批新增扩展的画风相当硬核。按大类可以分四组：
 
@@ -78,13 +78,13 @@ tags: [ext, catalog, build]
 
 --------
 
-## 新扩展大观园
+## 新扩展大观园 {#a-tour-of-the-new-additions}
 
 这次新加入了 32 个新扩展，下面的部分是请 Claude/Codex/Gemini 三剑客进行研究汇总摘要，用于帮助读者快速了解每个扩展的核心功能、技术实现和适用场景。
 
 -------
 
-## 1. rdkit: 把化学信息学搬进 PostgreSQL
+## 1. rdkit: 把化学信息学搬进 PostgreSQL {#s-1-rdkit-cheminformatics-inside-postgresql}
 
 > [`rdkit`](https://pigsty.cc/ext/e/rdkit) | [GitHub](https://github.com/rdkit/rdkit)
 
@@ -115,7 +115,7 @@ SELECT * FROM rdk.mols WHERE m @> 'c1[o,s]ncn1'::qmol LIMIT 500;
 
 -------
 
-## 2. provsql: 半环溯源让查询结果"可追溯"
+## 2. provsql: 半环溯源让查询结果"可追溯" {#s-2-provsql-semiring-provenance-for-query-results}
 
 > [`provsql`](https://pigsty.cc/ext/e/provsql) | [GitHub](https://github.com/PierreSenellart/provsql)
 
@@ -144,7 +144,7 @@ ProvSQL 的价值往往体现在"可组合性"：溯源结果不是字符串日�
 
 -------
 
-## 3. onesparse: 在 SQL 里跑十亿边级图算法
+## 3. onesparse: 在 SQL 里跑十亿边级图算法 {#s-3-onesparse-billion-edge-graph-algorithms-in-sql}
 
 > [`onesparse`](https://pigsty.cc/ext/e/onesparse) | [GitHub](https://github.com/OneSparse/OneSparse)
 
@@ -172,7 +172,7 @@ OneSparse 要求 **PG 18 Beta 或更新版本**，当前处于 Alpha 阶段。Ap
 
 -------
 
-## 4. pg_datasentinel: 容器时代的 PostgreSQL 深度可观测性
+## 4. pg_datasentinel: 容器时代的 PostgreSQL 深度可观测性 {#s-4-pg-datasentinel-deep-observability-for-postgresql-in-the-container-era}
 
 > [`pg_datasentinel`](https://pigsty.cc/ext/e/pg_datasentinel) | [GitHub](https://github.com/datasentinel/pg_datasentinel)
 
@@ -194,11 +194,11 @@ SELECT xid_current, xid_limit, xid_eta_aggressive_vacuum, xid_eta_wraparound
 FROM pg_datasentinel_wraparound;
 ```
 
-对于在 Kubernetes 上运行 PostgreSQL 的团队，pg_datasentinel 提供了无需外部监控代理即可获得的容器级资源可见性。**XID 回卷预警** 功能对运维尤为关键——众所周知，XID 回卷会导致数据库强制关闭，而 pg_datasentinel 通过追踪消耗速率提供预测性告警，将"救火"变为"防火"。3-Clause BSD 许可证，要求 PG 15+。
+对于在 Kubernetes 上运行 PostgreSQL 的团队，`pg_datasentinel` 提供了无需外部监控代理即可获得的容器级资源可见性。**XID 回卷预警** 功能对运维尤为关键——众所周知，XID 回卷会导致数据库强制关闭，而 `pg_datasentinel` 通过追踪消耗速率提供预测性告警，将"救火"变为"防火"。3-Clause BSD 许可证，要求 PG 15+。
 
 -------
 
-## 5. datasketches: Apache 出品的亿级近似分析利器
+## 5. datasketches: Apache 出品的亿级近似分析利器 {#s-5-datasketches-approximate-analytics-at-hundred-million-row-scale}
 
 > [`datasketches`](https://pigsty.cc/ext/e/datasketches) | [GitHub](https://github.com/apache/datasketches-postgresql)
 
@@ -235,7 +235,7 @@ FROM (
 
 -------
 
-## 6. pghydro: 巴西国家水务局的排水网络分析引擎
+## 6. pghydro: 巴西国家水务局的排水网络分析引擎 {#s-6-pghydro-drainage-network-analysis-from-brazil-s-national-water-agency}
 
 > [`pghydro`](https://pigsty.cc/ext/e/pghydro) | [GitHub](https://github.com/pghydro/pghydro)
 
@@ -266,11 +266,11 @@ SELECT pghydro.pghfn_calculatestrahlernumber();
 
 -------
 
-## 7. pg_stat_ch: ClickHouse 官方出品的 PostgreSQL 查询遥测
+## 7. pg_stat_ch: ClickHouse 官方出品的 PostgreSQL 查询遥测 {#s-7-pg-stat-ch-postgresql-query-telemetry-exported-to-clickhouse}
 
 > [`pg_stat_ch`](https://pigsty.cc/ext/e/pg_stat_ch) | [GitHub](https://github.com/ClickHouse/pg_stat_ch)
 
-pg_stat_ch 由 ClickHouse 公司开发，于 [2026 年 2 月 13 日公布](https://clickhouse.com/blog/pg_stat_ch-postgres-extension-stats-to-clickhouse)，作者是 Kaushik Iska。与 pg_stat_statements 在 PostgreSQL 内部做聚合统计不同，pg_stat_ch 将 **每条查询的原始执行事件**（包含 45 个字段、固定 4.6KB）实时流式导出到 ClickHouse，让所有聚合分析（p50/p95/p99、Top 查询、错误分析）在 ClickHouse 的分析引擎中完成。
+`pg_stat_ch` 由 ClickHouse 公司开发，于 [2026 年 2 月 13 日公布](https://clickhouse.com/blog/pg_stat_ch-postgres-extension-stats-to-clickhouse)，作者是 Kaushik Iska。与 `pg_stat_statements` 在 PostgreSQL 内部做聚合统计不同，`pg_stat_ch` 将 **每条查询的原始执行事件**（包含 45 个字段、固定 4.6KB）实时流式导出到 ClickHouse，让所有聚合分析（p50/p95/p99、Top 查询、错误分析）在 ClickHouse 的分析引擎中完成。
 
 数据管道架构为：**PostgreSQL Hooks（前台）→ 共享内存环形缓冲区 → 后台 Worker → ClickHouse**。45 个遥测字段覆盖查询计时、行数、缓冲区使用、WAL 使用、CPU 时间、JIT 指标（PG15+）、并行 Worker 统计（PG18+）、客户端上下文（应用名、IP）、错误捕获（SQLSTATE 码）等。扩展使用 ClickHouse 原生二进制协议加 **LZ4 压缩**，静态链接 clickhouse-cpp 库。为避免对 PostgreSQL 造成背压，队列溢出时丢弃事件（计数器记录丢弃数）而非减慢数据库——与 StatsD 的设计哲学一致。
 
@@ -294,7 +294,7 @@ ClickHouse 侧预置了四个物化视图：`events_recent_1h`（滚动 1 小时
 
 -------
 
-## 8. pg_rrf: 一个函数搞定混合检索的排序融合
+## 8. pg_rrf: 一个函数搞定混合检索的排序融合 {#s-8-pg-rrf-rank-fusion-for-hybrid-search-in-one-function}
 
 > [`pg_rrf`](https://pigsty.cc/ext/e/pg_rrf) | [GitHub](https://github.com/yuiseki/pg_rrf)
 
@@ -320,7 +320,7 @@ ORDER BY fused.score DESC LIMIT 20;
 
 -------
 
-## 9. pg_kazsearch: 哈萨克语全文检索的"从无到有"
+## 9. pg_kazsearch: 哈萨克语全文检索的"从无到有" {#s-9-pg-kazsearch-kazakh-full-text-search-from-zero-to-one}
 
 > [`pg_kazsearch`](https://pigsty.cc/ext/e/pg_kazsearch) | [GitHub](https://github.com/darkhanakh/pg-kazsearch)
 
@@ -344,7 +344,7 @@ LIMIT 10;
 
 -------
 
-## 10. pg_liquid: Datalog 风格的图查询
+## 10. pg_liquid: Datalog 风格的图查询 {#s-10-pg-liquid-datalog-style-graph-queries}
 
 > [`pg_liquid`](https://pigsty.cc/ext/e/pg_liquid) | [GitHub](https://github.com/michael-golfi/pg_liquid)
 
@@ -369,7 +369,7 @@ ORDER BY 1;
 
 -------
 
-## 11. logical_ddl: 让逻辑复制也能同步 DDL
+## 11. logical_ddl: 让逻辑复制也能同步 DDL {#s-11-logical-ddl-logical-replication-but-for-ddl-too}
 
 > [`logical_ddl`](https://pigsty.cc/ext/e/logical_ddl) | [GitHub](https://github.com/samedyildirim/logical_ddl)
 
@@ -394,7 +394,7 @@ VALUES ('my_table'::regclass, ARRAY['ADD COLUMN', 'DROP COLUMN']);
 
 -------
 
-## 12. rdf_fdw: 用 SQL 查询语义网
+## 12. rdf_fdw: 用 SQL 查询语义网 {#s-12-rdf-fdw-query-the-semantic-web-with-sql}
 
 > [`rdf_fdw`](https://pigsty.cc/ext/e/rdf_fdw) | [GitHub](https://github.com/jimjonesbr/rdf_fdw)
 
@@ -422,7 +422,7 @@ SELECT * FROM dbpedia_query WHERE o = 'some_value' LIMIT 10;
 
 -------
 
-## 13. pgbson: 比 JSONB 更精确的二进制文档类型
+## 13. pgbson: 比 JSONB 更精确的二进制文档类型 {#s-13-pgbson-a-more-exact-binary-document-type-than-jsonb}
 
 > [`pgbson`](https://pigsty.cc/ext/e/pgbson) | [GitHub](https://github.com/buzzm/postgresbson)
 
@@ -449,7 +449,7 @@ SELECT (data->'d'->'amt'->>'$numberDecimal')::numeric FROM data_collection;
 
 -------
 
-## 14. pg_when: 用自然语言描述时间
+## 14. pg_when: 用自然语言描述时间 {#s-14-pg-when-describe-time-in-natural-language}
 
 > [`pg_when`](https://pigsty.cc/ext/e/pg_when) | [GitHub](https://github.com/frectonz/pg-when)
 
@@ -466,7 +466,7 @@ SELECT when_is('December 31, 2026 at evening');
 
 -------
 
-## 15. pgmqtt: 数据库变更直推 MQTT
+## 15. pgmqtt: 数据库变更直推 MQTT {#s-15-pgmqtt-push-database-changes-straight-to-mqtt}
 
 > [`pgmqtt`](https://pigsty.cc/ext/e/pgmqtt) | [GitHub](https://github.com/RayElg/pgmqtt)
 
@@ -489,7 +489,7 @@ IoT 场景尤其合适——无需外部中间件即可将数据库状态变化�
 
 -------
 
-## 16. pg_query_rewrite: 透明地偷梁换柱
+## 16. pg_query_rewrite: 透明地偷梁换柱 {#s-16-pg-query-rewrite-transparent-sql-substitution}
 
 > [`pg_query_rewrite`](https://pigsty.cc/ext/e/pg_query_rewrite) | [GitHub](https://github.com/pierreforstmann/pg_query_rewrite)
 
@@ -510,7 +510,7 @@ SELECT pgqr_rules();
 
 -------
 
-## 17. pgclone: 一键克隆数据库对象
+## 17. pgclone: 一键克隆数据库对象 {#s-17-pgclone-clone-database-objects-with-one-function-call}
 
 > [`pgclone`](https://pigsty.cc/ext/e/pgclone) | [GitHub](https://github.com/valehdba/pgclone)
 
@@ -535,7 +535,7 @@ SELECT pgclone_database(
 
 -------
 
-## 18. pgproto: 原生 Protobuf 支持
+## 18. pgproto: 原生 Protobuf 支持 {#s-18-pgproto-native-protobuf-support}
 
 > [`pgproto`](https://pigsty.cc/ext/e/pgproto) | [GitHub](https://github.com/Apaezmx/pgproto)
 
@@ -556,11 +556,11 @@ CREATE INDEX idx_pb ON items ((data #> '{Outer, inner, id}'::text[]));
 
 -------
 
-## 19. pg_fsql: JSONB 驱动的递归 SQL 模板引擎
+## 19. pg_fsql: JSONB 驱动的递归 SQL 模板引擎 {#s-19-pg-fsql-a-recursive-sql-template-engine-driven-by-jsonb}
 
 > [`pg_fsql`](https://pigsty.cc/ext/e/pg_fsql) | [GitHub](https://github.com/yurc/pg_fsql)
 
-pg_fsql 由 yurc 开发，把"SQL 模板渲染 + 安全参数化执行 + 模板树递归组合"做成扩展。模板按 dot-path 组成树，子模板产出片段或 JSON，再注入父模板。支持占位符语法（`{d[key]}` 及不同转义 `!r/!j/!i`）、SPI plan cache（按模板可选缓存）、多种命令类型（exec/ref/if/exec_tpl/map/NULL），以及 `fsql.run` 执行、`fsql.render` dry-run、`fsql.tree`、`fsql.explain` 等公共 API。不需要 superuser。
+`pg_fsql` 由 yurc 开发，把"SQL 模板渲染 + 安全参数化执行 + 模板树递归组合"做成扩展。模板按 dot-path 组成树，子模板产出片段或 JSON，再注入父模板。支持占位符语法（`{d[key]}` 及不同转义 `!r/!j/!i`）、SPI plan cache（按模板可选缓存）、多种命令类型（`exec/ref/if/exec_tpl/map/NULL`），以及 `fsql.run` 执行、`fsql.render` dry-run、`fsql.tree`、`fsql.explain` 等公共 API。不需要 superuser。
 
 ```sql
 -- 定义模板
@@ -579,11 +579,11 @@ SELECT fsql.render('user_count', '{"status":"active"}');
 
 -------
 
-## 20. pg_dispatch: 基于 pg_cron 的异步 SQL 分发
+## 20. `pg_dispatch`: 基于 `pg_cron` 的异步 SQL 分发 {#s-20-pg-dispatch-async-sql-dispatch-on-top-of-pg-cron}
 
 > [`pg_dispatch`](https://pigsty.cc/ext/e/pg_dispatch) | [GitHub](https://github.com/Snehil-Shah/pg_dispatch)
 
-pg_dispatch 由 Snehil Shah 开发，是一个异步任务分发器，定位为 TLE 兼容的 pg_later 替代品，底层依赖 pg_cron。核心函数 `pgdispatch.fire(command)` 立即异步执行 SQL，`pgdispatch.snooze(command, delay)` 延迟执行。设计目标是解锁主事务——当 AFTER INSERT 触发器需要执行重操作时，将其卸载为后台任务。
+`pg_dispatch` 由 Snehil Shah 开发，是一个异步任务分发器，定位为 TLE 兼容的 `pg_later` 替代品，底层依赖 `pg_cron`。核心函数 `pgdispatch.fire(command)` 立即异步执行 SQL，`pgdispatch.snooze(command, delay)` 延迟执行。设计目标是解锁主事务——当 AFTER INSERT 触发器需要执行重操作时，将其卸载为后台任务。
 
 ```sql
 SELECT pgdispatch.fire('SELECT pg_sleep(40);');
@@ -594,7 +594,7 @@ TLE 兼容（纯 PL/pgSQL），可在 Supabase 和 AWS RDS 等沙盒环境使用
 
 -------
 
-## 21. block_copy_command: 安全加固：阻止 COPY 命令
+## 21. block_copy_command: 安全加固：阻止 COPY 命令 {#s-21-block-copy-command-security-hardening-by-intercepting-copy}
 
 > [`block_copy_command`](https://pigsty.cc/ext/e/block_copy_command) | [GitHub](https://github.com/rustwizard/block_copy_command)
 
@@ -617,7 +617,7 @@ ORDER BY ts DESC;
 
 -------
 
-## 22. pg_isok: 数据质量的"软告警"系统
+## 22. pg_isok: 数据质量的"软告警"系统 {#s-22-pg-isok-soft-alerts-for-data-quality}
 
 > [`pg_isok`](https://pigsty.cc/ext/e/pg_isok) | [Repo](https://codeberg.org/kop/pg_isok)
 
@@ -640,7 +640,7 @@ INSERT INTO isok.isok_queries (query) VALUES (
 
 -------
 
-## 23. external_file: PostgreSQL 版的 Oracle BFILE
+## 23. external_file: PostgreSQL 版的 Oracle BFILE {#s-23-external-file-oracle-bfile-semantics-for-postgresql}
 
 > [`external_file`](https://pigsty.cc/ext/e/external_file) | [GitHub](https://github.com/darold/external_file)
 
@@ -661,7 +661,7 @@ SELECT writeEfile(my_bytea_column, efilename('MY_DIR', 'output.bin')) FROM my_ta
 
 -------
 
-## 24. pg_byteamagic: 检测 bytea 的文件类型
+## 24. pg_byteamagic: 检测 bytea 的文件类型 {#s-24-byteamagic-detect-file-types-in-bytea}
 
 > [`pg_byteamagic`](https://pigsty.cc/ext/e/byteamagic) | [GitHub](https://github.com/nmandery/pg_byteamagic)
 
@@ -679,7 +679,7 @@ FROM uploads GROUP BY 1 ORDER BY 2 DESC;
 
 -------
 
-## 25. pg_text_semver: 语义版本号的原生支持
+## 25. pg_text_semver: 语义版本号的原生支持 {#s-25-pg-text-semver-native-semantic-versioning}
 
 > [`pg_text_semver`](https://pigsty.cc/ext/e/pg_text_semver) | [GitHub](https://github.com/bigsmoke/pg_text_semver)
 
@@ -697,11 +697,11 @@ SELECT semver_parsed('1.0.0-a.1+commit-y');
 
 -------
 
-## 26. parray_gin: text[] 的子串匹配索引
+## 26. parray_gin: text[] 的子串匹配索引 {#s-26-parray-gin-substring-matching-indexes-for-text}
 
 > [`parray_gin`](https://pigsty.cc/ext/e/parray_gin) | [GitHub](https://github.com/theirix/parray_gin)
 
-parray_gin 由 Eugene Seliverstov 开发，为 `text[]` 数组列提供基于 GIN 索引的 **部分匹配** 操作符。标准 PostgreSQL 的 GIN 数组操作符只支持精确元素匹配，parray_gin 新增的 `@@>` 操作符支持用 `LIKE` 模式匹配数组元素，底层基于 trigram 分解（复用 pg_trgm 的实现），并通过 recheck 处理 false positive。
+`parray_gin` 由 Eugene Seliverstov 开发，为 `text[]` 数组列提供基于 GIN 索引的 **部分匹配** 操作符。标准 PostgreSQL 的 GIN 数组操作符只支持精确元素匹配，`parray_gin` 新增的 `@@>` 操作符支持用 `LIKE` 模式匹配数组元素，底层基于 trigram 分解（复用 `pg_trgm` 的实现），并通过 recheck 处理 false positive。
 
 ```sql
 CREATE INDEX ON test_table USING gin (val parray_gin_ops);
@@ -717,7 +717,7 @@ SELECT * FROM test_table WHERE val @@> array['%ar%'];
 
 -------
 
-## 27. pg_slug_gen: 加密安全的时间戳短标识
+## 27. pg_slug_gen: 加密安全的时间戳短标识 {#s-27-pg-slug-gen-cryptographically-secure-timestamp-slugs}
 
 > [`pg_slug_gen`](https://pigsty.cc/ext/e/pg_slug_gen) | [GitHub](https://github.com/nandoolle/pg_slug_gen)
 
@@ -733,7 +733,7 @@ SELECT gen_random_slug(19);    -- 纳秒精度
 
 -------
 
-## 28. pglock: PostgreSQL 内的轻量级分布式锁
+## 28. pglock: PostgreSQL 内的轻量级分布式锁 {#s-28-pglock-lightweight-distributed-locks-inside-postgresql}
 
 > [`pglock`](https://pigsty.cc/ext/e/pglock) | [GitHub](https://github.com/fraruiz/pglock)
 
@@ -754,7 +754,7 @@ SELECT pglock.ttl();
 
 -------
 
-## 29. pg_regresql: 让规划器信任 pg_class 统计信息
+## 29. `pg_regresql`: 让规划器信任 `pg_class` 统计信息 {#s-29-pg-regresql-portable-planner-statistics-for-explain-costing}
 
 > [`pg_regresql`](https://pigsty.cc/ext/e/pg_regresql) | [GitHub](https://github.com/boringsql/regresql)
 
@@ -777,7 +777,7 @@ EXPLAIN SELECT * FROM orders WHERE status = 'pending';
 
 -------
 
-## 30. pgcalendar: 循环日程的无限投影
+## 30. pgcalendar: 循环日程的无限投影 {#s-30-pgcalendar-infinite-projection-for-recurring-schedules}
 
 > [`pgcalendar`](https://pigsty.cc/ext/e/pgcalendar) | [GitHub](https://github.com/h4kbas/pgcalendar)
 
@@ -811,7 +811,7 @@ SELECT pgcalendar.transition_event_schedule(
 
 -------
 
-## 31. pg_variables: 比临时表更快的会话变量
+## 31. pg_variables: 比临时表更快的会话变量 {#s-31-pg-variables-session-variables-faster-than-temp-tables}
 
 > [`pg_variables`](https://pigsty.cc/ext/e/pg_variables) | [GitHub](https://github.com/postgrespro/pg_variables)
 
@@ -839,7 +839,7 @@ SELECT * FROM pgv_select('pack', 'employees');
 
 -------
 
-## 32. pgelog: 回滚也丢不掉的日志
+## 32. pgelog: 回滚也丢不掉的日志 {#s-32-pgelog-logs-that-survive-rollback}
 
 > [`pgelog`](https://pigsty.cc/ext/e/pgelog) | [GitHub](https://github.com/anfiau/pgelog)
 
@@ -866,7 +866,7 @@ SELECT pgelog_set_param('pgelog_ttl_minutes', '2880');
 
 -------
 
-## 总结
+## 总结 {#conclusion}
 
 这 32 个扩展背后有几条清晰的趋势线。
 
@@ -874,7 +874,7 @@ SELECT pgelog_set_param('pgelog_ttl_minutes', '2880');
 
 **第二，查询能力在向"组合式 API"演化。** RRF 融合、SQL 模板树、查询重写、稀疏计算、近似摘要结构——这些扩展的共同目标是让复杂逻辑以更少、更稳定的 SQL 片段表达，同时保持可审计、可复跑和可优化。
 
-**第三，生产工程与平台化在加速。** 从 pg_stat_ch 的实时遥测外送、pg_datasentinel 的容器资源可见性，到 block_copy_command 的安全钩子、pg_isok 的软告警治理——扩展层正在承接越来越多"原本要靠外部系统"的能力。
+**第三，生产工程与平台化在加速。** 从 `pg_stat_ch` 的实时遥测外送、`pg_datasentinel` 的容器资源可见性，到 `block_copy_command` 的安全钩子、`pg_isok` 的软告警治理——扩展层正在承接越来越多"原本要靠外部系统"的能力。
 
 **第四，垂直领域渗透持续加深。** 从化学信息学（rdkit）、水文分析（pghydro）到哈萨克语 NLP（pg_kazsearch），PostgreSQL 正在成为越来越多专业领域的计算底座。
 

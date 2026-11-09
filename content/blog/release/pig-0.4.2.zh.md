@@ -4,7 +4,7 @@ linkTitle: "v0.4.2"
 date: 2025-05-27
 description: "421 个扩展，halo 和 oriole deb"
 tags: [catalog, repo]
-weight: 271
+weight: 40
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v0.4.2
 ---
@@ -21,7 +21,7 @@ release_url: https://github.com/pgsty/pig/releases/tag/v0.4.2
 - orioledb [1.4.0 beta11](https://github.com/orioledb/orioledb)
 - 重新添加 el7 仓库
 
-## 校验和
+## 校验和 {#checksums}
 
 ```checksums
 bbf83fa3e3ec9a4dca82eeed921ae90a  pig_0.4.2-1_amd64.deb

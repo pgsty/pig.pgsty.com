@@ -4,7 +4,7 @@ linkTitle: "v1.10.0"
 date: 2026-10-17
 description: "603 条目录记录、PostgreSQL 目标验证、恢复与 fork 安全修复、Inventory 保真，以及一致的自动化结果。"
 tags: [postgres, inventory, catalog, cli]
-weight: 0
+weight: 5
 authors: [Vonng]
 draft: false
 release_url: https://github.com/pgsty/pig/releases/tag/v1.10.0
@@ -14,7 +14,7 @@ Pig `v1.10.0` 集中修复现有命令的正确性与安全边界：操作前验
 保留 Inventory 来源与 YAML 类型，让仓库、扩展及自动化结果准确反映实际执行情况。
 内嵌目录从 **600 条增至 603 条记录**。内置 Pigsty 保持 `4.5.0`，默认 `cargo-pgrx` 保持 `0.19.3`。
 
-## PostgreSQL 目标与维护命令
+## PostgreSQL 目标与维护命令 {#postgresql-targets-and-maintenance}
 
 - 显式 `-D` 将 `psql`、`ps`、`kill`、`vacuum`、`analyze`、`freeze`、`repack` 绑定到所选实例，
   包括 `--all` 枚举数据库的连接。启动 SQL 客户端前，PIG 检查 PID、数据目录、端口、socket
@@ -29,10 +29,10 @@ Pig `v1.10.0` 集中修复现有命令的正确性与安全边界：操作前验
 - `vacuum`、`analyze`、`freeze --all` 在开始维护前验证完整数据库列表。
   需要连接串或被此边界拒绝的数据库名时，请使用原生客户端。
 
-目标选择见 [`pig pg`](/zh/pg/#全局参数)，数据库名称规则见
-[维护命令](/zh/pg/#数据库维护命令)。
+目标选择见 [`pig pg`](/zh/pg/#global-options)，数据库名称规则见
+[维护命令](/zh/pg/#database-maintenance-commands)。
 
-## 运行状态、恢复与 fork 安全
+## 运行状态、恢复与 fork 安全 {#runtime-state-recovery-and-fork-safety}
 
 - 权限失败、PID 元数据损坏、进程身份无法验证时，报告错误或未知状态，不能据此授权强制初始化、
   恢复或 fork 替换。`pg status` 对权限失败返回 `130201`（退出码 `3`），其他运行探测失败
@@ -46,9 +46,9 @@ Pig `v1.10.0` 集中修复现有命令的正确性与安全边界：操作前验
 - 以数据库用户写文件时，使用私有的同目录临时文件并精确替换目标。新文件权限为 `0600`；
   拒绝目录与符号链接目标，替换时不会覆盖指向旧文件的其他硬链接所见的内容。
 
-[PITR 参考](/zh/pitr/)介绍托管恢复流程；[`pig pb restore`](/zh/pb/#pb-restore) 仍是独立的恢复原语。
+[PITR 参考](/zh/pitr/) 介绍托管恢复流程；[`pig pb restore`](/zh/pb/#pb-restore) 仍是独立的恢复原语。
 
-## Inventory 与 Pigsty
+## Inventory 与 Pigsty {#inventory-and-pigsty}
 
 - `sty deploy` 与 `do` 显式向 Ansible 传递已解析的 Inventory 路径。命令行和环境变量中的
   相对路径以调用者工作目录为基准；带引号的 `~/` 路径在解析前展开。选中的来源缺失或无效时，
@@ -60,9 +60,9 @@ Pig `v1.10.0` 集中修复现有命令的正确性与安全边界：操作前验
 - `sty conf --proxy` 接受 HTTP、HTTPS、ALL、NO 代理变量的大写与小写形式；HTTP、HTTPS
   缺失时都会回退到 ALL_PROXY。版本补全按点分段匹配，指定 `1.1` 不会误选 `1.10`。
 
-详情见 [Inventory 来源选择](/zh/inventory/#source-selection)与 [`pig sty`](/zh/sty/)。
+详情见 [Inventory 来源选择](/zh/inventory/#source-selection) 与 [`pig sty`](/zh/sty/)。
 
-## 软件仓库与扩展
+## 软件仓库与扩展 {#repositories-and-extensions}
 
 - 仓库命令在改文件前验证完整操作数列表。空值、逗号列表中的空项、不安全的仓库名在修改前失败。
   只有真正不带参数的 `repo rm` 才备份全部仓库文件；`repo rm all` 展开为 `node`、`pgsql`、
@@ -82,7 +82,7 @@ Pig `v1.10.0` 集中修复现有命令的正确性与安全边界：操作前验
 
 详情见 [`pig repo`](/zh/repo/)与 [`pig ext`](/zh/ext/)。
 
-## 构建与自动化
+## 构建与自动化 {#builds-and-automation}
 
 - 多版本构建依赖按每个选定的 PostgreSQL 大版本展开包名，去重后安装。默认构建目标继续遵循
   扩展元数据与本地安装规则，不会因包矩阵缺包而丢失。
@@ -98,14 +98,14 @@ Pig `v1.10.0` 集中修复现有命令的正确性与安全边界：操作前验
   `pig update` 在不支持的平台上明确报错。命令帮助与中英文参考文档同步校准。
 - 更新 Go 依赖与验证工具。CI 增加 Linux 权限、实例边界和独立 YAML 消费端验收。
 
-详情见 [`pig build`](/zh/build/)、[`pig pe`](/zh/pe/)与[全局命令行为](/zh/cmd/)。
+详情见 [`pig build`](/zh/build/)、[`pig pe`](/zh/pe/)与 [全局命令行为](/zh/cmd/)。
 
-## 升级注意事项
+## 升级注意事项 {#upgrade-notes}
 
 已有命令名和参数继续可用。自动化脚本需要处理部分导入失败、HTTP 错误、恢复取消和
 PostgreSQL 状态无法确定时纠正后的失败状态。仓库操作数必须有效，需要确认的操作仍须显式确认，
 维护命令应传入数据库名称。名称以 `-` 开头时，把全部选项放在前面，再写 `--` 和数据库名。
 
-按[安装文档](/zh/install/)升级。
+按 [安装文档](/zh/install/) 升级。
 
 {{< release-card >}}

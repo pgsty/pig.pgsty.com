@@ -10,13 +10,13 @@ authors: [Vonng]
 
 I was recently chatting with my friend Yurii, the founder of Omnigres. He wants to hire a PostgreSQL packaging expert and has even coined a title for the role: EEE, or Extension Ecosystem Engineer. It is an interesting idea. The [job description is public](https://github.com/omnigres/rfc/pull/2/files), so I have included it at the end.
 
-## A Scarce Skill: Linux Packaging
+## A Scarce Skill: Linux Packaging {#a-scarce-skill-linux-packaging}
 
 I think this job description asks for a little too much: DevRel + SRE + DBA + build engineer + PostgreSQL specialist, all in one person. It almost reads as though it were written for me. But I have genuinely never met anyone else with that exact combination, so I advised Yurii that hiring a build engineer who knows Debian and Enterprise Linux packaging inside out would be more realistic. Even that will be difficult, though. Scarce hardly begins to describe people who understand build and packaging work. DevRel talent may be scarcer still.
 
 The context here is specifically building and packaging PostgreSQL kernels and extensions for Linux. Most of the code is C or C++, with some Rust, Java, Go, and other languages mixed in. The main deliverables are RPM and DEB packages distributed through YUM and APT repositories. I believe this is a remarkably valuable skill that gets very little attention.
 
-## When Did I Realize This?
+## When Did I Realize This? {#when-did-i-realize-this}
 
 I first recognized the importance of packaging in 2017, during an interview with Pivotal. One of the interviewers asked, almost in passing, "Do you know how to package software? We don't have anyone who does." I wondered what kind of package he meant. RPMs? As it turned out, yes. Later, Yao of YMatrix, who had also come out of Pivotal, asked me much the same thing: "You know build and packaging work pretty well, don't you? We badly need that skill right now." That made the gap stick in my mind.
 
@@ -26,13 +26,13 @@ Alibaba Cloud's PolarDB for PostgreSQL and HighGo's IvorySQL also started with o
 
 ![Pigsty database kernel catalog](/article/packaging-skill/01.webp)
 
-## Why Build and Packaging Matter
+## Why Build and Packaging Matter {#why-build-and-packaging-matter}
 
 Packaging expertise is scarce, but where does its value come from? Most end users **do not care whether your software is open source**. What they care about is whether a stable, reliable—and **preferably free**—binary package is available to download. Greenplum is now closed source, yet friends still ask me from time to time for Greenplum RPMs. Yao's YMatrix, a closed-source branch of GP7, is commercial software. But it offers a free trial download, so people can still use it. Whether its source is open hardly matters to them.
 
 A more recent example is the [KubeSphere community's binary cutoff](https://mp.weixin.qq.com/s?__biz=MzU5ODAyNTM5Ng==&mid=2247490196&idx=1&sn=6c9a10f35182119ac8ad3171d732a596&scene=21#wechat_redirect). The source code was still there, but the project deleted its binary artifacts—the container images—and that directly affected end users. Whether the code was open source made no practical difference to them. The real supply-chain chokepoint has never been source code, but the finished software artifacts users actually run.
 
-## Packaging Makes Open Source Self-Reliant
+## Packaging Makes Open Source Self-Reliant {#packaging-makes-open-source-self-reliant}
 
 Open-source expert Tison explored this issue in depth in his articles ["How Can You Use Open Source Software with Confidence?"](https://mp.weixin.qq.com/s?__biz=MzIzMDEwODM5OQ==&mid=2647852959&idx=1&sn=54447d633589061f469174818654e958&scene=21#wechat_redirect) and ["Can Open Source Software Be Cut Off?"](https://mp.weixin.qq.com/s?__biz=MzIzMDEwODM5OQ==&mid=2647852894&idx=1&sn=a18cb659f93dbef7bfab20ed312311e3&scene=21#wechat_redirect). His conclusion is that open-source software itself cannot be cut off, but its artifacts can. If you want to use open source with confidence, the most important safeguard is to keep a local copy of the software or operate your own package repository. Build and packaging work is the foundation for that independence.
 
@@ -40,7 +40,7 @@ Consider the recent [PGDG repository supply disruption](https://mp.weixin.qq.com
 
 Of course, a mirror merely copies binary artifacts built by someone else. Imagine the more extreme case: instead of merely stopping incremental synchronization, PGDG locked everything down completely. To build an independent repository from scratch, with separate packages for RISC-V, MIPS, ARM, and the rest of the architectural menagerie, you would still have to cross the build-and-packaging barrier.
 
-## Not All Packaging Is Equal
+## Not All Packaging Is Equal {#not-all-packaging-is-equal}
 
 Someone will inevitably say, "But it is open source. You can compile it yourself." That is true. Software written in modern languages often comes with a much smoother packaging workflow. Go programs, for example, are exceptionally easy to build and package. Tools such as GoReleaser can build an entire cross-platform matrix in one shot, generate RPM and DEB packages, build and push Docker images, and create a GitHub Release automatically. With vibe coding, you could probably implement such a workflow in under half an hour.
 
@@ -48,7 +48,7 @@ But that is not what we are talking about. We are talking about ecosystem-scale 
 
 Build and packaging work is not easy. You must untangle dependencies involving glibc, ICU, OpenSSL, and PostGIS's enormous dependency tree; deal with the obscure system libraries required by assorted extensions; resolve version conflicts across distributions and even across major releases of the same distribution; and master a whole toolbox that includes CMake, Make, Ninja, Cargo, and more.
 
-## Why Not Docker?
+## Why Not Docker? {#why-not-docker}
 
 Docker looks like a shortcut around packaging: build once, run anywhere. If only. Docker does remove Linux distribution releases—EL 9, Debian 12, Ubuntu 24.04, and so on—from the build matrix. But you still need separate builds for PostgreSQL major versions, system architectures, and hundreds of extensions in multiple versions. And if you inspect PostgreSQL Docker images, you will find that their Dockerfiles often still use `apt install` to install PGDG's DEB packages. Linux packages are upstream of Docker images, not the other way around.
 
@@ -58,7 +58,7 @@ Second, extensions are one of PostgreSQL's defining advantages over other databa
 
 [Should Databases Be Deployed in Kubernetes?](https://vonng.com/en/db/db-in-k8s/)
 
-## How I Got Into Packaging
+## How I Got Into Packaging {#how-i-got-into-packaging}
 
 I started doing this work only about two years before writing this article. I wanted Pigsty to support self-hosted Supabase, but Supabase depended on more than a dozen PostgreSQL extensions, most of which were absent from the official PGDG binary repositories. I asked Devrim, the maintainer of the PGDG YUM repository, about them. He told me that extensions written in Rust would never make it into PGDG because they took too long to compile. So I rolled up my sleeves and built the RPMs myself.
 
@@ -74,7 +74,7 @@ That is because we solved the build, packaging, and distribution problems for Su
 
 Engineers who know EL or Debian packaging do exist. Engineers who also understand the PostgreSQL ecosystem well enough to build hundreds of PostgreSQL packages across more than ten Linux distributions are genuinely rare.
 
-## A Vanishingly Rare Craft
+## A Vanishingly Rare Craft {#a-vanishingly-rare-craft}
 
 In practice, I have found this skill astonishingly scarce. Yurii asked me who else understands it. In China, nobody comes to mind. Even globally, perhaps the author of ZomboDB, who also created pgrx and was hired by ParadeDB, could do it well. Beyond that, I struggle to name anyone.
 
@@ -84,11 +84,11 @@ The same pattern appears among Chinese database vendors. Alibaba Cloud's PolarDB
 
 ![Pigsty documentation for supported database kernels](/article/packaging-skill/03.webp)
 
-## Conclusion
+## Conclusion {#conclusion}
 
 Value often comes from non-consensus skills. Build and packaging work is a perfect example. To a casual observer, it looks like little more than compiling some code and wrapping it in a package. In reality, it is an exceptionally scarce craft—one whose absence creates painful supply-chain chokepoints.
 
-## References
+## References {#references}
 
 ![Extension Ecosystem Engineer RFC](/article/packaging-skill/04.webp)
 

@@ -1,10 +1,10 @@
 ---
 title: "pig v1.10.2"
 linkTitle: "v1.10.2"
-date: 2026-10-24T00:00:00+08:00
+date: 2026-10-24
 description: "新增 pg_nanotime，更新扩展版本与软件包信息，目录增至 616 个条目。"
 tags: [ext, catalog]
-weight: -2
+weight: 3
 authors: [Vonng]
 draft: false
 release_url: https://github.com/pgsty/pig/releases/tag/v1.10.2
@@ -13,13 +13,13 @@ release_url: https://github.com/pgsty/pig/releases/tag/v1.10.2
 PIG `v1.10.2` 更新内嵌 PostgreSQL 扩展目录，从 **615 个条目增至 616 个**，
 新增 `pg_nanotime`，并刷新扩展版本、兼容性与软件包可用性信息。
 
-## 新增扩展
+## 新增扩展 {#new-extension}
 
 收录 [`pg_nanotime`](https://github.com/bunko666-cloud/pg_nanotime) `0.2.0`，
 提供纳秒时间戳与固定时长间隔类型。目录包含 PostgreSQL **17、18** 的 RPM 与 DEB
 软件包信息；上游将 `0.2.0` 标记为测试版本。
 
-## 版本更新
+## 版本更新 {#version-updates}
 
 | 扩展 | 原版本 | 新版本 |
 |:-----|:-------|:-------|
@@ -31,7 +31,7 @@ PIG `v1.10.2` 更新内嵌 PostgreSQL 扩展目录，从 **615 个条目增至 6
 Citus 的目录扩展版本为 `14.3-1`，对应 RPM / DEB 软件包版本为 `14.3.0`。
 本次还补充了 `pg_tre` 在 PostgreSQL 17、18 上的 DEB 包可用性信息。
 
-## 目录信息
+## 目录信息 {#catalog-metadata}
 
 - 刷新 PostgreSQL 兼容范围、包可用性、许可证与扩展描述。
 - 将 `duckdb_fdw` 的目录兼容范围调整为 PostgreSQL 15–18，
@@ -43,7 +43,7 @@ Citus 的目录扩展版本为 `14.3-1`，对应 RPM / DEB 软件包版本为 `1
 Go 保持 `1.27.3`，内嵌 Pigsty 保持 `4.5.0`，默认 `cargo-pgrx` 保持 `0.19.3`。
 升级 PIG 请参阅 [安装文档](/zh/install/)。
 
-## 校验和
+## 校验和 {#checksums}
 
 ```checksums
 f07992b20b0b397d1e4bb286656b404e3c911775e98e5fc7d940ef91439f62ed  pig-1.10.2-1.aarch64.rpm

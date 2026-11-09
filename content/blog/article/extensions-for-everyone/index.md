@@ -11,9 +11,9 @@ tags: [ext, repo, catalog, build]
 
 --------
 
-## Part I. Introduction
+## Part I. Introduction {#part-i-introduction}
 
-### 0. Extensions for Everyone
+### 0. Extensions for Everyone {#s-0-extensions-for-everyone}
 
 > [00. Extensions for Everyone](https://vonng.com/work/extensions-for-everyone/00-extensions-for-everyone.html)
 
@@ -23,7 +23,7 @@ It is about delivering PostgreSQL extensions, and about how a shared delivery la
 
 [![00. Extensions for Everyone](/article/extensions-for-everyone/00.webp)](https://vonng.com/work/extensions-for-everyone/00-extensions-for-everyone.html)
 
-### 1. Who am I
+### 1. Who am I {#s-1-who-am-i}
 
 > [01. Who am I](https://vonng.com/work/extensions-for-everyone/01-who-am-i.html)
 
@@ -35,7 +35,7 @@ Over the past two years, I have been cataloging, building, packaging, and testin
 
 [![01. Who am I](/article/extensions-for-everyone/01.webp)](https://vonng.com/work/extensions-for-everyone/01-who-am-i.html)
 
-### 2. Extensibility Matters
+### 2. Extensibility Matters {#s-2-extensibility-matters}
 
 > [02. Extensibility Matters](https://vonng.com/work/extensions-for-everyone/02-extensibility-matters.html)
 
@@ -51,7 +51,7 @@ That is why I began collecting and packaging extensions.
 
 [![02. Extensibility Matters](/article/extensions-for-everyone/02.webp)](https://vonng.com/work/extensions-for-everyone/02-extensibility-matters.html)
 
-### 3. Two Years Later
+### 3. Two Years Later {#s-3-two-years-later}
 
 > [03. Two Years Later](https://vonng.com/work/extensions-for-everyone/03-two-years-later.html)
 
@@ -65,7 +65,7 @@ The main point is what we have learned while maintaining this matrix. That is wh
 
 [![03. Two Years Later](/article/extensions-for-everyone/03.webp)](https://vonng.com/work/extensions-for-everyone/03-two-years-later.html)
 
-### 4. Who Benefits?
+### 4. Who Benefits? {#s-4-who-benefits}
 
 > [04. Who Benefits?](https://vonng.com/work/extensions-for-everyone/04-who-benefits.html)
 
@@ -85,9 +85,9 @@ So this is about a shared delivery layer. Not just for convenience, but also for
 
 --------
 
-## Part II: The Ecosystem Landscape
+## Part II: The Ecosystem Landscape {#part-ii-the-ecosystem-landscape}
 
-### 5. Galaxy
+### 5. Galaxy {#s-5-galaxy}
 
 > [05. Galaxy](https://vonng.com/work/extensions-for-everyone/05-galaxy.html)
 
@@ -101,7 +101,7 @@ It means the ecosystem boundary is large and messy.
 
 [![05. Galaxy](/article/extensions-for-everyone/05.webp)](https://vonng.com/work/extensions-for-everyone/05-galaxy.html)
 
-### 6. GitHub Stars
+### 6. GitHub Stars {#s-6-github-stars}
 
 > [06. GitHub Stars](https://vonng.com/work/extensions-for-everyone/06-github-stars.html)
 
@@ -113,7 +113,7 @@ If we look at the distribution, it is extremely skewed. A few extensions get mos
 
 [![06. GitHub Stars](/article/extensions-for-everyone/06.webp)](https://vonng.com/work/extensions-for-everyone/06-github-stars.html)
 
-### 7. Star Tiering
+### 7. Star Tiering {#s-7-star-tiering}
 
 > [07. Star Tiering](https://vonng.com/work/extensions-for-everyone/07-star-tiering.html)
 
@@ -135,7 +135,7 @@ But the tiers tell us something. The visible ecosystem is much smaller than the 
 
 [![07. Star Tiering](/article/extensions-for-everyone/07.webp)](https://vonng.com/work/extensions-for-everyone/07-star-tiering.html)
 
-### 8. The Extension Funnel
+### 8. The Extension Funnel {#s-8-the-extension-funnel}
 
 > [08. The Extension Funnel](https://vonng.com/work/extensions-for-everyone/08-the-extension-funnel.html)
 
@@ -149,7 +149,7 @@ The point is the shape. Discovery is broad. Delivery is narrower. Usage is narro
 
 [![08. The Extension Funnel](/article/extensions-for-everyone/08.webp)](https://vonng.com/work/extensions-for-everyone/08-the-extension-funnel.html)
 
-### 9. Dimension Analysis
+### 9. Dimension Analysis {#s-9-dimension-analysis}
 
 > [09. Dimension Analysis](https://vonng.com/work/extensions-for-everyone/09-dimension-analysis.html)
 
@@ -161,9 +161,9 @@ Now let us move from "what exists" to "what can actually be delivered".
 
 --------
 
-## Part III: The Delivery Layer
+## Part III: The Delivery Layer {#part-iii-the-delivery-layer}
 
-### 10. The Status Quo
+### 10. The Status Quo {#s-10-the-status-quo}
 
 > [10. The Status Quo](https://vonng.com/work/extensions-for-everyone/10-the-status-quo.html)
 
@@ -175,7 +175,7 @@ So the complementary repository aims to fill that gap. It adds packages where PG
 
 [![10. The Status Quo](/article/extensions-for-everyone/10.webp)](https://vonng.com/work/extensions-for-everyone/10-the-status-quo.html)
 
-### 11. The Trade-Off
+### 11. The Trade-Off {#s-11-the-trade-off}
 
 > [11. The Trade-Off](https://vonng.com/work/extensions-for-everyone/11-the-trade-off.html)
 
@@ -185,7 +185,7 @@ But users still need them. A self-hosted Supabase stack, for example, needs abou
 
 [![11. The Trade-Off](/article/extensions-for-everyone/11.webp)](https://vonng.com/work/extensions-for-everyone/11-the-trade-off.html)
 
-### 12. Why Linux Native?
+### 12. Why Linux Native? {#s-12-why-linux-native}
 
 > [12. Why Linux Native?](https://vonng.com/work/extensions-for-everyone/12-why-linux-native.html)
 
@@ -197,7 +197,7 @@ So the packaging has to be done somewhere.
 
 [![12. Why Linux Native?](/article/extensions-for-everyone/12.webp)](https://vonng.com/work/extensions-for-everyone/12-why-linux-native.html)
 
-### 13. PGEXT.CLOUD
+### 13. PGEXT.CLOUD {#s-13-pgext-cloud}
 
 > [13. PGEXT.CLOUD](https://vonng.com/work/extensions-for-everyone/13-pgext-cloud.html)
 
@@ -209,7 +209,7 @@ The CLI is simple. The repository is useful. But the catalog and the build matri
 
 [![13. PGEXT.CLOUD](/article/extensions-for-everyone/13.webp)](https://vonng.com/work/extensions-for-everyone/13-pgext-cloud.html)
 
-### 14. Extension Catalog
+### 14. Extension Catalog {#s-14-extension-catalog}
 
 > [14. Extension Catalog](https://vonng.com/work/extensions-for-everyone/14-extension-catalog.html)
 
@@ -219,7 +219,7 @@ This sounds like boring grunt work. But boring metadata is what lets the rest of
 
 [![14. Extension Catalog](/article/extensions-for-everyone/14.webp)](https://vonng.com/work/extensions-for-everyone/14-extension-catalog.html)
 
-### 15. Catalog Details
+### 15. Catalog Details {#s-15-catalog-details}
 
 > [15. Catalog Details](https://vonng.com/work/extensions-for-everyone/15-catalog-details.html)
 
@@ -231,7 +231,7 @@ I would be very happy if this kind of information could one day live on postgres
 
 [![15. Catalog Details](/article/extensions-for-everyone/15.webp)](https://vonng.com/work/extensions-for-everyone/15-catalog-details.html)
 
-### 16. Catalog Page Views
+### 16. Catalog Page Views {#s-16-catalog-page-views}
 
 > [16. Catalog Page Views](https://vonng.com/work/extensions-for-everyone/16-catalog-page-views.html)
 
@@ -241,7 +241,7 @@ Here is the extension pageview data from the last month.
 
 [![16. Catalog Page Views](/article/extensions-for-everyone/16.webp)](https://vonng.com/work/extensions-for-everyone/16-catalog-page-views.html)
 
-### 17. Repository
+### 17. Repository {#s-17-repository}
 
 > [17. Repository](https://vonng.com/work/extensions-for-everyone/17-repository.html)
 
@@ -253,7 +253,7 @@ This repository aims to enhance the PGDG YUM and APT repositories. It is fully c
 
 [![17. Repository](/article/extensions-for-everyone/17.webp)](https://vonng.com/work/extensions-for-everyone/17-repository.html)
 
-### 18. Repo Download Stats
+### 18. Repo Download Stats {#s-18-repo-download-stats}
 
 > [18. Repo Download Stats](https://vonng.com/work/extensions-for-everyone/18-repo-download-stats.html)
 
@@ -265,7 +265,7 @@ I would really welcome it if the PGDG repository could share access logs, or at 
 
 [![18. Repo Download Stats](/article/extensions-for-everyone/18.webp)](https://vonng.com/work/extensions-for-everyone/18-repo-download-stats.html)
 
-### 19. What We Can Still Infer
+### 19. What We Can Still Infer {#s-19-what-we-can-still-infer}
 
 > [19. What We Can Still Infer](https://vonng.com/work/extensions-for-everyone/19-what-we-can-still-infer.html)
 
@@ -275,7 +275,7 @@ But be careful. A package with few downloads may still be important. Maybe we ne
 
 [![19. What We Can Still Infer](/article/extensions-for-everyone/19.webp)](https://vonng.com/work/extensions-for-everyone/19-what-we-can-still-infer.html)
 
-### 20. The CLI - PIG
+### 20. The CLI - PIG {#s-20-the-cli-pig}
 
 > [20. The CLI - PIG](https://vonng.com/work/extensions-for-everyone/20-the-cli-pig.html)
 
@@ -293,9 +293,9 @@ So that is the delivery layer: catalog, repository, CLI, and the build matrix be
 
 --------
 
-## Part IV: Maintenance in the Wild
+## Part IV: Maintenance in the Wild {#part-iv-maintenance-in-the-wild}
 
-### 21. Dimension Explosion!
+### 21. Dimension Explosion! {#s-21-dimension-explosion}
 
 > [21. Dimension Explosion!](https://vonng.com/work/extensions-for-everyone/21-dimension-explosion.html)
 
@@ -315,7 +315,7 @@ The rest of this part is about what we learn when that explosion meets reality.
 
 [![21. Dimension Explosion!](/article/extensions-for-everyone/21.webp)](https://vonng.com/work/extensions-for-everyone/21-dimension-explosion.html)
 
-### 22. PG Minor ABI Break
+### 22. PG Minor ABI Break {#s-22-pg-minor-abi-break}
 
 > [22. PG Minor ABI Break](https://vonng.com/work/extensions-for-everyone/22-pg-minor-abi-break.html)
 
@@ -327,7 +327,7 @@ It is better to treat this as an exceptional case. But when it happens, we have 
 
 [![22. PG Minor ABI Break](/article/extensions-for-everyone/22.webp)](https://vonng.com/work/extensions-for-everyone/22-pg-minor-abi-break.html)
 
-### 23. OS Minor Break
+### 23. OS Minor Break {#s-23-os-minor-break}
 
 > [23. OS Minor Break](https://vonng.com/work/extensions-for-everyone/23-os-minor-break.html)
 
@@ -339,7 +339,7 @@ In response, the PGDG YUM repository recently changed its packaging policy. It n
 
 [![23. OS Minor Break](/article/extensions-for-everyone/23.webp)](https://vonng.com/work/extensions-for-everyone/23-os-minor-break.html)
 
-### 24. Rust Problems
+### 24. Rust Problems {#s-24-rust-problems}
 
 > [24. Rust Problems](https://vonng.com/work/extensions-for-everyone/24-rust-problems.html)
 
@@ -353,7 +353,7 @@ So Rust does not just add another language. It adds another compatibility axis.
 
 [![24. Rust Problems](/article/extensions-for-everyone/24.webp)](https://vonng.com/work/extensions-for-everyone/24-rust-problems.html)
 
-### 25. Bulky Extensions
+### 25. Bulky Extensions {#s-25-bulky-extensions}
 
 > [25. Bulky Extensions](https://vonng.com/work/extensions-for-everyone/25-bulky-extensions.html)
 
@@ -363,7 +363,7 @@ Some newer extensions, such as pg_search and pg_duckdb, are tens of megabytes. S
 
 [![25. Bulky Extensions](/article/extensions-for-everyone/25.webp)](https://vonng.com/work/extensions-for-everyone/25-bulky-extensions.html)
 
-### 26. Naming Conflicts
+### 26. Naming Conflicts {#s-26-naming-conflicts}
 
 > [26. Naming Conflicts](https://vonng.com/work/extensions-for-everyone/26-naming-conflicts.html)
 
@@ -381,7 +381,7 @@ This is not just a packaging issue. It is an ecosystem metadata problem. If the 
 
 [![26. Naming Conflicts](/article/extensions-for-everyone/26.webp)](https://vonng.com/work/extensions-for-everyone/26-naming-conflicts.html)
 
-### 27. Library Conflicts
+### 27. Library Conflicts {#s-27-library-conflicts}
 
 > [27. Library Conflicts](https://vonng.com/work/extensions-for-everyone/27-library-conflicts.html)
 
@@ -395,7 +395,7 @@ The lesson is simple: names are part of compatibility, and names do conflict.
 
 [![27. Library Conflicts](/article/extensions-for-everyone/27.webp)](https://vonng.com/work/extensions-for-everyone/27-library-conflicts.html)
 
-### 28. API Break
+### 28. API Break {#s-28-api-break}
 
 > [28. API Break](https://vonng.com/work/extensions-for-everyone/28-api-break.html)
 
@@ -409,7 +409,7 @@ I think build coverage is a useful signal. When a patch breaks N extensions, tha
 
 [![28. API Break](/article/extensions-for-everyone/28.webp)](https://vonng.com/work/extensions-for-everyone/28-api-break.html)
 
-### 29. PG 19 Compatibility
+### 29. PG 19 Compatibility {#s-29-pg-19-compatibility}
 
 > [29. PG 19 Compatibility](https://vonng.com/work/extensions-for-everyone/29-pg-19-compatibility.html)
 
@@ -425,7 +425,7 @@ The goal is not to block progress. The goal is to make ecosystem impact visible 
 
 [![29. PG 19 Compatibility](/article/extensions-for-everyone/29.webp)](https://vonng.com/work/extensions-for-everyone/29-pg-19-compatibility.html)
 
-### 30. Keeping It Maintainable
+### 30. Keeping It Maintainable {#s-30-keeping-it-maintainable}
 
 > [30. Keeping It Maintainable](https://vonng.com/work/extensions-for-everyone/30-keeping-it-maintainable.html)
 
@@ -443,7 +443,7 @@ This is the only way a 511-extension matrix stays alive with one maintainer.
 
 [![30. Keeping It Maintainable](/article/extensions-for-everyone/30.webp)](https://vonng.com/work/extensions-for-everyone/30-keeping-it-maintainable.html)
 
-### 31. Three Questions
+### 31. Three Questions {#s-31-three-questions}
 
 > [31. Three Questions](https://vonng.com/work/extensions-for-everyone/31-three-questions.html)
 
@@ -461,7 +461,7 @@ Extensions are collective infrastructure. Delivery is part of extensibility. If 
 
 [![31. Three Questions](/article/extensions-for-everyone/31.webp)](https://vonng.com/work/extensions-for-everyone/31-three-questions.html)
 
-### 32. Thank You
+### 32. Thank You {#s-32-thank-you}
 
 > [32. Thank You](https://vonng.com/work/extensions-for-everyone/32-thank-you.html)
 

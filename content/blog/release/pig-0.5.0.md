@@ -4,7 +4,7 @@ linkTitle: "v0.5.0"
 date: 2025-06-30
 description: "422 extension, new extension catalog"
 tags: [catalog, sty]
-weight: 261
+weight: 39
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v0.5.0
 ---
@@ -18,7 +18,7 @@ release_url: https://github.com/pgsty/pig/releases/tag/v0.5.0
 - Bump kubernetes repo to 1.33
 - Bump default pigsty version to 3.5.0
 
-## Checksums
+## Checksums {#checksums}
 
 ```checksums
 9ec6f3caf3edbe867caab5de0e0ccb33  pig_0.5.0-1_amd64.deb

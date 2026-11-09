@@ -24,7 +24,7 @@ tags: [ext, catalog]
 | `ext reload` | Refresh extension catalog | |
 {.full-width .wide .expand}
 
-## Quick Start
+## Quick Start {#quick-start}
 
 This example uses a running PostgreSQL 18 instance. To install and start one, follow [Getting Started](/start/).
 
@@ -46,7 +46,7 @@ CREATE EXTENSION vector;
 See the [extension list](https://pigsty.io/ext/list/) for other extensions.
 If an extension requires preloading or other configuration, complete the steps from `pig ext info NAME` before enabling it.
 
-### Select a PostgreSQL installation
+### Select a PostgreSQL installation {#select-a-postgresql-installation}
 
 - `-v, --version 18`: select a PostgreSQL major version.
 - `-p, --path /path/to/pg_config`: select an installation by its `pg_config` path.
@@ -67,7 +67,7 @@ The default PGDG paths are `/usr/pgsql-18/bin/pg_config` on EL and `/usr/lib/pos
 
 `pg_available_extensions` lists extensions available to the server. `pg_extension` lists extensions enabled in the current database.
 
-## ext list
+## ext list {#ext-list}
 
 List or search extensions in the extension catalog.
 
@@ -82,12 +82,13 @@ pig ext ls rag                   # list RAG category extensions
 
 Category filtering is done by passing the category name as the query. Supported categories include: `time`, `gis`, `rag`, `fts`, `olap`, `feat`, `lang`, `type`, `func`, `util`, `admin`, `stat`, `sec`, `fdw`, `sim`, and `etl`.
 
-**Options:**
+| Option | Description |
+|:---|:---|
+| `-v, --version` | Select the PG version used to evaluate availability; unavailable entries remain in the list |
+| `--pkg` | Show package names instead of extension names, listing only leading extensions |
+{.full-width}
 
-- `-v|--version`: select the PG version used to evaluate availability; unavailable entries remain in the list
-- `--pkg`: show package names instead of extension names, listing only leading extensions
-
-**Status column:**
+Status column values:
 
 - `installed`: extension is installed
 - `available`: extension is available but not installed
@@ -109,7 +110,7 @@ The [counting decision](/design/catalog-entry-count/) explains this shared defin
 
 Use `pig ext reload` to refresh to the latest catalog. The downloaded catalog is stored at `~/.pig/extension.csv`; the latest online catalog is also published at [**repo.pigsty.io/ext/data/extension.csv**](https://repo.pigsty.io/ext/data/extension.csv).
 
-## ext info
+## ext info {#ext-info}
 
 Show detailed information for selected extensions.
 
@@ -119,7 +120,7 @@ pig ext info timescaledb    # show TimescaleDB details
 pig ext info vector postgis # show multiple extensions
 ```
 
-## ext avail
+## ext avail {#ext-avail}
 
 Show the extension availability matrix across operating systems, architectures, and PostgreSQL versions.
 
@@ -133,7 +134,7 @@ pig ext matrix citus              # alias for avail
 
 The matrix shows availability across operating systems (EL8/9/10, Debian 12/13, Ubuntu 22/24/26), architectures (x86_64/aarch64), and PostgreSQL versions (14-18).
 
-## ext status
+## ext status {#ext-status}
 
 Show extension files/packages visible to the selected PostgreSQL installation on this host.
 
@@ -143,11 +144,12 @@ pig ext status -c           # include contrib extensions
 pig ext status -v 16        # show installed extensions for PG 16
 ```
 
-**Options:**
+| Option | Description |
+|:---|:---|
+| `-c, --contrib` | Include contrib extensions in the result |
+{.full-width}
 
-- `-c|--contrib`: include contrib extensions in the result
-
-## ext scan
+## ext scan {#ext-scan}
 
 Scan the selected PostgreSQL installation's extension directories.
 
@@ -159,7 +161,7 @@ The command reads control files and related installation paths for the selected 
 It also matches shared-library names against catalog metadata, so a catalog entry without a
 control file can still be reported as installed. This does not imply `CREATE EXTENSION` support.
 
-## ext add
+## ext add {#ext-add}
 
 Install one or more PostgreSQL extensions. Aliases for `pig ext add` include `pig ext install`, `pig ext ins`, and `pig ext a`. The top-level [`pig install`](/cmd/#pig-install) command also accepts extension aliases and general OS packages.
 
@@ -188,6 +190,8 @@ Use these aliases to select a PostgreSQL package group:
 | `pg18-client` | Client tools |
 | `pg18-devel` | Development files |
 | `pg18-basic` | pg_repack, wal2json, and pgvector |
+| `pgsql-common` | patroni, pgbouncer, pgbackrest, pg-exporter, pgbackrest-exporter, vip-manager, and python3-etcd |
+{.full-width}
 
 Replace `18` with the required major version. You can also use `pgsql` with `-v 18`.
 To select a specific package version, use `NAME=VERSION` with a version available in the configured repository.
@@ -216,15 +220,16 @@ resolves through `pgaudit_14`/`pgaudit_15`, while the PostGIS 3.7 family resolve
 `postgis37_N`; its address-standardizer and PG16+ Tiger Geocoder packages have their own catalog
 entries. The configured repository must provide the selected package.
 
-**Options:**
-
-- `-v|--version`: specify PG major version
-- `-y|--yes`: auto-confirm installation
-- `--plan`: preview the install plan without running package-manager commands
+| Option | Description |
+|:---|:---|
+| `-v, --version` | Specify PG major version |
+| `-y, --yes` | Auto-confirm installation |
+| `--plan` | Preview the install plan without running package-manager commands |
+{.full-width}
 
 Successful installation only makes the extension files available on the host. Follow the extension's `ext info` hints for preload, restart, and `CREATE EXTENSION` steps.
 
-## ext rm
+## ext rm {#ext-rm}
 
 Remove one or more PostgreSQL extensions.
 
@@ -235,15 +240,16 @@ pig ext rm pgvector -y           # auto-confirm removal
 pig ext rm pgvector --plan       # preview remove plan without executing
 ```
 
-**Options:**
-
-- `-v|--version`: specify PG major version
-- `-y|--yes`: auto-confirm removal
-- `--plan`: preview the remove plan without running package-manager commands
+| Option | Description |
+|:---|:---|
+| `-v, --version` | Specify PG major version |
+| `-y, --yes` | Auto-confirm removal |
+| `--plan` | Preview the remove plan without running package-manager commands |
+{.full-width}
 
 This removes an OS package, not database objects. Drop or migrate dependent extensions in every affected database before removing the shared files.
 
-## ext update
+## ext update {#ext-update}
 
 Update the named packages to the versions available from the configured repositories. With no arguments, the command makes no changes.
 
@@ -255,15 +261,16 @@ pig ext update pg_duckdb -y      # auto-confirm update
 pig ext update pg_duckdb -m      # refresh the catalog from the China mirror first
 ```
 
-**Options:**
-
-- `-v|--version`: specify PG major version
-- `-y|--yes`: auto-confirm update
-- `-m|--mirror`: refresh the extension catalog from the `pigsty.cc` mirror before updating packages; package downloads still use the configured OS repositories
+| Option | Description |
+|:---|:---|
+| `-v, --version` | Specify PG major version |
+| `-y, --yes` | Auto-confirm update |
+| `-m, --mirror` | Refresh the extension catalog from the `pigsty.cc` mirror before updating packages; package downloads still use the configured OS repositories |
+{.full-width}
 
 The command does not run SQL migrations. After the package upgrade, follow the extension's release notes and run `ALTER EXTENSION ... UPDATE` in each database where appropriate.
 
-## ext import
+## ext import {#ext-import}
 
 Download extension packages into a local repository for offline installation.
 
@@ -275,9 +282,10 @@ pig ext import pgsql-common           # import common utility packages
 pig ext import -d /www/pigsty postgis # import to a selected path
 ```
 
-**Options:**
-
-- `-d|--repo`: local repository directory (default: `/www/pigsty`)
+| Option | Description |
+|:---|:---|
+| `-d, --repo` | Local repository directory (default: `/www/pigsty`) |
+{.full-width}
 
 If some names cannot be resolved, successfully resolved packages are still downloaded, but the
 command exits with failure. Structured output preserves `requested`, resolved `packages`,
@@ -290,7 +298,7 @@ the package download list; real package dependencies remain eligible.
 JSON/YAML output and `PIG_NON_INTERACTIVE=1` use non-interactive sudo. If privilege escalation
 requires a password, the command fails instead of waiting for input; configure suitable sudo access first.
 
-## ext link
+## ext link {#ext-link}
 
 Link a selected PG version into the system PATH.
 
@@ -311,7 +319,7 @@ This command creates the `/usr/pgsql` symlink and writes `/etc/profile.d/pgsql.s
 . /etc/profile.d/pgsql.sh
 ```
 
-## ext reload
+## ext reload {#ext-reload}
 
 Refresh extension metadata.
 

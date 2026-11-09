@@ -4,7 +4,7 @@ linkTitle: "v0.7.0"
 date: 2025-11-07
 description: "强化 build 能力，大批量包更新"
 tags: [build, repo, catalog, install]
-weight: 221
+weight: 35
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v0.7.0
 ---
@@ -23,7 +23,7 @@ release_url: https://github.com/pgsty/pig/releases/tag/v0.7.0
 - 大量优化了错误日志记录。
 - 基于 hugo 与 hextra 全新目录网站
 
-## 校验和
+## 校验和 {#checksums}
 
 ```checksums
 ad60f9abcde954769e46eb23de61965e  pig_0.7.0-1_amd64.deb

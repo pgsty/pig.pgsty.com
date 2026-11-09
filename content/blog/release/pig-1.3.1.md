@@ -4,7 +4,7 @@ linkTitle: "v1.3.1"
 date: 2026-03-05
 description: "Retire PG13 defaults, unify PG14-18 support window, 464 extensions"
 tags: [build, catalog]
-weight: 111
+weight: 21
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.3.1
 ---
@@ -18,7 +18,7 @@ This is a small maintenance release from `v1.3.0` to `v1.3.1`.
 - Fix `pig build` dependency/build sync issues; rsync now uses `--keep-dirlinks`.
 - In YUM repos, Nginx is split out from `infra` into its own module index (`nginx`).
 
-## Checksums
+## Checksums {#checksums}
 
 ```checksums
 196e57c7dd46cdedd90ab75965a766f74aabc3bc23ddc8fb757473647bed7b8f  pig-1.3.1-1.aarch64.rpm

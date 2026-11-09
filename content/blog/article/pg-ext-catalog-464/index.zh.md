@@ -13,7 +13,7 @@ tags: [ext, catalog, repo]
 
 ![Pigsty PostgreSQL 扩展目录首页](/article/pg-ext-catalog-464/01.webp)
 
-## 不只是有包，还要有文档
+## 不只是有包，还要有文档 {#not-just-packages-but-documentation-too}
 
 之前的扩展目录，核心功能是告诉你：这个扩展叫什么、元数据在哪里、二进制包怎么下载、一键安装怎么搞。你装好了就行，至于怎么用 —— 自己找文档去。
 
@@ -33,7 +33,7 @@ tags: [ext, catalog, repo]
 
 我们要做的，就是把这些 README 统统收集起来，嵌入到每个扩展的详情页面中。你不用再到处跳转、翻 GitHub，在一个集中的地方就能查阅所有扩展的核心文档。对于特别大的扩展，我们也会把信息索引聚合起来，让你有一个权威可靠的参考入口。
 
-目前 pigsty.cc 已经[完成了 PgBouncer、pgBackRest 和 Patroni 的文档翻译](https://mp.weixin.qq.com/s?__biz=MzU5ODAyNTM5Ng==&mid=2247491396&idx=1&sn=db1796eb86174ab3b1eb8c7f37220def&scene=21#wechat_redirect)。后续所有扩展 —— 包括 PostgreSQL 内核本身 —— 都会逐步推进并持续维护。
+目前 pigsty.cc 已经 [完成了 PgBouncer、pgBackRest 和 Patroni 的文档翻译](https://mp.weixin.qq.com/s?__biz=MzU5ODAyNTM5Ng==&mid=2247491396&idx=1&sn=db1796eb86174ab3b1eb8c7f37220def&scene=21#wechat_redirect)。后续所有扩展 —— 包括 PostgreSQL 内核本身 —— 都会逐步推进并持续维护。
 
 [花一天翻完了 PG 生态三大组件的文档](https://mp.weixin.qq.com/s?__biz=MzU5ODAyNTM5Ng==&mid=2247491396&idx=1&sn=db1796eb86174ab3b1eb8c7f37220def&scene=21#wechat_redirect)
 
@@ -41,7 +41,7 @@ tags: [ext, catalog, repo]
 
 说实话，很多时候我做"正活"剩下的 AI Token 额度没烧完，就顺手拿来填这些空，算是一种兜底，也算在做公益。
 
-## 同时对 Agent 友好，对人类友好
+## 同时对 Agent 友好，对人类友好 {#friendly-to-agents-and-humans-alike}
 
 接下来聊聊这个目录是怎么设计的。
 
@@ -79,7 +79,7 @@ tags: [ext, catalog, repo]
 
 ![特定 PostgreSQL 分支内核专属扩展](/article/pg-ext-catalog-464/13.webp)
 
-## 五个版本，兜兜转转回到原点
+## 五个版本，兜兜转转回到原点 {#five-versions-back-where-we-started}
 
 最后聊一个不那么技术、但挺有感触的话题：文档框架的选型。
 

@@ -4,7 +4,7 @@ linkTitle: "v1.4.1"
 date: 2026-05-01
 description: "510 extensions, Ubuntu 26.04 support, repo calibration"
 tags: [catalog, patroni]
-weight: 61
+weight: 16
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.4.1
 ---
@@ -15,7 +15,7 @@ release_url: https://github.com/pgsty/pig/releases/tag/v1.4.1
 - Bump pgEdge to PostgreSQL 18.
 - Calibrate upstream repo definition.
 
-## Checksums
+## Checksums {#checksums}
 
 ```checksums
 cbfbb04b9640dcf39fcd9ccfa49e500dd0e65b72c0326c0d166e6f43e52b6dc3  pig-1.4.1-1.aarch64.rpm

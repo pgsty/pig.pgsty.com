@@ -26,7 +26,7 @@ I replied:
 >
 > My conclusion is that treating a volunteer mirror as critical production infrastructure, without a service commitment, is a mistake. I now host my own PGDG mirror and control that part of my supply chain. Thank you for explaining the maintainer's perspective. Helping users understand what they can expect from mirrors is valuable in itself.
 
-## My reflections
+## My reflections {#my-reflections}
 
 After receiving the comment, I checked TUNA again. PostgreSQL 18 packages were available, although “Last Update” still showed May 16, 2025. That suggested a manual sync. Besides the [Pigsty repository](https://pgext.cloud), China had another node providing reasonably current PGDG packages. Credit to TUNA for restoring it.
 
@@ -46,7 +46,7 @@ After waiting about another month, I set up a PGDG mirror for China on Tencent C
 
 I am often blunt with cloud vendors. That does not mean I dismiss the difficulties volunteers face. University maintainers deserve more support and fewer moral accusations. That is why I changed my wording.
 
-## Open source and trust
+## Open source and trust {#open-source-and-trust}
 
 I recently experienced the same problem from the maintainer's side. I maintain several open-source projects, including [pg_exporter](https://github.com/pgsty/pg_exporter), a Prometheus exporter used by some PostgreSQL vendors.
 
@@ -62,7 +62,7 @@ I had spent September driving around Xinjiang and barely used a computer. I had 
 
 When an upstream mirror stops working and a report receives neither a response nor a fix, I feel the same way that user did. I do not want to depend on a project whose maintainer appears absent.
 
-## The software supply chain
+## The software supply chain {#the-software-supply-chain}
 
 In “[PG ‘Export Controls’ and Supply-Chain Trust](/article/pg-mirror-pigsty/),” I argued that publishing source code is only one way to build trust. Continued effort, dependable delivery, and a willingness to address problems matter too.
 
@@ -76,7 +76,7 @@ Consistent maintenance and clear expectations build trust. Stale or unreliable r
 
 My point is that **a production supply chain should not depend on an upstream service that explicitly makes no commitment to its availability.**
 
-## Quality and commitments
+## Quality and commitments {#quality-and-commitments}
 
 TUNA provides useful services. I use its PyPI and Homebrew mirrors on my own computer to speed up downloads. Early versions of Pigsty also used some of TUNA's PostgreSQL mirrors. After several unexpected HTTP 403 failures disrupted automated deployments, I switched to Alibaba Cloud.
 
@@ -92,27 +92,27 @@ Mirrors, repositories, and distributions support the rest of our infrastructure.
 
 When an upstream says, “Don't count on me,” my response is, “Then I'll take responsibility for it myself.”
 
-## A word from our sponsor
+## A word from our sponsor {#a-word-from-our-sponsor}
 
 I rarely pass up a chance to mention my own work. These three public repositories may be useful to you. They have global endpoints behind Cloudflare and separate endpoints in China, and can be configured through PIG, APT, or DNF. See the [repository documentation](https://pigsty.io/docs/repo/) for current addresses and setup instructions.
 
 ![Pigsty architecture and repository overview](/article/tuna-mirror-site/pigsty.webp)
 
-### PGDG mirror
+### PGDG mirror {#pgdg-mirror}
 
 The mirror copies the PostgreSQL Global Development Group's packages for EL 7–10, Debian 11–13, and Ubuntu 20.04–24.04. On November 22, 2025, it had just completed a sync and was being updated weekly.
 
-### PIGSTY PGSQL
+### PIGSTY PGSQL {#pigsty-pgsql}
 
 This repository supplements PGDG with [PostgreSQL variants](https://pigsty.io/docs/pgsql/kernel/), including PolarDB, IvorySQL, Babelfish, OrioleDB, OpenHaloDB, Percona TDE, and Supabase. At the time of writing, it provided [437 PostgreSQL extensions](https://pgext.cloud/list) and ecosystem tools across [14 Linux distribution major versions](https://pgext.cloud/os).
 
 ![PGEXT.CLOUD extension catalog and availability counts](/article/tuna-mirror-site/extensions.webp)
 
-### PIGSTY INFRA
+### PIGSTY INFRA {#pigsty-infra}
 
 This repository provides database tools, Grafana, Prometheus, and exporters. The following package versions describe the November 22, 2025 snapshot.
 
-#### Databases and ecosystem tools
+#### Databases and ecosystem tools {#databases-and-ecosystem-tools}
 
 | Package | Version |
 |---|---|
@@ -134,7 +134,7 @@ This repository provides database tools, Grafana, Prometheus, and exporters. The
 | [pgschema](https://github.com/pgschema/pgschema) | 1.4.2 |
 {.wide .expand}
 
-#### Prometheus and exporters
+#### Prometheus and exporters {#prometheus-and-exporters}
 
 | Package | Version |
 |---|---|
@@ -156,7 +156,7 @@ This repository provides database tools, Grafana, Prometheus, and exporters. The
 | [mongodb_exporter](https://github.com/percona/mongodb_exporter) | 0.47.1 |
 {.wide .expand}
 
-#### Grafana and log tools
+#### Grafana and log tools {#grafana-and-log-tools}
 
 | Package | Version |
 |---|---|
@@ -169,7 +169,7 @@ This repository provides database tools, Grafana, Prometheus, and exporters. The
 | [grafana-vmetrics-ds](https://github.com/VictoriaMetrics/victoriametrics-datasource/releases/) | 0.19.6 |
 | [grafana-plugins](https://github.com/pgsty/infra-pkg/tree/main/grafana-plugins) | 12.0.0 |
 
-#### Utilities
+#### Utilities {#utilities}
 
 | Package | Version |
 |---|---|

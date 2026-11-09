@@ -2,16 +2,16 @@
 title: "One-command Xray Clients and Servers"
 linkTitle: "Xray Client and Server"
 date: 2026-10-05
-lastmod: 2026-10-17
+lastmod: 2026-11-09
 description: "One-command VLESS, REALITY, and Vision client/server setup, stable server credentials, and verified proxy connectivity."
 tags: [build, cli, install]
-weight: 90
+weight: 95
 authors: [Vonng]
 draft: false
 ---
 
 > **Decision date:** 2026-10-05<br>
-> **Status:** Released in [v1.9.0](/release/pig-1.9.0/). The 2026-10-16 refinements below are Implemented in the v1.10.0 candidate, not yet released.<br>
+> **Status:** Released in [v1.9.0](/release/pig-1.9.0/); the 2026-10-16 service-recognition refinement shipped in [v1.10.0](/release/pig-1.10.0/).<br>
 > **Current reference:** [`pig build`](/build/), [operations safety](/design/ops-cli-safety/), and [release history](/release/)<br>
 > **Scope:** One-command Xray client and server setup; Linux clients and servers, plus a macOS client. Shared Nginx ingress remains a separate deployment boundary.
 
@@ -276,7 +276,7 @@ existing plan, output, confirmation, privileged-write, and logging helpers.
 ## Verification and evolution {#verification}
 
 Fixed source commits and regression tests for the committed v1.10.0 refinements cover:
-[complete legacy service recognition](https://github.com/pgsty/pig/commit/9ab5be72360a2d1344e90df3cafd2cff2d914b2a). These commits do not establish a release boundary.
+[complete legacy service recognition](https://github.com/pgsty/pig/commit/9ab5be72360a2d1344e90df3cafd2cff2d914b2a). This refinement shipped in [v1.10.0](https://github.com/pgsty/pig/releases/tag/v1.10.0).
 The v1.9.0 runtime evidence below covers the original implementation.
 
 The implementation is recorded in
@@ -306,5 +306,5 @@ other Xray versions, or deployment of a new PROXY-protocol frontend.
 
 ## Current status {#status}
 
-Released in [v1.9.0](https://github.com/pgsty/pig/releases/tag/v1.9.0).
+Released in [v1.9.0](https://github.com/pgsty/pig/releases/tag/v1.9.0) and refined in [v1.10.0](https://github.com/pgsty/pig/releases/tag/v1.10.0).
 Nginx ingress automation and credential rotation remain future work.

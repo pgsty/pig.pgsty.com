@@ -4,7 +4,7 @@ linkTitle: "v1.3.0"
 date: 2026-02-27
 description: "Build pipeline hardening, 461 extensions, new pgedge/ivory support"
 tags: [catalog, build, cli, ext]
-weight: 121
+weight: 22
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.3.0
 ---
@@ -13,7 +13,7 @@ This release is a focused engineering update from `v1.2.0` to `v1.3.0`: 15 commi
 
 It hardens the `pig build` pipeline and extends catalog/alias coverage, increasing total extensions from **451** to **461**.
 
-## Highlights
+## Highlights {#highlights}
 
 - Build source download improvements (`pig build get`):
   - Parse multi-source `Source` fields (whitespace/newline/tab) and deduplicate entries.
@@ -38,11 +38,11 @@ It hardens the `pig build` pipeline and extends catalog/alias coverage, increasi
 - Engineering and release:
   - Version bumped to `v1.3.0` (including a `v1.2.1` transition commit), copyright year moved to 2026, and README refreshed for 461 extensions and current alias docs.
 
-## Compatibility Notes
+## Compatibility Notes {#compatibility-notes}
 
 - Structured `removed/updated` fields in `pig ext rm/update` now contain package names. Automation that matched extension aliases should update parsing logic.
 
-## New Extensions (451 -> 461)
+## New Extensions (451 -> 461) {#new-extensions-451-461}
 
 | Extension             | Version | Notes                                             |
 |:----------------------|:--------|:--------------------------------------------------|
@@ -58,7 +58,7 @@ It hardens the `pig build` pipeline and extends catalog/alias coverage, increasi
 | `lolor`               | 1.2.2   | pgEdge logical-replication-friendly large objects  |
 {.wide .expand}
 
-## Full Commit List (`v1.2.0..v1.3.0`)
+## Full Commit List (`v1.2.0..v1.3.0`) {#full-commit-list-v1-2-0-v1-3-0}
 
 - `b8ecf8d` bump version string to 1.2.1
 - `55df9a4` build/get: support multi-source parsing and pgedge spock tarball
@@ -76,7 +76,7 @@ It hardens the `pig build` pipeline and extends catalog/alias coverage, increasi
 - `1f88f06` chore: update copyright year to 2026
 - `c804757` v1.3.0
 
-## Checksums
+## Checksums {#checksums}
 
 ```checksums
 196f32419886da095f303b1bcad2729b674abc03d412199e88a39390b2616534  pig-1.3.0-1.aarch64.rpm

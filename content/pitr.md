@@ -14,7 +14,7 @@ By default, it then starts PostgreSQL and leaves Patroni stopped for you to veri
 Recovery replaces data in the target directory. Start with `--plan` to check the directory,
 backup source, recovery target, and service actions.
 
-## Before recovery
+## Before recovery {#before-recovery}
 
 You need an installed pgBackRest, a readable configuration file, a usable backup,
 and the archived WAL needed to reach the target. The default config path is
@@ -35,7 +35,7 @@ Service operations require root privileges, directly or through sudo.
 
 Use [`pig pb restore`](/pb/#pb-restore) when you want to manage service shutdown and startup yourself.
 
-## Quick start
+## Quick start {#quick-start}
 
 This example restores an existing managed data directory to a chosen time.
 Replace the timestamp with your recovery target:
@@ -60,9 +60,9 @@ PIG asks for `y` or `yes` before recovery. Use `--yes` for execution without a p
 For a time, name, LSN, transaction ID, or immediate target, PostgreSQL normally pauses when it
 reaches the target. Inspect the data before promotion. See [post-recovery actions](#post-recovery-actions).
 
-## Parameters
+## Parameters {#parameters}
 
-### Recovery target
+### Recovery target {#recovery-target}
 
 Choose exactly one target. Without a target, PIG returns an error and shows help in text mode.
 
@@ -78,7 +78,7 @@ Choose exactly one target. Without a target, PIG returns an error and shows help
 
 `--set` selects a backup; it does not select a recovery target.
 
-### Backup and target options
+### Backup and target options {#backup-and-target-options}
 
 | Option | Short | Description |
 |:---|:---|:---|
@@ -93,7 +93,7 @@ for WAL replay; it will shut down after reaching the target.
 
 `--target-action` cannot be combined with `--default`. `--exclusive` requires `--time`, `--lsn`, or `--xid`.
 
-### Flow control
+### Flow control {#flow-control}
 
 | Option | Short | Default | Description |
 |:---|:---|:---|:---|
@@ -104,7 +104,7 @@ for WAL replay; it will shut down after reaching the target.
 | `--force-stop` | | false | Allow immediate shutdown and process termination if fast shutdown fails |
 {.full-width}
 
-### Configuration
+### Configuration {#configuration}
 
 | Option | Short | Default or source |
 |:---|:---|:---|
@@ -115,7 +115,7 @@ for WAL replay; it will shut down after reaching the target.
 | `--data` | `-D` | Target directory; configured `pg1-path`, then `$PGDATA`, then `/pg/data` |
 {.full-width .wide .expand}
 
-### Native restore options
+### Native restore options {#native-restore-options}
 
 Put extra pgBackRest arguments after `--`:
 
@@ -127,7 +127,7 @@ Use PIG flags for the recovery target, data directory, config, stanza, and repos
 Arguments that override these settings are rejected, including `--repoN-*` and `--recovery-option`.
 Other restore options, such as `--delta`, `--tablespace-map`, `--link-map`, and `--link-all`, can be forwarded.
 
-## Time format
+## Time format {#time-format}
 
 PIG fills in missing date or timezone fields using the local date and timezone:
 
@@ -142,7 +142,7 @@ PIG fills in missing date or timezone fields using the local date and timezone:
 Use a full timestamp with timezone in scripts. Plans and suggested follow-up commands expand
 short forms to a full timestamp so that rerunning the command keeps the same target.
 
-## Managed directory and side restore
+## Managed directory and side restore {#managed-directory-and-side-restore}
 
 The managed directory comes from `pg1-path` in the selected stanza, then `$PGDATA`, then `/pg/data`.
 It must already contain an initialized PostgreSQL instance. An explicit `-D` that resolves to this
@@ -173,7 +173,7 @@ pig pg psql -D /tmp/pg-restore
 `pig pg psql -D` reads the restored directory's `postmaster.pid` to select its port and socket.
 It returns an error if it cannot resolve that instance.
 
-## Execution flow
+## Execution flow {#execution-flow}
 
 1. Validate options, configuration, target directory, stanza health, and available backups.
    If `--set` is given, check that the backup label exists.
@@ -197,7 +197,7 @@ follow-up SQL checks against an unverified connection target.
 `--plan` runs the prechecks and returns the planned actions. It needs access to the configuration,
 data directory, and backup repository, but does not stop services or restore data.
 
-## More examples
+## More examples {#more-examples}
 
 Run one recovery command for the target you need:
 
@@ -246,7 +246,7 @@ pig pitr -t "2025-01-15 09:30:00+08" --target-action=promote -- --delta
 If a managed restore fails after stopping Patroni, Patroni stays stopped. The target directory can contain a partial restore. Inspect PostgreSQL and pgBackRest logs, fix the failure, and complete recovery before
 starting Patroni. A startup timeout also needs investigation; it does not undo the restored files.
 
-## Structured output
+## Structured output {#structured-output}
 
 Use `--plan -o json` to inspect a structured plan. Use `--yes -o json` to execute without interaction.
 YAML is also available.
@@ -254,7 +254,7 @@ YAML is also available.
 Successful results include `requested_data_dir`, `effective_data_dir`, `managed_data_dir`, and
 `side_restore` in `data`. Follow-up commands are in the result's top-level `next_actions` field.
 
-## Design record
+## Design record {#design-record}
 
 [PIG's Operations CLI Safety Contract](/design/ops-cli-safety/) explains the separate roles of
 `pig pb restore` and `pig pitr`.

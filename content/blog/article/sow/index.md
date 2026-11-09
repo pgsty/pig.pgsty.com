@@ -34,7 +34,7 @@ SOW provides both repository indexing and long-term repository management in one
 
 ---
 
-## Why SOW?
+## Why SOW? {#why-sow}
 
 The name deserves an explanation. We previously built a companion project, [**Pig—PostgreSQL Install Genius**](/article/pig/), the package manager for the PostgreSQL ecosystem. If a little Pig installs the packages, then the tool that produces, stores, organizes, and distributes those artifacts naturally has to be its mother: SOW.
 
@@ -46,7 +46,7 @@ It also expands neatly to **Software Object Warehouse**, a name that fits natura
 
 ---
 
-## Why Build Another Repository Tool?
+## Why Build Another Repository Tool? {#why-build-another-repository-tool}
 
 The immediate trigger was Pigsty's offline installation. Pigsty first downloads the required RPMs and DEBs, then turns them into a local offline repository. Historically, RPM systems relied on `createrepo_c`, while Debian and Ubuntu relied on `dpkg-dev`. The output is only a few XML files, `Packages` indexes, and compressed metadata, yet preparing the toolchain pulls in hundreds of megabytes of dependencies.
 
@@ -58,17 +58,17 @@ In [Pigsty 4.5](https://vonng.com/en/pigsty/v4.5/), I removed that clutter. SOW 
 
 But installing fewer tools was only the surface problem. Four deeper problems convinced me to keep building SOW as the repository grew.
 
-### First, Hard Links Don't Help in Object Storage
+### First, Hard Links Don't Help in Object Storage {#first-hard-links-don-t-help-in-object-storage}
 
 The same `noarch` RPM may appear in repositories for several architectures, and the same package may belong to beta, latest, and stable views. On a local disk, hard links let many paths share one inode. Upload them to Cloudflare R2, Alibaba Cloud OSS, or another object store, and every `object key` incurs real storage and upload costs. Identical content does not make the cloud treat those keys as one object.
 
-### Second, 100,000 Files Make Even a Comparison Expensive
+### Second, 100,000 Files Make Even a Comparison Expensive {#second-100-000-files-make-even-a-comparison-expensive}
 
 A repository update may change only a few dozen packages, yet traditional synchronization tools often have to walk, compare, and verify more than 100,000 files to prove it. A full comparison can easily take more than ten minutes. The actual transfer may take seconds; almost all the time goes into proving that nothing changed.
 
 ![Traditional repository synchronization spends most of its time walking and comparing files](/article/sow/rclone-sync.webp)
 
-### Third, a Live Repository Must Never Expose a Half-Built State
+### Third, a Live Repository Must Never Expose a Half-Built State {#third-a-live-repository-must-never-expose-a-half-built-state}
 
 An RPM repository is more than a directory of `.rpm` files. Clients read `repomd.xml` first, then follow it to `primary`, `filelists`, and the package payloads. APT has the same constraint: `Release`, `InRelease`, `Packages`, and `by-hash` files form a strict graph of references.
 
@@ -76,7 +76,7 @@ If you publish them in the wrong order, a client may see a new pointer before th
 
 ![SOW's self-contained binary and incremental publishing model](/article/sow/sow-features.webp)
 
-### Fourth, Directories Have No Versions, but Distributions Need Them
+### Fourth, Directories Have No Versions, but Distributions Need Them {#fourth-directories-have-no-versions-but-distributions-need-them}
 
 The deeper problem surfaced when I wanted to add repository channels. How do you maintain beta, latest, and stable at the same time? Keep a monthly snapshot? Answer “which packages were added last Wednesday?” Roll back safely? Determine which old objects are no longer referenced by any snapshot and may be deleted?
 
@@ -86,11 +86,11 @@ Fortunately, building your own tools has never been cheaper.
 
 ---
 
-## Two Levels of Complexity, Two Modes
+## Two Levels of Complexity, Two Modes {#two-levels-of-complexity-two-modes}
 
 SOW does not assume that every repository needs the same degree of governance. It splits the problem into Plain and Managed modes: small problems stay small, while large ones get the full state machine.
 
-### Plain: The Package Directory Is the Truth
+### Plain: The Package Directory Is the Truth {#plain-the-package-directory-is-the-truth}
 
 Plain mode has one central command:
 
@@ -113,7 +113,7 @@ With `--pigsty`, SOW removes DEB `i386` packages and Patroni 3.0.4 packages, the
 
 This mode solves Pigsty's original problem: replace two toolchains and several containers with one small binary, then quickly produce a repository that real APT, DNF, and YUM clients can consume.
 
-### Managed: The Repository Is a State Machine, Not a Directory
+### Managed: The Repository Is a State Machine, Not a Directory {#managed-the-repository-is-a-state-machine-not-a-directory}
 
 A long-lived repository cannot look only at “what is in the directory now.” It must also know what you **want**, what it published successfully last time, and why the two differ.
 
@@ -137,7 +137,7 @@ The boundary of “store only one copy” must be stated precisely: it is one Re
 
 ---
 
-## Desired, Built, and Generation
+## Desired, Built, and Generation {#desired-built-and-generation}
 
 Managed mode divides repository state into three concepts:
 
@@ -165,7 +165,7 @@ The transfer set comes from comparing two known Generations. SOW still checks th
 
 ---
 
-## Publish the Referenced Objects Before the Pointers
+## Publish the Referenced Objects Before the Pointers {#publish-the-referenced-objects-before-the-pointers}
 
 SOW publishes repository objects in a defined order:
 
@@ -186,7 +186,7 @@ This is the essential difference between SOW and a single `rclone sync` command.
 
 ---
 
-## At 100,000 Objects, Performance Needs Proof
+## At 100,000 Objects, Performance Needs Proof {#at-100-000-objects-performance-needs-proof}
 
 Most of the work in SOW 0.3 was not adding more features. It was making an already sound model work at real repository scale.
 
@@ -202,7 +202,7 @@ These numbers are not there to decorate a benchmark slide. They simply demonstra
 
 ---
 
-## Tearing Down V1 and Rebuilding from a Minimal End-to-End Core
+## Tearing Down V1 and Rebuilding from a Minimal End-to-End Core {#tearing-down-v1-and-rebuilding-from-a-minimal-end-to-end-core}
 
 SOW took a while to build. Midway through, I tore it down almost completely and started over.
 
@@ -228,7 +228,7 @@ This path looks slower than building everything for one grand reveal, but it is 
 
 ---
 
-## Where SOW Goes Next
+## Where SOW Goes Next {#where-sow-goes-next}
 
 SOW 0.3 can create repositories, manage membership and snapshots, calculate changesets, and publish to filesystems and R2. It is still some distance from the complete software-artifact control plane I have in mind.
 
@@ -245,7 +245,7 @@ No more disappearing to build the grand design in one shot. Ship small, complete
 
 ---
 
-## The Pig Family Keeps Growing
+## The Pig Family Keeps Growing {#the-pig-family-keeps-growing}
 
 SOW is part of Pigsty's increasingly elaborate porcine universe. The naming scheme keeps getting more ridiculous—and more complete:
 

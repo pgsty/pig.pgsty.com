@@ -4,7 +4,7 @@ linkTitle: "v0.6.1"
 date: 2025-08-14
 description: "CI/CD, el10 存根，PGDG 中国镜像"
 tags: [repo]
-weight: 241
+weight: 37
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v0.6.1
 ---

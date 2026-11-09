@@ -2,7 +2,7 @@
 title: "From Human-Friendly to Agent-Native: PIG's CLI Contract"
 linkTitle: "Agent-Native CLI"
 date: 2026-02-12
-lastmod: 2026-10-17
+lastmod: 2026-11-09
 description: "How PIG separates terminal text, structured results, execution plans, and environment context."
 tags: [cli]
 weight: 10
@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **Decision date:** 2026-02-12<br>
-> **Status:** Released in [pig v1.1.0](/release/pig-1.1.0/) and refined by later command-layer work. The 2026-10-16 refinements below are Implemented in the v1.10.0 candidate, not yet released.<br>
+> **Status:** Released in [pig v1.1.0](/release/pig-1.1.0/) and refined in [pig v1.10.0](/release/pig-1.10.0/).<br>
 > **Current reference:** [`pig` command overview](/cmd/)<br>
 > **Scope:** PIG-owned commands and their machine-consumption contract; opaque passthrough commands keep their native interface.
 
@@ -91,7 +91,7 @@ forwarded tools.
 Fixed source commits and regression tests for the committed v1.10.0 refinements cover:
 [availability and counts](https://github.com/pgsty/pig/commit/863a271a924a1634630247643d9d96200a98572d),
 [partial imports](https://github.com/pgsty/pig/commit/a0e9cc477f3834607c03620cb7c77187773218b5),
-[exporter HTTP failures](https://github.com/pgsty/pig/commit/2214f598101c82ffb2b3bf2a6a7dd15d6f025483). These commits do not establish a release boundary.
+[exporter HTTP failures](https://github.com/pgsty/pig/commit/2214f598101c82ffb2b3bf2a6a7dd15d6f025483). These refinements shipped in [v1.10.0](https://github.com/pgsty/pig/releases/tag/v1.10.0).
 
 The initial framework shipped with [v1.1.0](https://github.com/pgsty/pig/releases/tag/v1.1.0).
 The command-layer consolidation in

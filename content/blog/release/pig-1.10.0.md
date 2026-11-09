@@ -4,7 +4,7 @@ linkTitle: "v1.10.0"
 date: 2026-10-17
 description: "603 catalog entries, verified PostgreSQL targets, safer recovery and fork operations, faithful Inventory handling, and consistent automation results."
 tags: [postgres, inventory, catalog, cli]
-weight: 0
+weight: 5
 authors: [Vonng]
 draft: false
 release_url: https://github.com/pgsty/pig/releases/tag/v1.10.0
@@ -15,7 +15,7 @@ targets before operations, preserves Inventory sources and YAML types, and makes
 extension, and automation results match the work actually performed. The bundled catalog grows
 from **600 to 603 records**. Embedded Pigsty remains `4.5.0`; the default `cargo-pgrx` remains `0.19.3`.
 
-## PostgreSQL targets and maintenance
+## PostgreSQL targets and maintenance {#postgresql-targets-and-maintenance}
 
 - An explicit `-D` binds `psql`, `ps`, `kill`, `vacuum`, `analyze`, `freeze`, and `repack` to the
   selected instance, including `--all` database enumeration. PIG validates the PID, data directory,
@@ -36,7 +36,7 @@ from **600 to 603 records**. Embedded Pigsty remains `4.5.0`; the default `cargo
 See [`pig pg`](/pg/#global-options) for target selection and
 [maintenance commands](/pg/#database-maintenance-commands) for database-name rules.
 
-## Runtime state, recovery, and fork safety
+## Runtime state, recovery, and fork safety {#runtime-state-recovery-and-fork-safety}
 
 - Permission failures, malformed PID metadata, and unavailable process identity are reported as
   errors or unknown state. They cannot authorize forced initialization, restore, or fork replacement.
@@ -58,7 +58,7 @@ See [`pig pg`](/pg/#global-options) for target selection and
 The [PITR reference](/pitr/) explains the managed recovery workflow;
 [`pig pb restore`](/pb/#pb-restore) remains a separate restore primitive.
 
-## Inventory and Pigsty
+## Inventory and Pigsty {#inventory-and-pigsty}
 
 - `sty deploy` and `do` pass the resolved Inventory path explicitly to Ansible. Flag and environment
   paths resolve from the caller's working directory; quoted `~/` paths expand before resolution.
@@ -74,7 +74,7 @@ The [PITR reference](/pitr/) explains the managed recovery workflow;
 
 See [Inventory source selection](/inventory/#source-selection) and [`pig sty`](/sty/).
 
-## Repositories and extensions
+## Repositories and extensions {#repositories-and-extensions}
 
 - Repository commands validate the complete operand list before changing files. Empty values,
   empty comma-separated elements, and unsafe repository names fail before mutation.
@@ -100,7 +100,7 @@ See [Inventory source selection](/inventory/#source-selection) and [`pig sty`](/
 
 Details: [`pig repo`](/repo/), [`pig ext`](/ext/).
 
-## Builds and automation
+## Builds and automation {#builds-and-automation}
 
 - Multi-version build dependency installation expands package names for every selected PostgreSQL
   major version and removes duplicates. Default build targets retain their metadata and local
@@ -124,7 +124,7 @@ Details: [`pig repo`](/repo/), [`pig ext`](/ext/).
 
 See [`pig build`](/build/), [`pig pe`](/pe/), and [global command behavior](/cmd/).
 
-## Upgrade notes
+## Upgrade notes {#upgrade-notes}
 
 Existing command names and flags remain available. Automation should handle the corrected failure
 statuses for partial imports, HTTP errors, cancelled recovery, and indeterminate PostgreSQL state.

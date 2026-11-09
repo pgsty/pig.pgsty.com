@@ -4,7 +4,7 @@ linkTitle: "v0.5.0"
 date: 2025-06-30
 description: "422 个扩展，新的扩展目录"
 tags: [catalog, sty]
-weight: 261
+weight: 39
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v0.5.0
 ---
@@ -18,7 +18,7 @@ release_url: https://github.com/pgsty/pig/releases/tag/v0.5.0
 - 将 kubernetes 仓库升级到 1.33
 - 将默认 pigsty 版本升级到 3.5.0
 
-## 校验和
+## 校验和 {#checksums}
 
 ```checksums
 9ec6f3caf3edbe867caab5de0e0ccb33  pig_0.5.0-1_amd64.deb

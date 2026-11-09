@@ -4,7 +4,7 @@ linkTitle: "v0.7.1"
 date: 2025-11-10
 description: "New Website, improve in-docker experience"
 tags: [ext]
-weight: 211
+weight: 34
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v0.7.1
 ---
@@ -17,7 +17,7 @@ release_url: https://github.com/pgsty/pig/releases/tag/v0.7.1
 - [DEB Changelog](https://pigsty.io/docs/repo/pgsql/deb#2025-11-10): Add PG 18 support to almost all extensions
 - [Infra Changelog](https://pigsty.io/docs/repo/infra/log/): Routine update to the latest version
 
-## Checksums
+## Checksums {#checksums}
 
 ```checksums
 a696c9ec784e2fc248e5f3d87cc8aae4116e890f78c5997957d30593f2c85ca6  pig-0.7.1-1.aarch64.rpm

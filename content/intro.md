@@ -14,7 +14,7 @@ PIG is a command-line tool for installing and managing PostgreSQL and its extens
 
 The catalog contains [{{< param pgext_count >}} extension entries](https://pigsty.io/ext/list/). PIG selects package names for your PostgreSQL major version, operating system, and CPU architecture. It also provides commands for source builds, local PostgreSQL operations, backups, and Pigsty administration.
 
-## What you can do
+## What you can do {#what-you-can-do}
 
 | Task | Command | Reference |
 |:---|:---|:---|
@@ -29,7 +29,7 @@ The catalog contains [{{< param pgext_count >}} extension entries](https://pigst
 
 Start with the [tutorial](/start/) to install PostgreSQL and enable your first extension.
 
-## How package installation works
+## How package installation works {#how-package-installation-works}
 
 For example, this command installs pgvector for PostgreSQL 18:
 
@@ -49,7 +49,7 @@ Some extensions also need a setting in `shared_preload_libraries` and a PostgreS
 
 PIG is needed only when you run its commands. PostgreSQL and installed extensions continue to work without it. You can also use the [Pigsty repositories](https://pigsty.io/docs/repo/pgsql/) directly with `apt` or `dnf`.
 
-## Linux compatibility
+## Linux compatibility {#linux-compatibility}
 
 The package repositories cover PostgreSQL **14–18** on these Linux releases. Each release has packages for **x86_64** and **aarch64**.
 
@@ -74,7 +74,7 @@ The {{< param pgext_count >}} catalog entries include packaged SQL utilities and
 
 The macOS binary supports catalog queries and commands such as inventory editing. PostgreSQL package installation uses Linux package managers. See [Installation](/install/) for the binary downloads.
 
-## Choose a workflow
+## Choose a workflow {#choose-a-workflow}
 
 - **Use an existing host:** add repositories with `pig repo add pgsql -u`, then install the required packages.
 - **Configure all repositories on a new host:** use `pig repo set`. It backs up and replaces the existing repository definitions.

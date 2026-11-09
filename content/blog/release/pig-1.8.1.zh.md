@@ -4,7 +4,7 @@ linkTitle: "v1.8.1"
 date: 2026-09-03
 description: "CLI 安全与仓库流程加固、扩展目录刷新、Go 1.27.1，以及 cargo-pgrx 0.19.2。"
 tags: [cli, repo, build, catalog]
-weight: 2
+weight: 7
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.8.1
 ---
@@ -14,7 +14,7 @@ Pig `v1.8.1` 是 [v1.8.0](/zh/release/pig-1.8.0/) 之上的安全、正确性与
 同时刷新内置扩展目录，并将构建工具链升级到 Go `1.27.1` 与 `cargo-pgrx 0.19.2`。
 内置 Pigsty 版本仍为 `4.5.0`。
 
-## CLI 安全与正确性
+## CLI 安全与正确性 {#cli-safety-and-correctness}
 
 - 只读且不依赖配置的命令不再要求 `HOME` 可写，也不会把创建 `~/.pig` 当作查询副作用；
   叶子命令会保留自己声明的初始化策略。
@@ -24,7 +24,7 @@ Pig `v1.8.1` 是 [v1.8.0](/zh/release/pig-1.8.0/) 之上的安全、正确性与
 - PostgreSQL 原生角色检测绑定到用户选中的实例，而不是无关的本机默认实例。
 - 结构化结果会遮盖凭据、许可证材料与构建代理标识符，同时保持真实的失败状态。
 
-## 仓库与构建加固
+## 仓库与构建加固 {#repository-and-build-hardening}
 
 - 仓库添加与删除在任一请求失败时整体返回失败，对模块选择去重，并保持替换边界。
 - 离线缓存包拒绝不安全路径、链接、特殊文件与不完整输入；归档解压继续采用有根、失败关闭的实现。
@@ -33,7 +33,7 @@ Pig `v1.8.1` 是 [v1.8.0](/zh/release/pig-1.8.0/) 之上的安全、正确性与
   参数保持可选，结构化输出不再泄露秘密标识符。
 - 自更新会验证发布校验和；发布工具拒绝脏工作区、错误 tag，以及覆盖不可变制品。
 
-## 工具链与扩展目录
+## 工具链与扩展目录 {#toolchain-and-catalog}
 
 - `pig build ext` 与 `pig build pkg` 默认保留平台调试包；使用 `--nodbg` 显式省略。
   `-s|--symbol` 保留为已弃用的兼容空操作。
@@ -45,7 +45,7 @@ Pig `v1.8.1` 是 [v1.8.0](/zh/release/pig-1.8.0/) 之上的安全、正确性与
 - 内置目录从维护中的 pgext 视图刷新：新增 `acdat 0.1.0`，将已被取代的
   `pgcontext_pgvector` 标记为 removed，并更新软件包版本、仓库归属、PostgreSQL 覆盖与可用性矩阵。
 
-## 验证
+## 验证 {#verification}
 
 本版本从源码提交
 [`1c6f524`](https://github.com/pgsty/pig/commit/1c6f52401accc8ad6d7e8ab51248895632d7629b)
@@ -54,13 +54,13 @@ Pig `v1.8.1` 是 [v1.8.0](/zh/release/pig-1.8.0/) 之上的安全、正确性与
 随后 tag 通过 [Release 工作流](https://github.com/pgsty/pig/actions/runs/33748002429)，生成并发布
 RPM、DEB、macOS 与 Linux 制品。
 
-## 兼容性提醒
+## 兼容性提醒 {#compatibility-notes}
 
 - 本版本没有移除 CLI 命令或参数。
 - 如果旧脚本依赖只读命令顺便创建本地配置，应改为显式准备所需状态。
 - pgrx 默认值变为 `0.19.2`；构建特定扩展时，仍以该扩展的目录元数据为准。
 
-## 校验和
+## 校验和 {#checksums}
 
 ```checksums
 4154b3e49cb499e57d7c7b1ab4ae5e45d03d5d0c2ffe26d6ade64e46db6923cf  pig-1.8.1-1.aarch64.rpm

@@ -4,7 +4,7 @@ linkTitle: "v0.7.2"
 date: 2025-11-20
 description: "437 extensions, fix pig build issue"
 tags: [build, catalog]
-weight: 201
+weight: 33
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v0.7.2
 ---
@@ -17,7 +17,7 @@ release_url: https://github.com/pgsty/pig/releases/tag/v0.7.2
 - Updated extensions: vchord pg_later pgvectorscale pglite_fusion pgx_ulid pg_search citus timescaledb pg_profile pg_stat_monitor documentdb
 - New extensions: pglinter pg_typeid pg_enigma pg_retry pg_biscuit pg_weighted_statistics
 
-## Checksums
+## Checksums {#checksums}
 
 ```checksums
 080dd93c33faf81e8f9d3b9d543b9949604b834ccd55331cce697df79049a9af  pig-0.7.2-1.aarch64.rpm

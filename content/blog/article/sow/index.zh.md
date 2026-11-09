@@ -34,7 +34,7 @@ SOW 用同一个二进制工具完成仓库索引生成与长期仓库管理。
 
 ---
 
-## 为什么叫 SOW？
+## 为什么叫 SOW？ {#why-sow}
 
 这个名字值得单独讲讲。此前，我们做过另一个配套开源项目：[**Pig —— PostgreSQL Install Genius**](/zh/article/pig/)；它是 PostgreSQL 生态的包管理器。既然有小猪负责装包，那么制作这些包、承载、组织与分发软件制品的仓库工具，自然就是“母猪” SOW 了。
 
@@ -46,7 +46,7 @@ SOW 用同一个二进制工具完成仓库索引生成与长期仓库管理。
 
 ---
 
-## 为什么要再造一个仓库工具？
+## 为什么要再造一个仓库工具？ {#why-build-another-repository-tool}
 
 最直接的诱因来自 Pigsty 的离线安装。Pigsty 会先把安装所需的 RPM / DEB 下载到本地，再生成一个离线软件仓库。过去，RPM 系统依赖 `createrepo_c`，Debian / Ubuntu 依赖 `dpkg-dev`。真正要生成的不过是几份 XML、Packages 与压缩索引，准备工具链却要装进几百 MB 的依赖。
 
@@ -58,17 +58,17 @@ SOW 用同一个二进制工具完成仓库索引生成与长期仓库管理。
 
 但“少装几个工具”只是表面问题。真正让我决定把 SOW 做下去的，是仓库规模扩大后暴露出的四个痛点。
 
-### 第一，硬链接救不了对象存储
+### 第一，硬链接救不了对象存储 {#first-hard-links-don-t-help-in-object-storage}
 
 同一个 `noarch` RPM 可能同时出现在多个架构仓库里，同一份包也可能进入 beta、latest、stable 等多个视图。放在本地磁盘上，可以用硬链接让许多路径共用一份 inode；上传到 Cloudflare R2、OSS 或其他对象存储后，每个 `object key` 都会变成一份实打实的存储与上传成本。文件内容相同，不代表云端知道它们应该共享所有权。
 
-### 第二，十万个文件让“比较一下”都变得昂贵
+### 第二，十万个文件让“比较一下”都变得昂贵 {#second-100-000-files-make-even-a-comparison-expensive}
 
 仓库更新通常只变动几十个包，但传统同步工具为了确认这一点，往往要把十几万个文件重新遍历、比较、校验一遍。全量检查一次花十几分钟并不稀奇；真正的数据传输可能只有几秒，时间全耗在“什么都没变”的证明上。
 
 ![传统仓库同步需要花费大量时间遍历和比较文件](/article/sow/rclone-sync.webp)
 
-### 第三，在线仓库不应该露出半成品
+### 第三，在线仓库不应该露出半成品 {#third-a-live-repository-must-never-expose-a-half-built-state}
 
 一个 RPM 仓库不只是 `.rpm` 文件；客户端先读 `repomd.xml`，再沿着它找到 `primary`、`filelists` 和包体。APT 同理：`Release`、`InRelease`、`Packages` 与 `by-hash` 文件之间有严格引用关系。
 
@@ -76,7 +76,7 @@ SOW 用同一个二进制工具完成仓库索引生成与长期仓库管理。
 
 ![SOW 的自包含二进制与增量发布能力](/article/sow/sow-features.webp)
 
-### 第四，目录没有版本，发行版需要版本
+### 第四，目录没有版本，发行版需要版本 {#fourth-directories-have-no-versions-but-distributions-need-them}
 
 最核心的问题是：当老冯想进一步改进仓库、提供 Channel 能力时，之前的维护模型就会遇到这些问题：如何同时维护 beta、latest、stable 仓库？如何每月保存一个快照？如何回答“上周三到底加了哪些包”？如何安全回退？哪些旧对象已经没有任何快照引用，可以删除？
 
@@ -86,11 +86,11 @@ SOW 用同一个二进制工具完成仓库索引生成与长期仓库管理。
 
 ---
 
-## 两种复杂度，两种模式
+## 两种复杂度，两种模式 {#two-levels-of-complexity-two-modes}
 
 SOW 并不假定所有仓库都需要同样的治理强度。它把问题切成 Plain 与 Managed 两层：小问题保持小，大问题才使用完整状态机。
 
-### Plain：包目录就是事实
+### Plain：包目录就是事实 {#plain-the-package-directory-is-the-truth}
 
 Plain 模式只有一个核心命令：
 
@@ -113,7 +113,7 @@ Plain 不保存操作日志。各个文件分别替换，中断后可能留下�
 
 这套模式解决了 Pigsty 最初的痛点：用一个小二进制替代两套工具链与多个容器，快速得到能被真实 APT / DNF / YUM 客户端消费的仓库。
 
-### Managed：仓库不是目录，而是状态机
+### Managed：仓库不是目录，而是状态机 {#managed-the-repository-is-a-state-machine-not-a-directory}
 
 长期运行的仓库不能只看“目录里现在有什么”。它还必须知道你 **想要什么**、上一次成功发布了什么，以及两者为什么不同。
 
@@ -137,7 +137,7 @@ repo/dists/trixie/main/binary-amd64/...    APT 元数据视图
 
 ---
 
-## Desired、Built 与 Generation
+## Desired、Built 与 Generation {#desired-built-and-generation}
 
 Managed 模式把仓库状态拆成三个概念：
 
@@ -165,7 +165,7 @@ sow log     -r pigsty
 
 ---
 
-## 发布顺序：先放对象，最后切换指针
+## 发布顺序：先放对象，最后切换指针 {#publish-the-referenced-objects-before-the-pointers}
 
 SOW 按固定顺序发布仓库对象：
 
@@ -186,7 +186,7 @@ payload  →  metadata  →  pointer  →  delete
 
 ---
 
-## 十万个对象，性能不能靠信仰
+## 十万个对象，性能不能靠信仰 {#at-100-000-objects-performance-needs-proof}
 
 SOW 0.3 的主要工作，不是继续堆功能，而是把已经成立的模型推到真实仓库规模。
 
@@ -202,7 +202,7 @@ Managed 路径则把解析后的“软件包事实”按不可变 SHA-256 缓存
 
 ---
 
-## 推倒第一版，再从最小闭环长回来
+## 推倒第一版，再从最小闭环长回来 {#tearing-down-v1-and-rebuilding-from-a-minimal-end-to-end-core}
 
 SOW 的开发时间不短，中间还经历过一次相当彻底的推倒重来。
 
@@ -214,8 +214,8 @@ SOW 的开发时间不短，中间还经历过一次相当彻底的推倒重来�
 
 推倒的不是目标，而是抵达目标的方式。一个基础设施工具最怕“什么都有一点，但没有哪一层能单独说清楚”。所以第二版先把最小闭环重新切出来：
 
-- **P0 / Plain Create：** 一个目录进去，一个可用仓库出来；
-- **P1 / Managed Control Plane：** Workspace、Repository、Dist、Membership、Build、Generation、Check、Changes 与 Operation Log；
+- **P0 / Plain Create**：一个目录进去，一个可用仓库出来；
+- **P1 / Managed Control Plane**：Workspace、Repository、Dist、Membership、Build、Generation、Check、Changes 与 Operation Log；
 - 更复杂的同步、远端发布、CDN 与供应商控制面，逐项回到独立验收队列。
 
 **v0.2.0** 建立了今天的 Plain + Managed 主体：单份包池、元数据视图、确定性构建、锁、日志、崩溃恢复、Generation、文件系统与 R2 发布。
@@ -228,7 +228,7 @@ SOW 的开发时间不短，中间还经历过一次相当彻底的推倒重来�
 
 ---
 
-## 接下来的 Roadmap
+## 接下来的 Roadmap {#where-sow-goes-next}
 
 SOW 0.3 已经能创建仓库、管理成员与快照、计算变更集，并发布到文件系统和 R2；但它离我脑子里完整的软件制品控制面还有距离。
 
@@ -245,7 +245,7 @@ SOW 0.3 已经能创建仓库、管理成员与快照、计算变更集，并发
 
 ---
 
-## 猪猪家族还在继续长大
+## 猪猪家族还在继续长大 {#the-pig-family-keeps-growing}
 
 SOW 是 Pigsty “猪圈宇宙”的一部分，而且这个命名体系已经越来越离谱，也越来越完整：
 
@@ -268,7 +268,7 @@ sow create /srv/repo
 
 如果你也在维护一套长期运行的软件发行版，欢迎访问 [SOW 项目主页](https://sow.pgsty.com/zh/)，或直接阅读 [使用文档](https://sow.pgsty.com/zh/docs/)，看看它更深的一面。
 
-SOW 采用 [Apache-2.0 许可证](https://github.com/pgsty/sow/blob/main/LICENSE)。本文介绍的 [v0.3.0](https://github.com/pgsty/sow/releases/tag/v0.3.0) 提供 Linux / macOS 的 amd64、arm64 归档，以及 Linux RPM / DEB 安装包；最新版本可以从 [下载页](https://sow.pgsty.com/zh/download/)获取，也可以直接查看 [源代码](https://github.com/pgsty/sow)。
+SOW 采用 [Apache-2.0 许可证](https://github.com/pgsty/sow/blob/main/LICENSE)。本文介绍的 [v0.3.0](https://github.com/pgsty/sow/releases/tag/v0.3.0) 提供 Linux / macOS 的 amd64、arm64 归档，以及 Linux RPM / DEB 安装包；最新版本可以从 [下载页](https://sow.pgsty.com/zh/download/) 获取，也可以直接查看 [源代码](https://github.com/pgsty/sow)。
 
 十万个包并不可怕。可怕的是，它们还只是十万个文件。
 

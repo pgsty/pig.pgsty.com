@@ -11,9 +11,9 @@ tags: [ext, repo, catalog, build]
 
 --------
 
-## 第一部分：引言
+## 第一部分：引言 {#part-i-introduction}
 
-### 0. 人人都能用上的扩展
+### 0. 人人都能用上的扩展 {#s-0-extensions-for-everyone}
 
 > [00. 人人都能用上的扩展](https://vonng.com/work/extensions-for-everyone/00-extensions-for-everyone.html)
 
@@ -23,7 +23,7 @@ tags: [ext, repo, catalog, build]
 
 [![00. 人人都能用上的扩展](/article/extensions-for-everyone/00.webp)](https://vonng.com/work/extensions-for-everyone/00-extensions-for-everyone.html)
 
-### 1. 我是谁
+### 1. 我是谁 {#s-1-who-am-i}
 
 > [01. 我是谁](https://vonng.com/work/extensions-for-everyone/01-who-am-i.html)
 
@@ -35,7 +35,7 @@ tags: [ext, repo, catalog, build]
 
 [![01. 我是谁](/article/extensions-for-everyone/01.webp)](https://vonng.com/work/extensions-for-everyone/01-who-am-i.html)
 
-### 2. 可扩展性很重要
+### 2. 可扩展性很重要 {#s-2-extensibility-matters}
 
 > [02. 可扩展性很重要](https://vonng.com/work/extensions-for-everyone/02-extensibility-matters.html)
 
@@ -51,7 +51,7 @@ tags: [ext, repo, catalog, build]
 
 [![02. 可扩展性很重要](/article/extensions-for-everyone/02.webp)](https://vonng.com/work/extensions-for-everyone/02-extensibility-matters.html)
 
-### 3. 两年之后
+### 3. 两年之后 {#s-3-two-years-later}
 
 > [03. 两年之后](https://vonng.com/work/extensions-for-everyone/03-two-years-later.html)
 
@@ -65,7 +65,7 @@ tags: [ext, repo, catalog, build]
 
 [![03. 两年之后](/article/extensions-for-everyone/03.webp)](https://vonng.com/work/extensions-for-everyone/03-two-years-later.html)
 
-### 4. 谁会受益？
+### 4. 谁会受益？ {#s-4-who-benefits}
 
 > [04. 谁会受益？](https://vonng.com/work/extensions-for-everyone/04-who-benefits.html)
 
@@ -85,9 +85,9 @@ tags: [ext, repo, catalog, build]
 
 --------
 
-## 第二部分：生态全景
+## 第二部分：生态全景 {#part-ii-the-ecosystem-landscape}
 
-### 5. 星系
+### 5. 星系 {#s-5-galaxy}
 
 > [05. 星系](https://vonng.com/work/extensions-for-everyone/05-galaxy.html)
 
@@ -101,7 +101,7 @@ PostgreSQL 到底有多少扩展？社区里有一个很有名的、由大家共
 
 [![05. 星系](/article/extensions-for-everyone/05.webp)](https://vonng.com/work/extensions-for-everyone/05-galaxy.html)
 
-### 6. GitHub 星标
+### 6. GitHub 星标 {#s-6-github-stars}
 
 > [06. GitHub 星标](https://vonng.com/work/extensions-for-everyone/06-github-stars.html)
 
@@ -113,7 +113,7 @@ PostgreSQL 到底有多少扩展？社区里有一个很有名的、由大家共
 
 [![06. GitHub 星标](/article/extensions-for-everyone/06.webp)](https://vonng.com/work/extensions-for-everyone/06-github-stars.html)
 
-### 7. 星标分层
+### 7. 星标分层 {#s-7-star-tiering}
 
 > [07. 星标分层](https://vonng.com/work/extensions-for-everyone/07-star-tiering.html)
 
@@ -135,7 +135,7 @@ PostgreSQL 到底有多少扩展？社区里有一个很有名的、由大家共
 
 [![07. 星标分层](/article/extensions-for-everyone/07.webp)](https://vonng.com/work/extensions-for-everyone/07-star-tiering.html)
 
-### 8. 扩展漏斗
+### 8. 扩展漏斗 {#s-8-the-extension-funnel}
 
 > [08. 扩展漏斗](https://vonng.com/work/extensions-for-everyone/08-the-extension-funnel.html)
 
@@ -149,7 +149,7 @@ PostgreSQL 到底有多少扩展？社区里有一个很有名的、由大家共
 
 [![08. 扩展漏斗](/article/extensions-for-everyone/08.webp)](https://vonng.com/work/extensions-for-everyone/08-the-extension-funnel.html)
 
-### 9. 维度分析
+### 9. 维度分析 {#s-9-dimension-analysis}
 
 > [09. 维度分析](https://vonng.com/work/extensions-for-everyone/09-dimension-analysis.html)
 
@@ -161,9 +161,9 @@ PostgreSQL 到底有多少扩展？社区里有一个很有名的、由大家共
 
 --------
 
-## 第三部分：交付层
+## 第三部分：交付层 {#part-iii-the-delivery-layer}
 
-### 10. 现状
+### 10. 现状 {#s-10-the-status-quo}
 
 > [10. 现状](https://vonng.com/work/extensions-for-everyone/10-the-status-quo.html)
 
@@ -175,7 +175,7 @@ Christoph 和 Devrim 维护的 PGDG YUM 与 APT 仓库已经完成了基础工�
 
 [![10. 现状](/article/extensions-for-everyone/10.webp)](https://vonng.com/work/extensions-for-everyone/10-the-status-quo.html)
 
-### 11. 取舍
+### 11. 取舍 {#s-11-the-trade-off}
 
 > [11. 取舍](https://vonng.com/work/extensions-for-everyone/11-the-trade-off.html)
 
@@ -185,7 +185,7 @@ Christoph 和 Devrim 维护的 PGDG YUM 与 APT 仓库已经完成了基础工�
 
 [![11. 取舍](/article/extensions-for-everyone/11.webp)](https://vonng.com/work/extensions-for-everyone/11-the-trade-off.html)
 
-### 12. 为什么要做 Linux 原生包？
+### 12. 为什么要做 Linux 原生包？ {#s-12-why-linux-native}
 
 > [12. 为什么要做 Linux 原生包？](https://vonng.com/work/extensions-for-everyone/12-why-linux-native.html)
 
@@ -197,7 +197,7 @@ Christoph 和 Devrim 维护的 PGDG YUM 与 APT 仓库已经完成了基础工�
 
 [![12. 为什么要做 Linux 原生包？](/article/extensions-for-everyone/12.webp)](https://vonng.com/work/extensions-for-everyone/12-why-linux-native.html)
 
-### 13. 基础设施
+### 13. 基础设施 {#s-13-pgext-cloud}
 
 > [13. 基础设施](https://vonng.com/work/extensions-for-everyone/13-pgext-cloud.html)
 
@@ -207,7 +207,7 @@ Christoph 和 Devrim 维护的 PGDG YUM 与 APT 仓库已经完成了基础工�
 
 [![13. 基础设施](/article/extensions-for-everyone/13.webp)](https://vonng.com/work/extensions-for-everyone/13-pgext-cloud.html)
 
-### 14. 扩展目录
+### 14. 扩展目录 {#s-14-extension-catalog}
 
 > [14. 扩展目录](https://vonng.com/work/extensions-for-everyone/14-extension-catalog.html)
 
@@ -217,7 +217,7 @@ Christoph 和 Devrim 维护的 PGDG YUM 与 APT 仓库已经完成了基础工�
 
 [![14. 扩展目录](/article/extensions-for-everyone/14.webp)](https://vonng.com/work/extensions-for-everyone/14-extension-catalog.html)
 
-### 15. 目录细节
+### 15. 目录细节 {#s-15-catalog-details}
 
 > [15. 目录细节](https://vonng.com/work/extensions-for-everyone/15-catalog-details.html)
 
@@ -229,7 +229,7 @@ Christoph 和 Devrim 维护的 PGDG YUM 与 APT 仓库已经完成了基础工�
 
 [![15. 目录细节](/article/extensions-for-everyone/15.webp)](https://vonng.com/work/extensions-for-everyone/15-catalog-details.html)
 
-### 16. 目录页访问量
+### 16. 目录页访问量 {#s-16-catalog-page-views}
 
 > [16. 目录页访问量](https://vonng.com/work/extensions-for-everyone/16-catalog-page-views.html)
 
@@ -239,7 +239,7 @@ Christoph 和 Devrim 维护的 PGDG YUM 与 APT 仓库已经完成了基础工�
 
 [![16. 目录页访问量](/article/extensions-for-everyone/16.webp)](https://vonng.com/work/extensions-for-everyone/16-catalog-page-views.html)
 
-### 17. 仓库
+### 17. 仓库 {#s-17-repository}
 
 > [17. 仓库](https://vonng.com/work/extensions-for-everyone/17-repository.html)
 
@@ -251,7 +251,7 @@ Christoph 和 Devrim 维护的 PGDG YUM 与 APT 仓库已经完成了基础工�
 
 [![17. 仓库](/article/extensions-for-everyone/17.webp)](https://vonng.com/work/extensions-for-everyone/17-repository.html)
 
-### 18. 仓库下载统计
+### 18. 仓库下载统计 {#s-18-repo-download-stats}
 
 > [18. 仓库下载统计](https://vonng.com/work/extensions-for-everyone/18-repo-download-stats.html)
 
@@ -263,7 +263,7 @@ Christoph 和 Devrim 维护的 PGDG YUM 与 APT 仓库已经完成了基础工�
 
 [![18. 仓库下载统计](/article/extensions-for-everyone/18.webp)](https://vonng.com/work/extensions-for-everyone/18-repo-download-stats.html)
 
-### 19. 我们仍然可以推断什么
+### 19. 我们仍然可以推断什么 {#s-19-what-we-can-still-infer}
 
 > [19. 我们仍然可以推断什么](https://vonng.com/work/extensions-for-everyone/19-what-we-can-still-infer.html)
 
@@ -273,7 +273,7 @@ Christoph 和 Devrim 维护的 PGDG YUM 与 APT 仓库已经完成了基础工�
 
 [![19. 我们仍然可以推断什么](/article/extensions-for-everyone/19.webp)](https://vonng.com/work/extensions-for-everyone/19-what-we-can-still-infer.html)
 
-### 20. CLI：PIG
+### 20. CLI：PIG {#s-20-the-cli-pig}
 
 > [20. CLI：PIG](https://vonng.com/work/extensions-for-everyone/20-the-cli-pig.html)
 
@@ -281,7 +281,7 @@ Christoph 和 Devrim 维护的 PGDG YUM 与 APT 仓库已经完成了基础工�
 
 我们还有一个专用但完全可选的命令行工具，叫 PIG。它用 Go 编写，以单个可执行文件分发。这个名字的含义是「piggyback on the OS package manager」，也就是借力系统包管理器。它将扩展名解析为所选 PostgreSQL 版本与平台对应的软件包。
 
-有意思的是，它不只是能安装，也能构建和交付二进制包。配置好构建环境后，运行 `pig build pkg pg_search` 即可构建 pg_search，也可以选择 pg_duckdb 等其他支持的扩展。
+有意思的是，它不只是能安装，也能构建和交付二进制包。配置好构建环境后，运行 `pig build pkg pg_search` 即可构建 `pg_search`，也可以选择 `pg_duckdb` 等其他支持的扩展。
 
 这对供应链信任很重要。用户愿意的话，可以自行重建所有东西。
 
@@ -291,9 +291,9 @@ Christoph 和 Devrim 维护的 PGDG YUM 与 APT 仓库已经完成了基础工�
 
 --------
 
-## 第四部分：野外维护
+## 第四部分：野外维护 {#part-iv-maintenance-in-the-wild}
 
-### 21. 扩展矩阵
+### 21. 扩展矩阵 {#s-21-dimension-explosion}
 
 > [21. 扩展矩阵](https://vonng.com/work/extensions-for-everyone/21-dimension-explosion.html)
 
@@ -313,7 +313,7 @@ Christoph 和 Devrim 维护的 PGDG YUM 与 APT 仓库已经完成了基础工�
 
 [![21. 扩展矩阵](/article/extensions-for-everyone/21.webp)](https://vonng.com/work/extensions-for-everyone/21-dimension-explosion.html)
 
-### 22. PG 小版本 ABI 破坏
+### 22. PG 小版本 ABI 破坏 {#s-22-pg-minor-abi-break}
 
 > [22. PG 小版本 ABI 破坏](https://vonng.com/work/extensions-for-everyone/22-pg-minor-abi-break.html)
 
@@ -325,7 +325,7 @@ Christoph 和 Devrim 维护的 PGDG YUM 与 APT 仓库已经完成了基础工�
 
 [![22. PG 小版本 ABI 破坏](/article/extensions-for-everyone/22.webp)](https://vonng.com/work/extensions-for-everyone/22-pg-minor-abi-break.html)
 
-### 23. 操作系统小版本破坏
+### 23. 操作系统小版本破坏 {#s-23-os-minor-break}
 
 > [23. 操作系统小版本破坏](https://vonng.com/work/extensions-for-everyone/23-os-minor-break.html)
 
@@ -337,7 +337,7 @@ Christoph 和 Devrim 维护的 PGDG YUM 与 APT 仓库已经完成了基础工�
 
 [![23. 操作系统小版本破坏](/article/extensions-for-everyone/23.webp)](https://vonng.com/work/extensions-for-everyone/23-os-minor-break.html)
 
-### 24. Rust 问题
+### 24. Rust 问题 {#s-24-rust-problems}
 
 > [24. Rust 问题](https://vonng.com/work/extensions-for-everyone/24-rust-problems.html)
 
@@ -351,17 +351,17 @@ Rust 扩展正在增长。它们给生态带来了新的人和新的想法。Rus
 
 [![24. Rust 问题](/article/extensions-for-everyone/24.webp)](https://vonng.com/work/extensions-for-everyone/24-rust-problems.html)
 
-### 25. 臃肿的扩展
+### 25. 臃肿的扩展 {#s-25-bulky-extensions}
 
 > [25. 臃肿的扩展](https://vonng.com/work/extensions-for-everyone/25-bulky-extensions.html)
 
 过去扩展通常很小，典型大小只有几百 KB。现在不总是这样了。
 
-一些新的扩展，比如 pg_search 和 pg_duckdb，体积有几十 MB。源码归档和构建产物都会迅速膨胀。放到完整矩阵里，这会变成真实的存储和带宽成本。
+一些新的扩展，比如 `pg_search` 和 `pg_duckdb`，体积有几十 MB。源码归档和构建产物都会迅速膨胀。放到完整矩阵里，这会变成真实的存储和带宽成本。
 
 [![25. 臃肿的扩展](/article/extensions-for-everyone/25.webp)](https://vonng.com/work/extensions-for-everyone/25-bulky-extensions.html)
 
-### 26. 命名冲突
+### 26. 命名冲突 {#s-26-naming-conflicts}
 
 > [26. 命名冲突](https://vonng.com/work/extensions-for-everyone/26-naming-conflicts.html)
 
@@ -379,7 +379,7 @@ Rust 扩展正在增长。它们给生态带来了新的人和新的想法。Rus
 
 [![26. 命名冲突](/article/extensions-for-everyone/26.webp)](https://vonng.com/work/extensions-for-everyone/26-naming-conflicts.html)
 
-### 27. 库冲突
+### 27. 库冲突 {#s-27-library-conflicts}
 
 > [27. 库冲突](https://vonng.com/work/extensions-for-everyone/27-library-conflicts.html)
 
@@ -393,7 +393,7 @@ Rust 扩展正在增长。它们给生态带来了新的人和新的想法。Rus
 
 [![27. 库冲突](/article/extensions-for-everyone/27.webp)](https://vonng.com/work/extensions-for-everyone/27-library-conflicts.html)
 
-### 28. API 破坏
+### 28. API 破坏 {#s-28-api-break}
 
 > [28. API 破坏](https://vonng.com/work/extensions-for-everyone/28-api-break.html)
 
@@ -407,7 +407,7 @@ Rust 扩展正在增长。它们给生态带来了新的人和新的想法。Rus
 
 [![28. API 破坏](/article/extensions-for-everyone/28.webp)](https://vonng.com/work/extensions-for-everyone/28-api-break.html)
 
-### 29. PG 19 兼容性
+### 29. PG 19 兼容性 {#s-29-pg-19-compatibility}
 
 > [29. PG 19 兼容性](https://vonng.com/work/extensions-for-everyone/29-pg-19-compatibility.html)
 
@@ -421,7 +421,7 @@ Rust 扩展正在增长。它们给生态带来了新的人和新的想法。Rus
 
 [![29. PG 19 兼容性](/article/extensions-for-everyone/29.webp)](https://vonng.com/work/extensions-for-everyone/29-pg-19-compatibility.html)
 
-### 30. 让它可维护
+### 30. 让它可维护 {#s-30-keeping-it-maintainable}
 
 > [30. 让它可维护](https://vonng.com/work/extensions-for-everyone/30-keeping-it-maintainable.html)
 
@@ -437,7 +437,7 @@ AI 也降低了测试成本。我们可以从扩展文档驱动冒烟检查，�
 
 [![30. 让它可维护](/article/extensions-for-everyone/30.webp)](https://vonng.com/work/extensions-for-everyone/30-keeping-it-maintainable.html)
 
-### 31. 三个问题
+### 31. 三个问题 {#s-31-three-questions}
 
 > [31. 三个问题](https://vonng.com/work/extensions-for-everyone/31-three-questions.html)
 
@@ -455,7 +455,7 @@ AI 也降低了测试成本。我们可以从扩展文档驱动冒烟检查，�
 
 [![31. 三个问题](/article/extensions-for-everyone/31.webp)](https://vonng.com/work/extensions-for-everyone/31-three-questions.html)
 
-### 32. 致谢
+### 32. 致谢 {#s-32-thank-you}
 
 > [32. 致谢](https://vonng.com/work/extensions-for-everyone/32-thank-you.html)
 

@@ -4,12 +4,12 @@ linkTitle: "v0.8.0"
 date: 2025-12-26
 description: "440 extensions，移除 sysupdate 仓库"
 tags: [repo, catalog, patroni]
-weight: 161
+weight: 29
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v0.8.0
 ---
 
-## 扩展更新
+## 扩展更新 {#extension-updates}
 
 - 扩展总数达到 440 个
 - 新增扩展：[pg_ai_query](https://github.com/benodiwal/pg_ai_query) 0.1.1
@@ -24,7 +24,7 @@ release_url: https://github.com/pgsty/pig/releases/tag/v0.8.0
 - 修复 debian/ubuntu pg18 扩展问题：supautils、pg_summarize、pg_vectorize、pg_tiktoken、pg_tzf、pglite_fusion、pgsmcrypto、pgx_ulid、plprql
 - pigsty 版本号同步至 4.0.0
 
-## 仓库更新
+## 仓库更新 {#repository-updates}
 
 - 因上游变更移除 pgdg yum sysupdate 仓库
 - 因上游变更移除 pgdg yum llvmjit 软件包
@@ -32,7 +32,7 @@ release_url: https://github.com/pgsty/pig/releases/tag/v0.8.0
 - 为 el 仓库定义添加优先级，docker 仓库不可用时自动跳过
 - 添加 epel 10 / pgdg 9/10 操作系统小版本热修复
 
-## 校验和
+## 校验和 {#checksums}
 
 ```checksums
 e457832fb290e2f9975bf719966dc36e650bdcbf8505d319c9e0431f4c03bc9e  pig-0.8.0-1.aarch64.rpm

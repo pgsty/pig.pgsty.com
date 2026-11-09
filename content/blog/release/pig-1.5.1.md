@@ -4,14 +4,14 @@ linkTitle: "v1.5.1"
 date: 2026-07-08
 description: "PG kernel fork updates, mirror mode, bug fixes"
 tags: [repo, build, ext]
-weight: 31
+weight: 13
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.5.1
 ---
 
 Pig `v1.5.1` updates PG kernel forks to the latest package names.
 
-## Highlights
+## Highlights {#highlights}
 
 - Add mirror/proxy mode to repo, build, sty, update, and extension update workflows; `pig build rust -m` also configures Cargo mirror settings with `rsproxy.cn`.
 - Add explicit PostgreSQL 19 beta build switches: `pig build repo --beta`, `pig build tool --beta`, and `pig build pgrx -b`, while keeping PostgreSQL 18 and PG14-18 as the stable defaults.
@@ -21,7 +21,7 @@ Pig `v1.5.1` updates PG kernel forks to the latest package names.
 - Improve repository generation for newer EL release strings, including PGDG on EL9.6+ / EL10+ and EPEL's EL10 `10z` stream.
 - Refresh extension versions including `pg_ivm 1.15`, `spock 5.0.10`, `snowflake 2.5.0`, `pg_tde 2.2`, `decoderbufs 3.6.0`, and IvorySQL `5.4` packages.
 
-## Checksums
+## Checksums {#checksums}
 
 ```checksums
 bc83887d640ed299a967b4eda2ae6db621a985abfa022fccabf508f7ec7b98e3  pig-1.5.1-1.aarch64.rpm

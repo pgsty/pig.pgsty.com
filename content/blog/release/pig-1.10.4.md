@@ -1,10 +1,10 @@
 ---
 title: "pig v1.10.4"
 linkTitle: "v1.10.4"
-date: 2026-11-06T00:00:00+08:00
+date: 2026-11-06
 description: "Seven new catalog entries, refreshed package metadata, target-version alias fixes, and 626 entries."
 tags: [ext, catalog, install]
-weight: -4
+weight: 1
 authors: [Vonng]
 draft: false
 release_url: https://github.com/pgsty/pig/releases/tag/v1.10.4
@@ -12,7 +12,7 @@ release_url: https://github.com/pgsty/pig/releases/tag/v1.10.4
 
 PIG `v1.10.4` refreshes the embedded PostgreSQL extension catalog from **620 to 626 entries** and fixes category aliases to respect the requested PostgreSQL major version. The November 6, 2026 snapshot adds seven entries and drops the retired `pgcontext_pgvector` record, for a net increase of six.
 
-## New catalog entries
+## New catalog entries {#new-catalog-entries}
 
 | Extension | Version | PostgreSQL support | Description |
 |:----------|:--------|:-------------------|:------------|
@@ -23,10 +23,11 @@ PIG `v1.10.4` refreshes the embedded PostgreSQL extension catalog from **620 to 
 | `pg_lion_citext` | `0.3.0` | 16–18 | Case-insensitive citext operator class for lion indexes |
 | `pg_lion_vector` | `0.3.0` | 16–18 | Filtered nearest-neighbor indexes for pgvector vector and halfvec |
 | `opencc` | `0.1.0` | 14–18 | OpenCC conversion between Simplified Chinese, Traditional Chinese, regional variants and Japanese Shinjitai |
+{.wide .expand}
 
 Installability depends on the target PostgreSQL major, operating system, architecture, and configured repository.
 
-## Version and package metadata updates
+## Version and package metadata updates {#version-and-package-metadata-updates}
 
 Selected catalog version changes:
 
@@ -45,17 +46,17 @@ Selected catalog version changes:
 
 The refresh also updates package availability, dependencies, descriptions, and source metadata. PostGIS 3.7 uses the `postgis37_N` RPM family, with separate address-standardizer and Tiger Geocoder packages. The EL pgaudit catalog uses `pgaudit_14` and `pgaudit_15` for PostgreSQL 14 and 15.
 
-## Category aliases follow the target version
+## Category aliases follow the target version {#category-aliases-follow-the-target-version}
 
 For stable PostgreSQL versions, `pgsql-<category> -v N` now selects the same platform and PostgreSQL-major matrix as `pgN-<category>`. For example, `pig ext add pgsql-gis -v 14 --plan` no longer includes packages available only for a newer PostgreSQL major. Package names come from the catalog, replacing the obsolete pgaudit rename in the resolver. Beta targets retain the existing latest-stable, PGDG-only fallback.
 
-## Catalog count and build versions
+## Catalog count and build versions {#catalog-count-and-build-versions}
 
 The embedded catalog contains **626 records**: **624 available** entries and **2 retained removed** records. They map to **518 distinct package names**, including PostgreSQL contrib modules, or **457 non-contrib package families**. See the [catalog-entry counting rule](/ext/#catalog-count).
 
 Go remains at `1.27.3`, embedded Pigsty at `4.5.0`, and default `cargo-pgrx` at `0.19.3`. Follow the [installation guide](/install/) to upgrade PIG.
 
-## Checksums
+## Checksums {#checksums}
 
 ```checksums
 4981a060779423ab4d6c5baaa8fe6c26adb972fc34b9515119b9e5d4723513ce  pig-1.10.4-1.aarch64.rpm

@@ -4,14 +4,14 @@ linkTitle: "v1.0.0"
 date: 2026-01-26
 description: "444, 新增 pg/pt/pb/pitr 子命令，可用性矩阵"
 tags: [patroni, pgbackrest, postgres, pitr]
-weight: 151
+weight: 26
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.0.0
 ---
 
 本版本引入三组主要的新子命令（`pig pg`、`pig pt`、`pig pb`），用于管理 PostgreSQL、Patroni 和 pgBackRest，同时新增编排式 PITR 命令，并增强扩展可用性显示。
 
-## 新增命令
+## 新增命令 {#new-commands}
 
 - `pig pg` - PostgreSQL 实例管理
   - `pg init/start/stop/restart/reload/status` - 控制与管理 PostgreSQL 实例
@@ -38,21 +38,21 @@ release_url: https://github.com/pgsty/pig/releases/tag/v1.0.0
   - 多种恢复目标：时间、LSN、XID、还原点
   - 支持计划预览模式与恢复后指引
 
-## 新功能
+## 新功能 {#new-features}
 
 - 为 `pig ext avail` 和 `pig ext ls` 添加可用性矩阵
 
-## 改进
+## 改进 {#improvements}
 
 - 统一 pg/pt/pb 命令别名风格
 - 规范化错误消息格式
 - 代码重构与清理
 
-## Bug 修复
+## Bug 修复 {#bug-fixes}
 
 - 修复 UTIL 扩展分类缺失问题
 
-## 校验和
+## 校验和 {#checksums}
 
 ```checksums
 306637079e942bcac9ccbc089cd09a80051898f8db1630269bb1acd3fbdaa872  pig-1.0.0-1.aarch64.rpm

@@ -15,7 +15,7 @@ Documentation version: **v{{< param version >}}**. This release adds seven catal
 
 PIG provides commands to find, install, and build PostgreSQL extension packages. It also manages PostgreSQL, Patroni, pgBackRest, and Pigsty workflows. Package installation uses the system's `apt`, `dnf`, or `yum`.
 
-## Start here
+## Start here {#start-here}
 
 | Your task | Page |
 |:---|:---|
@@ -24,7 +24,7 @@ PIG provides commands to find, install, and build PostgreSQL extension packages.
 | Download, install, update, or remove PIG | [Installation](/install/) |
 | Look up commands, options, and automation features | [Command reference](/cmd/) |
 
-## Install PostgreSQL and extensions
+## Install PostgreSQL and extensions {#install-postgresql-and-extensions}
 
 On a Linux host with root or `sudo` access, run:
 
@@ -36,7 +36,7 @@ sudo pig install -v 18 pg18 vector
 
 In mainland China, use `https://repo.pigsty.cc/pig` for the installer. These commands install PostgreSQL 18 and pgvector packages. Continue with [Getting started](/start/) to start a test instance and enable the extension with `CREATE EXTENSION vector`.
 
-## Command reference
+## Command reference {#command-reference}
 
 | Task | Command |
 |:---|:---|
@@ -56,7 +56,7 @@ In mainland China, use `https://repo.pigsty.cc/pig` for the installer. These com
 
 Run `pig help <command>` for command help. For automation, use `pig -o json --help` to inspect command capabilities, then select the relevant output and plan options.
 
-## Find more information
+## Find more information {#find-more-information}
 
 Press {{< kbd "Ctrl" "K" >}} ({{< kbd "⌘" "K" >}} on macOS) to search the site. Press {{< kbd "/" >}} for page actions. An AI assistant action sends the public page URL and a reading prompt to the selected service.
 

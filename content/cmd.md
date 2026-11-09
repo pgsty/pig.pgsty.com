@@ -25,7 +25,7 @@ tags: [cli]
 - **pig license**: issue and verify Pigsty licenses
 - **pig status / update / version**: inspect environment status, upgrade pig, and print version information
 
-## Global options
+## Global options {#global-options}
 
 | Option | Purpose |
 |:---|:---|
@@ -51,7 +51,7 @@ pig ext list vector -o json
 pig help inventory edit
 ```
 
-## pig repo
+## pig repo {#pig-repo}
 
 Manage APT/YUM repositories for PostgreSQL packages. See [`pig repo`](/repo/) for details.
 
@@ -67,7 +67,7 @@ pig repo cache                   # create offline package
 pig repo boot                    # bootstrap from offline package
 ```
 
-## pig ext
+## pig ext {#pig-ext}
 
 Manage PostgreSQL extensions and kernel packages. See [`pig ext`](/ext/) for details.
 
@@ -84,7 +84,7 @@ pig ext link    17               # link PG version into PATH
 pig ext reload                   # refresh extension catalog
 ```
 
-## pig build
+## pig build {#pig-build}
 
 Build PostgreSQL extensions from source. See [`pig build`](/build/) for details.
 
@@ -110,7 +110,7 @@ pig build dep citus              # install dependencies
 pig build ext citus              # build package
 ```
 
-## pig install
+## pig install {#pig-install}
 
 Install packages through the system's native package manager and translate PostgreSQL kernel, extension, and common aliases into package names. Use `-n/--no-translation` when you need to pass raw system package names directly.
 
@@ -123,7 +123,7 @@ pig install pg18 --plan          # preview installation plan
 pig install vector -y         # auto-confirm installation
 ```
 
-## pig sty
+## pig sty {#pig-sty}
 
 Install the Pigsty distribution. See [`pig sty`](/sty/) for details.
 
@@ -137,7 +137,7 @@ pig sty get {{< param pigsty_version >}}                # download the embedded 
 pig sty grafana list             # manage Grafana dashboards (info/list/boot/load/init/dump/clean/lang/style)
 ```
 
-## pig inventory
+## pig inventory {#pig-inventory}
 
 Inspect, edit, validate, check, and exchange the Pigsty inventory (`pigsty.yml`) with the
 CMDB. Root-level command group with alias `inv`; see [`pig inventory`](/inventory/)
@@ -154,7 +154,7 @@ pig inventory diff other.yml     # compare declarations without emitting values
 pig inventory cmdb check         # check the PostgreSQL CMDB (experimental)
 ```
 
-## pig do
+## pig do {#pig-do}
 
 Run Pigsty administration tasks through the corresponding Ansible playbooks. See
 [`pig do`](/do/) for the command reference.
@@ -168,7 +168,7 @@ pig do pgsql-ext  <cls> [ext...]      # install extensions
 pig do node-pkg   <sel> [pkg...]      # install node packages
 ```
 
-## pig pe
+## pig pe {#pig-pe}
 
 Access PostgreSQL monitoring metrics exposed by pg_exporter. The default endpoint is
 `127.0.0.1:9630`; see [`pig pe`](/pe/) for endpoint and operation details.
@@ -190,7 +190,7 @@ never included in arguments, parameters, or diagnostics returned in the result. 
 errors are replaced with fixed messages. Parameter errors and safe signing-key failure reasons
 remain available in text, JSON, and YAML. `license status` and `license verify` do not reveal tokens.
 
-## pig context
+## pig context {#pig-context}
 
 Output an environment context snapshot covering host, PostgreSQL, Patroni, pgBackRest, and installed extensions. This command is useful for troubleshooting and for automation scripts that need a quick view of the current node.
 
@@ -201,7 +201,7 @@ pig context -m postgres          # only output PostgreSQL module (host included 
 pig context -m postgres,!host    # exclude host module
 ```
 
-## pig pg
+## pig pg {#pig-pg}
 
 Manage the local PostgreSQL server. See [`pig pg`](/pg/) for details.
 
@@ -219,7 +219,7 @@ pig pg fork list                 # list local forks
 pig pg log tail                  # tail logs in real time
 ```
 
-## pig pt
+## pig pt {#pig-pt}
 
 Run `patronictl` transparently to manage Patroni HA clusters. See [`pig pt`](/pt/) for details.
 
@@ -232,7 +232,7 @@ pig pt status                    # local: combined service and cluster status
 pig pt log -f                    # local: tail logs in real time
 ```
 
-## pig pb
+## pig pb {#pig-pb}
 
 Manage pgBackRest backup and restore. See [`pig pb`](/pb/) for details.
 
@@ -246,7 +246,7 @@ pig pb restore -t "2025-01-01"   # restore to a specific time
 pig pb log tail                  # tail logs in real time
 ```
 
-## pig pitr
+## pig pitr {#pig-pitr}
 
 Run orchestrated point-in-time recovery (PITR). See [`pig pitr`](/pitr/) for details.
 
@@ -258,7 +258,7 @@ pig pitr -d --plan               # show execution plan without running
 pig pitr -d -y                   # skip confirmation for automation
 ```
 
-## Helper Commands
+## Helper Commands {#helper-commands}
 
 ```bash
 pig status                       # show current environment status
@@ -275,7 +275,7 @@ download the new archive and replace the executable as described in [Installatio
 
 If `~/.pig/config.yml` has a syntax error, fix it before running commands that read configuration, such as `pig status`. `pig version` and the `pig pe` HTTP commands remain available because they do not read this file.
 
-## Design records
+## Design records {#design-records}
 
 - [From Human-Friendly to Agent-Native](/design/agent-native-cli/)
 - [Why PIG Keeps the Cobra Command Layer Flat](/design/flat-cobra-command-layer/)

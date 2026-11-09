@@ -4,7 +4,7 @@ linkTitle: "v0.7.4"
 date: 2025-12-01
 description: "更新 ivory/pgtde 内核与 pgdg extras 仓库"
 tags: [catalog]
-weight: 181
+weight: 31
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v0.7.4
 ---
@@ -14,7 +14,7 @@ release_url: https://github.com/pgsty/pig/releases/tag/v0.7.4
 - 将 ivorysql 更新至 5.0 版本，与 PG 18 兼容
 - 将 Percona Postgres TDE 内核更新至 18.1
 
-## Checksums
+## 校验和 {#checksums}
 
 ```checksums
 5769b0051f04dcda22dd92b30b8effc8ddfa40097308bded76ce2b38d012ce57  pig-0.7.4-1.aarch64.rpm

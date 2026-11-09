@@ -4,7 +4,7 @@ linkTitle: "v0.6.2"
 date: 2025-10-03
 description: "PG 18 official Repo"
 tags: [repo]
-weight: 231
+weight: 36
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v0.6.2
 ---
@@ -13,7 +13,7 @@ release_url: https://github.com/pgsty/pig/releases/tag/v0.6.2
 - Add `v` prefix when specifying pigsty version string
 - Improved network connectivity check
 
-## Checksums
+## Checksums {#checksums}
 
 ```checksums
 01f5b7dc20644226c762dbb229768347  pig_0.6.2-1_amd64.deb

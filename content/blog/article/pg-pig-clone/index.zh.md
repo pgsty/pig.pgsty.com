@@ -14,9 +14,9 @@ tags: [postgres, cli, sty]
 
 [![《Git for Data》旧文截图](/article/pg-pig-clone/old-post.webp)](https://vonng.com/pg/pg-clone/)
 
-今天看到阿里云数据库 [发了篇文章](https://mp.weixin.qq.com/s?__biz=Mzk2NDgzOTk3NA==&mid=2247523890&idx=1&sn=fdfe899fc6f7601f586b4ba32eaf147b&scene=21#wechat_redirect)说，他们在阿里云 RDS for PostgreSQL 上支持这个功能了。老冯看了直想笑：这个动作也太慢了。说起来其实这个功能不复杂，不需要改内核，只要在 PG 18 上启用一个参数，在创建数据库的时候加一个 `STRATEGY` 参数就可以实现。说是不复杂，但想做好，还是有几个边界条件要处理。
+今天看到阿里云数据库 [发了篇文章](https://mp.weixin.qq.com/s?__biz=Mzk2NDgzOTk3NA==&mid=2247523890&idx=1&sn=fdfe899fc6f7601f586b4ba32eaf147b&scene=21#wechat_redirect) 说，他们在阿里云 RDS for PostgreSQL 上支持这个功能了。老冯看了直想笑：这个动作也太慢了。说起来其实这个功能不复杂，不需要改内核，只要在 PG 18 上启用一个参数，在创建数据库的时候加一个 `STRATEGY` 参数就可以实现。说是不复杂，但想做好，还是有几个边界条件要处理。
 
-## 一些改进
+## 一些改进 {#a-few-improvements}
 
 之前要克隆数据库的时候，在 Pigsty 的 IaC 式操作里还是有些繁琐：首先你要定义一个数据库，把另一个数据库作为模板，然后执行数据库创建。
 
@@ -32,7 +32,7 @@ tags: [postgres, cli, sty]
 
 只要底层用的是支持 CoW 的文件系统（比如 XFS），那么克隆一个数据库基本是常数时间耗时，通常几百毫秒。新副本需要少量元数据空间；后续写入时，再为修改的数据块分配新空间。
 
-## Agent Native CLI
+## Agent Native CLI {#agent-native-cli}
 
 当然，这个命令行工具的特点不一样：这是专门给 DBA 和 DBA Agent 设计的。之前你也可以用 Ansible Playbook，或者 Pigsty 提供的 Shell 脚本 `/pg/bin/pg-clone` 来执行克隆，但很显然都没有直接使用 `pig` 命令行工具方便。
 
@@ -48,7 +48,7 @@ tags: [postgres, cli, sty]
 
 这个设计，我之前称之为 Agent Native CLI，之前写了篇文章介绍过。
 
-## 实例级 Fork
+## 实例级 Fork {#instance-level-forks}
 
 当然，除了 Database Clone，还有一个新的相关功能也值得一提。我在《[Git for Data：瞬间克隆 PG 数据库与实例](https://vonng.com/pg/pg-clone/)》里也提到过，就是实例级瞬间克隆，我将其称作 “fork”。
 
@@ -64,7 +64,7 @@ tags: [postgres, cli, sty]
 
 ![PIG 瞬间克隆 PostgreSQL 工作流](/article/pg-pig-clone/featured.webp)
 
-## 参考阅读
+## 参考阅读 {#further-reading}
 
 - [Git for Data: 瞬间克隆PG数据库](https://vonng.com/pg/pg-clone/)
 - [把 Agent 的状态放进数据库](https://vonng.com/db/agent-state-db/)

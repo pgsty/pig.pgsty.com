@@ -4,14 +4,14 @@ linkTitle: "v1.5.0"
 date: 2026-07-04
 description: "531 个扩展，pigsty v4.4，pg/pb/pt/pitr 重做，clone/fork"
 tags: [patroni, pgbackrest, catalog, postgres]
-weight: 41
+weight: 14
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.5.0
 ---
 
 Pig `v1.5.0` 是一次面向 PostgreSQL 日常运维的版本：新增本地数据库 clone / fork 工作流，明确 `pg`、`pt`、`pb`、`pitr` 的职责边界，并收紧高风险操作的预览、确认与结构化输出行为。
 
-## 主要变化
+## 主要变化 {#highlights}
 
 - `pig pg` 更聚焦本地 PostgreSQL 操作。新增 `pig pg clone` 用于快速创建数据库级副本，新增 `pig pg fork` 用于创建一次性物理实例分叉，适合本地验证、恢复演练和隔离实验。
 - 恢复流程拆得更清楚：`pig pitr` 作为 Patroni / PostgreSQL / pgBackRest 的恢复编排入口；`pig pb restore` 保持为低层 pgBackRest restore 原语。恢复命令现在必须指定明确目标，并提供更具体的 plan 与恢复后指引。
@@ -20,20 +20,20 @@ Pig `v1.5.0` 是一次面向 PostgreSQL 日常运维的版本：新增本地数�
 - 日志与状态输出更适合排障：`pg`、`pb`、`pt` 的日志命令补齐 latest / tail / show / grep 等常用入口，结构化日志快照使用 JSONL 语义。
 - 构建与发布默认值更新：Pig 版本为 `1.5.0`，内置 Pigsty 版本为 `4.4.0`，`pig build pgrx` 默认 `cargo-pgrx` 升级到 `0.19.1`。
 
-## 扩展目录
+## 扩展目录 {#extension-catalog}
 
 - 可用扩展数量从 **524** 增加到 **531**，没有移除项。
 - 新增扩展：`pg_ducklake`、`pgdisablelogerror`、`pg_stat_log`、`pg_stat_plans`、`passwordpolicy`、`db2fce`、`plpgsql_wrap`。
 - 刷新一批已有扩展版本与包元数据，代表性更新包括 `timescaledb 2.28.2`、`postgis 3.6.4`、`vector 0.8.4`、`biscuit 2.4.1`、`citus 14.1.0`、`orioledb 1.8`、`documentdb 0.113`、`credcheck 5.0`、`pgtt 4.5`。
 - `orioledb` alias 不再固定到 PG17，而是按请求的 PostgreSQL 主版本解析；EL9 ARM64 Patroni alias 也调整为 noarch 包。
 
-## 兼容性提醒
+## 兼容性提醒 {#compatibility-notes}
 
 - 自动化执行破坏性操作时请使用 `-y/--yes`；结构化输出模式不会再替代人工确认。
 - `pig pb restore` / `pig pitr` 需要明确指定一个恢复目标；自动 promote 类行为请使用 `--target-action=promote`。
 - 若干易混淆短参数经过整理；日志命令的 `-o json` 表示 JSONL 快照，不用于 tail / follow 这类流式交互场景。
 
-## 校验和
+## 校验和 {#checksums}
 
 ```checksums
 9f83b78ed2eccedd55a86c634f88364f1945c3cefa1b23efdd72a7cf2062e1df  pig-1.5.0-1.aarch64.rpm

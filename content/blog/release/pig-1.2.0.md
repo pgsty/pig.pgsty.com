@@ -4,7 +4,7 @@ linkTitle: "v1.2.0"
 date: 2026-02-23
 description: "Unified aliases, routine updates, plan mode, repo fixes"
 tags: [repo, sty, catalog, cli]
-weight: 131
+weight: 23
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.2.0
 ---
@@ -48,7 +48,7 @@ release_url: https://github.com/pgsty/pig/releases/tag/v1.2.0
 | `antlr4-runtime413` | -        | 4.13     | New runtime dependency for Babelfish              |
 {.wide .expand}
 
-## Checksums
+## Checksums {#checksums}
 
 ```checksums
 344b77385fa9c3d4fe5e1961340e68716251e38d1cb8308f5af45ce8a03cd206  pig-1.2.0-1.aarch64.rpm

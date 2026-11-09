@@ -4,14 +4,14 @@ linkTitle: "v1.5.0"
 date: 2026-07-04
 description: "531 extensions, pigsty v4.4, pg/pt/pb/pitr rework, clone & fork"
 tags: [patroni, pgbackrest, catalog, postgres]
-weight: 41
+weight: 14
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.5.0
 ---
 
 Pig `v1.5.0` is a PostgreSQL operations release for day-to-day DBA work. It adds local database clone/fork workflows, clarifies the boundaries between `pg`, `pt`, `pb`, and `pitr`, and tightens preview, confirmation, and structured-output behavior for high-risk operations.
 
-## Highlights
+## Highlights {#highlights}
 
 - `pig pg` is now more focused on local PostgreSQL operations. `pig pg clone` creates quick database-level copies, while `pig pg fork` creates disposable physical instance forks for local validation, recovery drills, and isolated experiments.
 - Recovery flows are split more clearly: `pig pitr` is the orchestration entry point across Patroni, PostgreSQL, and pgBackRest; `pig pb restore` remains the low-level pgBackRest restore primitive. Restore commands now require an explicit target and provide more concrete plans and post-restore guidance.
@@ -20,20 +20,20 @@ Pig `v1.5.0` is a PostgreSQL operations release for day-to-day DBA work. It adds
 - Logs and status output are more useful during incidents: `pg`, `pb`, and `pt` log commands now cover common latest / tail / show / grep workflows, and structured log snapshots use JSONL semantics.
 - Build and release defaults were refreshed: Pig is `1.5.0`, embedded Pigsty is `4.4.0`, and `pig build pgrx` defaults to `cargo-pgrx 0.19.1`.
 
-## Extension Catalog
+## Extension Catalog {#extension-catalog}
 
 - Available extensions: **524 -> 531**, with no removals.
 - New extensions: `pg_ducklake`, `pgdisablelogerror`, `pg_stat_log`, `pg_stat_plans`, `passwordpolicy`, `db2fce`, `plpgsql_wrap`.
 - Refreshed a batch of existing extension versions and package metadata, including `timescaledb 2.28.2`, `postgis 3.6.4`, `vector 0.8.4`, `biscuit 2.4.1`, `citus 14.1.0`, `orioledb 1.8`, `documentdb 0.113`, `credcheck 5.0`, and `pgtt 4.5`.
 - `orioledb` aliases no longer pin to PG17; they resolve against the requested PostgreSQL major. EL9 ARM64 Patroni aliases now point to noarch packages.
 
-## Compatibility Notes
+## Compatibility Notes {#compatibility-notes}
 
 - Use `-y/--yes` for destructive operations in automation; structured output mode no longer substitutes for human confirmation.
 - `pig pb restore` and `pig pitr` require exactly one explicit recovery target; use `--target-action=promote` for auto-promote behavior.
 - Several ambiguous short options were cleaned up. For log commands, `-o json` means a JSONL snapshot and is not used for tail/follow streaming modes.
 
-## Checksums
+## Checksums {#checksums}
 
 ```checksums
 9f83b78ed2eccedd55a86c634f88364f1945c3cefa1b23efdd72a7cf2062e1df  pig-1.5.0-1.aarch64.rpm

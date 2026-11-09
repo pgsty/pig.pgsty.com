@@ -18,7 +18,7 @@ tags: [ext, catalog, repo]
 
 ![PG 扩展百科全书首页](/article/pgext-pedia/featured.webp)
 
-## 这不是一个列表，而是一本百科全书
+## 这不是一个列表，而是一本百科全书 {#not-just-a-list}
 
 市面上不缺 PostgreSQL 扩展列表。PGXN 有一个，各种 Awesome List 也一大堆。但它们通常只给你一个名字和一句话简介。你想进一步知道这个扩展用什么语言写、用什么许可证、支持哪些 PG 版本、在你的操作系统上有没有预编译包、怎么安装、有没有冲突扩展，往往还是得自己去折腾。
 
@@ -37,47 +37,47 @@ tags: [ext, catalog, repo]
 
 ![扩展文档总览](/article/pgext-pedia/docs.webp)
 
-## 464 个扩展，16 个分类
+## 464 个扩展，16 个分类 {#s-464-extensions-16-categories}
 
 这 464 个扩展按功能被分成了 16 个大类。如果你之前听说过 PostgreSQL 可以做时序数据库、向量数据库、图数据库、文档数据库，甚至兼容 Oracle 和 SQL Server，那么现在你可以在同一个目录里把这些能力背后的扩展全部找出来，看到详细信息，再一行命令装上。
 
 ![扩展分类总览](/article/pgext-pedia/categories.webp)
 
-## 多维度浏览
+## 多维度浏览 {#multiple-ways-to-browse}
 
 除了按分类浏览，你还可以从不同维度切入这个目录。
 
-### 按归属仓库
+### 按归属仓库 {#by-repository-origin}
 
 每个扩展归属于 PGDG、PIGSTY 或 CONTRIB 三类来源之一。PGDG 是 PostgreSQL 官方社区仓库，CONTRIB 是 PostgreSQL 自带扩展，而 PIGSTY 则是我额外打包收录和维护的部分。
 
 ![按仓库来源浏览扩展](/article/pgext-pedia/repos.webp)
 
-### 按编程语言
+### 按编程语言 {#by-implementation-language}
 
 你可以看到这些扩展分别是用 C、C++、Rust、Java、Python、SQL 还是纯数据文件实现的。尤其是近两年 Rust 扩展的增长趋势，在这里看得非常直观。
 
 ![按开发语言浏览扩展](/article/pgext-pedia/languages.webp)
 
-### 按开源协议
+### 按开源协议 {#by-license}
 
 MIT、Apache 2.0、PostgreSQL、BSD、GPL、AGPL、Timescale License，不同协议对商业使用的影响各不相同，在技术选型时非常值得关注。
 
 ![按许可证浏览扩展](/article/pgext-pedia/licenses.webp)
 
-### 按扩展属性
+### 按扩展属性 {#by-extension-properties}
 
 哪些扩展需要修改 `shared_preload_libraries` 重启才能用？哪些是没有 SQL DDL 的“无头扩展”？哪些扩展之间有依赖或冲突？哪些包里包含多个扩展？这些都能在目录中直接看清楚。
 
 ![按扩展属性浏览](/article/pgext-pedia/attributes.webp)
 
-### 按操作系统
+### 按操作系统 {#by-platform}
 
 在特定操作系统和 CPU 架构组合下，哪些扩展可用、哪些不可用、版本分别是多少，一张表就能说明白。
 
 ![按平台矩阵浏览扩展](/article/pgext-pedia/matrix.webp)
 
-## 三件套：目录 + 仓库 + 包管理器
+## 三件套：目录 + 仓库 + 包管理器 {#the-full-stack-directory-repo-package-manager}
 
 光有元数据目录还不够，配套基础设施同样重要。这次重做扩展目录，其实是一个系统性工程的一部分，整套体系包含三样东西：
 
@@ -87,7 +87,7 @@ MIT、Apache 2.0、PostgreSQL、BSD、GPL、AGPL、Timescale License，不同协
 
 这三样东西配合起来，把“找扩展、选扩展、装扩展、用扩展”的完整链路打通了。
 
-## 一些数字
+## 一些数字 {#a-few-numbers}
 
 下面是这套扩展百科全书和配套仓库的一些统计数据。
 
@@ -99,7 +99,7 @@ MIT、Apache 2.0、PostgreSQL、BSD、GPL、AGPL、Timescale License，不同协
 
 ![软件包分发统计](/article/pgext-pedia/pkgstats.webp)
 
-## 为什么要做这件事
+## 为什么要做这件事 {#why-build-this}
 
 做这个扩展目录，表面上是在做一个文档网站，实际上是在做 PostgreSQL 扩展生态的基础设施。
 
@@ -109,7 +109,7 @@ PostgreSQL 扩展生态的现状长期是“有酒无杯”：好东西很多，
 
 每个扩展详情页，都是一个完整的 one-stop shop。你不需要再去 GitHub 翻 README，不需要去 PGXN 找包，也不需要猜操作系统兼容性。所有信息汇聚在一个页面里，中英双语，对国内外用户同样友好。
 
-## 怎么用
+## 怎么用 {#how-to-use-it}
 
 如果你本来就会折腾 PostgreSQL，只是想在 PGDG 仓库之外额外安装一些“官方仓库”没有的扩展，那么直接添加 Pigsty 的 APT / DNF 仓库即可。`pig` 包管理器可以把这个过程大幅简化，但它并不是强制依赖。
 
@@ -128,19 +128,19 @@ cd ~/pigsty
 ./deploy.yml
 ```
 
-## 完全开源
+## 完全开源 {#fully-open-source}
 
 顺便一提，这个网站和扩展元数据本身也是完全开源的。如果你想自己保存一份副本，或者复用这套数据，直接去 [pgsty/pgext](https://github.com/pgsty/pgext) 仓库就可以了，省得再自己写爬虫解析。如果你发现了扩展信息、元数据或文档中的错误，也欢迎直接提交 Issue 或 Pull Request。
 
 ![扩展元数据与网站仓库](/article/pgext-pedia/source.webp)
 
-## 附：Extension for Everyone
+## 附：Extension for Everyone {#bonus}
 
 原稿末尾还附了一张相关主题演讲的海报，这里一并保留下来。
 
 ![Extension for Everyone 主题海报](/article/pgext-pedia/poster.webp)
 
-## 小结
+## 小结 {#the-catalog-in-numbers}
 
 **扩展是 PostgreSQL 的灵魂，而这个目录，就是灵魂的索引。**
 

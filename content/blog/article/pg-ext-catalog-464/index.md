@@ -14,7 +14,7 @@ This is already the catalog's fifth incarnation. After a long detour, it has ret
 
 ![Pigsty PostgreSQL extension catalog homepage](/article/pg-ext-catalog-464/01.webp)
 
-## Not Just Packages, but Documentation Too
+## Not Just Packages, but Documentation Too {#not-just-packages-but-documentation-too}
 
 The old extension catalog answered a few basic questions: What is this extension called? Where is its metadata? Where can I download the binary packages? How do I install it with one command? Once it was installed, however, learning how to use it was your problem. Go find the documentation yourself.
 
@@ -42,7 +42,7 @@ That is part of the larger vision: **to become a dependable source of essential 
 
 To be honest, whenever I finish my “real work” with AI tokens left to burn, I spend them filling gaps like these. It is a useful backstop—and a little public service while I am at it.
 
-## Friendly to Agents and Humans Alike
+## Friendly to Agents and Humans Alike {#friendly-to-agents-and-humans-alike}
 
 Now let us look at how the catalog is designed.
 
@@ -80,7 +80,7 @@ This time, we also included extensions that exist only in particular PostgreSQL 
 
 ![Extensions available only for particular PostgreSQL forks](/article/pg-ext-catalog-464/13.webp)
 
-## Five Versions, Back Where We Started
+## Five Versions, Back Where We Started {#five-versions-back-where-we-started}
 
 There is one last topic—less technical, but more personal: choosing a documentation framework.
 

@@ -28,13 +28,13 @@ Postgres Extensions Day 将于 2025 年 5 月 12 日在加拿大魁北克省蒙�
 
 ------
 
-## 扩展峰会的日程
+## 扩展峰会的日程 {#extension-summit-schedule}
 
 ![PGEXT Day 2025 日程安排](/article/pgext-day/schedule.webp)
 
 ------
 
-### 1. 从 `pl/v8` 到 `pl/<any>`：迈向更容易的扩展开发
+### 1. 从 `pl/v8` 到 `pl/<any>`：迈向更容易的扩展开发 {#s-1-from-pl-v8-to-pl-any-towards-easier-extension-development}
 
 **9:00 am → 25 min**，Hannu Krosing
 
@@ -57,7 +57,7 @@ Postgres Extensions Day 将于 2025 年 5 月 12 日在加拿大魁北克省蒙�
 
 ------
 
-### 2. 将大版本升级封装成一个扩展
+### 2. 将大版本升级封装成一个扩展 {#s-2-upgrade-as-an-extension}
 
 **9:30 am → 25 min**，Andrey Borodin
 
@@ -67,7 +67,7 @@ Postgres Extensions Day 将于 2025 年 5 月 12 日在加拿大魁北克省蒙�
 
 ------
 
-### 3. 内联 Postgres 函数：现在与未来
+### 3. 内联 Postgres 函数：现在与未来 {#s-3-inlining-postgres-functions-now-and-then}
 
 **10:00 am → 25 min**，Paul Jungwirth
 
@@ -77,7 +77,7 @@ Postgres Extensions Day 将于 2025 年 5 月 12 日在加拿大魁北克省蒙�
 
 ------
 
-### 4. Postgres 点菜：自选扩展的动态容器镜像
+### 4. Postgres 点菜：自选扩展的动态容器镜像 {#s-4-postgres-la-carte-dynamic-container-images-with-your-choice-of-extensions}
 
 **10:30 am → 25 min**，Alvaro Hernandez
 
@@ -91,7 +91,7 @@ Postgres Extensions Day 将于 2025 年 5 月 12 日在加拿大魁北克省蒙�
 
 ------
 
-### 5. Cppgres：少一个讨厌 C++ 的理由
+### 5. Cppgres：少一个讨厌 C++ 的理由 {#s-5-cppgres-one-less-reason-to-hate-c}
 
 **11:00 am → 25 min**，Yurii Rashkovskii
 
@@ -105,7 +105,7 @@ Postgres Extensions Day 将于 2025 年 5 月 12 日在加拿大魁北克省蒙�
 
 ------
 
-### 6. 使用 MemoryContext 并调试 Postgres 中的内存泄漏
+### 6. 使用 MemoryContext 并调试 Postgres 中的内存泄漏 {#s-6-working-with-memorycontexts-and-debugging-memory-leaks-in-postgres}
 
 **11:30 am → 25 min**，Phil Eaton
 
@@ -115,7 +115,7 @@ Postgres Extensions Day 将于 2025 年 5 月 12 日在加拿大魁北克省蒙�
 
 ------
 
-### 7. 作为控制平面的 Postgres：使用扩展卸载计算的挑战
+### 7. 作为控制平面的 Postgres：使用扩展卸载计算的挑战 {#s-7-postgres-as-a-control-plane-challenges-in-offloading-compute-via-extensions}
 
 **12:00 pm → 25 min**，Sweta Vooda
 
@@ -129,13 +129,13 @@ Postgres Extensions Day 将于 2025 年 5 月 12 日在加拿大魁北克省蒙�
 
 ------
 
-### 8. 午餐
+### 8. 午餐 {#s-8-lunch}
 
 **12:30 pm → 60 min**
 
 ------
 
-### 9. 缺失的 Postgres 扩展仓库与包管理器
+### 9. 缺失的 Postgres 扩展仓库与包管理器 {#s-9-the-missing-postgres-extension-repo-and-package-manager}
 
 **1:30 pm → 25 min**，Ruohang Feng
 
@@ -143,13 +143,13 @@ Postgres Extensions Day 将于 2025 年 5 月 12 日在加拿大魁北克省蒙�
 
 > 哈哈，真的是我。
 
-尽管 PostgreSQL 扩展功能强大又灵活，大多数用户还是希望“开箱即用”，而非自己编译与手动构建。我建立了一个[软件仓库](https://pigsty.cc/ext/list/)，打包了 200 多个扩展，补足了官方 PGDG 仓库的缺口。这些 RPM/DEB 包覆盖五个 Linux 发行版、五个 PostgreSQL 大版本，以及 x86-64 与 ARM64 架构。
+尽管 PostgreSQL 扩展功能强大又灵活，大多数用户还是希望“开箱即用”，而非自己编译与手动构建。我建立了一个 [软件仓库](https://pigsty.cc/ext/list/)，打包了 200 多个扩展，补足了官方 PGDG 仓库的缺口。这些 RPM/DEB 包覆盖五个 Linux 发行版、五个 PostgreSQL 大版本，以及 x86-64 与 ARM64 架构。
 
 本次分享将探讨如何构建这一仓库，包括跨发行版兼容、多架构支持、版本对齐等挑战，并分享经验教训及未来改进方向，让 PostgreSQL 扩展安装更轻松。
 
 ------
 
-### 10. 如何自动在 PGXN 上发布你的扩展
+### 10. 如何自动在 PGXN 上发布你的扩展 {#s-10-how-to-automatically-release-your-extensions-on-pgxn}
 
 **2:00 pm → 25 min**，David Wheeler
 
@@ -163,7 +163,7 @@ PGXN 致力于成为所有扩展版本的根注册中心，未来希望将所有
 
 ------
 
-### 11. 用 Java 扩展 PostgreSQL：克服 Java 与 C 应用交互的开发挑战
+### 11. 用 Java 扩展 PostgreSQL：克服 Java 与 C 应用交互的开发挑战 {#s-11-extending-postgresql-with-java-overcoming-development-challenges-in-bridging-java-and-c-applications}
 
 **2:30 pm → 25 min**，Cary Huang
 
@@ -185,7 +185,7 @@ Java 和 C 两种语言设计理念与内存管理方式迥异。看似南辕北
 
 ------
 
-### 12. 重新思考 OLAP 架构：pg_mooncake v0.2 的历程
+### 12. 重新思考 OLAP 架构：pg_mooncake v0.2 的历程 {#s-12-rethinking-olap-architecture-the-journey-to-pg-mooncake-v0-2}
 
 **3:00 pm → 25 min**，Cheng Chen
 
@@ -195,7 +195,7 @@ Java 和 C 两种语言设计理念与内存管理方式迥异。看似南辕北
 
 ------
 
-### 13. Spat：劫持共享内存，在 PostgreSQL 中获得类 Redis 的使用体验
+### 13. Spat：劫持共享内存，在 PostgreSQL 中获得类 Redis 的使用体验 {#s-13-spat-hijacking-shared-memory-for-a-redis-like-experience-in-postgresql}
 
 **3:30 pm → 25 min**，Florents Tselai
 
@@ -209,7 +209,7 @@ Spat 提供类似键值存储的模式，支持字符串、列表、集合、哈
 
 ------
 
-### 14. 使用 Citus 扩容 PostgreSQL：为现代应用而生的分布式数据
+### 14. 使用 Citus 扩容 PostgreSQL：为现代应用而生的分布式数据 {#s-14-scaling-postgresql-with-citus-distributed-data-for-modern-applications}
 
 **4:00 pm → 25 min**，Mehmet Yilmaz
 
@@ -226,7 +226,7 @@ Spat 提供类似键值存储的模式，支持字符串、列表、集合、哈
 
 ------
 
-### 15. 扩展能力：新选项与愿望清单
+### 15. 扩展能力：新选项与愿望清单 {#s-15-extensibility-new-options-and-a-wish-list}
 
 **4:30 pm → 25 min**，Alastair Turner
 
@@ -240,7 +240,7 @@ Spat 提供类似键值存储的模式，支持字符串、列表、集合、哈
 
 ------
 
-### 16. 晚餐
+### 16. 晚餐 {#s-16-dinner}
 
 **6:00 pm – 9:00 pm**
 
@@ -248,7 +248,7 @@ Spat 提供类似键值存储的模式，支持字符串、列表、集合、哈
 
 ------
 
-## 回顾 2024 年 PGConf.dev
+## 回顾 2024 年 PGConf.dev {#looking-back-at-pgconf-dev-2024}
 
 - [Andreas Scherbaum PostgreSQL Development Conference 2024 - Review](https://andreas.scherbaum.la/post/2024-06-14_postgresql-development-conference-2024-review/)
 - [PgCon 2024 Developer Meeting](https://wiki.postgresql.org/wiki/PgCon_2024_Developer_Meeting)

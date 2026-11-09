@@ -2,7 +2,7 @@
 title: "编辑声明，保留文档：无损 Pigsty Inventory"
 linkTitle: "无损 Inventory"
 date: 2026-07-18
-lastmod: 2026-10-17
+lastmod: 2026-11-09
 description: "为什么 pig inventory 将 YAML 语义与源字节分离，让局部编辑能够保留注释、顺序、锚点与格式。"
 tags: [inventory, sty]
 weight: 50
@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **决策日期：** 2026-07-18<br>
-> **状态：** 已实现并随 [pig v1.6.0](/zh/release/pig-1.6.0/) 发布。 下述验收修订已实现（Implemented），纳入 v1.10.0 候选版本，尚未发布。<br>
+> **状态：** 已实现并随 [pig v1.6.0](/zh/release/pig-1.6.0/) 发布；2026-10-16 至 2026-10-17 的验收修订已随 [pig v1.10.0](/zh/release/pig-1.10.0/) 发布。<br>
 > **当前参考：** [`pig inventory`](/zh/inventory/)<br>
 > **范围：** 静态 Pigsty Inventory 的查看、局部编辑、校验、比较与安全写入。
 
@@ -75,7 +75,7 @@ Inventory 可以包含自定义凭据字段，无法仅凭字段名可靠脱敏�
 v1.10.0 已提交修订的固定源码与回归测试证据包括：
 [来源解析与角色授权](https://github.com/pgsty/pig/commit/7be9b2b6cd31603de0e8a564aa5e9859b936b8e3)、
 [日期形式字符串保留](https://github.com/pgsty/pig/commit/a3ea1e50befbf412ae1267d57f1dbf1b26dd530d)、
-[独立 YAML 消费端验收](https://github.com/pgsty/pig/commit/eb3fc1e4ff39318972277fd96626ffa2c449f01d)。这些提交不构成版本发布证据。
+[独立 YAML 消费端验收](https://github.com/pgsty/pig/commit/eb3fc1e4ff39318972277fd96626ffa2c449f01d)。上述修订已随 [v1.10.0](https://github.com/pgsty/pig/releases/tag/v1.10.0) 发布。
 
 根级 Inventory 契约与既有 CMDB 边界建立于
 [`ba6e678`](https://github.com/pgsty/pig/commit/ba6e678)，实现落地于

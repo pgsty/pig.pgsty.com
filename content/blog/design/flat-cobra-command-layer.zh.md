@@ -12,7 +12,7 @@ draft: false
 
 > **决策日期：** 2026-06-30<br>
 > **状态：** 已实现；新命令继续采用此布局。<br>
-> **当前参考：** [`pig` 命令总览](/zh/cmd/)与[源码仓库](https://github.com/pgsty/pig)<br>
+> **当前参考：** [`pig` 命令总览](/zh/cmd/)与 [源码仓库](https://github.com/pgsty/pig)<br>
 > **范围：** Go 源码归属与命令注册方式，而不是公开命令分类本身。
 
 ## 决策 {#decision}

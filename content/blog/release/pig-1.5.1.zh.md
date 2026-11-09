@@ -4,14 +4,14 @@ linkTitle: "v1.5.1"
 date: 2026-07-08
 description: "PG 内核分支包更新，镜像模式，修复若干问题"
 tags: [repo, build, ext]
-weight: 31
+weight: 13
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.5.1
 ---
 
 Pig `v1.5.1` 是一次构建与仓库维护版本，更新了多款 PG 内核分支包。
 
-## 主要变化
+## 主要变化 {#highlights}
 
 - 镜像/代理模式覆盖 repo、build、sty、update、ext update 等流程；`pig build rust -m` 会写入 Cargo 镜像配置并使用 `rsproxy.cn`。
 - 新增 PostgreSQL 19 beta 的 repo、tool、pgrx 显式构建开关：`pig build repo --beta`、`pig build tool --beta`、`pig build pgrx -b`；稳定默认值仍保持 PostgreSQL 18 与 PG14-18 窗口。
@@ -21,7 +21,7 @@ Pig `v1.5.1` 是一次构建与仓库维护版本，更新了多款 PG 内核分
 - 改进较新 EL release 字符串处理，包括 EL9.6+ / EL10+ 上的 PGDG 仓库，以及 EPEL 在 EL10 上使用的 `10z` stream。
 - 刷新扩展版本，包括 `pg_ivm 1.15`、`spock 5.0.10`、`snowflake 2.5.0`、`pg_tde 2.2`、`decoderbufs 3.6.0`、IvorySQL `5.4` 包。
 
-## 校验和
+## 校验和 {#checksums}
 
 ```checksums
 bc83887d640ed299a967b4eda2ae6db621a985abfa022fccabf508f7ec7b98e3  pig-1.5.1-1.aarch64.rpm

@@ -1,10 +1,10 @@
 ---
 title: "pig v1.10.4"
 linkTitle: "v1.10.4"
-date: 2026-11-06T00:00:00+08:00
+date: 2026-11-06
 description: "新增七个目录条目，刷新包元数据，修复目标版本别名解析，目录增至 626 个条目。"
 tags: [ext, catalog, install]
-weight: -4
+weight: 1
 authors: [Vonng]
 draft: false
 release_url: https://github.com/pgsty/pig/releases/tag/v1.10.4
@@ -12,7 +12,7 @@ release_url: https://github.com/pgsty/pig/releases/tag/v1.10.4
 
 PIG `v1.10.4` 将内嵌 PostgreSQL 扩展目录从 **620 个条目更新到 626 个**，并修复分类别名未按指定 PostgreSQL 大版本选择软件包的问题。2026 年 11 月 6 日的目录快照新增七个条目，移除已退役的 `pgcontext_pgvector` 记录，净增六个。
 
-## 新增目录条目
+## 新增目录条目 {#new-catalog-entries}
 
 | 扩展 | 版本 | PostgreSQL 支持 | 说明 |
 |:-----|:-----|:----------------|:-----|
@@ -23,10 +23,11 @@ PIG `v1.10.4` 将内嵌 PostgreSQL 扩展目录从 **620 个条目更新到 626 
 | `pg_lion_citext` | `0.3.0` | 16–18 | 为 lion 索引提供大小写不敏感的 citext 运算符类 |
 | `pg_lion_vector` | `0.3.0` | 16–18 | 为 pgvector 的 vector 与 halfvec 提供带过滤的近邻索引 |
 | `opencc` | `0.1.0` | 14–18 | 基于 OpenCC 的简繁中文、地区用语与日文新字体转换 |
+{.wide .expand}
 
 实际可安装性取决于目标 PostgreSQL 大版本、操作系统、架构与已配置的软件源。
 
-## 版本与包元数据更新
+## 版本与包元数据更新 {#version-and-package-metadata-updates}
 
 部分目录版本变化如下：
 
@@ -45,17 +46,17 @@ PIG `v1.10.4` 将内嵌 PostgreSQL 扩展目录从 **620 个条目更新到 626 
 
 本次还刷新了软件包可用性、依赖、描述与源信息。PostGIS 3.7 使用 `postgis37_N` RPM 包系列，地址标准化器与 Tiger Geocoder 使用独立软件包。EL 上 PostgreSQL 14、15 的 pgaudit 包名分别为 `pgaudit_14`、`pgaudit_15`。
 
-## 分类别名遵循目标版本
+## 分类别名遵循目标版本 {#category-aliases-follow-the-target-version}
 
 对于稳定版 PostgreSQL，`pgsql-<category> -v N` 现在与 `pgN-<category>` 使用相同的平台及 PostgreSQL 大版本矩阵。例如，`pig ext add pgsql-gis -v 14 --plan` 不再混入仅适用于较新 PostgreSQL 大版本的软件包。软件包名称统一从目录取得，解析器中旧的 pgaudit 特殊改名规则已移除。Beta 目标仍沿用借用最新稳定版矩阵、仅保留 PGDG 来源的回退策略。
 
-## 目录口径与构建版本
+## 目录口径与构建版本 {#catalog-count-and-build-versions}
 
 内嵌目录包含 **626 条记录**，其中 **624 条可用**、**2 条为保留的已移除记录**。包含 PostgreSQL contrib 模块时，共对应 **518 个不同包名**；非 contrib 包系列共 **457 个**。详见 [目录条目计数口径](/zh/ext/#catalog-count)。
 
 Go 保持 `1.27.3`，内嵌 Pigsty 保持 `4.5.0`，默认 `cargo-pgrx` 保持 `0.19.3`。升级 PIG 请参阅 [安装文档](/zh/install/)。
 
-## 校验和
+## 校验和 {#checksums}
 
 ```checksums
 4981a060779423ab4d6c5baaa8fe6c26adb972fc34b9515119b9e5d4723513ce  pig-1.10.4-1.aarch64.rpm

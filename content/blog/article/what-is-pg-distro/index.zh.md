@@ -15,7 +15,7 @@ tags: [postgres, repo, ext, sty]
 
 --------
 
-## 一、从 Linux 与操作系统发行版说起
+## 一、从 Linux 与操作系统发行版说起 {#i-start-with-linux-distributions}
 
 说起 Distribution（发行版），绝大多数人第一反应都是 Linux 发行版 —— Red Hat、Debian、Ubuntu、SUSE、Arch…… 但问题是：既然已经有 Linux，为什么还需要 Linux 发行版？两者到底是什么关系？
 
@@ -37,7 +37,7 @@ tags: [postgres, repo, ext, sty]
 
 --------
 
-## 二、搬到 PostgreSQL：相似，但不相同
+## 二、搬到 PostgreSQL：相似，但不相同 {#ii-apply-the-analogy-to-postgresql-carefully}
 
 PostgreSQL 可以说是数据库世界的 Linux 内核，但如果直接把 Linux 这套逻辑搬到 PostgreSQL 上，第一步就会撞墙。
 
@@ -56,13 +56,13 @@ PG 发行版的价值，就在这里。它不是把 PostgreSQL 变成可用的�
 
 --------
 
-## 三、PG 发行版的三层工作
+## 三、PG 发行版的三层工作 {#iii-the-three-layers-of-a-pg-distribution}
 
 一个像样的 PG 发行版，至少要做好三件事：选择与集成、构建与分发、编排与管控。
 
 这三层都重要，但它们的边际价值并不一样。越往后，越接近真正的战场。
 
-### 1. 选择与集成：替用户做决定
+### 1. 选择与集成：替用户做决定 {#s-1-selection-and-integration-make-decisions-for-the-user}
 
 生产 PostgreSQL 不是一个裸 `postgres` 进程。你要备份，要高可用，要连接池，要监控，要日志，要告警，要对象存储，要扩展，要权限模型，要默认参数 —— 每一个位置都有一堆选项。
 
@@ -79,7 +79,7 @@ PG 发行版的价值，就在这里。它不是把 PostgreSQL 变成可用的�
 
 光会选型还不够，还要能可靠地交付。
 
-### 2. 构建与分发：供应链是信任，不是噱头
+### 2. 构建与分发：供应链是信任，不是噱头 {#s-2-build-and-distribution-a-supply-chain-is-trust-not-a-gimmick}
 
 第二层是构建与分发。这层经常被低估，因为用户只看到一个包名，很少看见后面那堆脏活：多系统、多架构、多版本、多扩展、依赖解析、ABI 兼容、GPG 签名、CVE 响应、仓库可用性、版本生命周期。
 
@@ -93,7 +93,7 @@ PGDG 已经做了一块很强的公共基础设施。PGDG 提供了 YUM 和 APT 
 
 真正把发行版和 “装包脚本” 拉开差距的，是下一层 —— 编排与管控。
 
-### 3. 编排与管控：把静态包变成活系统
+### 3. 编排与管控：把静态包变成活系统 {#s-3-orchestration-and-control-turn-static-packages-into-a-living-system}
 
 发行版中真正的硬骨头，其实是编排与管控。选型品味在收敛，构建分发只能守成，而编排与管控，是所有玩家真刀真枪见高下的地方。它的难点，一句话就能说清：**如何让这些 “静态的包”，变成 “动态运行的服务”？**
 
@@ -109,7 +109,7 @@ PGDG 已经做了一块很强的公共基础设施。PGDG 提供了 YUM 和 APT 
 
 --------
 
-## 四、编排的两条路：K8s 原生与 Linux 原生
+## 四、编排的两条路：K8s 原生与 Linux 原生 {#iv-two-paths-to-orchestration-kubernetes-native-and-linux-native}
 
 既然关键是编排，那么问题就变成：你把这套控制平面放在哪一层？
 
@@ -117,7 +117,7 @@ PGDG 已经做了一块很强的公共基础设施。PGDG 提供了 YUM 和 APT 
 
 以下 GitHub Star 数量统计于 2026 年 7 月 4 日。
 
-### 赛道一：Kubernetes（云原生）
+### 赛道一：Kubernetes（云原生） {#path-one-kubernetes-native}
 
 这条路把数据库当作 Kubernetes 上的一等公民，用 Operator 模式来编排。你按照 CRD 定义的类型创建一个声明式自定义资源，Operator 通过控制器的调谐循环（reconcile loop），持续地把集群的现实状态收敛到你声明的目标状态 —— 拉起、监控、故障切换、扩缩容，都在 K8s 这一层完成。
 
@@ -129,7 +129,7 @@ PGDG 已经做了一块很强的公共基础设施。PGDG 提供了 YUM 和 APT 
 
 ![CloudNativePG 项目首页](/article/what-is-pg-distro/cloudnative-pg.webp)
 
-### 赛道二：Linux 原生（原生操作系统）
+### 赛道二：Linux 原生（原生操作系统） {#path-two-linux-native}
 
 这条路不把数据库塞进 Kubernetes，而是回到操作系统本身：直接跑在 Linux 上，运行于物理机或虚拟机环境，安装 RPM / DEB 包，通过 systemd 管理服务，使用 Ansible 或者类似的 IaC 工具发起管理。
 
@@ -137,7 +137,7 @@ Linux 原生开源项目包括：Pigsty（约 5200 Star）、Autobase（约 4300
 
 这条路的优点是基础设施层次更少，可以直接使用熟悉的 Linux 工具。DBA 能直接检查进程、文件和服务。它的代价则是：没有 K8s 替你处理状态收敛、幂等执行、故障恢复、升级编排，你得自己想办法实现，还要直面十几种主流发行版大版本之间的差异 —— 这是一份持续的、并不性感的苦役。
 
-### Pigsty 的选择
+### Pigsty 的选择 {#pigsty-s-choice}
 
 两条路各有其合理性，选择哪条取决于你的团队已经站在哪里、把复杂度放在哪里更划算。Pigsty 选择了 Linux 原生这条道路，理由我在《[数据库是否应该放入 K8S 中](https://vonng.com/db/db-in-k8s/)》和《[容器化数据库是个好主意吗？](https://vonng.com/db/pg-in-docker)》里已经充分阐述过了 —— 我认为对于数据库来说，这是一条更贴合本质、艰难但正确的道路。
 
@@ -149,7 +149,7 @@ Linux 原生开源项目包括：Pigsty（约 5200 Star）、Autobase（约 4300
 
 --------
 
-## 五、再往前一步：Meta Distribution
+## 五、再往前一步：Meta Distribution {#v-one-step-further-a-meta-distribution}
 
 到这里，故事本可以收尾了。但 Pigsty 还做了一件更有意思的事，触及了 “PG 发行版” 这个词的边界。
 
@@ -196,7 +196,7 @@ Pigsty 选择的是另一条路：**把编排与管控的底盘抽出来，让�
 
 --------
 
-## 尾声：发行版是一条信任的供应链
+## 尾声：发行版是一条信任的供应链 {#epilogue-a-distribution-is-a-supply-chain-of-trust}
 
 绕回最初的问题：什么是 PostgreSQL 发行版？
 

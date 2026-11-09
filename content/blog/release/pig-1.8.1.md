@@ -4,7 +4,7 @@ linkTitle: "v1.8.1"
 date: 2026-09-03
 description: "CLI safety and repository hardening, a refreshed extension catalog, Go 1.27.1, and cargo-pgrx 0.19.2."
 tags: [cli, repo, build, catalog]
-weight: 2
+weight: 7
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.8.1
 ---
@@ -15,7 +15,7 @@ repository and build workflows, release integrity, and structured-output redacti
 refreshes the embedded extension catalog and moves the build toolchain to Go `1.27.1` and
 `cargo-pgrx 0.19.2`. The embedded Pigsty version remains `4.5.0`.
 
-## CLI safety and correctness
+## CLI safety and correctness {#cli-safety-and-correctness}
 
 - Read-only and configuration-independent commands no longer require a writable `HOME` or create
   `~/.pig` as a side effect. Leaf commands preserve their declared initialization policy.
@@ -27,7 +27,7 @@ refreshes the embedded extension catalog and moves the build toolchain to Go `1.
 - Structured results redact credentials, license material, and build-proxy identifiers while
   retaining truthful command failure.
 
-## Repository and build hardening
+## Repository and build hardening {#repository-and-build-hardening}
 
 - Repository add and remove operations now fail when any requested operation fails, deduplicate
   module selections, and preserve replacement boundaries.
@@ -40,7 +40,7 @@ refreshes the embedded extension catalog and moves the build toolchain to Go `1.
 - Self-update verifies release checksums, and release tooling refuses dirty or mismatched-tag
   publication and immutable artifact replacement.
 
-## Toolchain and catalog
+## Toolchain and catalog {#toolchain-and-catalog}
 
 - `pig build ext` and `pig build pkg` keep platform debug packages enabled by default;
   use `--nodbg` to omit them. `-s|--symbol` remains a deprecated compatibility no-op.
@@ -53,7 +53,7 @@ refreshes the embedded extension catalog and moves the build toolchain to Go `1.
   the superseded `pgcontext_pgvector` entry removed, and updates package versions, repository
   ownership, PostgreSQL coverage, and availability matrices.
 
-## Verification
+## Verification {#verification}
 
 The release is built from source commit
 [`1c6f524`](https://github.com/pgsty/pig/commit/1c6f52401accc8ad6d7e8ab51248895632d7629b).
@@ -63,7 +63,7 @@ vulnerability scanning, and a GoReleaser snapshot. The tag then passed the
 [Release workflow](https://github.com/pgsty/pig/actions/runs/33748002429), which produced the
 published RPM, DEB, macOS, and Linux artifacts.
 
-## Compatibility notes
+## Compatibility notes {#compatibility-notes}
 
 - No CLI command or flag is removed in this release.
 - Scripts that previously depended on read-only commands creating local configuration should
@@ -71,7 +71,7 @@ published RPM, DEB, macOS, and Linux artifacts.
 - The pgrx default changes to `0.19.2`; extension-specific metadata remains authoritative when a
   build requires another pgrx version.
 
-## Checksums
+## Checksums {#checksums}
 
 ```checksums
 4154b3e49cb499e57d7c7b1ab4ae5e45d03d5d0c2ffe26d6ade64e46db6923cf  pig-1.8.1-1.aarch64.rpm

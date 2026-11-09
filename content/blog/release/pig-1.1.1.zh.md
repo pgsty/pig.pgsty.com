@@ -4,19 +4,19 @@ linkTitle: "v1.1.1"
 date: 2026-02-14
 description: "修复路径、符号链接与构建目录迁移问题"
 tags: [repo, sty]
-weight: 136
+weight: 24
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.1.1
 ---
 
-## 修复
+## 修复 {#fixes}
 
 - 在迁移构建目录时保留符号链接语义，并支持跨文件系统移动。
 - 正确处理被配置为文件系统根目录的 PostgreSQL 日志目录，防止解析到预期目录之外的文件。
 - 允许 `pig repo rm` 删除名称中带点号的仓库模块，同时保留安全路径校验。
 - `pig sty init` 解压 Pigsty 发布包时允许安全的相对符号链接。
 
-## 校验和
+## 校验和 {#checksums}
 
 ```checksums
 22fe5e951f09e7cfa46ab22781199b3209792992940eb5615ace4928e41a7429  pig-1.1.1-1.aarch64.rpm

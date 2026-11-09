@@ -2,7 +2,7 @@
 title: "One Grammar for Dangerous Work: PIG's Operations CLI Safety Contract"
 linkTitle: "Operations CLI Safety"
 date: 2026-07-02
-lastmod: 2026-10-17
+lastmod: 2026-11-09
 description: "How PIG separates primitives from orchestrators, makes destructive intent explicit, and prevents aliases or structured output from changing operational meaning."
 tags: [cli, postgres, pgbackrest, pitr]
 weight: 40
@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **Decision date:** 2026-07-02<br>
-> **Status:** Released for `pg`, `pb`, `pt`, and `pitr` by v1.5.0; the 2026-08-29 `do` and `build proxy` refinements were released in [v1.8.1](/release/pig-1.8.1/). The acceptance refinements below are Implemented for v1.10.0; source evidence is listed under verification. They are not yet released.<br>
+> **Status:** Released for `pg`, `pb`, `pt`, and `pitr` by v1.5.0; the 2026-08-29 `do` and `build proxy` refinements shipped in [v1.8.1](/release/pig-1.8.1/), and the 2026-10-16 to 2026-10-17 acceptance refinements shipped in [v1.10.0](/release/pig-1.10.0/).<br>
 > **Current reference:** [`pig pg`](/pg/), [`pig pb`](/pb/), [`pig pitr`](/pitr/), [`pig do`](/do/), and [`pig build`](/build/)<br>
 > **Scope:** PIG-owned operational commands; transparent upstream commands retain upstream confirmation and exit behavior.
 
@@ -66,7 +66,7 @@ rendering used different definitions of success.
   optionally starts PostgreSQL, and deliberately leaves Patroni stopped for operator verification;
 - native tools receive extra arguments only through an explicit, documented boundary.
 
-The 2026-10-16 to 2026-10-17 refinements apply the same boundary to the v1.10.0 candidate:
+The 2026-10-16 to 2026-10-17 refinements apply the same boundary to v1.10.0:
 
 - Cross-user DBSU writes stage an exclusively created private sibling, use mode `0600` and the
   executing DBSU's ownership, reject symlink/non-regular destinations, replace the exact path,
@@ -137,7 +137,7 @@ Fixed source commits and regression tests for the committed v1.10.0 refinements 
 [fork ownership and private paths](https://github.com/pgsty/pig/commit/9db279947ef5d2492956a482a984685e8f807c5f),
 [PITR cancellation and unknown state](https://github.com/pgsty/pig/commit/54d4bae5480a2424ec4842e64ca8e9f810e8d354),
 [plan target preservation](https://github.com/pgsty/pig/commit/da0706fa3c676b8d912b4c7a556ee58dbe8045f3),
-[status error classification](https://github.com/pgsty/pig/commit/e6cd11f59590d158749eface28a470a78e17bba4). These commits do not establish a release boundary.
+[status error classification](https://github.com/pgsty/pig/commit/e6cd11f59590d158749eface28a470a78e17bba4). These refinements shipped in [v1.10.0](https://github.com/pgsty/pig/releases/tag/v1.10.0).
 The later [maintenance database-name and `--` operand boundaries](https://github.com/pgsty/pig/commit/5cf691b7fc559a5f3dd0c9d346927188f8b63375)
 include Cobra argument-reparse tests and a real libpq target-boundary regression test.
 The [repository operand preflight](https://github.com/pgsty/pig/commit/981726b27786be78832b2c1b457e55ebf7505fe9) rejects

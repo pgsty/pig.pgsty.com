@@ -4,19 +4,19 @@ linkTitle: "v1.1.1"
 date: 2026-02-14
 description: "Path, symlink, and build migration fixes"
 tags: [repo, sty]
-weight: 136
+weight: 24
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.1.1
 ---
 
-## Fixes
+## Fixes {#fixes}
 
 - Preserve symlink semantics during build-tree migration and support cross-device moves.
 - Handle a PostgreSQL log directory configured as the filesystem root without resolving files outside the intended directory.
 - Allow `pig repo rm` to remove repository modules whose names contain dots while retaining safe-path validation.
 - Accept safe relative symlinks when `pig sty init` extracts a Pigsty release archive.
 
-## Checksums
+## Checksums {#checksums}
 
 ```checksums
 22fe5e951f09e7cfa46ab22781199b3209792992940eb5615ace4928e41a7429  pig-1.1.1-1.aarch64.rpm

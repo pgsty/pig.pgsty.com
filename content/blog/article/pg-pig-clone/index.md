@@ -14,7 +14,7 @@ This is a particularly good fit for AI agents. As I wrote in [What Kind of Datab
 
 Today I saw [an article from Aliyun](https://mp.weixin.qq.com/s?__biz=Mzk2NDgzOTk3NA==&mid=2247523890&idx=1&sn=fdfe899fc6f7601f586b4ba32eaf147b&scene=21#wechat_redirect) announcing support for this feature in Alibaba Cloud RDS for PostgreSQL. I couldn't help laughing: that took them long enough. The feature itself is not complicated. It requires no kernel patch—just enable one setting in PostgreSQL 18 and add a `STRATEGY` option when creating the database. But simple as it sounds, a robust implementation still has a few edge cases to handle.
 
-## A Few Improvements
+## A Few Improvements {#a-few-improvements}
 
 Previously, cloning a database through Pigsty's IaC-style workflow was still somewhat cumbersome: first define the clone with another database as its template, then run the database creation workflow.
 
@@ -30,7 +30,7 @@ The command automatically detects whether instant cloning is both enabled and su
 
 As long as the underlying filesystem supports CoW, such as XFS, cloning a database takes essentially constant time—usually a few hundred milliseconds—and initially needs only metadata space. Subsequent writes allocate new space for the modified blocks.
 
-## Agent-Native CLI
+## Agent-Native CLI {#agent-native-cli}
 
 This command-line tool is built specifically for DBAs and DBA agents. You could already clone a database with an Ansible playbook or Pigsty's `/pg/bin/pg-clone` shell script, but neither is as convenient as using the `pig` CLI directly.
 
@@ -44,7 +44,7 @@ Incidentally, both normal command output and help output are available as text, 
 
 I call this design an Agent-Native CLI, and I have written about it before.
 
-## Instance-Level Forks
+## Instance-Level Forks {#instance-level-forks}
 
 Database cloning is not the only related new feature worth mentioning. In [Git for Data: Instant PostgreSQL Database and Instance Cloning](https://vonng.com/en/pg/pg-clone/), I also covered instant instance-level cloning, which I call a “fork.”
 
@@ -60,7 +60,7 @@ This release of the `pig` CLI adds many management features, including operation
 
 ![PIG instant PostgreSQL cloning workflow](/article/pg-pig-clone/featured.webp)
 
-## Further Reading
+## Further Reading {#further-reading}
 
 - [Git for Data: Instant PostgreSQL Database Cloning](https://vonng.com/en/pg/pg-clone/)
 - [Put Your AI Agent's State in a Database](https://vonng.com/en/db/agent-state-db/)

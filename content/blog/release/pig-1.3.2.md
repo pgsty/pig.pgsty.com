@@ -4,7 +4,7 @@ linkTitle: "v1.3.2"
 date: 2026-03-23
 description: "Routine metadata refresh, a new pg tune command, and new build aliases"
 tags: [catalog, build, ext, postgres]
-weight: 101
+weight: 20
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.3.2
 ---
@@ -16,7 +16,7 @@ Routine maintenance release.
 - Add `pdu` and `pgdog` source package aliases for `pig build get`.
 - Migrate extension catalog URLs from `pgext.cloud` to `pigsty.io/ext`.
 
-## Checksums
+## Checksums {#checksums}
 
 ```checksums
 d760f47652ff3e2e4a61eb7b9a68ca68665b2b36c187c52f5eaf50d2f007d8f3  pig-1.3.2-1.aarch64.rpm

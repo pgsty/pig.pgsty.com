@@ -4,12 +4,12 @@ linkTitle: "v0.7.5"
 date: 2025-12-15
 description: "Routine extension update, fixed aliyun mirror"
 tags: [repo]
-weight: 171
+weight: 30
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v0.7.5
 ---
 
-## Extension Updates
+## Extension Updates {#extension-updates}
 
 - timescaledb 2.23.1 -> 2.24.0
 - pg_search 0.20.0 -> 0.20.3
@@ -22,11 +22,11 @@ release_url: https://github.com/pgsty/pig/releases/tag/v0.7.5
 - wrappers 0.5.6 -> 0.5.7
 - pg_vectorize 0.25.0 -> 0.26.0
 
-## Repository Updates
+## Repository Updates {#repository-updates}
 
 Use the fixed Aliyun PGDG mirror repository
 
-## Checksums
+## Checksums {#checksums}
 
 ```checksums
 9de11ac1404fc4100074113f2a5d50e4ec42c353b6e122a0b29edc17e53feca6  pig-0.7.5-1.aarch64.rpm

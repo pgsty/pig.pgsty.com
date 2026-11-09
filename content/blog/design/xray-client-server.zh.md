@@ -2,17 +2,17 @@
 title: "一键配置 Xray 客户端与服务端"
 linkTitle: "Xray 客户端与服务端"
 date: 2026-10-05
-lastmod: 2026-10-17
+lastmod: 2026-11-09
 description: "以现有可工作的客户端与服务端为参考，为 build proxy 增加配套的 VLESS、REALITY 与 Vision 初始化能力。"
 tags: [build, cli, install]
-weight: 90
+weight: 95
 authors: [Vonng]
 draft: false
 ---
 
 > **决策日期：** 2026-10-05<br>
-> **状态：** Released（已发布），随 [v1.9.0](/zh/release/pig-1.9.0/) 交付。 下述验收修订已实现（Implemented），纳入 v1.10.0 候选版本，尚未发布。<br>
-> **当前参考：** [`pig build`](/zh/build/)、[运维安全契约](/zh/design/ops-cli-safety/)与[发布历史](/zh/release/)<br>
+> **状态：** Released（已发布），随 [v1.9.0](/zh/release/pig-1.9.0/) 交付；2026-10-16 的服务定义识别修订随 [v1.10.0](/zh/release/pig-1.10.0/) 发布。<br>
+> **当前参考：** [`pig build`](/zh/build/)、[运维安全契约](/zh/design/ops-cli-safety/) 与 [发布历史](/zh/release/)<br>
 > **范围：** 一键配置 Xray 客户端与服务端；Linux 客户端和服务端，以及 macOS 客户端。共享 Nginx 入口仍是独立部署边界。
 
 ## 决策 {#decision}
@@ -133,13 +133,13 @@ Vision 与 Chrome 采用下述默认值。所有输入形式进入同一份经�
 只支持参考组合 REALITY + Vision + TCP/RAW。URI 中的 `type=tcp` 映射为 JSON
 `network: raw`，`pbk` 映射为 `password`，`sid` 映射为 `shortId`，`pqv` 映射为
 `mldsa65Verify`。保留 ML-DSA 验证字段，不静默丢弃。拒绝重复参数，以及会改变连接语义的
-不支持参数。映射遵循[上游分享链接规范](https://github.com/XTLS/Xray-core/discussions/716)。
+不支持参数。映射遵循 [上游分享链接规范](https://github.com/XTLS/Xray-core/discussions/716)。
 
 首次设置使用 `socks` 入站，默认绑定 `127.0.0.1:12345`，沿用现有 PIG 客户端默认地址。
 可通过 `--listen 127.0.0.1:8888` 显式使用已检查的本地客户端地址。重复设置未指定 `--listen` 时，
 保留已有受管理客户端的监听地址。同一端口提供 HTTP，启用 UDP，关闭 multiplexing。
 出站使用 `encryption: none`、Vision flow、Chrome 指纹与 `spiderX: /`。
-上游 [Socks 参考](https://xtls.github.io/en/config/inbounds/socks.html)明确说明支持 HTTP。
+上游 [Socks 参考](https://xtls.github.io/en/config/inbounds/socks.html) 明确说明支持 HTTP。
 分别验证 HTTP 与 SOCKS，不能仅以 TCP 端口开启认定代理工作。
 
 命令行字段与现有参考配置的对应关系如下。客户端路径相对于 VLESS 出站，服务端路径相对于
@@ -233,7 +233,7 @@ SNI map、接收 PROXY 头的网站后端，以及操作系统特定的服务注
 ## 验证与演进 {#verification}
 
 v1.10.0 已提交修订的固定源码与回归测试证据包括：
-[完整旧服务定义识别](https://github.com/pgsty/pig/commit/9ab5be72360a2d1344e90df3cafd2cff2d914b2a)。这些提交不构成版本发布证据。
+[完整旧服务定义识别](https://github.com/pgsty/pig/commit/9ab5be72360a2d1344e90df3cafd2cff2d914b2a)。该修订已随 [v1.10.0](https://github.com/pgsty/pig/releases/tag/v1.10.0) 发布。
 下列 v1.9.0 运行验证针对原始实现。
 
 实现提交为
@@ -261,5 +261,5 @@ HTTP 与 SOCKS 访问可达的 TLS 网站均返回 HTTP 200。该服务器的网
 
 ## 当前状态 {#status}
 
-已随 [v1.9.0](https://github.com/pgsty/pig/releases/tag/v1.9.0) 发布。
+已随 [v1.9.0](https://github.com/pgsty/pig/releases/tag/v1.9.0) 发布，并在 [v1.10.0](https://github.com/pgsty/pig/releases/tag/v1.10.0) 中补齐旧服务定义识别。
 Nginx 入口自动化与凭据轮换留待后续设计。

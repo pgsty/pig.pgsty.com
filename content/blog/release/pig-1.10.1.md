@@ -1,10 +1,10 @@
 ---
 title: "pig v1.10.1"
 linkTitle: "v1.10.1"
-date: 2026-10-24T00:00:00+08:00
+date: 2026-10-24
 description: "Go 1.27.3 security update, refreshed dependencies, and 615 extension catalog entries."
 tags: [build, catalog, cli]
-weight: -1
+weight: 4
 authors: [Vonng]
 draft: false
 release_url: https://github.com/pgsty/pig/releases/tag/v1.10.1
@@ -14,7 +14,7 @@ PIG `v1.10.1` is a security and catalog maintenance release. It upgrades Go to
 `1.27.3`, refreshes tooling dependencies, and expands the embedded PostgreSQL
 extension catalog from **603 to 615 entries**.
 
-## Security update
+## Security update {#security-update}
 
 - Upgrade the Go toolchain from `1.27.2` to `1.27.3`. CI and release builds read
   the version from `go.mod`.
@@ -27,7 +27,7 @@ Go `1.27.3` adds **one security fix** over `1.27.2`, as documented in the
 [Go release announcement](https://groups.google.com/g/golang-announce/c/66pojueaQek).
 Earlier Go security fixes are already included in the `1.27.2` baseline used by PIG `v1.10.0`.
 
-## Dependency updates
+## Dependency updates {#dependency-updates}
 
 Update inherited tooling dependencies through version-specific module replacements:
 
@@ -38,7 +38,7 @@ Update inherited tooling dependencies through version-specific module replacemen
 | `golang.org/x/mod` | `v0.41.0` | `v0.42.0` |
 | `golang.org/x/tools` | `v0.51.0` | `v0.52.0` |
 
-## Extension catalog
+## Extension catalog {#extension-catalog}
 
 The embedded catalog now contains **615 entries**, with **12 additions** since `v1.10.0`:
 
@@ -51,7 +51,7 @@ The total follows the [catalog-entry counting rule](/ext/#catalog-count): it inc
 packaged SQL utilities and retained records for removed extensions. It does not imply
 that all 615 entries support `CREATE EXTENSION` or can be installed on every platform.
 
-## Compatibility
+## Compatibility {#compatibility}
 
 Commands, flags, and configuration remain compatible with `v1.10.0`.
 Embedded Pigsty remains at `4.5.0`, and default `cargo-pgrx` remains at `0.19.3`.
@@ -61,7 +61,7 @@ Follow the [installation guide](/install/) to upgrade PIG. Replacing the PIG exe
 brings in the updated Go standard library; upgrading the host's Go installation alone
 does not update an existing PIG binary.
 
-## Checksums
+## Checksums {#checksums}
 
 ```checksums
 fbd58de4cd1fa767c6d2b15d4fcb029fe38c90a0d12db2e387b7f698b5c8a69d  pig-1.10.1-1.aarch64.rpm

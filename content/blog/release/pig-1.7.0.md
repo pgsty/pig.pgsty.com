@@ -4,14 +4,14 @@ linkTitle: "v1.7.0"
 date: 2026-08-12
 description: "Safer EL module handling, refreshed China mirrors, streamlined EL7 compatibility, and 575 packaged extensions."
 tags: [repo, catalog, ext]
-weight: 3
+weight: 9
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.7.0
 ---
 
 Pig `v1.7.0` is a repository compatibility and catalog release on top of [v1.6.2](/release/pig-1.6.2/). It makes China-mirror selection explicit, preserves native DNF module filtering by default, restores a streamlined EL7 repository catalog, and grows the bundled extension snapshot from 572 to 575. The embedded Pigsty version remains `4.5.0`.
 
-## Highlights
+## Highlights {#highlights}
 
 - `-m|--mirror` now selects the bundled `china` repository definitions directly. PGDG, Rocky Linux, Debian, Ubuntu, Docker, and other regional routes use the maintained mirror list instead of the former runtime PGDG proxy rewrite.
 - EL repository definitions no longer receive `module_hotfixes=1` globally. Pigsty and PGDG repositories that intentionally override module streams opt in explicitly; BaseOS, AppStream, EPEL, and other repositories retain native DNF module filtering.
@@ -19,21 +19,21 @@ Pig `v1.7.0` is a repository compatibility and catalog release on top of [v1.6.2
 - Repository setup now reports unsupported platforms when the catalog has no matching definitions, instead of continuing with an empty repository set.
 - Release metadata is bumped to `1.7.0`; the embedded Pigsty version remains `4.5.0`.
 
-## Extension Catalog
+## Extension Catalog {#extension-catalog}
 
 - Packaged extensions: **572 -> 575**, with no removals.
 - 3 new extensions: `pg_local_cache 1.2.0`, `pg_statviz 0.1.0`, and `pg_policy 0.1.0`.
 - Version refreshes include `biscuit 3.0.0`, `pg_clickhouse 0.10.0`, `pg_search 0.25.2`, `pg_turbovec` packages `1.29.0`, `pg_uuid_v8 1.1.0`, and the Debian `q3c 2.0.5` package.
 - Package metadata and availability matrices are refreshed. Run `pig ext reload` when you need a catalog newer than this release snapshot.
 
-## Compatibility Notes
+## Compatibility Notes {#compatibility-notes}
 
 - No commands or global flags are removed in this release.
 - `-m|--mirror` is now an explicit China-region selection rather than a PGDG proxy rewrite. Use `--region=default|china|europe` when you need a specific route.
 - Custom EL repository definitions that require module-stream overrides must now set `meta.module_hotfixes: 1` explicitly. This setting is intentionally omitted for ordinary OS repositories and removed on EL7.
 - EL7 is end-of-life and only has limited compatibility coverage; prefer EL8 or newer for current PostgreSQL and extension packages.
 
-## Checksums
+## Checksums {#checksums}
 
 ```checksums
 e3a339fefdd2203825d15438b52f18e729547eb88dae014212a46006a9bd47d1  pig-1.7.0-1.aarch64.rpm

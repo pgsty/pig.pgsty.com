@@ -11,7 +11,7 @@ This month, [KubeSphere removed its container images](https://vonng.com/en/cloud
 
 I was disappointed by the response. I stopped relying on Chinese cloud and university mirrors and built a domestic mirror of the PGDG YUM and APT repositories myself.
 
-## PGDG's "Supply Cut"
+## PGDG's "Supply Cut" {#pgdg-s-supply-cut}
 
 PostgreSQL is one of the most widely used open-source databases. Many Linux users install it through the PGDG APT and YUM repositories.
 In mid-May, PGDG (PostgreSQL Global Development Group) closed the FTP and rsync channels used to synchronize its repositories. Most mirrors stopped receiving updates and continued serving packages that were months old.
@@ -38,14 +38,14 @@ At that time, Germany's xTom appeared to update its mirror manually each month. 
 | PIGSTY          | China   | **2025-08-14**    | [repository docs](https://pigsty.io/docs/repo/)                                        |
 {.wide .expand}
 
-## Mirrors "Stop Updating"
+## Mirrors "Stop Updating" {#mirrors-stop-updating}
 
 For instance, the 17.5 May update fixed [CVE-2025-4207](https://www.postgresql.org/support/security/CVE-2025-4207/) GB18030-related vulnerability,
 and the just-released [17.6 series](https://www.postgresql.org/about/news/postgresql-176-1610-1514-1419-1322-and-18-beta-3-released-3118/) fixed 3 CVEs and 55 bugs. If you're a mirror user, you can't update and patch in time. Not to mention PostgreSQL 18 releasing next month. We're still in the early stages — just two PG minor versions behind, but soon it'll be a major version behind. All those accumulated vulnerability patches and security fixes become unavailable to domestic users, creating increasingly larger exposure risks.
 
 From a mirror user's perspective, the flow of updates had stopped. PGDG did provide an alternative: direct downloads through a CDN.
 
-## Why PGDG "Cut Supply"
+## Why PGDG "Cut Supply" {#why-pgdg-cut-supply}
 
 In the PostgreSQL mailing list, on May 20th, a Korean mirror maintainer asked why rsync sync with PGDG official repository suddenly broke.
 
@@ -53,7 +53,7 @@ Dave Page explained that FTP and rsync had never been officially supported servi
 
 The reasoning is understandable: a CDN can serve users directly across many locations. PGDG kept HTTP access available and closed FTP and rsync. Users who could reach the CDN could switch to the official repository.
 
-## What This Meant for Users in China
+## What This Meant for Users in China {#what-this-meant-for-users-in-china}
 
 The disruption had less impact where users could reach PGDG's CDN. In mainland China, access to those CDN endpoints was unreliable or blocked. Stale domestic mirrors therefore left many users without a practical source of current packages.
 
@@ -63,7 +63,7 @@ From this angle, **Chinese users faced a real supply-chain bottleneck**. PGDG ha
 
 Common choices included Alibaba Cloud, Tsinghua University's TUNA, Zhejiang University, and USTC. The mirrors I checked had stopped updating. That was frustrating, although these were free services rather than contracted suppliers.
 
-## Supply Chain Risk
+## Supply Chain Risk {#supply-chain-risk}
 
 In ["How to Safely Use Open-Source Software?"](https://mp.weixin.qq.com/s/-2CeJq1XZdwifZkJY2oXNA) and ["Does Open-Source Software Have Supply Cut Risk?"](https://mp.weixin.qq.com/s/vSxWUcFgbS3D_0tZnBIfdg), Tison distinguishes access to source code from access to a supplier's services. His argument is that a supplier cannot withdraw the rights already granted over an open-source copy. Expectations of continued service often get confused with those rights.
 
@@ -73,7 +73,7 @@ Distribution has costs. Developers may enjoy writing software, but packaging, re
 
 Most users do not pay PGDG or mirror operators. An open-source license does not require its authors to operate a package repository indefinitely. Users who depend on a free service still need to decide how to maintain their own supply chain.
 
-## How to Solve Supply Chain Risk?
+## How to Solve Supply Chain Risk? {#how-to-solve-supply-chain-risk}
 
 Could commercial database vendors solve this? Many Chinese database products derive from PostgreSQL, so I expected at least some vendors to maintain a local mirror. Yet many depended on Alibaba Cloud or TUNA themselves. Others shipped a few RPM files rather than maintaining a repository at all.
 
@@ -83,7 +83,7 @@ I still use PGDG for the standard PostgreSQL packages. Devrim and Christoph alre
 
 I reported the problem to Alibaba Cloud and TUNA and discussed it with Dege. Weeks passed without a resolution. I was disappointed, but waiting longer would not solve the problem for Pigsty users.
 
-## I'll Do It Myself
+## I'll Do It Myself {#i-ll-do-it-myself}
 
 So I built the mirror. FTP and rsync were closed, but HTTP remained available. Yesterday, with help from Claude Code, I spent about two hours writing a synchronization process with apt-mirror and reposync, then downloaded and tested the packages. The solution was much simpler than I had expected. It was frustrating to see such a small amount of work remain undone for so long.
 

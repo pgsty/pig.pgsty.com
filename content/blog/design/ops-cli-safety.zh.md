@@ -2,7 +2,7 @@
 title: "危险操作只有一套语法：PIG 运维 CLI 安全契约"
 linkTitle: "运维 CLI 安全"
 date: 2026-07-02
-lastmod: 2026-10-17
+lastmod: 2026-11-09
 description: "PIG 如何分离底层原语与编排器、显式表达破坏性意图，并防止别名或结构化输出改变操作含义。"
 tags: [cli, postgres, pgbackrest, pitr]
 weight: 40
@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **决策日期：** 2026-07-02<br>
-> **状态：** `pg`、`pb`、`pt`、`pitr` 已于 v1.5.0 交付；2026-08-29 的 `do` 与 `build proxy` 修订已随 [v1.8.1](/zh/release/pig-1.8.1/) 发布。下述验收修订已实现（Implemented），面向 v1.10.0；源码证据见验证章节，尚未发布。<br>
+> **状态：** `pg`、`pb`、`pt`、`pitr` 已于 v1.5.0 交付；2026-08-29 的 `do` 与 `build proxy` 修订随 [v1.8.1](/zh/release/pig-1.8.1/) 发布，2026-10-16 至 2026-10-17 的验收修订随 [v1.10.0](/zh/release/pig-1.10.0/) 发布。<br>
 > **当前参考：** [`pig pg`](/zh/pg/)、[`pig pb`](/zh/pb/)、[`pig pitr`](/zh/pitr/)、[`pig do`](/zh/do/) 与 [`pig build`](/zh/build/)<br>
 > **范围：** PIG 实现的运维命令；透明上游命令继续采用上游的确认与退出行为。
 
@@ -54,7 +54,7 @@ PostgreSQL 停止、恢复、重新启动与恢复后指引。任何别名都不
   并有意保持 Patroni 停止，等待运维人员验证；
 - 额外原生参数只通过明确记录的边界传递。
 
-2026-10-16 至 2026-10-17 的修订将相同边界用于 v1.10.0 候选版本：
+2026-10-16 至 2026-10-17 的修订将相同边界用于 v1.10.0：
 
 - 跨用户 DBSU 写入以排他方式创建私有临时文件，使用 `0600` 和执行 DBSU 的属主，拒绝符号链接与
   非普通文件目标，精确替换目标路径，失败时清理暂存。Linux 使用精确目标重命名；macOS 使用系统
@@ -114,7 +114,7 @@ v1.10.0 已提交修订的固定源码与回归测试证据包括：
 [fork 归属与私有路径](https://github.com/pgsty/pig/commit/9db279947ef5d2492956a482a984685e8f807c5f)、
 [PITR 取消与未知状态](https://github.com/pgsty/pig/commit/54d4bae5480a2424ec4842e64ca8e9f810e8d354)、
 [计划目标保留](https://github.com/pgsty/pig/commit/da0706fa3c676b8d912b4c7a556ee58dbe8045f3)、
-[状态错误分类](https://github.com/pgsty/pig/commit/e6cd11f59590d158749eface28a470a78e17bba4)。这些提交不构成版本发布证据。
+[状态错误分类](https://github.com/pgsty/pig/commit/e6cd11f59590d158749eface28a470a78e17bba4)。上述修订已随 [v1.10.0](https://github.com/pgsty/pig/releases/tag/v1.10.0) 发布。
 后续的[维护数据库名与 `--` 操作数边界修订](https://github.com/pgsty/pig/commit/5cf691b7fc559a5f3dd0c9d346927188f8b63375)
 包含 Cobra 参数重解析测试与真实 libpq 目标边界回归测试。
 [仓库参数预检](https://github.com/pgsty/pig/commit/981726b27786be78832b2c1b457e55ebf7505fe9) 在准备密钥或写入仓库前拒绝

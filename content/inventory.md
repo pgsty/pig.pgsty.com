@@ -44,7 +44,7 @@ require a supported YAML source. [`pig do`](/do/) can forward a directory or exe
 to Ansible; [`pig sty deploy`](/sty/#sty-deploy) requires a regular file. Both pass the resolved
 path explicitly to Ansible, so it cannot silently select a different default.
 
-## Quick Start
+## Quick Start {#quick-start}
 
 ```bash
 pig inventory status                     # which inventory source is active?
@@ -55,7 +55,7 @@ pig inventory check -p ssh --sudo        # add SSH/sudo readiness probes
 pig inventory diff /path/other.yml       # compare declarations with another file
 ```
 
-## inv status / list / show
+## inv status / list / show {#inv-status-list-show}
 
 ```bash
 pig inv status                          # show the active path and source type
@@ -66,7 +66,7 @@ pig inv show pg-meta                    # print the cluster YAML verbatim
 
 `status` inspects the source without executing a dynamic inventory. `list` shows groups, hosts, keys, and value types. `show` prints actual values, including any passwords in the selected configuration. Adding `-o json` does not change its YAML output.
 
-## Selectors
+## Selectors {#selectors}
 
 `list` / `show` / `edit` accept an optional **selector** that addresses one fragment:
 
@@ -78,7 +78,7 @@ pig inv e pg-meta.vars.pg_databases      # a nested key path
 pig inv e 'pg-meta.hosts["10.10.10.10"]' # dotted keys (e.g. IPs) via quoted brackets
 ```
 
-## inv edit
+## inv edit {#inv-edit}
 
 Open the selected fragment in `$EDITOR`. After you save and exit, PIG restores the indentation and newline style, parses the complete document, checks for concurrent changes, and replaces the original file atomically. If parsing fails, PIG keeps the temporary file so you can correct it.
 
@@ -95,7 +95,7 @@ pig inv e vars --from vars.yml           # replace the fragment from a file (or 
 
 The saved file belongs to the current user. PIG removes group and other permissions, usually producing mode `0600`, and preserves stricter owner-only permissions. The structured result's `mode_tightened` field reports this change.
 
-## inv validate
+## inv validate {#inv-validate}
 
 Validates one complete static Pigsty inventory: YAML structure, Ansible conventions, and
 Pigsty semantics (such as `admin_ip`, the `infra` group, and IPv4 host keys) are checked
@@ -126,7 +126,7 @@ downstream YAML consumers from changing their types. Existing unquoted or explic
 retain their source bytes and use the opaque `unknown` scalar kind; quote them when a string is intended.
 `show` and explicit CMDB exports retain their raw-data contract.
 
-## inv check
+## inv check {#inv-check}
 
 Readiness checks on top of static validation: by default only the inventory and local
 controller conditions are checked; add probes with `--profile`.
@@ -149,7 +149,7 @@ pig inv ck -p ssh --sudo                 # SSH probes plus sudo -n validation
 
 `--user` and `--port` use explicit arguments or the defaults above. They do not infer effective SSH variables from the inventory. Combine profiles with commas, for example `--profile ansible,ssh`.
 
-## inv diff
+## inv diff {#inv-diff}
 
 Compare the active inventory with another file. The result lists added, removed, and changed declarations by path and value type, without configuration values:
 
@@ -158,7 +158,7 @@ pig inv diff other.yml
 pig inv diff other.yml -o json
 ```
 
-## inv cmdb (experimental)
+## inv cmdb (experimental) {#inv-cmdb}
 
 `pig inventory cmdb` exchanges the inventory with Pigsty's existing CMDB schema
 (`files/cmdb.sql`, the `pigsty` / `pglog` schemas) over a native PostgreSQL driver.
@@ -186,7 +186,7 @@ pig inventory cmdb disable               # switch back to the static pigsty.yml
 
 `init` runs `cmdb.sql` and replaces existing `pigsty` / `pglog` schemas. Back up data you need to retain before running it. `load` replaces all declaration rows in one transaction. Interactive mode asks you to confirm the target; use `--yes` for automation and structured output. Use `--plan` to inspect the operation first.
 
-## Design records
+## Design records {#design-records}
 
 - [Lossless Pigsty Inventory](/design/lossless-inventory/)
 - [Use the CMDB Pigsty Already Has](/design/existing-cmdb-boundary/)

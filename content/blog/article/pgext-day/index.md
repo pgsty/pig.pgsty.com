@@ -29,13 +29,13 @@ Below is the PG Extension Summit agenda - looking forward to seeing readers at t
 
 ------
 
-## Extension Summit Schedule
+## Extension Summit Schedule {#extension-summit-schedule}
 
 ![PGEXT Day 2025 schedule](/article/pgext-day/schedule.webp)
 
 ------
 
-### 1. From `pl/v8` to `pl/<any>`: Towards Easier Extension Development
+### 1. From `pl/v8` to `pl/<any>`: Towards Easier Extension Development {#s-1-from-pl-v8-to-pl-any-towards-easier-extension-development}
 
 **9:00 am → 25 min**, Hannu Krosing
 
@@ -58,7 +58,7 @@ Future expansions on pl/v8 could include:
 
 ------
 
-### 2. Upgrade as an Extension
+### 2. Upgrade as an Extension {#s-2-upgrade-as-an-extension}
 
 **9:30 am → 25 min**, Andrey Borodin
 
@@ -68,7 +68,7 @@ Future expansions on pl/v8 could include:
 
 ------
 
-### 3. Inlining Postgres Functions: Now and Then
+### 3. Inlining Postgres Functions: Now and Then {#s-3-inlining-postgres-functions-now-and-then}
 
 **10:00 am → 25 min**, Paul Jungwirth
 
@@ -78,7 +78,7 @@ When PostgreSQL calls user-defined functions (or built-in functions), it might a
 
 ------
 
-### 4. Postgres à la Carte: Dynamic Container Images with Your Choice of Extensions
+### 4. Postgres à la Carte: Dynamic Container Images with Your Choice of Extensions {#s-4-postgres-la-carte-dynamic-container-images-with-your-choice-of-extensions}
 
 **10:30 am → 25 min**, Alvaro Hernandez
 
@@ -92,7 +92,7 @@ This talk will explore the concepts and technology behind dynamic container imag
 
 ------
 
-### 5. Cppgres: One Less Reason to Hate C++
+### 5. Cppgres: One Less Reason to Hate C++ {#s-5-cppgres-one-less-reason-to-hate-c}
 
 **11:00 am → 25 min**, Yurii Rashkovskii
 
@@ -106,7 +106,7 @@ This talk will introduce **Cppgres**: a lightweight, header-only C++20 library f
 
 ------
 
-### 6. Working with MemoryContexts and Debugging Memory Leaks in Postgres
+### 6. Working with MemoryContexts and Debugging Memory Leaks in Postgres {#s-6-working-with-memorycontexts-and-debugging-memory-leaks-in-postgres}
 
 **11:30 am → 25 min**, Phil Eaton
 
@@ -116,7 +116,7 @@ This talk will focus on creating and switching MemoryContexts in real scenarios,
 
 ------
 
-### 7. Postgres as a Control Plane: Challenges in Offloading Compute via Extensions
+### 7. Postgres as a Control Plane: Challenges in Offloading Compute via Extensions {#s-7-postgres-as-a-control-plane-challenges-in-offloading-compute-via-extensions}
 
 **12:00 pm → 25 min**, Sweta Vooda
 
@@ -130,13 +130,13 @@ The session is aimed at engineers who want to offload computation while keeping 
 
 ------
 
-### 8. Lunch
+### 8. Lunch {#s-8-lunch}
 
 **12:30 pm → 60 min**
 
 ------
 
-### 9. The Missing Postgres Extension Repo and Package Manager
+### 9. The Missing Postgres Extension Repo and Package Manager {#s-9-the-missing-postgres-extension-repo-and-package-manager}
 
 **1:30 pm → 25 min**, Ruohang Feng
 
@@ -150,7 +150,7 @@ This talk will explore building this repository, including challenges like cross
 
 ------
 
-### 10. How to Automatically Release Your Extensions on PGXN
+### 10. How to Automatically Release Your Extensions on PGXN {#s-10-how-to-automatically-release-your-extensions-on-pgxn}
 
 **2:00 pm → 25 min**, David Wheeler
 
@@ -164,7 +164,7 @@ This talk will demonstrate setting up release processes on PGXN and achieving au
 
 ------
 
-### 11. Extending PostgreSQL with Java: Overcoming Development Challenges in Bridging Java and C Applications
+### 11. Extending PostgreSQL with Java: Overcoming Development Challenges in Bridging Java and C Applications {#s-11-extending-postgresql-with-java-overcoming-development-challenges-in-bridging-java-and-c-applications}
 
 **2:30 pm → 25 min**, Cary Huang
 
@@ -186,7 +186,7 @@ Attendees will learn how to bring change data from other databases into PostgreS
 
 ------
 
-### 12. Rethinking OLAP Architecture: The Journey to pg_mooncake v0.2
+### 12. Rethinking OLAP Architecture: The Journey to pg_mooncake v0.2 {#s-12-rethinking-olap-architecture-the-journey-to-pg-mooncake-v0-2}
 
 **3:00 pm → 25 min**, Cheng Chen
 
@@ -196,7 +196,7 @@ In this talk, we'll explore shortcomings of pg_mooncake v0.1 and major architect
 
 ------
 
-### 13. Spat: Hijacking Shared Memory for a Redis-Like Experience in PostgreSQL
+### 13. Spat: Hijacking Shared Memory for a Redis-Like Experience in PostgreSQL {#s-13-spat-hijacking-shared-memory-for-a-redis-like-experience-in-postgresql}
 
 **3:30 pm → 25 min**, Florents Tselai
 
@@ -210,7 +210,7 @@ Spat provides key-value storage patterns supporting strings, lists, sets, hashes
 
 ------
 
-### 14. Scaling PostgreSQL with Citus: Distributed Data for Modern Applications
+### 14. Scaling PostgreSQL with Citus: Distributed Data for Modern Applications {#s-14-scaling-postgresql-with-citus-distributed-data-for-modern-applications}
 
 **4:00 pm → 25 min**, Mehmet Yilmaz
 
@@ -227,7 +227,7 @@ Content includes:
 
 ------
 
-### 15. Extensibility - New Options and a Wish List
+### 15. Extensibility - New Options and a Wish List {#s-15-extensibility-new-options-and-a-wish-list}
 
 **4:30 pm → 25 min**, Alastair Turner
 
@@ -241,7 +241,7 @@ This talk will introduce recent new extensible areas (with example code) and dis
 
 ------
 
-### 16. Dinner
+### 16. Dinner {#s-16-dinner}
 
 **6:00 pm – 9:00 pm**
 
@@ -249,7 +249,7 @@ This talk will introduce recent new extensible areas (with example code) and dis
 
 ------
 
-## Looking Back at PGConf.dev 2024
+## Looking Back at PGConf.dev 2024 {#looking-back-at-pgconf-dev-2024}
 
 - [Andreas Scherbaum PostgreSQL Development Conference 2024 - Review](https://andreas.scherbaum.la/post/2024-06-14_postgresql-development-conference-2024-review/)
 - [PgCon 2024 Developer Meeting](https://wiki.postgresql.org/wiki/PgCon_2024_Developer_Meeting)

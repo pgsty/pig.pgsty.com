@@ -4,7 +4,7 @@ linkTitle: "v0.6.2"
 date: 2025-10-03
 description: "正式提供 PG 18 支持"
 tags: [repo]
-weight: 231
+weight: 36
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v0.6.2
 ---
@@ -13,7 +13,7 @@ release_url: https://github.com/pgsty/pig/releases/tag/v0.6.2
 - 在接收 Pigsty 版本字符串的时候，自动添加 `v` 前缀
 - 改进了网络检查与下载的逻辑
 
-## 校验和
+## 校验和 {#checksums}
 
 ```checksums
 01f5b7dc20644226c762dbb229768347  pig_0.6.2-1_amd64.deb

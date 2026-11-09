@@ -2,7 +2,7 @@
 title: "从面向人类到 Agent-Native：PIG 的 CLI 契约"
 linkTitle: "Agent-Native CLI"
 date: 2026-02-12
-lastmod: 2026-10-17
+lastmod: 2026-11-09
 description: "PIG 如何分别提供终端文本、结构化结果、执行计划与环境上下文。"
 tags: [cli]
 weight: 10
@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **决策日期：** 2026-02-12<br>
-> **状态：** 随 [pig v1.1.0](/zh/release/pig-1.1.0/) 发布，之后随命令层演进调整。下述验收修订已实现（Implemented），纳入 v1.10.0 候选版本，尚未发布。<br>
+> **状态：** 随 [pig v1.1.0](/zh/release/pig-1.1.0/) 发布，并在 [pig v1.10.0](/zh/release/pig-1.10.0/) 中完成下述验收修订。<br>
 > **当前参考：** [`pig` 命令总览](/zh/cmd/)<br>
 > **范围：** PIG 命令的自动化接口，以及外部工具的原生透传接口。
 
@@ -59,7 +59,7 @@ v1.1.0 引入了全局输出选择、稳定结果对象、执行计划与 `pig c
 
 - 可用性判断与各格式摘要共用矩阵优先级、架构别名及元数据回退规则。
   macOS 只报告声明支持的 PostgreSQL 版本，不承诺存在安装包。
-  这里描述的是目录中的包快照；默认[构建目标](/zh/build/#build-ext)仍按版本元数据与本机安装规则选择，
+  这里描述的是目录中的包快照；默认 [构建目标](/zh/build/#build-ext) 仍按版本元数据与本机安装规则选择，
   不受包矩阵影响。
 - 部分导入失败必须返回失败，同时保留已解析、已下载和未解析的条目。
   已完成的下载留在磁盘上，操作不承诺全有或全无事务。
@@ -82,7 +82,7 @@ stdout 纯净性需要测试，包装器也不能承诺比被委托工具更高�
 v1.10.0 已提交修订的固定源码与回归测试证据包括：
 [可用性与计数](https://github.com/pgsty/pig/commit/863a271a924a1634630247643d9d96200a98572d)、
 [部分导入失败](https://github.com/pgsty/pig/commit/a0e9cc477f3834607c03620cb7c77187773218b5)、
-[exporter HTTP 失败](https://github.com/pgsty/pig/commit/2214f598101c82ffb2b3bf2a6a7dd15d6f025483)。这些提交不构成版本发布证据。
+[exporter HTTP 失败](https://github.com/pgsty/pig/commit/2214f598101c82ffb2b3bf2a6a7dd15d6f025483)。上述修订已随 [v1.10.0](https://github.com/pgsty/pig/releases/tag/v1.10.0) 发布。
 
 最初框架随 [v1.1.0](https://github.com/pgsty/pig/releases/tag/v1.1.0) 发布。
 命令层整合提交 [`fb93602`](https://github.com/pgsty/pig/commit/fb93602) 随后删除重复包装器，

@@ -4,7 +4,7 @@ linkTitle: "v1.4.0"
 date: 2026-04-19
 description: "510 个扩展，pgrx 0.18.0，更多构建规格"
 tags: [build, catalog, patroni, repo]
-weight: 71
+weight: 17
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.4.0
 ---
@@ -15,7 +15,7 @@ release_url: https://github.com/pgsty/pig/releases/tag/v1.4.0
 - 修复 `repo set` 标志位隔离问题，并修正 PostgreSQL schema 级维护 SQL。
 - `el9.aarch64` 上的 `patroni` 升级到 `4.1.1`。
 
-## 校验和
+## 校验和 {#checksums}
 
 ```checksums
 c8d2f46ea1b25f7d4665ee0994f0cb403a59f1464f80b3ecfa575ac283e5ecd0  pig-1.4.0-1.aarch64.rpm

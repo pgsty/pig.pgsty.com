@@ -4,7 +4,7 @@ linkTitle: "v0.7.3"
 date: 2025-11-25
 description: "Fix repo for el10 & debian13"
 tags: [repo]
-weight: 191
+weight: 32
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v0.7.3
 ---
@@ -15,7 +15,7 @@ release_url: https://github.com/pgsty/pig/releases/tag/v0.7.3
 - Update extension versions
 - Bump Pigsty version to 3.7.0
 
-## Checksums
+## Checksums {#checksums}
 
 ```checksums
 83e1b491b58793859caaccb0600a8ad7f7c0ea71dfcbc1dc348bf4666f7dc742  pig-0.7.3-1.aarch64.rpm

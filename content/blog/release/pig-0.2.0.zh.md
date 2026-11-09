@@ -4,12 +4,12 @@ linkTitle: "v0.2.0"
 date: 2025-02-14
 description: "新增 DocumentDB、VectorChord-bm25 等扩展，更新 Citus、TimescaleDB、PGroonga 等版本。"
 tags: [catalog]
-weight: 361
+weight: 49
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v0.2.0
 ---
 
-## 新增扩展
+## 新增扩展 {#new-extensions}
 
 - [pg_documentdb_core](https://github.com/microsoft/documentdb/tree/main/pg_documentdb_core)，以及 FerretDB
 - [VectorChord-bm25](https://github.com/tensorchord/VectorChord-bm25) (vchord_bm25) 0.1.0
@@ -22,7 +22,7 @@ release_url: https://github.com/pgsty/pig/releases/tag/v0.2.0
 - [db_migrator](https://github.com/cybertec-postgresql/db_migrator) 1.0.0
 - [pg_cooldown](https://github.com/rbergm/pg_cooldown) 0.1
 
-## 扩展更新
+## 扩展更新 {#extension-updates}
 
 - citus 13.0.0 -> 13.0.1
 - pg_mooncake 0.1.0 -> 0.1.1

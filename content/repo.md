@@ -24,7 +24,7 @@ tags: [repo]
 | `repo reload` | Refresh repository catalog | |
 {.full-width .wide .expand}
 
-## Quick Start
+## Quick Start {#quick-start}
 
 On a host with working OS repositories, add the PostgreSQL repositories and refresh their indexes:
 
@@ -46,7 +46,7 @@ pig repo set
 
 Use `pig repo info pgsql` to inspect repository definitions. Use `pig repo status` to inspect the host's current configuration.
 
-## Modules
+## Modules {#modules}
 
 In pig, APT/YUM repositories are organized as **modules**: groups of repositories serving a specific purpose.
 
@@ -88,7 +88,7 @@ repository changes. A syntactically valid but unknown module retains the existin
 `repo add` adds valid modules and returns failure for unknown ones; `repo set` and
 `repo add --remove` reject the whole request.
 
-## Repository Definitions
+## Repository Definitions {#repository-definitions}
 
 The full repository definition bundled with Pigsty is in [`cli/repo/assets/repo.yml`](https://github.com/pgsty/pig/blob/main/cli/repo/assets/repo.yml).
 
@@ -96,7 +96,7 @@ Create `~/.pig/repo.yml` to override the embedded catalog. Use the source file a
 
 `--region` selects a regional URL from `baseurl`. If that region is absent, PIG uses `default`. `-m` selects `china`, including the Pigsty China mirror and other mirrors defined in the catalog.
 
-### Trust and configuration ownership
+### Trust and configuration ownership {#trust-and-configuration-ownership}
 
 `repo add` writes the selected module files and preserves other files. `repo set` and `repo add --remove` back up and replace the existing definitions. If Ansible or another tool manages these files, keep the definitions in that tool's configuration so its next run preserves your changes.
 
@@ -125,7 +125,7 @@ If preparation of an explicit key fails, repository configuration stops. Implici
 
 EL repositories retain DNF module filtering. Definitions with `module_hotfixes=1`, including Pigsty and PGDG, bypass module streams. PIG omits this key in EL7 configuration.
 
-## repo list
+## repo list {#repo-list}
 
 `pig repo list` lists all repository modules available on the current system.
 
@@ -134,7 +134,7 @@ pig repo list                # list repositories available on current system
 pig repo list all            # list all repositories without filtering
 ```
 
-## repo info
+## repo info {#repo-info}
 
 Show detailed information for specific repositories or modules, including URLs, metadata, regional mirrors, and `.repo` / `.list` repository file content.
 
@@ -144,7 +144,7 @@ pig repo info pigsty pgdg        # show multiple modules
 pig repo info all                # show all modules
 ```
 
-## repo status
+## repo status {#repo-status}
 
 Show current repository configuration on the system.
 
@@ -152,7 +152,7 @@ Show current repository configuration on the system.
 pig repo status
 ```
 
-## repo add
+## repo add {#repo-add}
 
 Add repository configuration files to the system. Requires root/sudo privileges.
 
@@ -167,12 +167,13 @@ pig repo add pgdg --region=china # use China mirror
 pig repo add pgsql -m            # explicitly select the China-region mirrors
 ```
 
-**Options:**
-
-- `-r|--remove`: remove existing repositories before adding new ones
-- `-u|--update`: run package cache update after adding repositories
-- `-m|--mirror`: explicitly select the bundled `china` repository definitions
-- `--region <region>`: use regional mirror repositories (`default` / `china` / `europe`)
+| Option | Description |
+|:---|:---|
+| `-r, --remove` | Remove existing repositories before adding new ones |
+| `-u, --update` | Run package cache update after adding repositories |
+| `-m, --mirror` | Explicitly select the bundled `china` repository definitions |
+| `--region <region>` | Use regional mirror repositories (`default` / `china` / `europe`) |
+{.full-width}
 
 | Platform | Module Location |
 |:---:|:---|
@@ -180,10 +181,10 @@ pig repo add pgsql -m            # explicitly select the China-region mirrors
 | Debian | `/etc/apt/sources.list.d/<module>.list` |
 {.full-width}
 
-## repo set
+## repo set {#repo-set}
 
 Back up and remove existing repository definitions, write the selected modules, then refresh package metadata.
-This is equivalent to `repo add --remove --update`. If you omit the modules, PIG uses `all`.
+This is equivalent to `repo add --remove --update` (alias `pig repo overwrite`). If you omit the modules, PIG uses `all`.
 
 ```bash
 pig repo set                     # replace with default repositories
@@ -194,7 +195,7 @@ pig repo set -m                  # explicitly select the China-region mirrors
 
 `repo set` supports the same `--region` and `-m|--mirror` options as `repo add`.
 
-## repo rm
+## repo rm {#repo-rm}
 
 With truly no operands, move all repository definitions to the existing backup directory.
 Explicit module operands remove only those module files; `all` expands to `node`, `pgsql`, and
@@ -221,7 +222,7 @@ pig repo rm pgdg pigsty -u       # remove and update cache
 | Debian | `/etc/apt/sources.list.d/backup/` |
 {.full-width}
 
-## repo update
+## repo update {#repo-update}
 
 Update package-manager cache to reflect repository changes.
 
@@ -235,7 +236,7 @@ pig repo update                  # update package cache
 | Debian | `apt-get update` |
 {.full-width}
 
-## repo create
+## repo create {#repo-create}
 
 Create a local package repository for offline installation.
 
@@ -265,7 +266,7 @@ Documentation packages such as `annobin-docs` are retained unless another cleanu
 
 SOW preserves non-package files and directories. It stops if a package cannot be parsed or package coordinates conflict. The legacy backend uses different cleanup rules and records MD5 hashes in `repo_complete`. PIG checks that this file exists; it does not check its hashes. Use the list to verify package integrity before distributing an offline bundle.
 
-## repo cache
+## repo cache {#repo-cache}
 
 Create a compressed tarball of repository contents for offline distribution.
 
@@ -275,17 +276,18 @@ pig repo cache -d /srv           # custom source directory
 pig repo cache pigsty docker     # include multiple top-level repositories
 ```
 
-**Options:**
-
-- `-d, --dir`: source directory, default `/www/`
-- `-p, --path`: output path, default `/tmp/pkg.tgz`
+| Option | Description |
+|:---|:---|
+| `-d, --dir` | Source directory, default `/www/` |
+| `-p, --path` | Output path, default `/tmp/pkg.tgz` |
+{.full-width}
 
 An offline bundle must include `pigsty` and a regular `pigsty/repo_complete` marker. Missing
 requested repositories are skipped and reported separately from the repositories actually included.
 Symbolic links are rejected because the native boot extractor accepts only directories and regular
 files. A failed cache leaves an existing output package unchanged.
 
-## repo boot
+## repo boot {#repo-boot}
 
 Extract and set up a local repository from an offline package.
 
@@ -295,10 +297,11 @@ pig repo boot -p /mnt/pkg.tgz    # custom package path
 pig repo boot -d /srv            # custom target directory
 ```
 
-**Options:**
-
-- `-p, --path`: package path, default `/tmp/pkg.tgz`
-- `-d, --dir`: target directory, default `/www/`
+| Option | Description |
+|:---|:---|
+| `-p, --path` | Package path, default `/tmp/pkg.tgz` |
+| `-d, --dir` | Target directory, default `/www/` |
+{.full-width}
 
 The command extracts into a staging directory, checks target paths, then moves the repositories into place. It moves additional repositories first and `pigsty` last.
 
@@ -306,7 +309,7 @@ The command extracts into a staging directory, checks target paths, then moves t
 - A conflicting target path stops extraction. After an interrupted run, inspect and move any conflicting directories before retrying.
 - The archive must contain a regular `pigsty/repo_complete` file. PIG checks its presence, not its contents.
 
-## repo reload
+## repo reload {#repo-reload}
 
 Download the latest repository catalog from the Pigsty repository sites.
 

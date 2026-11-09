@@ -4,7 +4,7 @@ linkTitle: "v1.4.1"
 date: 2026-05-01
 description: "510 个扩展，支持 Ubuntu 26.04，仓库校准"
 tags: [catalog, patroni]
-weight: 61
+weight: 16
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.4.1
 ---
@@ -14,7 +14,7 @@ release_url: https://github.com/pgsty/pig/releases/tag/v1.4.1
 - 将 `el9.aarch64` 特例中的 `patroni` / `patroni-etcd` 提升到 `4.1.2`。
 - 校准上游软件仓库定义。
 
-## 校验和
+## 校验和 {#checksums}
 
 ```checksums
 cbfbb04b9640dcf39fcd9ccfa49e500dd0e65b72c0326c0d166e6f43e52b6dc3  pig-1.4.1-1.aarch64.rpm

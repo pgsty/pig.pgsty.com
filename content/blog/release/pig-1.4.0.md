@@ -4,7 +4,7 @@ linkTitle: "v1.4.0"
 date: 2026-04-19
 description: "510 extensions, pgrx 0.18.0, more building specs"
 tags: [build, catalog, patroni, repo]
-weight: 71
+weight: 17
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.4.0
 ---
@@ -15,7 +15,7 @@ release_url: https://github.com/pgsty/pig/releases/tag/v1.4.0
 - Fix `repo set` flag isolation and correct schema maintenance SQL.
 - Bump `patroni` to `4.1.1` for `el9.aarch64`.
 
-## Checksums
+## Checksums {#checksums}
 
 ```checksums
 c8d2f46ea1b25f7d4665ee0994f0cb403a59f1464f80b3ecfa575ac283e5ecd0  pig-1.4.0-1.aarch64.rpm

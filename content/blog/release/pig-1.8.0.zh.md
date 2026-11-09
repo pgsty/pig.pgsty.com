@@ -4,7 +4,7 @@ linkTitle: "v1.8.0"
 date: 2026-08-14
 description: "原生 pig sty boot 与 pig sty conf 工作流，以及 575 个已打包 PostgreSQL 扩展。"
 tags: [sty, repo, inventory, catalog]
-weight: 2
+weight: 8
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.8.0
 ---
@@ -14,12 +14,12 @@ Pig `v1.8.0` 将 Pigsty 控制节点的准备过程原生化。两条核心安�
 不再包装旧版 `bootstrap` 与 `configure` Shell 脚本。本版本继续以
 **575 个已打包 PostgreSQL 扩展** 作为统一发布口径，内置 Pigsty `4.5.0`。
 
-## 原生 `pig sty boot`
+## 原生 `pig sty boot` {#native-pig-sty-boot}
 
 `pig sty boot` 现在是一套具备事务语义与完整失败处理的原生控制节点引导流程。它不再执行
 `<PIGSTY_HOME>/bootstrap`，HTTP 下载与归档解压也不依赖 `curl`、`wget`、`tar` 或 `gzip`。
 
-### 权限与就绪检查
+### 权限与就绪检查 {#privilege-and-readiness}
 
 - 普通用户可以直接发起命令。Pig 会在一次 sudo 自重启前解析并下载显式来源；
   `PIG_NO_SUDO=1` 可禁用提权，`PIG_NON_INTERACTIVE=1` 可要求非交互 sudo。
@@ -27,7 +27,7 @@ Pig `v1.8.0` 将 Pigsty 控制节点的准备过程原生化。两条核心安�
 - 就绪判定会实际执行 `ansible-playbook`，发现其 Python 解释器，并检查 `yaml`、`jmespath`，
   以及 `cryptography` 或 `OpenSSL` 两者之一；只有二进制文件但无法运行的 Ansible 不再产生假成功。
 
-### 仓库来源与事务
+### 仓库来源与事务 {#repository-sources-and-transactions}
 
 - 来源覆盖本地归档、HTTP(S) URL、经过权限检查的自动 `/tmp/pkg.tgz`、已经提交的
   `/www/pigsty` 仓库，以及区域在线仓库。显式来源无效时直接失败，不会悄悄转为在线引导。
@@ -39,7 +39,7 @@ Pig `v1.8.0` 将 Pigsty 控制节点的准备过程原生化。两条核心安�
 - 结果会明确标记 `ready`、`offline`、`online` 或 `existing` 模式。即使 Ansible 已经可用，
   显式、自动发现或已提交的离线来源仍会被准备。
 
-### 收尾检查与自动化
+### 收尾检查与自动化 {#finishing-checks-and-automation}
 
 - Pig 会探测控制节点辅助工具，为发起调用的管理员用户修复到 `127.0.0.1` 的密钥 SSH，
   并尽可能从在线或本地内容初始化缺失的 `~/pigsty`。
@@ -49,13 +49,13 @@ Pig `v1.8.0` 将 Pigsty 控制节点的准备过程原生化。两条核心安�
   来源路径、locale、SSH 与初始化状态、变更、告警，以及后续 `conf`、`inventory` 与
   `deploy` 命令。
 
-## 原生 `pig sty conf`
+## 原生 `pig sty conf` {#native-pig-sty-conf}
 
 `pig sty conf` 现在是一套完整的原生 Inventory 编译流程。它不执行 `./configure`，也不会
 回退到原始 Shell 行为：Pig 解析一个模板、执行有边界的结构化变更、校验完整候选，最后才提交
 输出文件。
 
-### 安全配置流水线
+### 安全配置流水线 {#safe-configuration-pipeline}
 
 - 默认模板为 `conf/meta.yml`；安全的斜杠分隔相对模式既可作为位置参数，也可通过 `--conf`
   指定。绝对路径、目录穿越、路径逃逸，以及通过直接路径、符号链接、带符号链接父目录或硬链接
@@ -64,7 +64,7 @@ Pig `v1.8.0` 将 Pigsty 控制节点的准备过程原生化。两条核心安�
 - Pig 执行原生 Inventory 校验，并在 `ansible-inventory` 可用时进行一次有时间边界的外部
   解析；成功结果以 `0600` 权限原子写入。
 
-### Inventory 结构化变更
+### Inventory 结构化变更 {#structural-inventory-changes}
 
 - 最多十个互不相同的 `--ip` 地址会同时映射到 `10.10.10.10` 至 `10.10.10.19`，VIP 等
   无关地址保持不变。未指定 `--ip` 时，交互、非交互与输入关闭场景都有明确且确定的选择行为。
@@ -77,14 +77,14 @@ Pig `v1.8.0` 将 Pigsty 控制节点的准备过程原生化。两条核心安�
 - `--generate` 为每个已知凭据标识符分配一个 24 位随机值，并一致更新生效值与文档占位符；
   结果只列出生成的标识符，绝不输出机密值。
 
-### 预检与结果契约
+### 预检与结果契约 {#preflight-and-result-contract}
 
 - 未指定 `--skip` 时，预检覆盖平台、软件包管理器、控制节点资源、sudo/管理员权限、本机 SSH
   与 Ansible 可用性；`conf/build/` 下的构建模板有意绕过 IP 映射与管理员预检。
 - JSON/YAML 使用 `pig.sty.configure/v1`，报告模板与输出、已选择和丢弃的地址、请求与实际
   PostgreSQL 版本、已应用选项、生成的机密标识符及告警。
 
-## 其他更新
+## 其他更新 {#other-updates}
 
 - EL8 及以上软件包操作统一优先使用 DNF；本地 RPM 依赖按提供能力解析；新建软件仓库时恢复
   预期的 `/www` 布局；自更新可容忍 latest 标记中的空白字符。
@@ -93,7 +93,7 @@ Pig `v1.8.0` 将 Pigsty 控制节点的准备过程原生化。两条核心安�
 - CI 与发布构建使用 Go `1.26.6`、固定版本的分析工具与 GoReleaser，并执行依赖校验、
   工作流检查、漏洞扫描与完整发布快照构建。
 
-## 兼容性提醒
+## 兼容性提醒 {#compatibility-notes}
 
 - `pig sty boot` 不再执行 `<PIGSTY_HOME>/bootstrap`；依赖 Shell 脚本副作用的自动化应改为
   使用原生命令及其结构化结果。
@@ -103,7 +103,7 @@ Pig `v1.8.0` 将 Pigsty 控制节点的准备过程原生化。两条核心安�
   大写 `-O` 选择 Inventory 文件，全局小写 `-o` 选择命令输出格式。
 - EL8 及以上使用 DNF；有限的 EL7 兼容目录继续保留独立的传统 YUM 路径。
 
-## 校验和
+## 校验和 {#checksums}
 
 制品：[GitHub Release](https://github.com/pgsty/pig/releases/tag/v1.8.0) · [checksums.txt](https://github.com/pgsty/pig/releases/download/v1.8.0/checksums.txt)
 

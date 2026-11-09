@@ -4,7 +4,7 @@ linkTitle: "v0.6.0"
 date: 2025-07-17
 description: "423 extension, percona pg_tde, mcp toolbox"
 tags: [catalog, ext]
-weight: 251
+weight: 38
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v0.6.0
 ---
@@ -20,7 +20,7 @@ release_url: https://github.com/pgsty/pig/releases/tag/v0.6.0
 - Bump golang to 1.24.5
 - Bump pigsty to v3.6.0
 
-## Checksums
+## Checksums {#checksums}
 
 ```checksums
 1804766d235b9267701a08f95903bc3b  pig_0.6.0-1_amd64.deb

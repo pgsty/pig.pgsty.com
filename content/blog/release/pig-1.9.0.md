@@ -4,7 +4,7 @@ linkTitle: "v1.9.0"
 date: 2026-10-06
 description: "600 catalog entries, one-command Xray clients and servers, automatic repository keys, and cargo-pgrx 0.19.3."
 tags: [repo, build, catalog, cli]
-weight: 1
+weight: 6
 authors: [Vonng]
 release_url: https://github.com/pgsty/pig/releases/tag/v1.9.0
 ---
@@ -13,7 +13,7 @@ Pig `v1.9.0` adds one-command Xray client/server setup, automatic Pigsty reposit
 preparation, and a refreshed **600-entry extension catalog**. The default `cargo-pgrx`
 version is now `0.19.3`; the embedded Pigsty version remains `4.5.0`.
 
-## Xray clients and servers
+## Xray clients and servers {#xray-clients-and-servers}
 
 - `pig build proxy` installs or verifies Xray. `pig build proxy client` configures a
   VLESS/REALITY/Vision HTTP/SOCKS client; `pig build proxy server` configures a Linux server.
@@ -37,7 +37,7 @@ sudo pig build proxy client --from ./client.uri
 Run the server command on the server, then transfer `client.uri` securely to the client and run
 the client command there. See [`pig build`](/build/#build-proxy) for prerequisites and macOS setup.
 
-## Repository keys
+## Repository keys {#repository-keys}
 
 - `repo add`, `repo set`, and `sty boot` prepare the embedded Pigsty public key when selected
   repositories need it. Existing regular key files are reused; missing defaults are installed
@@ -48,10 +48,10 @@ the client command there. See [`pig build`](/build/#build-proxy) for prerequisit
   repository replacement or cache refresh. EL imports explicit references with `rpm --import`.
   Selecting unrelated repositories does not prepare the Pigsty key.
 
-See [`pig repo`](https://pig.pgsty.com/repo/#repository-definitions) for signature-enforcement
+See [`pig repo`](/repo/#repository-definitions) for signature-enforcement
 defaults and the distinction between key preparation and metadata refresh.
 
-## Catalog and build defaults
+## Catalog and build defaults {#catalog-and-build-defaults}
 
 - The embedded catalog contains **600 entries**, adding 22 entries to the v1.8.1 snapshot.
   New entries include `edtf_postgres`, `plphp`, `pg_lexo`, `pg_money`, `istore`, `colnames`,
@@ -64,14 +64,14 @@ defaults and the distinction between key preparation and metadata refresh.
 - Platform debug packages remain enabled by default, as in v1.8.1. Use `--nodbg` for RPM
   `debuginfo`/`debugsource` and DEB `dbgsym` suppression; `-s|--symbol` is a deprecated no-op.
 
-## Compatibility
+## Compatibility {#compatibility}
 
 No existing command or flag is removed. New Xray role commands use VLESS/REALITY/Vision;
 existing positional VMess commands retain their V2Ray behavior. Server setup checks the local listener and service.
 Configure the firewall, cloud security group, and any Nginx frontend for the chosen public port,
 then verify the connection from the client.
 
-## Verification
+## Verification {#verification}
 
 The verified [v1.9.0 tag](https://github.com/pgsty/pig/tree/v1.9.0) points to
 [`9eb5488`](https://github.com/pgsty/pig/commit/9eb5488847ea34827a74c9f8bb7b2dd3778f5190). The exact commit passed
@@ -80,7 +80,7 @@ command race regressions, vet, static analysis, vulnerability scanning, and a re
 The [Release workflow](https://github.com/pgsty/pig/actions/runs/37484632240) produced eight
 Linux/macOS archives and RPM/DEB packages. Published downloads were verified against SHA-256.
 
-## Checksums
+## Checksums {#checksums}
 
 ```checksums
 d0d80bd23a654308598f265ce4b4d4f78d6156c113ce6aa00f82bfc9519a180f  pig-1.9.0-1.aarch64.rpm
