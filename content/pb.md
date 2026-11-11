@@ -267,6 +267,8 @@ Backup set and other options:
 
 Set the target, data directory, stanza, repository, and config through PIG options.
 PIG rejects native arguments that would override them, including `--repoN-*` and `--recovery-option`.
+This also applies to their `--reset-*` and `--no-*` forms. An explicitly empty or whitespace-only
+`-D/--data` is rejected; only omission selects the configured default. Rejection messages omit option values.
 Pass other restore options after `--`, for example `--delta`, `--tablespace-map`, `--link-map`, or `--link-all`.
 Use `-- --delta` to restore over an existing data directory with checksum-based file reuse.
 

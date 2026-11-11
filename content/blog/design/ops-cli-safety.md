@@ -2,7 +2,7 @@
 title: "One Grammar for Dangerous Work: PIG's Operations CLI Safety Contract"
 linkTitle: "Operations CLI Safety"
 date: 2026-07-02
-lastmod: 2026-11-11
+lastmod: 2026-11-12
 description: "How PIG separates primitives from orchestrators, makes destructive intent explicit, and prevents aliases or structured output from changing operational meaning."
 tags: [cli, postgres, pgbackrest, pitr]
 weight: 40
@@ -12,7 +12,8 @@ draft: false
 
 > **Decision date:** 2026-07-02<br>
 > **Status:** Released for `pg`, `pb`, `pt`, and `pitr` by v1.5.0; the 2026-08-29 `do` and `build proxy` refinements shipped in [v1.8.1](/release/pig-1.8.1/), and the 2026-10-16 to 2026-10-17 acceptance refinements shipped in [v1.10.0](/release/pig-1.10.0/). The 2026-11-10 removal and 2026-11-11 execution refinements are implemented in [`a95f37f`](https://github.com/pgsty/pig/commit/a95f37f), without a release claim.<br>
-> **Current reference:** [`pig pg`](/pg/), [`pig pb`](/pb/), [`pig pitr`](/pitr/), [`pig do`](/do/), and [`pig build`](/build/)<br>
+> **Latest refinement:** The 2026-11-12 target-isolation and validation fixes are Implemented in the commits listed under [verification](#verification), without a release claim.<br>
+> **Current reference:** [`pig pg`](/pg/), [`pig pb`](/pb/), [`pig pitr`](/pitr/), [`pig do`](/do/), [`pig build`](/build/), [`pig repo`](/repo/), and [`pig ext`](/ext/)<br>
 > **Scope:** PIG-owned operational commands; transparent upstream commands retain upstream confirmation and exit behavior.
 
 ## Decision {#decision}
@@ -147,6 +148,21 @@ The 2026-11-11 accepted refinement closes execution and diagnostic gaps:
 - Streaming DBSU operations retain bounded diagnostic tails. APIs used to capture complete data
   keep that data intact; truncation must not be applied to machine-consumed configuration or SQL results.
 
+The 2026-11-12 review closes additional target-isolation and validation gaps:
+
+- A fork pins its data directory in the copied main configuration before PostgreSQL chooses
+  `postgresql.auto.conf`. Both files override inherited data, authentication, port, archive, PID,
+  and restore settings; configuration literals escape backslashes, quotes, and line breaks.
+  An auto.conf-only override can still select the source directory and its settings.
+- Explicit nonpositive `pg kill --pid`, negative watch intervals, and non-finite tuning ratios
+  fail validation. An invalid PID must not broaden a request to all sessions.
+- `pb restore` and `pitr` reject explicitly blank data directories and apply their protected-option
+  boundary to `--reset-*` and `--no-*` forms. Error messages omit option values, which can contain secrets.
+- Direct `repo boot` applies the automatic-archive ownership and permission checks used by `sty boot`
+  before creating its destination. Explicit path selection remains the operator's trust decision.
+- `ext link` resolves caller-relative paths and rejects system roots and unsafe profile literals
+  before changing the link. Generic file writes do not guess `0644` when the existing mode is unreadable.
+
 ## Consequences {#impact}
 
 Some historical shorthand disappeared and some scripts had to adopt cluster-first or explicit
@@ -205,6 +221,17 @@ The execution refinement requires terminal-file-descriptor checks, SQL-file fail
 caller-relative paths, startup-file-independent enumeration, status exit parity, and Cobra
 reparsing of generated target commands. Include large-output tests that distinguish diagnostic
 streaming from complete data capture. These acceptance requirements do not establish a release.
+
+The 2026-11-12 implementation is pinned in
+[PostgreSQL target isolation and validation](https://github.com/pgsty/pig/commit/07a383722c56c075629ed95a2f37608f06da32c2),
+[restore option boundaries](https://github.com/pgsty/pig/commit/7911b96f0849e5f311cf4810dd9df920b40c9310),
+[automatic package trust](https://github.com/pgsty/pig/commit/595a74179c9a5eff45c31895b9945cfff3058a18),
+[installation paths](https://github.com/pgsty/pig/commit/5216ba893dc06a2c7f949ed5fb1d6daf70ac353f), and
+[file permissions](https://github.com/pgsty/pig/commit/324e0ed14ee3289f6e2f35e5bd7f3d76ff8961ec).
+Regression tests invoke real `postgres -C` to verify the selected directory, authentication files,
+and port, including inherited include files and special characters. Linux PostgreSQL 18.6 acceptance
+also checks private PGDATA, process identity, cross-user writes, and connection-target isolation.
+These local checks do not establish release or deployment.
 
 ## Current status {#status}
 

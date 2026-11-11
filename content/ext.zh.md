@@ -339,6 +339,9 @@ pig ext link null                # 取消当前 PostgreSQL 链接
 pig ext link none                # null / none / nil / nop / no 均可取消链接
 ```
 
+相对安装路径以调用者的当前工作目录解析。空路径、`/usr/` 等系统根路径，以及包含 shell
+展开字符或换行的路径，会在修改链接或 profile 前被拒绝。
+
 该命令创建 `/usr/pgsql` 软链接，并写入 `/etc/profile.d/pgsql.sh`。在当前 Shell 中加载配置：
 
 ```bash

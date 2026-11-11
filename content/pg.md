@@ -425,6 +425,9 @@ pig pg kill --plan                # Preview connection termination plan
 and takes precedence over other filters. Without filters, the command selects other client sessions;
 `--all` also includes non-client backends.
 
+An explicitly supplied `--pid` must be positive; `--pid 0` does not mean all sessions.
+`--watch` must be nonnegative. Invalid values are rejected before planning or execution.
+
 ### pg clone {#pg-clone}
 
 Create a database copy in the same instance. The command terminates sessions on the source database
@@ -651,6 +654,7 @@ Behavior notes:
 - Path validation resolves private directories as DBSU when the caller cannot traverse them; unresolved paths and source/destination aliases are refused.
 - Unmanaged fork removal checks an inaccessible target as the selected DBSU. The target must be a real directory; a symlink or failed check still prevents removal.
 - After copy, runtime and replication state is cleaned from the fork and `fork.json` is written. The new instance starts only when `-s|--start` is specified.
+- Both copied configuration files pin `data_directory`, `hba_file`, and `ident_file` to the fork, set its port, disable archiving, and clear external PID and restore commands. The main configuration must pin the data directory before PostgreSQL selects `postgresql.auto.conf`; an auto.conf override alone cannot isolate an inherited source path. Configuration writes reject symlinks rather than modifying their targets.
 - Managed forks must be managed by name. Unmanaged forks require `--dst-data` when starting, stopping, or removing.
 
 List forks:

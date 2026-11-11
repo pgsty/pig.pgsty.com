@@ -2,7 +2,7 @@
 title: "危险操作只有一套语法：PIG 运维 CLI 安全契约"
 linkTitle: "运维 CLI 安全"
 date: 2026-07-02
-lastmod: 2026-11-11
+lastmod: 2026-11-12
 description: "PIG 如何分离底层原语与编排器、显式表达破坏性意图，并防止别名或结构化输出改变操作含义。"
 tags: [cli, postgres, pgbackrest, pitr]
 weight: 40
@@ -12,7 +12,8 @@ draft: false
 
 > **决策日期：** 2026-07-02<br>
 > **状态：** `pg`、`pb`、`pt`、`pitr` 已于 v1.5.0 交付；2026-08-29 的 `do` 与 `build proxy` 修订随 [v1.8.1](/zh/release/pig-1.8.1/) 发布，2026-10-16 至 2026-10-17 的验收修订随 [v1.10.0](/zh/release/pig-1.10.0/) 发布。2026-11-10 的移除修订与 2026-11-11 的执行修订已在 [`a95f37f`](https://github.com/pgsty/pig/commit/a95f37f) 实现，不声明已发布。<br>
-> **当前参考：** [`pig pg`](/zh/pg/)、[`pig pb`](/zh/pb/)、[`pig pitr`](/zh/pitr/)、[`pig do`](/zh/do/) 与 [`pig build`](/zh/build/)<br>
+> **最新修订：** 2026-11-12 的目标隔离与校验修复已在[验证章节](#verification)列出的提交中实现（Implemented），不声明已发布。<br>
+> **当前参考：** [`pig pg`](/zh/pg/)、[`pig pb`](/zh/pb/)、[`pig pitr`](/zh/pitr/)、[`pig do`](/zh/do/)、[`pig build`](/zh/build/)、[`pig repo`](/zh/repo/) 与 [`pig ext`](/zh/ext/)<br>
 > **范围：** PIG 实现的运维命令；透明上游命令继续采用上游的确认与退出行为。
 
 ## 决策 {#decision}
@@ -120,6 +121,20 @@ PostgreSQL 停止、恢复、重新启动与恢复后指引。任何别名都不
 - DBSU 流式操作只保留有上限的诊断尾部；用于读取完整数据的 API 保留全部内容，
   不对配置文件或 SQL 结果等机器消费数据实施诊断截断。
 
+2026-11-12 的复核补齐以下目标隔离与校验边界：
+
+- fork 在复制后的主配置中绑定数据目录，使其在 PostgreSQL 选择 `postgresql.auto.conf` 前生效。
+  两个配置文件均覆盖继承的数据目录、认证文件、端口、归档、PID 与恢复设置；配置字面值正确转义
+  反斜杠、引号与换行。只修改 auto.conf 仍可能选中源目录及其设置。
+- 显式传入非正数 `pg kill --pid`、负数 watch 间隔或非有限调优比例时，校验失败。
+  无效 PID 不能把单进程请求扩大为全部会话。
+- `pb restore` 与 `pitr` 拒绝显式空数据目录，并对受保护参数的 `--reset-*`、`--no-*` 形式
+  应用同样的边界。错误消息省略可能携带秘密的选项值。
+- 直接执行 `repo boot` 时，在创建目标目录前应用 `sty boot` 的自动离线包所有权与权限检查。
+  显式选择路径仍由操作者决定是否信任。
+- `ext link` 解析调用者相对路径，在修改链接前拒绝系统根目录与不安全的 profile 字面值。
+  通用文件写入在无法读取原权限时，不猜测并改用 `0644`。
+
 ## 影响 {#impact}
 
 部分历史缩写被移除，一些脚本需要采用 cluster-first 或显式目标语法。
@@ -171,6 +186,16 @@ Patroni 后来改成透明透传，这仍遵循同一原则：PIG 只为自己�
 执行修订要求验证终端文件描述符、SQL 文件错误传播、调用者相对路径、不受启动文件影响的库名枚举、
 状态退出码一致性，以及用 Cobra 重新解析生成的目标命令。大输出测试应区分诊断流式输出与完整数据捕获。
 这些验收要求不构成发布证明。
+
+2026-11-12 的实现证据固定于
+[PostgreSQL 目标隔离与校验](https://github.com/pgsty/pig/commit/07a383722c56c075629ed95a2f37608f06da32c2)、
+[恢复参数边界](https://github.com/pgsty/pig/commit/7911b96f0849e5f311cf4810dd9df920b40c9310)、
+[自动离线包信任](https://github.com/pgsty/pig/commit/595a74179c9a5eff45c31895b9945cfff3058a18)、
+[安装路径](https://github.com/pgsty/pig/commit/5216ba893dc06a2c7f949ed5fb1d6daf70ac353f) 与
+[文件权限](https://github.com/pgsty/pig/commit/324e0ed14ee3289f6e2f35e5bd7f3d76ff8961ec)。
+回归测试调用真实 `postgres -C`，检查实际选择的数据目录、认证文件与端口，覆盖 include 继承与特殊字符。
+Linux PostgreSQL 18.6 验收还检查私有 PGDATA、进程身份、跨用户写入与连接目标隔离。
+这些本地验证不表示已发布或部署。
 
 ## 当前状态 {#status}
 

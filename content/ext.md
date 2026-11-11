@@ -349,6 +349,10 @@ pig ext link null                # remove current PostgreSQL link
 pig ext link none                # null / none / nil / nop / no all remove the link
 ```
 
+Relative installation paths resolve from the caller's working directory. Empty paths, system
+roots such as `/usr/`, and paths containing shell expansion characters or line breaks are rejected
+before changing the link or profile.
+
 This command creates the `/usr/pgsql` symlink and writes `/etc/profile.d/pgsql.sh`. Load the profile in your current shell:
 
 ```bash

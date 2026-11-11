@@ -315,6 +315,10 @@ Without `--path`, PIG first looks for `/var/tmp/pkg.tgz` and falls back to `/tmp
 only if the first path does not exist. An explicitly supplied path, including the default path,
 never falls back. `repo cache` writes to the new default and does not use this input fallback.
 
+An automatically selected archive must be a regular non-symlink file owned by root or the invoking
+`SUDO_UID`, with no group or world write permission. An untrusted automatic archive is rejected
+before creating the target directory. Explicit `--path` selection does not use this ownership check.
+
 The command extracts into a staging directory, checks target paths, then moves the repositories into place. It moves additional repositories first and `pigsty` last.
 
 - If a completed `pigsty/repo_complete` already exists at the target, PIG reuses that repository. It does not inspect the archive or import its additional repositories. Structured output sets `reused: true`.
