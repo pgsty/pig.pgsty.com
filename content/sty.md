@@ -100,7 +100,9 @@ PIG selects a source as follows:
 
 - `--path` accepts a local archive or an HTTP(S) URL. URL credentials are rejected, and a bad
   explicit source is a hard error rather than an online fallback.
-- An automatically discovered `/tmp/pkg.tgz` must be a regular, non-group/world-writable file
+- Automatic discovery tries `/var/tmp/pkg.tgz`, then `/tmp/pkg.tgz` only if the first path does
+  not exist. An unreadable or unsafe first candidate does not select the legacy file. The selected
+  archive must be a regular, non-group/world-writable file
   owned by root or the invoking sudo user. Unsafe candidates are ignored with a warning.
 - A complete `/www/pigsty` repository takes precedence over a selected package. If both exist,
   the existing repository is reused and the package is left untouched with a warning.
@@ -189,12 +191,17 @@ The command applies these changes to the template:
 | no `--ip` | Detects local interfaces. Interactive mode asks when selection is ambiguous; `--non-interactive` or closed stdin fails with guidance to pass `--ip`. |
 | `--domain NAME` | Replaces only the exact `i.pigsty` token, not names such as `cli.pigsty` or `i.pigsty.cc`; NAME must be a valid DNS domain. |
 | small controller | When detected CPU count is below four, rewrites `node_tune: oltp` and `pg_conf: oltp.yml` to their `tiny` profiles. |
-| `--region REGION` | Updates `all.vars.region` for non-default regions. `china` also activates template-provided Docker and pip mirrors, using values already present in the template. |
+| `--region REGION` | Writes the selected region to `all.vars.region`, including `default`. `china` also activates template-provided Docker and pip mirrors, using values already present in the template. |
 | `--proxy` | Reads `HTTP_PROXY`, `HTTPS_PROXY`, `ALL_PROXY`, and `NO_PROXY`, each falling back to its lowercase spelling. Missing HTTP/HTTPS values fall back to ALL_PROXY. Writes non-empty values to `all.vars.proxy_env` and supplies a default no-proxy list when needed. |
 | `--version MAJOR` | Updates generic templates for PostgreSQL 14-18, or explicit 19 beta, and selects the matching locale. Version-pinned `fork/mssql`, `fork/polar`, legacy root `mssql`/`polar`, and root `pgNN` modes keep their template version and report a warning. |
 | `--generate` | Generates one 24-character value per known credential identifier and consistently replaces its active values and documented placeholders. |
 
 An IP mapping that creates a duplicate key fails. PIG warns if a supplied address has no matching placeholder in the template.
+
+An explicit `--region` or `--mirror` takes precedence; otherwise PIG detects the region. The
+selected value replaces the template's region in both directions: a template containing `china`
+is changed to `default` when that is the detected region. The result reports the value written.
+If the template omits region and the selected value is `default`, the default remains implicit.
 
 For PostgreSQL 19 beta, Pig also enables the `beta` repository after `pgsql` when the template
 contains the expected repository list. Modes below `conf/build/` intentionally bypass IP mapping

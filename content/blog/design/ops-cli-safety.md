@@ -2,7 +2,7 @@
 title: "One Grammar for Dangerous Work: PIG's Operations CLI Safety Contract"
 linkTitle: "Operations CLI Safety"
 date: 2026-07-02
-lastmod: 2026-11-09
+lastmod: 2026-11-11
 description: "How PIG separates primitives from orchestrators, makes destructive intent explicit, and prevents aliases or structured output from changing operational meaning."
 tags: [cli, postgres, pgbackrest, pitr]
 weight: 40
@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **Decision date:** 2026-07-02<br>
-> **Status:** Released for `pg`, `pb`, `pt`, and `pitr` by v1.5.0; the 2026-08-29 `do` and `build proxy` refinements shipped in [v1.8.1](/release/pig-1.8.1/), and the 2026-10-16 to 2026-10-17 acceptance refinements shipped in [v1.10.0](/release/pig-1.10.0/).<br>
+> **Status:** Released for `pg`, `pb`, `pt`, and `pitr` by v1.5.0; the 2026-08-29 `do` and `build proxy` refinements shipped in [v1.8.1](/release/pig-1.8.1/), and the 2026-10-16 to 2026-10-17 acceptance refinements shipped in [v1.10.0](/release/pig-1.10.0/). The 2026-11-10 removal and 2026-11-11 execution refinements are implemented in [`a95f37f`](https://github.com/pgsty/pig/commit/a95f37f), without a release claim.<br>
 > **Current reference:** [`pig pg`](/pg/), [`pig pb`](/pb/), [`pig pitr`](/pitr/), [`pig do`](/do/), and [`pig build`](/build/)<br>
 > **Scope:** PIG-owned operational commands; transparent upstream commands retain upstream confirmation and exit behavior.
 
@@ -122,6 +122,31 @@ The 2026-10-16 to 2026-10-17 refinements apply the same boundary to v1.10.0:
 - Sensitive captured output and error details remain private. Signing-key load errors never echo
   the supplied key. Explicit raw exports remain available on their documented text surfaces.
 
+The 2026-11-10 accepted refinement makes [`pig do`](/do/#postgresql-operations) removal intent explicit:
+
+- `pgsql-rm` must pass `pg_rm_pkg=false` unless `--uninstall` is enabled, in which case it passes
+  `pg_rm_pkg=true`. Both cluster and instance removal override Inventory and playbook defaults;
+  omitting the variable cannot express an opt-in package uninstall when Pigsty defaults to `true`.
+- `pgmon-rm` must remove the same remote monitoring target that `pgmon-add` creates:
+  `/infra/targets/pgrds/<cluster>.yml` on the `infra` hosts. A successful `file state=absent`
+  against an obsolete directory does not establish that the active target was removed.
+
+The 2026-11-11 accepted refinement closes execution and diagnostic gaps:
+
+- Text `pg status` must return the same success or failure exit status as the structured result.
+  A rendered summary does not turn a stopped instance or failed probe into success.
+- `pg psql -f` enables `ON_ERROR_STOP=1`, including stdin scripts, so an SQL error stops execution
+  and produces failure. This is not an implicit transaction and does not undo committed work.
+  Resolve relative script paths before switching users; preserve terminal streams for interactive psql.
+  The same caller-relative rule applies to PIG's data-directory, log-directory, and start-log flags.
+- Internal database enumeration uses `psql -X`; user startup output cannot become a database operand.
+- `pg init --force` confirmation retries and `pg kill` plans retain the selected directory,
+  PostgreSQL installation, DBSU, and operation options. Quote generated shell arguments safely.
+- Restore and clone preflight errors remain readable in text mode, without extra usage output;
+  structured modes retain their result contract.
+- Streaming DBSU operations retain bounded diagnostic tails. APIs used to capture complete data
+  keep that data intact; truncation must not be applied to machine-consumed configuration or SQL results.
+
 ## Consequences {#impact}
 
 Some historical shorthand disappeared and some scripts had to adopt cluster-first or explicit
@@ -168,6 +193,18 @@ and optional operands were reflected in the machine grammar in
 The changes were exercised on Ubuntu 24.04 and Rocky Linux 9 ARM64 Farrow guests, then released
 from source commit [`1c6f524`](https://github.com/pgsty/pig/commit/1c6f52401accc8ad6d7e8ab51248895632d7629b)
 after the [v1.8.1 CI run](https://github.com/pgsty/pig/actions/runs/33747971725) passed.
+
+The removal refinement follows Pigsty's pinned
+[`pg_rm_pkg` default](https://github.com/pgsty/pigsty/blob/bc5c20b22081e6fffe43fd068a6682c34fc333e4/roles/pg_remove/defaults/main.yml)
+and [remote target registration](https://github.com/pgsty/pigsty/blob/bc5c20b22081e6fffe43fd068a6682c34fc333e4/roles/pg_exporters/tasks/main.yml).
+Regression checks must cover package retention for clusters and instances, explicit package
+uninstall, and the actual Ansible arguments used to remove a remote target. These checks verify
+the wrapper contract; they do not establish deployment or a released PIG artifact.
+
+The execution refinement requires terminal-file-descriptor checks, SQL-file failure propagation,
+caller-relative paths, startup-file-independent enumeration, status exit parity, and Cobra
+reparsing of generated target commands. Include large-output tests that distinguish diagnostic
+streaming from complete data capture. These acceptance requirements do not establish a release.
 
 ## Current status {#status}
 

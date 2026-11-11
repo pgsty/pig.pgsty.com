@@ -2,7 +2,7 @@
 title: "Bootstrapping a Pigsty Controller as a Recoverable Transaction"
 linkTitle: "Native sty boot"
 date: 2026-08-14
-lastmod: 2026-10-13
+lastmod: 2026-11-11
 description: "Why pig sty boot resolves sources before elevation, separates hard failures from finishing warnings, and restores repositories after failed setup."
 tags: [sty, repo, install]
 weight: 90
@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **Decision date:** 2026-08-14<br>
-> **Status:** Implemented and released in [pig v1.8.0](/release/pig-1.8.0/).<br>
+> **Status:** Implemented and released in [pig v1.8.0](/release/pig-1.8.0/). The 2026-11-11 offline-source refinement is Accepted, without a release claim.<br>
 > **Current reference:** [`pig sty boot`](/sty/#sty-boot)<br>
 > **Scope:** Preparing a Pigsty controller and its package sources; not deploying a database cluster.
 
@@ -52,6 +52,9 @@ repository prepared for later nodes.
 
 - explicit local paths and URLs are validated and never silently fall back to online mode;
 - automatic offline sources must pass ownership and permission checks;
+- the 2026-11-11 refinement follows Pigsty's current offline-bundle default, falling back to
+  the legacy location only if the default does not exist; explicit paths never fall back, and
+  an unsafe or unreadable default cannot be hidden by choosing another package;
 - a committed local repository can take precedence over a selected package;
 - download and restricted archive extraction use native bounded implementations;
 - offline bundles require a `pigsty/repo_complete` sentinel; additional roots are preflighted and

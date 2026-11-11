@@ -119,6 +119,8 @@ These options apply to all `pig pg` subcommands:
 Use `pig pg svc ...` to control the `postgres` systemd unit. Use the instance commands
 (`start`, `stop`, and so on) to operate on `-D` with `pg_ctl`, defaulting to `/pg/data`.
 An explicit empty or whitespace-only `-D` / `--data` is a parameter error; it does not select a default target.
+Relative `-D`, `--log-dir`, and `pg start --log` paths resolve from the caller's working
+directory before switching to the database operating-system user.
 
 When `-D` is explicitly supplied, `psql`, `ps`, `kill`, `vacuum`, `analyze`, `freeze`, and `repack`
 connect to that directory's instance, including database enumeration for `--all`. Before using its recorded
@@ -130,7 +132,7 @@ visible to the client; PIG does not add host or port arguments or bind the conne
 To explicitly target a TCP-only instance, use the native client with connection options.
 `pg clone` and `pg fork` retain their separate port options.
 
-Plans, confirmation retries, and verification commands for `promote`, `vacuum`, and `repack`
+Plans, confirmation retries, and verification commands for `init`, `kill`, `promote`, `vacuum`, and `repack`
 preserve the selected data directory, PostgreSQL version, and operating-system user. This includes
 an explicit `-D /pg/data`; omitting `-D` continues to preserve native SQL connection defaults.
 `VACUUM FULL` plans report confirmation as required, matching execution.
@@ -269,6 +271,9 @@ instance's process state. Service rows cover `patroni`, `pgbouncer`, `vip-manage
 Structured output describes the selected instance, including its data directory, version,
 PID, port, and available control-file information.
 
+Text and structured modes return the same exit status. A stopped selected instance returns
+failure even when PIG successfully prints the surrounding diagnostic summary.
+
 A missing process or a PID independently identified as a different executable is stale.
 `EPERM` alone never proves that PostgreSQL has stopped. If process identity cannot be established,
 the state remains unknown and cannot authorize forced initialization or PITR restore.
@@ -360,6 +365,12 @@ A stopped or uncertain target returns an error. Without `-D`, psql retains its n
 defaults and any `PGHOST`/`PGPORT` visible to it.
 
 For `-o json` or `-o yaml`, specify `-c` or `-f`; interactive psql uses text mode.
+
+Text-mode psql preserves the caller's terminal streams, including its interactive prompt.
+`-f` enables `ON_ERROR_STOP=1`: an SQL error stops the script and makes the command fail.
+This does not wrap the script in a transaction or undo statements already committed.
+Relative script paths are resolved from the caller's working directory before switching to the
+database operating-system user; `-f -` continues to read SQL from stdin.
 
 ### pg ps {#pg-ps}
 

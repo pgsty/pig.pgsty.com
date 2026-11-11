@@ -39,6 +39,10 @@ tags: [cli]
 
 PIG-owned results support structured output. Raw-content commands such as `inventory show` and passthrough commands such as `pt list` retain their native output. See the command reference for details.
 
+`-ojson`, `-o=json`, `-o json`, and `--output=json` select the same format, including on
+argument-validation failures. Flags after a native `--` forwarding boundary are operands for
+the downstream command and do not select PIG's output format.
+
 Structured results keep diagnostics and wrapped-tool chatter on stderr. JSON/YAML output and
 `PIG_NON_INTERACTIVE=1` disable prompt input in PIG-owned command adapters and use `sudo -n`;
 they do not supply destructive-operation confirmation. Pass `--yes` where required.

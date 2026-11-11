@@ -2,7 +2,7 @@
 title: "Install the Pigsty Repository Key Automatically"
 linkTitle: "Automatic Pigsty Key"
 date: 2026-10-04
-lastmod: 2026-10-13
+lastmod: 2026-11-11
 description: "Prepare the Pigsty key best-effort, reuse existing files, and fall back with a warning unless repository metadata explicitly names a key."
 tags: [repo, sty]
 weight: 94
@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **Decision date:** 2026-10-04<br>
-> **Status:** Released in [v1.9.0](/release/pig-1.9.0/).<br>
+> **Status:** Released in [v1.9.0](/release/pig-1.9.0/). The 2026-11-11 APT trust-reconciliation refinement is Accepted, without a release claim.<br>
 > **Current reference:** [`pig repo`](/repo/)<br>
 > **Scope:** Installing the existing embedded Pigsty public key during repository configuration.
 
@@ -86,6 +86,15 @@ metadata names a required key of its own; preparing an unrelated default file ca
   EL metadata does. Neither path changes APT's global trust store.
 - Repository rollback restores definitions; already installed or imported public keys remain.
 
+The 2026-11-11 refinement reconciles APT release-level trust by URI and suite before repository
+writes. Implicit defaults inherit an existing matching source's trust settings, including when
+another module selects it or the same module is added again after `sty boot`. Retained files are
+never rewritten to implement fallback. Explicit metadata cannot silently override a conflicting
+retained policy; inconsistent definitions are rejected with guidance to reconcile or replace them.
+Replacement uses the requested policy after the existing backup step. New definitions selected
+through several modules must also agree with each other. This preserves signature policy while
+preventing an additive operation from making APT unable to parse its source list.
+
 ## Consequences {#impact}
 
 Adding a Pigsty repository also attempts to prepare its public-key file, including on offline
@@ -121,6 +130,11 @@ custom-key absence before both add and replacement, a valid custom key with an u
 path, and mixed explicit/implicit definitions. Permission tests deny ordinary-user traversal of
 the key directory and verify both privileged installation and rejection of a hidden symlink.
 RPM import tests use an isolated copy of the guest's RPM database.
+
+The trust refinement requires repeated boot/add and overlapping-module tests, retained `.list`
+and Deb822 `.sources` fixtures, explicit-conflict rejection before file changes, key-failure
+behavior, and replacement. A real APT parser must accept the generated definitions with isolated
+source and state directories; fixture tests alone do not establish native APT compatibility.
 
 ## Current status {#status}
 

@@ -2,7 +2,7 @@
 title: "From Human-Friendly to Agent-Native: PIG's CLI Contract"
 linkTitle: "Agent-Native CLI"
 date: 2026-02-12
-lastmod: 2026-11-09
+lastmod: 2026-11-11
 description: "How PIG separates terminal text, structured results, execution plans, and environment context."
 tags: [cli]
 weight: 10
@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **Decision date:** 2026-02-12<br>
-> **Status:** Released in [pig v1.1.0](/release/pig-1.1.0/) and refined in [pig v1.10.0](/release/pig-1.10.0/).<br>
+> **Status:** Released in [pig v1.1.0](/release/pig-1.1.0/) and refined in [pig v1.10.0](/release/pig-1.10.0/). The 2026-11-11 output refinements are Accepted, without a release claim.<br>
 > **Current reference:** [`pig` command overview](/cmd/)<br>
 > **Scope:** PIG-owned commands and their machine-consumption contract; opaque passthrough commands keep their native interface.
 
@@ -76,6 +76,13 @@ The 2026-10-16 refinements apply the same contract to [`pig ext`](/ext/):
   boundary. Parameter errors and safe signing-key diagnostics remain readable in every output
   format. Other sensitive command wrappers retain full output and error-detail redaction.
 
+The 2026-11-11 accepted refinement requires early error rendering to recognize all supported
+output-flag spellings, including `-ojson`, without crossing native argument boundaries. Downloads
+send progress to stderr in text mode and suppress it during structured legacy capture; progress
+must not appear before the result or in `captured_output`. Bounded legacy diagnostics retain
+both the beginning and end, with an explicit truncation marker, so final failure context survives.
+Existing sensitive-output redaction still applies to the entire retained diagnostic.
+
 ## Consequences {#impact}
 
 This split makes scripts more reliable and lets agents choose commands based on risk and output
@@ -101,6 +108,10 @@ example of reducing PIG-owned structure when the upstream interface is already a
 
 Tests now cover structured stdout isolation, result rendering, plan behavior, confirmation gates,
 and context collection in the packages that own those contracts.
+
+The output refinement requires process-level argument-error tests and a legacy-wrapper test that
+performs an isolated HTTP download and decodes stdout as exactly one result. Diagnostic truncation
+tests must retain the final failure and drain all input, including after the capture limit.
 
 ## Current status {#status}
 

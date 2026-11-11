@@ -2,7 +2,7 @@
 title: "Compile, Validate, Then Commit: The Native sty conf Pipeline"
 linkTitle: "Native sty conf"
 date: 2026-02-18
-lastmod: 2026-11-08
+lastmod: 2026-11-11
 description: "Why pig sty conf treats Inventory generation as a bounded compiler pipeline with path safety, structural mutations, secret discipline, and atomic output."
 tags: [sty, inventory]
 weight: 15
@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **Decision date:** 2026-02-18; the production contract was finalized on 2026-08-14.<br>
-> **Status:** Native pipeline released in [pig v1.8.0](/release/pig-1.8.0/); ordered template lookup implemented locally on 2026-11-08, without a PIG release claim.<br>
+> **Status:** Native pipeline released in [pig v1.8.0](/release/pig-1.8.0/); ordered template lookup implemented locally on 2026-11-08, without a PIG release claim. The 2026-11-11 region refinement is Accepted.<br>
 > **Current reference:** [`pig sty conf`](/sty/#sty-conf)<br>
 > **Scope:** Generating one validated static Inventory from a trusted Pigsty template; not arbitrary YAML transformation.
 
@@ -77,6 +77,8 @@ template, regardless of the input spelling.
 - placeholder IPs are mapped simultaneously and unrelated addresses remain unchanged;
 - domain replacement matches the exact template token;
 - profile, region, proxy, locale, and PostgreSQL-version changes are structural and bounded;
+- the 2026-11-11 refinement writes the explicitly selected or detected region even when it is
+  `default`, replacing a template's `china` value; the result reports the value actually written;
 - generated credentials use one random value per known identifier and expose only identifiers in
   results;
 - the complete candidate receives native validation and optional bounded Ansible parsing;

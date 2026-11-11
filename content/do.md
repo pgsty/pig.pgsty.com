@@ -60,7 +60,15 @@ pig do pgsql-hba pg-meta                  # refresh pg_hba rules
 pig do pgsql-svc pg-meta                  # refresh PostgreSQL services
 ```
 
-`pgsql-db` and `pgsql-user` apply existing `pg_databases` and `pg_users` declarations. They do not edit the inventory. `pgsql-rm --uninstall` also removes packages. Omit this option if the host still needs those packages.
+`pgsql-db` and `pgsql-user` apply existing `pg_databases` and `pg_users` declarations. They do not edit the inventory.
+
+`pgsql-rm` keeps PostgreSQL packages by explicitly passing `pg_rm_pkg=false` to the removal
+playbook. `--uninstall` (or `-u`) instead passes `pg_rm_pkg=true`; `--uninstall=false` keeps
+packages. This choice overrides the Inventory and playbook defaults. It controls package removal
+only; data and backup removal still follow the installed Pigsty playbook and Inventory.
+
+`pgmon-rm <cluster>` removes `/infra/targets/pgrds/<cluster>.yml` on the `infra` hosts, matching
+the remote monitoring target created by `pgmon-add`. An already absent target is a successful no-op.
 
 ### Name rules {#name-rules}
 

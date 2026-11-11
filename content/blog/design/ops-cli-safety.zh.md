@@ -2,7 +2,7 @@
 title: "危险操作只有一套语法：PIG 运维 CLI 安全契约"
 linkTitle: "运维 CLI 安全"
 date: 2026-07-02
-lastmod: 2026-11-09
+lastmod: 2026-11-11
 description: "PIG 如何分离底层原语与编排器、显式表达破坏性意图，并防止别名或结构化输出改变操作含义。"
 tags: [cli, postgres, pgbackrest, pitr]
 weight: 40
@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **决策日期：** 2026-07-02<br>
-> **状态：** `pg`、`pb`、`pt`、`pitr` 已于 v1.5.0 交付；2026-08-29 的 `do` 与 `build proxy` 修订随 [v1.8.1](/zh/release/pig-1.8.1/) 发布，2026-10-16 至 2026-10-17 的验收修订随 [v1.10.0](/zh/release/pig-1.10.0/) 发布。<br>
+> **状态：** `pg`、`pb`、`pt`、`pitr` 已于 v1.5.0 交付；2026-08-29 的 `do` 与 `build proxy` 修订随 [v1.8.1](/zh/release/pig-1.8.1/) 发布，2026-10-16 至 2026-10-17 的验收修订随 [v1.10.0](/zh/release/pig-1.10.0/) 发布。2026-11-10 的移除修订与 2026-11-11 的执行修订已在 [`a95f37f`](https://github.com/pgsty/pig/commit/a95f37f) 实现，不声明已发布。<br>
 > **当前参考：** [`pig pg`](/zh/pg/)、[`pig pb`](/zh/pb/)、[`pig pitr`](/zh/pitr/)、[`pig do`](/zh/do/) 与 [`pig build`](/zh/build/)<br>
 > **范围：** PIG 实现的运维命令；透明上游命令继续采用上游的确认与退出行为。
 
@@ -100,6 +100,26 @@ PostgreSQL 停止、恢复、重新启动与恢复后指引。任何别名都不
   此规则。原生透传与显式数据 stdin 保留各自契约。
 - 敏感捕获输出和错误详情保持私有，签发密钥加载失败不回显输入。文档规定的原始导出通道仍然可用。
 
+2026-11-10 接受的修订要求 [`pig do`](/zh/do/#postgresql-operations) 显式表达移除意图：
+
+- `pgsql-rm` 必须传递 `pg_rm_pkg=false`；只有启用 `--uninstall` 时才传递 `pg_rm_pkg=true`。
+  集群与实例移除均覆盖 Inventory 和剧本的默认值。Pigsty 默认值为 `true` 时，省略变量不能表达按需卸载。
+- `pgmon-rm` 必须删除 `pgmon-add` 创建的同一远程监控目标，即 `infra` 主机上的
+  `/infra/targets/pgrds/<cluster>.yml`。对过时目录执行 `file state=absent` 成功，不能证明实际目标已移除。
+
+2026-11-11 接受的修订补齐执行和诊断边界：
+
+- 文本 `pg status` 与结构化结果采用相同的成功或失败退出状态，打印摘要不能把已停止实例或探测失败变成成功。
+- `pg psql -f` 启用 `ON_ERROR_STOP=1`，包括从 stdin 输入的脚本；SQL 错误停止执行并返回失败。
+  这不是隐式事务，不会撤销已提交的操作。相对脚本路径在切换用户前解析，交互式 psql 保留终端输入输出。
+  PIG 的数据目录、日志目录与启动日志参数也采用相同的调用者相对路径规则。
+- 内部数据库枚举使用 `psql -X`，用户启动文件的输出不能成为数据库操作数。
+- `pg init --force` 确认重试与 `pg kill` 计划保留所选数据目录、PostgreSQL 安装、DBSU 和操作参数，
+  生成的 shell 参数正确引用。
+- 恢复与克隆的预检错误在文本模式可读，不额外打印用法；结构化模式继续采用既有结果契约。
+- DBSU 流式操作只保留有上限的诊断尾部；用于读取完整数据的 API 保留全部内容，
+  不对配置文件或 SQL 结果等机器消费数据实施诊断截断。
+
 ## 影响 {#impact}
 
 部分历史缩写被移除，一些脚本需要采用 cluster-first 或显式目标语法。
@@ -141,6 +161,16 @@ Patroni 后来改成透明透传，这仍遵循同一原则：PIG 只为自己�
 客体中完成实机测试，并在 [v1.8.1 CI](https://github.com/pgsty/pig/actions/runs/33747971725)
 通过后，从源码提交 [`1c6f524`](https://github.com/pgsty/pig/commit/1c6f52401accc8ad6d7e8ab51248895632d7629b)
 正式发布。
+
+移除修订依据 Pigsty 固定源码中的
+[`pg_rm_pkg` 默认值](https://github.com/pgsty/pigsty/blob/bc5c20b22081e6fffe43fd068a6682c34fc333e4/roles/pg_remove/defaults/main.yml)
+与[远程目标注册路径](https://github.com/pgsty/pigsty/blob/bc5c20b22081e6fffe43fd068a6682c34fc333e4/roles/pg_exporters/tasks/main.yml)。
+回归检查须覆盖集群和实例默认保留软件包、显式卸载软件包，以及删除远程目标时实际传给 Ansible 的参数。
+这些检查验证包装器契约，不代表部署验收或 PIG 发布制品。
+
+执行修订要求验证终端文件描述符、SQL 文件错误传播、调用者相对路径、不受启动文件影响的库名枚举、
+状态退出码一致性，以及用 Cobra 重新解析生成的目标命令。大输出测试应区分诊断流式输出与完整数据捕获。
+这些验收要求不构成发布证明。
 
 ## 当前状态 {#status}
 

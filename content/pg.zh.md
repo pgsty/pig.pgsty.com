@@ -118,6 +118,7 @@ pig pg psql -D /pg/data
 使用 `pig pg svc ...` 控制 `postgres` systemd 服务。
 使用 `start`、`stop` 等实例命令，通过 `pg_ctl` 操作 `-D` 指定的目录，省略时使用 `/pg/data`。
 显式传入空字符串或纯空白的 `-D` / `--data` 会返回参数错误，不会选择默认目标。
+相对的 `-D`、`--log-dir` 与 `pg start --log` 路径在切换数据库操作系统用户前，按调用者工作目录解析。
 
 显式指定 `-D` 时，`psql`、`ps`、`kill`、`vacuum`、`analyze`、`freeze`、`repack` 连接该目录对应的实例，
 `--all` 的数据库枚举也使用同一目标。使用 PID 文件记录的端口和 socket
@@ -127,7 +128,7 @@ pig pg psql -D /pg/data
 PIG 不追加主机或端口参数，也不会将连接绑定到 `/pg/data`。
 需要显式指定仅监听 TCP 的实例时，请使用原生客户端的连接参数。`pg clone` 和 `pg fork` 保留独立的端口参数。
 
-`promote`、`vacuum`、`repack` 的计划、确认重试和验证命令保留所选的数据目录、PostgreSQL 版本
+`init`、`kill`、`promote`、`vacuum`、`repack` 的计划、确认重试和验证命令保留所选的数据目录、PostgreSQL 版本
 和操作系统用户，包括显式的 `-D /pg/data`。省略 `-D` 时仍保留 SQL 客户端的默认连接方式。
 `VACUUM FULL` 计划将确认标记为必需，与实际执行一致。
 生成的维护命令将数据库名放在 `--` 之后，避免 `--all` 这样的库名在复制执行时变成选项。
@@ -267,6 +268,8 @@ pig pg status -D /data/pg18 -o json
 
 结构化输出描述所选实例，包括数据目录、版本、PID、端口和可用的控制文件信息。
 
+文本与结构化模式使用相同的退出状态。所选实例已停止时返回失败，即使周边诊断摘要已成功打印。
+
 PID 对应的进程不存在，或独立探测确认 PID 已被其他可执行程序复用时，判定为陈旧 PID。
 不能仅凭 `EPERM` 认定 PostgreSQL 已停止；无法确认进程身份时，状态保持未知，不能放行强制初始化或 PITR 恢复。
 计划将无法确认的运行状态检查标记为 `unknown`，不提供可用 PID，也不将前置检查标记为通过。
@@ -353,6 +356,10 @@ pig pg psql -f script.sql         # 执行 SQL 脚本文件
 省略 `-D` 时，psql 保留原生默认连接方式，以及客户端可见的 `PGHOST`/`PGPORT`。
 
 使用 `-o json` 或 `-o yaml` 时，必须指定 `-c` 或 `-f`；交互式 psql 使用文本模式。
+
+文本模式保留调用者的终端输入输出，包括交互提示符。`-f` 启用 `ON_ERROR_STOP=1`：
+遇到 SQL 错误就停止脚本并返回失败；这不等于将脚本放进一个事务，也不会撤销已经提交的语句。
+相对脚本路径在切换数据库操作系统用户前，以调用者的工作目录解析；`-f -` 继续从 stdin 读取 SQL。
 
 ### pg ps {#pg-ps}
 

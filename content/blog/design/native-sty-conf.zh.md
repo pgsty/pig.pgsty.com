@@ -2,7 +2,7 @@
 title: "先编译和校验，再提交：原生 sty conf 流水线"
 linkTitle: "原生 sty conf"
 date: 2026-02-18
-lastmod: 2026-11-08
+lastmod: 2026-11-11
 description: "pig sty conf 如何校验模板、修改配置、保护凭据，并原子写入 Inventory。"
 tags: [sty, inventory]
 weight: 15
@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **决策日期：** 2026-02-18；生产契约于 2026-08-14 定稿。<br>
-> **状态：** 原生流水线已随 [pig v1.8.0](/zh/release/pig-1.8.0/) 发布；有序模板查找于 2026-11-08 在本地实现，不声明已随 PIG 发布。<br>
+> **状态：** 原生流水线已随 [pig v1.8.0](/zh/release/pig-1.8.0/) 发布；有序模板查找于 2026-11-08 在本地实现，不声明已随 PIG 发布。2026-11-11 的区域修订为 Accepted。<br>
 > **当前参考：** [`pig sty conf`](/zh/sty/#sty-conf)<br>
 > **范围：** 从受信 Pigsty 模板生成一份经过校验的静态 Inventory，不是任意 YAML 转换器。
 
@@ -63,6 +63,8 @@ Pigsty 将模板分组放入子目录，同时接受 `full` 这样的简写。�
 - 占位 IP 同时映射，无关地址保持不变；
 - 域名替换只匹配精确模板 token；
 - profile、region、proxy、locale 与 PostgreSQL 版本变更都是有边界的结构化操作；
+- 2026-11-11 修订要求显式选择或探测出的区域为 `default` 时也写入，覆盖模板原有的 `china`；
+  结果必须报告实际写入的区域值；
 - 每个已知凭据标识符只生成一个随机值，结果只暴露标识符；
 - 完整候选接受原生校验，并可选执行有超时边界的 Ansible 解析；
 - 任一失败都不改变目标文件；

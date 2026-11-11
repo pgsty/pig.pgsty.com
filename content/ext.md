@@ -187,6 +187,7 @@ Use these aliases to select a PostgreSQL package group:
 |:---|:---|
 | `pg18` | Server, client, contrib modules, and procedural languages |
 | `pg18-server` | Server and contrib modules |
+| `pg18-contrib` | Separate contrib bundle on EL; unavailable on Debian/Ubuntu |
 | `pg18-client` | Client tools |
 | `pg18-devel` | Development files |
 | `pg18-basic` | pg_repack, wal2json, and pgvector |
@@ -231,13 +232,17 @@ Successful installation only makes the extension files available on the host. Fo
 
 ## ext rm {#ext-rm}
 
-Remove one or more PostgreSQL extensions.
+Remove OS packages selected by extension names or explicit package-group aliases.
 
 ```bash
 pig ext rm pg_duckdb             # remove pg_duckdb
 pig ext rm pg_duckdb -v 18       # remove PG 18 package
 pig ext rm pgvector -y           # auto-confirm removal
 pig ext rm pgvector --plan       # preview remove plan without executing
+pig ext rm plpython3u -v 18      # remove an independent language package
+pig ext rm pg18-contrib --plan   # preview the whole contrib bundle (EL only)
+pig ext rm pg18-server --plan    # preview the explicit server package group
+pig ext rm orioledb-server -v 18 --plan  # preview the OrioleDB kernel
 ```
 
 | Option | Description |
@@ -248,6 +253,37 @@ pig ext rm pgvector --plan       # preview remove plan without executing
 {.full-width}
 
 This removes an OS package, not database objects. Drop or migrate dependent extensions in every affected database before removing the shared files.
+
+Server, contrib-bundle, and supported replacement-kernel packages are protected. An extension
+name such as `pg_trgm`, `earthdistance`, `tablefunc`, or `plpgsql` cannot remove the server or
+contrib package that provides it. Use an explicit package-group alias only when removing that
+whole group is intended:
+
+| Selection | Removal rule |
+|:---|:---|
+| `pg18-server`, `pgsql-server -v 18` | Allow the explicit server group; on EL it also includes libraries and contrib |
+| `pg18`, `pg18-mini`, `pg18-core`, `pg18-full`, `pg18-main`, `postgresql -v 18` | Allow the selected PostgreSQL package group |
+| `pg18-contrib`, `pgsql-contrib -v 18` | Allow on EL; reject on Debian/Ubuntu, where this mapping has no separate contrib package |
+| `plpython3u`, `pltcl`, `pltclu`, `plperl`, `plperlu` | Allow independent language packages, including trusted/untrusted variants sharing a package |
+| `spock`, `snowflake`, `lolor`, `orioledb`, `pg_tde` | Reject extension operands that resolve to a kernel |
+| `pgedge -v 18`, `orioledb-server -v 18`, `ivorysql -v 18`, `babelfish -v 18`, `openhalo -v 18` | Allow the explicitly selected kernel package group |
+{.full-width}
+
+The numbered alias selects its own major: `pg18-server -v 17` still selects PostgreSQL 18.
+Existing fixed-version aliases such as `pgtde`, `percona-core`, and `percona-main` select PG 18.
+`orioledb` retains its extension meaning; use `orioledb-server` to select the kernel explicitly.
+Category aliases and normalized extension package names do not authorize kernel removal.
+
+Each operand is checked before package deduplication. If any operand violates protection, the
+entire request is rejected before sudo or the package manager runs. Adding `pg18-server` to a
+request containing `pg_trgm` does not authorize the latter; argument order and `--yes` do not
+change the decision. Runtime returns error code `100102` and exit status `2`. A blocked
+`--plan` also exits `2`, with failed preconditions and no removal actions; structured stdout
+still contains exactly one plan.
+
+Allowed plans list the OS packages and the catalog extensions they provide, including other
+extensions sharing the same package. They do not simulate additional APT/DNF dependency
+removals. The [design record](/design/protected-package-removal/) explains this boundary.
 
 ## ext update {#ext-update}
 

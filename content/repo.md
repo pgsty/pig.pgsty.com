@@ -100,6 +100,14 @@ Create `~/.pig/repo.yml` to override the embedded catalog. Use the source file a
 
 `repo add` writes the selected module files and preserves other files. `repo set` and `repo add --remove` back up and replace the existing definitions. If Ansible or another tool manages these files, keep the definitions in that tool's configuration so its next run preserves your changes.
 
+On Debian/Ubuntu, definitions of the same APT URI and suite must agree on trust options,
+including `trusted` and `signed-by`. An ordinary additive operation inherits an existing source's
+policy instead of restoring permissive defaults after `sty boot`. Retained `.list` and `.sources`
+files are preserved. An explicit conflicting policy or inconsistent retained definitions cause
+failure before repository files are changed; reconcile them or intentionally use `repo set`.
+An inline key in a Deb822 `.sources` file cannot be duplicated into PIG's one-line `.list` format;
+keep that source in its existing file or configure a keyring path for replacement.
+
 ### Pigsty signing key {#repo-key}
 
 When a module includes `pigsty-infra` or `pigsty-pgsql`, PIG reuses the existing public-key file or installs its embedded key with mode `0644`:
@@ -271,7 +279,7 @@ SOW preserves non-package files and directories. It stops if a package cannot be
 Create a compressed tarball of repository contents for offline distribution.
 
 ```bash
-pig repo cache                   # default: /www to /tmp/pkg.tgz
+pig repo cache                   # default: /www to /var/tmp/pkg.tgz
 pig repo cache -d /srv           # custom source directory
 pig repo cache pigsty docker     # include multiple top-level repositories
 ```
@@ -279,7 +287,7 @@ pig repo cache pigsty docker     # include multiple top-level repositories
 | Option | Description |
 |:---|:---|
 | `-d, --dir` | Source directory, default `/www/` |
-| `-p, --path` | Output path, default `/tmp/pkg.tgz` |
+| `-p, --path` | Output path, default `/var/tmp/pkg.tgz` |
 {.full-width}
 
 An offline bundle must include `pigsty` and a regular `pigsty/repo_complete` marker. Missing
@@ -292,16 +300,20 @@ files. A failed cache leaves an existing output package unchanged.
 Extract and set up a local repository from an offline package.
 
 ```bash
-pig repo boot                    # default: /tmp/pkg.tgz to /www
+pig repo boot                    # default: /var/tmp/pkg.tgz to /www
 pig repo boot -p /mnt/pkg.tgz    # custom package path
 pig repo boot -d /srv            # custom target directory
 ```
 
 | Option | Description |
 |:---|:---|
-| `-p, --path` | Package path, default `/tmp/pkg.tgz` |
+| `-p, --path` | Package path, default `/var/tmp/pkg.tgz` |
 | `-d, --dir` | Target directory, default `/www/` |
 {.full-width}
+
+Without `--path`, PIG first looks for `/var/tmp/pkg.tgz` and falls back to `/tmp/pkg.tgz`
+only if the first path does not exist. An explicitly supplied path, including the default path,
+never falls back. `repo cache` writes to the new default and does not use this input fallback.
 
 The command extracts into a staging directory, checks target paths, then moves the repositories into place. It moves additional repositories first and `pigsty` last.
 
