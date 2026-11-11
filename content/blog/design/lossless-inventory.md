@@ -2,7 +2,7 @@
 title: "Edit the Declaration, Preserve the Document: Lossless Pigsty Inventory"
 linkTitle: "Lossless Inventory"
 date: 2026-07-18
-lastmod: 2026-11-09
+lastmod: 2026-11-12
 description: "Why pig inventory separates YAML semantics from source bytes so scoped edits can preserve comments, ordering, anchors, and formatting."
 tags: [inventory, sty]
 weight: 50
@@ -12,6 +12,7 @@ draft: false
 
 > **Decision date:** 2026-07-18<br>
 > **Status:** Implemented and released in [pig v1.6.0](/release/pig-1.6.0/); the 2026-10-16 to 2026-10-17 refinements shipped in [pig v1.10.0](/release/pig-1.10.0/).<br>
+> **Latest refinement:** The 2026-11-12 CMDB scalar fixes are Implemented in [`f569d0d`](https://github.com/pgsty/pig/commit/f569d0d4f75e39942baf393a224f21a617b29699), without a release claim.<br>
 > **Current reference:** [`pig inventory`](/inventory/)<br>
 > **Scope:** Static Pigsty Inventory inspection, scoped editing, validation, comparison, and safe writes.
 
@@ -73,6 +74,12 @@ Inventory path. Flag and environment relative paths use the caller's cwd, quoted
 user's home, and defaults remain explicit at execution. Missing sources do not fall back.
 Static inspection still never executes dynamic sources; Ansible retains its execution boundary.
 
+The 2026-11-12 refinement also quotes `"="`, `"<<"`, and numeric-looking strings such as `"1e1"`.
+CMDB export formats canonical JSON numbers for YAML 1.1: ordinary integers remain integers,
+floating-point exponents include the required decimal point and sign, and signed or unsigned
+64-bit integer values retain full precision. Export still validates semantic equivalence and refuses
+values that cannot round-trip. This formatting applies to generated CMDB YAML, not untouched source text.
+
 ## Consequences {#impact}
 
 The editor is more complex than ordinary YAML marshaling, and some syntactically valid fragments
@@ -98,6 +105,11 @@ rejection, atomic-write failures, selectors, validation, and secret-free diagnos
 
 Later refactors removed legacy options and separated validation stages without changing the
 source-fidelity model.
+
+The [2026-11-12 scalar implementation](https://github.com/pgsty/pig/commit/f569d0d4f75e39942baf393a224f21a617b29699)
+has exact-integer and CMDB-dump regression tests. With `PIG_TEST_PYYAML` pointing to PyYAML 6.0.3,
+the tests independently check the emitted scalar types and values, including the largest unsigned
+64-bit integer. Local acceptance passed with this independent consumer.
 
 ## Current status {#status}
 
