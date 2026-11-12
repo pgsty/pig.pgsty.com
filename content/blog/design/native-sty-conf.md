@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **Decision date:** 2026-02-18; the production contract was finalized on 2026-08-14.<br>
-> **Status:** Native pipeline released in [pig v1.8.0](/release/pig-1.8.0/); ordered template lookup implemented locally on 2026-11-08, without a PIG release claim. The 2026-11-11 region refinement is Accepted.<br>
+> **Status:** Native pipeline released in [pig v1.8.0](/release/pig-1.8.0/); ordered template lookup is implemented in [`ba771a5`](https://github.com/pgsty/pig/commit/ba771a587ec11a55dd43350cce4e9ce36586b308) and the 2026-11-11 region refinement is implemented in [`a95f37f`](https://github.com/pgsty/pig/commit/a95f37f7af430c447953537dd70bdd5b77030a20), without a PIG release claim.<br>
 > **Current reference:** [`pig sty conf`](/sty/#sty-conf)<br>
 > **Scope:** Generating one validated static Inventory from a trusted Pigsty template; not arbitrary YAML transformation.
 
@@ -120,13 +120,13 @@ from Pigsty commit `d3f3aae` above. The command was `pig sty conf MODE -H FIXTUR
 For each template, its bare, qualified, and `./conf/ha/full.yml`-style spellings produced identical inventories
 and canonical results: 162 invocations in total, with bare names also exercised through `-c`.
 Missing and invalid modes, source/output aliasing, root precedence, and explicit-path selection
-were checked separately. These checks cover configuration generation, not deployment.
+were checked separately. The 2026-11-11 bidirectional `default` region override is implemented in [`a95f37f`](https://github.com/pgsty/pig/commit/a95f37f7af430c447953537dd70bdd5b77030a20) with regression tests covering templates that start with `china` or omit `region`. These checks cover configuration generation, not deployment.
 
 ## Current status {#status}
 
 Use `pig sty conf` to generate a new Inventory from a Pigsty template and
 [`pig inventory`](/inventory/) to inspect or edit an existing declaration. Current flags, modes,
 and preflight behavior live in the [`pig sty` reference](/sty/).
-The ordered lookup extension is locally implemented; the earlier release evidence applies to the
-native pipeline, not to this extension. Availability in a released binary requires a corresponding
+Ordered template lookup and the `default` region override are implemented in source (`ba771a5`, `a95f37f`); the earlier release evidence applies to the
+native pipeline, and availability in a released binary requires a corresponding
 PIG tag or release artifact.

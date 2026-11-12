@@ -116,18 +116,16 @@ errors, and plans. Install and category-list behavior should remain compatible.
 
 ## Verification {#verification}
 
-Acceptance must exercise both real catalog mappings and controlled resolver fixtures on Debian
-and EL across supported majors. Cover server and contrib rejection, language-package allowance,
+Regression tests in [`a95f37f`](https://github.com/pgsty/pig/commit/a95f37f7af430c447953537dd70bdd5b77030a20) exercise both real catalog mappings and controlled resolver fixtures on Debian
+and EL across supported majors. They cover server and contrib rejection, language-package allowance,
 vendor kernels, the OrioleDB name collision, explicit aliases with a different `-v`, category
 expansion, mixed requests in both orders, duplicate packages, and `--yes`.
 
-For rejected runtime requests, assert zero calls to the package-manager adapter. For plans,
+Rejected runtime requests assert zero calls to the package-manager adapter. Plans
 assert failed preconditions, no removal action, and the same rejection reason. Allowed aliases
-must produce exactly the listed packages. Cobra tests must verify text/JSON behavior and exit
-status; tests must use isolated fake executables rather than uninstalling host packages.
+produce only the listed packages. Cobra tests verify text/JSON behavior and exit
+status using isolated fake executables rather than uninstalling host packages.
 
 ## Current status {#status}
 
-The decision is Accepted. The [current reference](/ext/#ext-rm) documents the approved contract.
-The pinned source links above establish the original defect. The implementation is verified in
-[`a95f37f`](https://github.com/pgsty/pig/commit/a95f37f); publication of release artifacts remains a separate stage.
+Implemented in source commit [`a95f37f`](https://github.com/pgsty/pig/commit/a95f37f7af430c447953537dd70bdd5b77030a20), following owner approval on 2026-11-11. The [current reference](/ext/#ext-rm) documents the approved contract, and the pinned source links above establish the original defect; publication of release artifacts remains a separate stage.

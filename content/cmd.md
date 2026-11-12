@@ -116,7 +116,7 @@ pig build ext citus              # build package
 
 ## pig install {#pig-install}
 
-Install packages through the system's native package manager and translate PostgreSQL kernel, extension, and common aliases into package names. Use `-n/--no-translation` when you need to pass raw system package names directly.
+Install packages through the system's native package manager and translate PostgreSQL kernel, extension, and Pigsty bundle aliases (such as `node` and `infra`, including `kes` and `openbao`) into package names. Use `-n/--no-translation` when you need to pass raw system package names directly.
 
 ```bash
 pig install pg_duckdb            # install extension and translate package name

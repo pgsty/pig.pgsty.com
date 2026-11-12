@@ -98,16 +98,14 @@ PL/Tcl 与 PL/TclU 共用语言包，PL/Perl 与 PL/PerlU 也一样。因此不�
 
 ## 验证 {#verification}
 
-使用真实目录映射与受控解析 fixture，覆盖 Debian、EL 和支持的大版本：server/contrib 拒绝、
+提交 [`a95f37f`](https://github.com/pgsty/pig/commit/a95f37f7af430c447953537dd70bdd5b77030a20) 中的回归测试使用真实目录映射与受控解析 fixture，覆盖 Debian、EL 和支持的大版本：server/contrib 拒绝、
 语言包放行、分支内核、OrioleDB 名称冲突、alias 与 `-v` 不同、分类展开、混合请求的两种顺序、
 重复软件包以及 `--yes`。
 
-被拒绝的执行应断言包管理器调用数为零。计划应具有失败的前置条件、不含卸载动作，且与执行报告相同原因。
-允许的 alias 必须只产生列明的软件包。Cobra 测试验证文本、JSON 和退出状态；使用隔离的假命令，
+被拒绝的执行断言包管理器调用数为零。计划具有失败的前置条件、不含卸载动作，且与执行报告相同原因。
+允许的 alias 只产生列明的软件包。Cobra 测试使用隔离的假命令验证文本、JSON 和退出状态，
 不在宿主机实际卸载软件包。
 
 ## 当前状态 {#status}
 
-本决策已接受，[当前参考](/zh/ext/#ext-rm) 描述批准的契约。
-上文的固定源码链接证明原始缺陷；实现已在 [`a95f37f`](https://github.com/pgsty/pig/commit/a95f37f)
-中验证，发布产物仍是独立阶段。
+本决策于 2026-11-11 获批，并已在源码提交 [`a95f37f`](https://github.com/pgsty/pig/commit/a95f37f7af430c447953537dd70bdd5b77030a20) 中实现并验证。[当前参考](/zh/ext/#ext-rm) 描述生效契约，上文的固定源码链接证明原始缺陷；发布产物仍是独立阶段。

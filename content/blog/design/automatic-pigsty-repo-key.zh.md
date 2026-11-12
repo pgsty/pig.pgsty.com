@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **决策日期：** 2026-10-04<br>
-> **状态：** Released（已发布），随 [v1.9.0](/zh/release/pig-1.9.0/) 交付。2026-11-11 的 APT 信任策略协调修订为 Accepted，不声明已发布。<br>
+> **状态：** Released（已发布），随 [v1.9.0](/zh/release/pig-1.9.0/) 交付。2026-11-11 的 APT 信任策略协调修订已在 [`a95f37f`](https://github.com/pgsty/pig/commit/a95f37f7af430c447953537dd70bdd5b77030a20) 实现，不声明已发布。<br>
 > **当前参考：** [`pig repo`](/zh/repo/)<br>
 > **范围：** 配置仓库时安装已有的内嵌 Pigsty 公钥。
 
@@ -103,11 +103,11 @@ sudo 创建缺失的密钥目录、内嵌公钥字节与权限一致、重复执
 有效自定义密钥仍能工作，以及显式与默认密钥混合配置的场景。权限测试禁止普通用户遍历密钥目录，
 验证提权安装和隐藏符号链接拒绝行为。RPM 导入测试使用虚拟机 RPM 数据库的隔离副本。
 
-信任策略修订要求覆盖重复 boot/add、模块重叠、保留的 `.list` 与 Deb822 `.sources`、
-显式冲突在文件变更前拒绝、公钥失败与替换场景。还须让真实 APT 解析器读取隔离的源和状态目录，
+提交 [`a95f37f`](https://github.com/pgsty/pig/commit/a95f37f7af430c447953537dd70bdd5b77030a20) 中的信任策略修订覆盖重复 boot/add、模块重叠、保留的 `.list` 与 Deb822 `.sources`、
+显式冲突在文件变更前拒绝、公钥失败与替换场景。Linux 客体验收还需让真实 APT 解析器读取隔离的源和状态目录，
 确认生成配置可接受；单靠 fixture 测试不能证明原生 APT 兼容性。
 
 ## 当前状态 {#status}
 
-已随 [v1.9.0](https://github.com/pgsty/pig/releases/tag/v1.9.0) 发布。
+自动安装公钥已随 [v1.9.0](https://github.com/pgsty/pig/releases/tag/v1.9.0) 发布；APT Release 级信任策略协调已在源码提交 [`a95f37f`](https://github.com/pgsty/pig/commit/a95f37f7af430c447953537dd70bdd5b77030a20) 实现，不声明已发布。
 用法与平台要求见文首链接的当前参考文档。

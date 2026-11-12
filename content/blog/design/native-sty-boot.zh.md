@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **决策日期：** 2026-08-14<br>
-> **状态：** 已实现并随 [pig v1.8.0](/zh/release/pig-1.8.0/) 发布。2026-11-11 的离线来源修订为 Accepted，不声明已发布。<br>
+> **状态：** 已实现并随 [pig v1.8.0](/zh/release/pig-1.8.0/) 发布。2026-11-11 的离线来源修订已在 [`a95f37f`](https://github.com/pgsty/pig/commit/a95f37f7af430c447953537dd70bdd5b77030a20) 实现，不声明已发布。<br>
 > **当前参考：** [`pig sty boot`](/zh/sty/#sty-boot)<br>
 > **范围：** 准备 Pigsty 控制节点及其软件来源，不包括部署数据库集群。
 
@@ -73,7 +73,7 @@ draft: false
 离线包改进提交
 [`8fa3abb`](https://github.com/pgsty/pig/commit/8fa3abb136ac5afeb9c58e24383c7b575a42c3b8)
 保留多个通过校验的顶层仓库，继续使用 `repo_complete` 完成标记。
-该改进已随 [v1.8.1](/zh/release/pig-1.8.1/) 发布。
+该改进已随 [v1.8.1](/zh/release/pig-1.8.1/) 发布。2026-11-11 的离线来源优先级修订已在 [`a95f37f`](https://github.com/pgsty/pig/commit/a95f37f7af430c447953537dd70bdd5b77030a20) 实现，回归测试覆盖首选离线包位置优先、缺失时回退旧位置，以及主候选不安全或不可读时禁止回退。
 
 ## 当前状态 {#status}
 

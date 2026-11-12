@@ -190,7 +190,7 @@ pig ext add pg18-client          # 仅安装客户端工具
 | `pg18-client` | 客户端工具 |
 | `pg18-devel` | 开发文件 |
 | `pg18-basic` | pg_repack、wal2json 和 pgvector |
-| `pgsql-common` | patroni、pgbouncer、pgbackrest、pg-exporter、pgbackrest-exporter、vip-manager 与 python3-etcd |
+| `pgsql-common` | patroni、pgbouncer、pgbackrest、pg-exporter、pgbackrest-exporter、vip-manager，以及 patroni-etcd（EL）或 python3-etcd（Debian/Ubuntu） |
 {.full-width}
 
 将 `18` 替换为所需的大版本，也可以用 `pgsql` 配合 `-v 18`。

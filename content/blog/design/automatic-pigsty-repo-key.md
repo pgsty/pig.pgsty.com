@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **Decision date:** 2026-10-04<br>
-> **Status:** Released in [v1.9.0](/release/pig-1.9.0/). The 2026-11-11 APT trust-reconciliation refinement is Accepted, without a release claim.<br>
+> **Status:** Released in [v1.9.0](/release/pig-1.9.0/). The 2026-11-11 APT trust-reconciliation refinement is implemented in [`a95f37f`](https://github.com/pgsty/pig/commit/a95f37f7af430c447953537dd70bdd5b77030a20), without a release claim.<br>
 > **Current reference:** [`pig repo`](/repo/)<br>
 > **Scope:** Installing the existing embedded Pigsty public key during repository configuration.
 
@@ -131,12 +131,12 @@ path, and mixed explicit/implicit definitions. Permission tests deny ordinary-us
 the key directory and verify both privileged installation and rejection of a hidden symlink.
 RPM import tests use an isolated copy of the guest's RPM database.
 
-The trust refinement requires repeated boot/add and overlapping-module tests, retained `.list`
+The trust refinement in [`a95f37f`](https://github.com/pgsty/pig/commit/a95f37f7af430c447953537dd70bdd5b77030a20) adds repeated boot/add and overlapping-module tests, retained `.list`
 and Deb822 `.sources` fixtures, explicit-conflict rejection before file changes, key-failure
-behavior, and replacement. A real APT parser must accept the generated definitions with isolated
-source and state directories; fixture tests alone do not establish native APT compatibility.
+behavior, and replacement. Linux guest acceptance also exercises a real APT parser with isolated
+source and state directories, since fixture tests alone do not establish native APT compatibility.
 
 ## Current status {#status}
 
-Released in [v1.9.0](https://github.com/pgsty/pig/releases/tag/v1.9.0).
+Automatic key installation shipped in [v1.9.0](https://github.com/pgsty/pig/releases/tag/v1.9.0); APT release-level trust reconciliation is implemented in source commit [`a95f37f`](https://github.com/pgsty/pig/commit/a95f37f7af430c447953537dd70bdd5b77030a20), without a release claim.
 See the current reference linked above for usage and platform requirements.

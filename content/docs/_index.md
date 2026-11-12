@@ -11,7 +11,7 @@ icon: fa-solid fa-book
 toc_root: true
 ---
 
-Documentation version: **v{{< param version >}}**. This release adds seven catalog entries, removes one retired record, and fixes target-version category aliases, bringing the embedded catalog to **{{< param pgext_count >}} entries**. Read the [release notes](/release/pig-1.10.4/).
+Documentation version: **v{{< param version >}}**. This release aligns with Pigsty **v{{< param pigsty_version >}}**, hardens package and operational command safety, adds ordered `sty conf` template shorthand lookup, and updates the embedded catalog to **{{< param pgext_count >}} entries**. Read the [release notes](/release/pig-{{< param version >}}/).
 
 PIG provides commands to find, install, and build PostgreSQL extension packages. It also manages PostgreSQL, Patroni, pgBackRest, and Pigsty workflows. Package installation uses the system's `apt`, `dnf`, or `yum`.
 

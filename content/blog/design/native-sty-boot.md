@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **Decision date:** 2026-08-14<br>
-> **Status:** Implemented and released in [pig v1.8.0](/release/pig-1.8.0/). The 2026-11-11 offline-source refinement is Accepted, without a release claim.<br>
+> **Status:** Implemented and released in [pig v1.8.0](/release/pig-1.8.0/). The 2026-11-11 offline-source refinement is implemented in [`a95f37f`](https://github.com/pgsty/pig/commit/a95f37f7af430c447953537dd70bdd5b77030a20), without a release claim.<br>
 > **Current reference:** [`pig sty boot`](/sty/#sty-boot)<br>
 > **Scope:** Preparing a Pigsty controller and its package sources; not deploying a database cluster.
 
@@ -87,7 +87,7 @@ results. The release page records delivery in v1.8.0.
 The offline-bundle refinement in
 [`8fa3abb`](https://github.com/pgsty/pig/commit/8fa3abb136ac5afeb9c58e24383c7b575a42c3b8)
 preserves multiple validated top-level repositories and retains the `repo_complete` marker.
-It shipped in [v1.8.1](/release/pig-1.8.1/).
+It shipped in [v1.8.1](/release/pig-1.8.1/). The 2026-11-11 automatic-source precedence refinement is implemented in [`a95f37f`](https://github.com/pgsty/pig/commit/a95f37f7af430c447953537dd70bdd5b77030a20) with regression tests for primary offline-bundle selection, legacy-path fallback when absent, and non-fallback on unsafe or unreadable primary candidates.
 
 ## Current status {#status}
 

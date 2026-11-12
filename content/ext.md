@@ -191,7 +191,7 @@ Use these aliases to select a PostgreSQL package group:
 | `pg18-client` | Client tools |
 | `pg18-devel` | Development files |
 | `pg18-basic` | pg_repack, wal2json, and pgvector |
-| `pgsql-common` | patroni, pgbouncer, pgbackrest, pg-exporter, pgbackrest-exporter, vip-manager, and python3-etcd |
+| `pgsql-common` | patroni, pgbouncer, pgbackrest, pg-exporter, pgbackrest-exporter, vip-manager, and patroni-etcd (EL) or python3-etcd (Debian/Ubuntu) |
 {.full-width}
 
 Replace `18` with the required major version. You can also use `pgsql` with `-v 18`.

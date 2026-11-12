@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **决策日期：** 2026-02-18；生产契约于 2026-08-14 定稿。<br>
-> **状态：** 原生流水线已随 [pig v1.8.0](/zh/release/pig-1.8.0/) 发布；有序模板查找于 2026-11-08 在本地实现，不声明已随 PIG 发布。2026-11-11 的区域修订为 Accepted。<br>
+> **状态：** 原生流水线已随 [pig v1.8.0](/zh/release/pig-1.8.0/) 发布；有序模板查找已在 [`ba771a5`](https://github.com/pgsty/pig/commit/ba771a587ec11a55dd43350cce4e9ce36586b308) 实现，2026-11-11 的区域修订已在 [`a95f37f`](https://github.com/pgsty/pig/commit/a95f37f7af430c447953537dd70bdd5b77030a20) 实现，均不声明已随 PIG 发布。<br>
 > **当前参考：** [`pig sty conf`](/zh/sty/#sty-conf)<br>
 > **范围：** 从受信 Pigsty 模板生成一份经过校验的静态 Inventory，不是任意 YAML 转换器。
 
@@ -100,11 +100,11 @@ PIG 实现记录于提交
 2026-11-08 的 CLI 复核使用上述 Pigsty 提交 `d3f3aae` 中全部 54 个 `.yml` 条目，包含 Supabase 符号链接。
 以裸名称、带目录的名称和 `./conf/ha/full.yml` 这样的文件名执行 `pig sty conf MODE -H FIXTURE -r default -s -n -o json -O OUTPUT`。
 共执行 162 次调用，每份模板的三种写法都生成相同的 Inventory，并返回相同的规范名称；裸名称同时覆盖 `-c` 形式。
-另行验证了不存在与非法模式、源/输出别名、根目录优先级和显式路径选择。这些检查验证配置生成，不代表部署验收。
+另行验证了不存在与非法模式、源/输出别名、根目录优先级和显式路径选择。2026-11-11 的 `default` 区域双向覆盖修订已在 [`a95f37f`](https://github.com/pgsty/pig/commit/a95f37f7af430c447953537dd70bdd5b77030a20) 实现，回归测试覆盖预设 `china` 与省略 `region` 的模板。这些检查验证配置生成，不代表部署验收。
 
 ## 当前状态 {#status}
 
 使用 `pig sty conf` 从 Pigsty 模板生成新 Inventory，使用 [`pig inventory`](/zh/inventory/) 查看或编辑已有声明。
 当前参数、mode 与预检行为维护在 [`pig sty` 参考文档](/zh/sty/)中。
-有序查找扩展已在本地实现；此前发布证据仅适用于原生流水线，不涵盖此扩展。
+有序查找扩展与 `default` 区域覆盖已在源码中实现（`ba771a5`、`a95f37f`）；此前发布证据仅适用于原生流水线。
 发行版中的可用性仍需对应 PIG 标签或发布制品佐证。

@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **Decision date:** 2026-02-12<br>
-> **Status:** Released in [pig v1.1.0](/release/pig-1.1.0/) and refined in [pig v1.10.0](/release/pig-1.10.0/). The 2026-11-11 output refinements are Accepted, without a release claim.<br>
+> **Status:** Released in [pig v1.1.0](/release/pig-1.1.0/) and refined in [pig v1.10.0](/release/pig-1.10.0/). The 2026-11-11 output refinements are implemented in [`a95f37f`](https://github.com/pgsty/pig/commit/a95f37f7af430c447953537dd70bdd5b77030a20), without a release claim.<br>
 > **Current reference:** [`pig` command overview](/cmd/)<br>
 > **Scope:** PIG-owned commands and their machine-consumption contract; opaque passthrough commands keep their native interface.
 
@@ -109,9 +109,9 @@ example of reducing PIG-owned structure when the upstream interface is already a
 Tests now cover structured stdout isolation, result rendering, plan behavior, confirmation gates,
 and context collection in the packages that own those contracts.
 
-The output refinement requires process-level argument-error tests and a legacy-wrapper test that
+The output refinement in [`a95f37f`](https://github.com/pgsty/pig/commit/a95f37f7af430c447953537dd70bdd5b77030a20) adds process-level argument-error tests and a legacy-wrapper test that
 performs an isolated HTTP download and decodes stdout as exactly one result. Diagnostic truncation
-tests must retain the final failure and drain all input, including after the capture limit.
+tests retain the final failure and drain all input, including after the capture limit.
 
 ## Current status {#status}
 

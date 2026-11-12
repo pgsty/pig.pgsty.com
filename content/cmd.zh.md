@@ -115,7 +115,7 @@ pig build ext citus              # 构建包
 
 ## pig install {#pig-install}
 
-使用系统原生包管理器安装软件包，并对 PostgreSQL 内核、扩展及常用别名做包名翻译。需要直接传递系统包名时，可使用 `-n/--no-translation`。
+使用系统原生包管理器安装软件包，并对 PostgreSQL 内核、扩展及 Pigsty 组件组别名（如 `node`、`infra`，含 `kes` 与 `openbao`）做包名翻译。需要直接传递系统包名时，可使用 `-n/--no-translation`。
 
 ```bash
 pig install pg_duckdb            # 安装扩展并自动翻译包名
