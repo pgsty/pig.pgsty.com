@@ -12,7 +12,7 @@ draft: false
 
 > **决策日期：** 2026-07-18<br>
 > **状态：** 已实现并随 [pig v1.6.0](/zh/release/pig-1.6.0/) 发布；2026-10-16 至 2026-10-17 的验收修订已随 [pig v1.10.0](/zh/release/pig-1.10.0/) 发布。<br>
-> **最新修订：** 2026-11-12 的 CMDB 标量修复已在 [`f569d0d`](https://github.com/pgsty/pig/commit/f569d0d4f75e39942baf393a224f21a617b29699) 中实现（Implemented），不声明已发布。<br>
+> **最新修订：** 2026-11-12 的 CMDB 标量修复在 [`f569d0d`](https://github.com/pgsty/pig/commit/f569d0d4f75e39942baf393a224f21a617b29699) 中实现，已随 [pig v1.11.0](https://github.com/pgsty/pig/releases/tag/v1.11.0) 发布（Released）。<br>
 > **当前参考：** [`pig inventory`](/zh/inventory/)<br>
 > **范围：** 静态 Pigsty Inventory 的查看、局部编辑、校验、比较与安全写入。
 

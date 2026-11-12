@@ -2,7 +2,7 @@
 title: "One Catalog Entry Count for the Website and CLI"
 linkTitle: "Catalog Entry Count"
 date: 2026-10-16
-lastmod: 2026-11-11
+lastmod: 2026-11-12
 description: "Count every catalog record consistently across the website, extension lists, availability summaries, and catalog refresh results."
 tags: [catalog, ext, cli]
 weight: 96
@@ -65,6 +65,7 @@ search and package counts specific to their returned rows.
 ## Status {#status}
 
 Accepted on 2026-10-16 and released in [v1.10.0](https://github.com/pgsty/pig/releases/tag/v1.10.0)
-(603 records); [v1.10.4](/release/pig-1.10.4/) bundles 626 records. Use the
+(603 records); [v1.10.4](/release/pig-1.10.4/) bundles 626 records, and
+[v1.11.0](https://github.com/pgsty/pig/releases/tag/v1.11.0) bundles 625 records after removing the retired `documentdb_distributed` entry. Use the
 [current reference](/ext/#catalog-count) for the counting contract and [release notes](/release/)
 for version boundaries.

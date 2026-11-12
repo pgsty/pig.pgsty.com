@@ -2,7 +2,7 @@
 title: "受保护软件包只能通过显式内核别名卸载"
 linkTitle: "受保护软件包卸载"
 date: 2026-11-11
-lastmod: 2026-11-11
+lastmod: 2026-11-12
 description: "根据最终软件包和原始输入决定卸载边界，同时保留独立语言包的卸载能力。"
 tags: [ext, catalog, cli]
 weight: 96
@@ -11,9 +11,9 @@ draft: false
 ---
 
 > **决策日期：** 2026-11-11<br>
-> **状态：** 已实现，源码提交为 [`a95f37f`](https://github.com/pgsty/pig/commit/a95f37f)；2026-11-11 已批准软件包边界、显式别名与整单拒绝规则，不表示已发布。<br>
+> **状态：** 已随 [pig v1.11.0](https://github.com/pgsty/pig/releases/tag/v1.11.0) 发布，源码提交为 [`a95f37f`](https://github.com/pgsty/pig/commit/a95f37f)；软件包边界、显式别名与整单拒绝规则于 2026-11-11 获批。<br>
 > **当前参考：** [`pig ext rm`](/zh/ext/#ext-rm)<br>
-> **范围：** `ext rm` 的软件包选择；不表示已有对应发布标签，或已模拟包管理器依赖事务。
+> **范围：** `ext rm` 的软件包选择；不包含包管理器依赖事务模拟。
 
 ## 决策 {#decision}
 
@@ -108,4 +108,4 @@ PL/Tcl 与 PL/TclU 共用语言包，PL/Perl 与 PL/PerlU 也一样。因此不�
 
 ## 当前状态 {#status}
 
-本决策于 2026-11-11 获批，并已在源码提交 [`a95f37f`](https://github.com/pgsty/pig/commit/a95f37f7af430c447953537dd70bdd5b77030a20) 中实现并验证。[当前参考](/zh/ext/#ext-rm) 描述生效契约，上文的固定源码链接证明原始缺陷；发布产物仍是独立阶段。
+本决策于 2026-11-11 获批，并已在源码提交 [`a95f37f`](https://github.com/pgsty/pig/commit/a95f37f7af430c447953537dd70bdd5b77030a20) 中实现并验证。[当前参考](/zh/ext/#ext-rm) 描述生效契约，上文的固定源码链接证明原始缺陷；该实现已包含在 [v1.11.0 发布制品](https://github.com/pgsty/pig/releases/tag/v1.11.0)中。

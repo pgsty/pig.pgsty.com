@@ -19,6 +19,7 @@ PIG `v1.11.0` 对齐内嵌 Pigsty `v4.6.0`，新增 `pig sty conf` 有序模板�
 - **Pigsty 剧本移除保护**：[`pig do pgsql-rm`](/zh/do/#postgresql-operations) 默认传递 `pg_rm_pkg=false`，仅在指定 `--uninstall` 时传递 `pg_rm_pkg=true`；`pig do pgmon-rm` 统一清理 `infra` 主机上的 `/infra/targets/pgrds/<cluster>.yml`，与 `pgmon-add` 保持一致。详见 [运维 CLI 安全契约](/zh/design/ops-cli-safety/)。
 - **PostgreSQL 与恢复命令边界**：文本模式 `pig pg status` 与结构化输出保持一致的退出码，且当前用户已是目标 DBSU 时不再依赖外部 `test` 命令；`pig pg psql -f` 启用 `ON_ERROR_STOP=1` 并在切换用户前解析调用者相对路径；内部库名枚举传入 `psql -X`；`pig pg fork` 在 `postgresql.conf` 与 `postgresql.auto.conf` 中同步锁定独立的 `data_directory`、`hba_file`、`ident_file`、`port` 及归档/恢复覆盖项，并在确认重试提示中保留 `--force`；`pig pg vacuum` 与 `pig pg freeze` 在传入 `--schema` 时强制要求搭配 `--table`；`pig pg kill` 与 `pig pg tune` 拦截非法 PID、轮询间隔与浮点边界；`pig pb restore` 与 `pig pitr` 保留复合增量/差异备份标签，拒绝 `--reset-*` / `--no-*` 透传覆盖及显式空 `-D` 参数，并隐藏错误诊断中的原始选项值。
 - **结构化输出与配置保真**：早期参数错误渲染支持连写的 `-ojson` 且不跨越 `--` 转发边界；原子文件写回严格保留原有权限模式而不再回退为 `0644`；旧式包装器下载期间抑制进度条污染 stdout；有上限诊断同时保留首尾上下文，而配置与 SQL 查询保持完整读取；`pig inventory cmdb dump` 保留有符号/无符号 64 位整型与浮点标量类型，并识别多主机 PostgreSQL URI 及 `sslpassword` 凭据；`pig pt status` 在解析 Patroni 配置失败时返回结构化 JSON 错误；`pig sty grafana` 拒绝不安全的仪表盘路径分量并对异常端点 URL 脱敏。
+- **目录加载与安装路径**：`pig ext` 正确加载用户配置的目录来源，并在执行安装操作前校验 PostgreSQL 安装路径。
 
 ## Pigsty 4.6.0 引导与配置 {#pigsty-bootstrap-and-configuration}
 
@@ -46,6 +47,17 @@ PIG `v1.11.0` 对齐内嵌 Pigsty `v4.6.0`，新增 `pig sty conf` 有序模板�
 内嵌目录包含 **625 条记录**（全部 **625 条** 均为 `available` 状态，保留已移除记录为 **0 条**）。包含 PostgreSQL contrib 模块时，共对应 **518 个不同包名**；非 contrib 包系列共 **457 个**。详见 [目录条目计数口径](/zh/ext/#catalog-count)。
 
 PIG `v1.11.0` 使用 Go `1.27.4` 构建，内嵌 Pigsty `4.6.0`，默认 `cargo-pgrx` 为 `0.19.3`。升级 PIG 请参阅 [安装文档](/zh/install/)。
+
+## 升级 {#upgrade}
+
+使用已安装的 PIG 升级到本版本：
+
+```bash
+pig update -v 1.11.0
+pig version
+```
+
+首次安装及各平台说明见[安装文档](/zh/install/)。
 
 ## 校验和 {#checksums}
 

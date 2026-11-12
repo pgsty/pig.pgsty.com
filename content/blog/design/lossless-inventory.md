@@ -12,7 +12,7 @@ draft: false
 
 > **Decision date:** 2026-07-18<br>
 > **Status:** Implemented and released in [pig v1.6.0](/release/pig-1.6.0/); the 2026-10-16 to 2026-10-17 refinements shipped in [pig v1.10.0](/release/pig-1.10.0/).<br>
-> **Latest refinement:** The 2026-11-12 CMDB scalar fixes are Implemented in [`f569d0d`](https://github.com/pgsty/pig/commit/f569d0d4f75e39942baf393a224f21a617b29699), without a release claim.<br>
+> **Latest refinement:** The 2026-11-12 CMDB scalar fixes from [`f569d0d`](https://github.com/pgsty/pig/commit/f569d0d4f75e39942baf393a224f21a617b29699) are Released in [pig v1.11.0](https://github.com/pgsty/pig/releases/tag/v1.11.0).<br>
 > **Current reference:** [`pig inventory`](/inventory/)<br>
 > **Scope:** Static Pigsty Inventory inspection, scoped editing, validation, comparison, and safe writes.
 

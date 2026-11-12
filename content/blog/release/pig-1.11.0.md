@@ -19,6 +19,7 @@ PIG `v1.11.0` aligns embedded Pigsty support with `v4.6.0`, adds ordered templat
 - **Explicit playbook removal boundaries**: [`pig do pgsql-rm`](/do/#postgresql-operations) passes `pg_rm_pkg=false` by default unless `--uninstall` sets `pg_rm_pkg=true`, and `pig do pgmon-rm` removes `/infra/targets/pgrds/<cluster>.yml` on `infra` hosts to match `pgmon-add`. See the [operations CLI safety contract](/design/ops-cli-safety/).
 - **PostgreSQL and recovery execution guards**: text `pig pg status` now shares structured exit status and avoids external `test` dependency when already running as the target DBSU; `pig pg psql -f` enables `ON_ERROR_STOP=1` and resolves caller-relative paths before user switching; internal database enumeration passes `psql -X`; `pig pg fork` pins isolated `data_directory`, `hba_file`, `ident_file`, `port`, and recovery/archive overrides across both `postgresql.conf` and `postgresql.auto.conf`, while propagating `--force` into confirmation retry hints; `pig pg vacuum` and `pig pg freeze` enforce `--table` when `--schema` is specified; `pig pg kill` and `pig pg tune` reject invalid PID, watch, and floating-point boundaries; and `pig pb restore` / `pig pitr` preserve incremental/differential backup labels, reject `--reset-*` / `--no-*` overrides and empty `-D` flags, and omit raw option values from validation errors.
 - **Structured output and inventory fidelity**: early argument-error rendering honors attached `-ojson` spellings without crossing `--`; atomic file writes preserve existing permissions instead of falling back to `0644`; legacy wrapper downloads keep progress off stdout; bounded diagnostic capture retains both head and tail context while preserving full data capture for configuration and SQL queries; `pig inventory cmdb dump` preserves signed/unsigned 64-bit integer and floating-point scalar types and flags multi-host PostgreSQL URI and `sslpassword` credentials; `pig pt status` emits structured JSON errors when Patroni configuration resolution fails; and `pig sty grafana` rejects unsafe dashboard path segments while redacting malformed endpoint URLs.
+- **Catalog loading and installation paths**: `pig ext` honors configured catalog sources and validates PostgreSQL installation paths before installation operations.
 
 ## Pigsty 4.6.0 bootstrap and configuration {#pigsty-bootstrap-and-configuration}
 
@@ -46,6 +47,17 @@ PIG `v1.11.0` aligns embedded Pigsty support with `v4.6.0`, adds ordered templat
 The embedded catalog contains **625 records** (**625 available** entries and **0 retained removed** records). They map to **518 distinct package names**, including PostgreSQL contrib modules, or **457 non-contrib package families**. See the [catalog-entry counting rule](/ext/#catalog-count).
 
 PIG `v1.11.0` is built with Go `1.27.4`, embeds Pigsty `4.6.0`, and defaults `cargo-pgrx` to `0.19.3`. Follow the [installation guide](/install/) to upgrade PIG.
+
+## Upgrade {#upgrade}
+
+Upgrade an existing PIG installation to this release:
+
+```bash
+pig update -v 1.11.0
+pig version
+```
+
+See the [installation guide](/install/) for first-time installation and platform details.
 
 ## Checksums {#checksums}
 

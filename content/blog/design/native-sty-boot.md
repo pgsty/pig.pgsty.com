@@ -2,7 +2,7 @@
 title: "Bootstrapping a Pigsty Controller as a Recoverable Transaction"
 linkTitle: "Native sty boot"
 date: 2026-08-14
-lastmod: 2026-11-11
+lastmod: 2026-11-12
 description: "Why pig sty boot resolves sources before elevation, separates hard failures from finishing warnings, and restores repositories after failed setup."
 tags: [sty, repo, install]
 weight: 90
@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **Decision date:** 2026-08-14<br>
-> **Status:** Implemented and released in [pig v1.8.0](/release/pig-1.8.0/). The 2026-11-11 offline-source refinement is implemented in [`a95f37f`](https://github.com/pgsty/pig/commit/a95f37f7af430c447953537dd70bdd5b77030a20), without a release claim.<br>
+> **Status:** Implemented and released in [pig v1.8.0](/release/pig-1.8.0/). The 2026-11-11 offline-source refinement from [`a95f37f`](https://github.com/pgsty/pig/commit/a95f37f7af430c447953537dd70bdd5b77030a20) shipped in [pig v1.11.0](https://github.com/pgsty/pig/releases/tag/v1.11.0).<br>
 > **Current reference:** [`pig sty boot`](/sty/#sty-boot)<br>
 > **Scope:** Preparing a Pigsty controller and its package sources; not deploying a database cluster.
 

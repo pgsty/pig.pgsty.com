@@ -11,8 +11,8 @@ draft: false
 ---
 
 > **Decision date:** 2026-07-02<br>
-> **Status:** Released for `pg`, `pb`, `pt`, and `pitr` by v1.5.0; the 2026-08-29 `do` and `build proxy` refinements shipped in [v1.8.1](/release/pig-1.8.1/), and the 2026-10-16 to 2026-10-17 acceptance refinements shipped in [v1.10.0](/release/pig-1.10.0/). The 2026-11-10 removal and 2026-11-11 execution refinements are implemented in [`a95f37f`](https://github.com/pgsty/pig/commit/a95f37f), without a release claim.<br>
-> **Latest refinement:** The 2026-11-12 target-isolation and validation fixes are Implemented in the commits listed under [verification](#verification), without a release claim.<br>
+> **Status:** Released for `pg`, `pb`, `pt`, and `pitr` by v1.5.0; the 2026-08-29 `do` and `build proxy` refinements shipped in [v1.8.1](/release/pig-1.8.1/), and the 2026-10-16 to 2026-10-17 acceptance refinements shipped in [v1.10.0](/release/pig-1.10.0/). The 2026-11-10 removal and 2026-11-11 execution refinements from [`a95f37f`](https://github.com/pgsty/pig/commit/a95f37f) shipped in [v1.11.0](/release/pig-1.11.0/).<br>
+> **Latest refinement:** The 2026-11-12 target-isolation and validation fixes are Released in [v1.11.0](https://github.com/pgsty/pig/releases/tag/v1.11.0); implementation commits are listed under [verification](#verification).<br>
 > **Current reference:** [`pig pg`](/pg/), [`pig pb`](/pb/), [`pig pitr`](/pitr/), [`pig do`](/do/), [`pig build`](/build/), [`pig repo`](/repo/), and [`pig ext`](/ext/)<br>
 > **Scope:** PIG-owned operational commands; transparent upstream commands retain upstream confirmation and exit behavior.
 
@@ -231,7 +231,7 @@ The 2026-11-12 implementation is pinned in
 Regression tests invoke real `postgres -C` to verify the selected directory, authentication files,
 and port, including inherited include files and special characters. Linux PostgreSQL 18.6 acceptance
 also checks private PGDATA, process identity, cross-user writes, and connection-target isolation.
-These local checks do not establish release or deployment.
+The 2026-11-10 through 2026-11-12 refinements are included in [v1.11.0](https://github.com/pgsty/pig/releases/tag/v1.11.0), built from [`365bf12`](https://github.com/pgsty/pig/commit/365bf1282fdb2319e2367740e792ba59bcc04d04) by the successful [release workflow](https://github.com/pgsty/pig/actions/runs/43128433510).
 
 ## Current status {#status}
 

@@ -2,7 +2,7 @@
 title: "先编译和校验，再提交：原生 sty conf 流水线"
 linkTitle: "原生 sty conf"
 date: 2026-02-18
-lastmod: 2026-11-11
+lastmod: 2026-11-12
 description: "pig sty conf 如何校验模板、修改配置、保护凭据，并原子写入 Inventory。"
 tags: [sty, inventory]
 weight: 15
@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **决策日期：** 2026-02-18；生产契约于 2026-08-14 定稿。<br>
-> **状态：** 原生流水线已随 [pig v1.8.0](/zh/release/pig-1.8.0/) 发布；有序模板查找已在 [`ba771a5`](https://github.com/pgsty/pig/commit/ba771a587ec11a55dd43350cce4e9ce36586b308) 实现，2026-11-11 的区域修订已在 [`a95f37f`](https://github.com/pgsty/pig/commit/a95f37f7af430c447953537dd70bdd5b77030a20) 实现，均不声明已随 PIG 发布。<br>
+> **状态：** 原生流水线已随 [pig v1.8.0](/zh/release/pig-1.8.0/) 发布；有序模板查找已在 [`ba771a5`](https://github.com/pgsty/pig/commit/ba771a587ec11a55dd43350cce4e9ce36586b308) 实现，2026-11-11 的区域修订已在 [`a95f37f`](https://github.com/pgsty/pig/commit/a95f37f7af430c447953537dd70bdd5b77030a20) 实现；两项修订均已随 [pig v1.11.0](https://github.com/pgsty/pig/releases/tag/v1.11.0) 发布。<br>
 > **当前参考：** [`pig sty conf`](/zh/sty/#sty-conf)<br>
 > **范围：** 从受信 Pigsty 模板生成一份经过校验的静态 Inventory，不是任意 YAML 转换器。
 
@@ -106,5 +106,5 @@ PIG 实现记录于提交
 
 使用 `pig sty conf` 从 Pigsty 模板生成新 Inventory，使用 [`pig inventory`](/zh/inventory/) 查看或编辑已有声明。
 当前参数、mode 与预检行为维护在 [`pig sty` 参考文档](/zh/sty/)中。
-有序查找扩展与 `default` 区域覆盖已在源码中实现（`ba771a5`、`a95f37f`）；此前发布证据仅适用于原生流水线。
-发行版中的可用性仍需对应 PIG 标签或发布制品佐证。
+有序查找扩展与 `default` 区域覆盖已包含在 [pig v1.11.0 发布制品](https://github.com/pgsty/pig/releases/tag/v1.11.0)中，
+实现证据见 `ba771a5` 与 `a95f37f`。

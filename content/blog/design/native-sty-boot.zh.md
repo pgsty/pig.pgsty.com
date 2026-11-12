@@ -2,7 +2,7 @@
 title: "把 Pigsty 控制节点引导设计成可恢复事务"
 linkTitle: "原生 sty boot"
 date: 2026-08-14
-lastmod: 2026-11-11
+lastmod: 2026-11-12
 description: "为什么 pig sty boot 在提权前解析来源、分离硬失败与收尾告警，并在软件源准备失败时恢复仓库定义。"
 tags: [sty, repo, install]
 weight: 90
@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **决策日期：** 2026-08-14<br>
-> **状态：** 已实现并随 [pig v1.8.0](/zh/release/pig-1.8.0/) 发布。2026-11-11 的离线来源修订已在 [`a95f37f`](https://github.com/pgsty/pig/commit/a95f37f7af430c447953537dd70bdd5b77030a20) 实现，不声明已发布。<br>
+> **状态：** 已实现并随 [pig v1.8.0](/zh/release/pig-1.8.0/) 发布。2026-11-11 的离线来源修订在 [`a95f37f`](https://github.com/pgsty/pig/commit/a95f37f7af430c447953537dd70bdd5b77030a20) 实现，已随 [pig v1.11.0](https://github.com/pgsty/pig/releases/tag/v1.11.0) 发布。<br>
 > **当前参考：** [`pig sty boot`](/zh/sty/#sty-boot)<br>
 > **范围：** 准备 Pigsty 控制节点及其软件来源，不包括部署数据库集群。
 

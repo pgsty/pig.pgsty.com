@@ -11,8 +11,8 @@ draft: false
 ---
 
 > **决策日期：** 2026-07-02<br>
-> **状态：** `pg`、`pb`、`pt`、`pitr` 已于 v1.5.0 交付；2026-08-29 的 `do` 与 `build proxy` 修订随 [v1.8.1](/zh/release/pig-1.8.1/) 发布，2026-10-16 至 2026-10-17 的验收修订随 [v1.10.0](/zh/release/pig-1.10.0/) 发布。2026-11-10 的移除修订与 2026-11-11 的执行修订已在 [`a95f37f`](https://github.com/pgsty/pig/commit/a95f37f) 实现，不声明已发布。<br>
-> **最新修订：** 2026-11-12 的目标隔离与校验修复已在[验证章节](#verification)列出的提交中实现（Implemented），不声明已发布。<br>
+> **状态：** `pg`、`pb`、`pt`、`pitr` 已于 v1.5.0 交付；2026-08-29 的 `do` 与 `build proxy` 修订随 [v1.8.1](/zh/release/pig-1.8.1/) 发布，2026-10-16 至 2026-10-17 的验收修订随 [v1.10.0](/zh/release/pig-1.10.0/) 发布。2026-11-10 的移除修订与 2026-11-11 的执行修订在 [`a95f37f`](https://github.com/pgsty/pig/commit/a95f37f) 实现，并随 [v1.11.0](/zh/release/pig-1.11.0/) 发布。<br>
+> **最新修订：** 2026-11-12 的目标隔离与校验修复已随 [v1.11.0](https://github.com/pgsty/pig/releases/tag/v1.11.0) 发布（Released），实现提交见[验证章节](#verification)。<br>
 > **当前参考：** [`pig pg`](/zh/pg/)、[`pig pb`](/zh/pb/)、[`pig pitr`](/zh/pitr/)、[`pig do`](/zh/do/)、[`pig build`](/zh/build/)、[`pig repo`](/zh/repo/) 与 [`pig ext`](/zh/ext/)<br>
 > **范围：** PIG 实现的运维命令；透明上游命令继续采用上游的确认与退出行为。
 
@@ -195,7 +195,7 @@ Patroni 后来改成透明透传，这仍遵循同一原则：PIG 只为自己�
 [文件权限](https://github.com/pgsty/pig/commit/324e0ed14ee3289f6e2f35e5bd7f3d76ff8961ec)。
 回归测试调用真实 `postgres -C`，检查实际选择的数据目录、认证文件与端口，覆盖 include 继承与特殊字符。
 Linux PostgreSQL 18.6 验收还检查私有 PGDATA、进程身份、跨用户写入与连接目标隔离。
-这些本地验证不表示已发布或部署。
+2026-11-10 至 2026-11-12 的修订均已包含在 [v1.11.0](https://github.com/pgsty/pig/releases/tag/v1.11.0) 中，由成功的[发布工作流](https://github.com/pgsty/pig/actions/runs/43128433510)从 [`365bf12`](https://github.com/pgsty/pig/commit/365bf1282fdb2319e2367740e792ba59bcc04d04) 构建。
 
 ## 当前状态 {#status}
 

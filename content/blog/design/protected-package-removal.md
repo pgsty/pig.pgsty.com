@@ -2,7 +2,7 @@
 title: "Require Explicit Kernel Aliases for Protected Package Removal"
 linkTitle: "Protected Package Removal"
 date: 2026-11-11
-lastmod: 2026-11-11
+lastmod: 2026-11-12
 description: "A removal boundary based on the resolved package and the user's original operand, while retaining independent language-package removal."
 tags: [ext, catalog, cli]
 weight: 96
@@ -11,9 +11,9 @@ draft: false
 ---
 
 > **Decision date:** 2026-11-11<br>
-> **Status:** Implemented in source commit [`a95f37f`](https://github.com/pgsty/pig/commit/a95f37f); the owner approved the package boundary, explicit aliases, and whole-request rejection on 2026-11-11. No release claim.<br>
+> **Status:** Released in [pig v1.11.0](https://github.com/pgsty/pig/releases/tag/v1.11.0), from implementation commit [`a95f37f`](https://github.com/pgsty/pig/commit/a95f37f); the owner approved the package boundary, explicit aliases, and whole-request rejection on 2026-11-11.<br>
 > **Current reference:** [`pig ext rm`](/ext/#ext-rm)<br>
-> **Scope:** Package selection for `ext rm`; no claim of a tagged release or package-manager dependency simulation.
+> **Scope:** Package selection for `ext rm`; package-manager dependency simulation remains outside this scope.
 
 ## Decision {#decision}
 
@@ -128,4 +128,4 @@ status using isolated fake executables rather than uninstalling host packages.
 
 ## Current status {#status}
 
-Implemented in source commit [`a95f37f`](https://github.com/pgsty/pig/commit/a95f37f7af430c447953537dd70bdd5b77030a20), following owner approval on 2026-11-11. The [current reference](/ext/#ext-rm) documents the approved contract, and the pinned source links above establish the original defect; publication of release artifacts remains a separate stage.
+Implemented in source commit [`a95f37f`](https://github.com/pgsty/pig/commit/a95f37f7af430c447953537dd70bdd5b77030a20), following owner approval on 2026-11-11. The [current reference](/ext/#ext-rm) documents the approved contract, and the pinned source links above establish the original defect; the implementation is included in the [v1.11.0 release artifacts](https://github.com/pgsty/pig/releases/tag/v1.11.0).

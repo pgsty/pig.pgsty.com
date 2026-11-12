@@ -2,7 +2,7 @@
 title: "Compile, Validate, Then Commit: The Native sty conf Pipeline"
 linkTitle: "Native sty conf"
 date: 2026-02-18
-lastmod: 2026-11-11
+lastmod: 2026-11-12
 description: "Why pig sty conf treats Inventory generation as a bounded compiler pipeline with path safety, structural mutations, secret discipline, and atomic output."
 tags: [sty, inventory]
 weight: 15
@@ -11,7 +11,7 @@ draft: false
 ---
 
 > **Decision date:** 2026-02-18; the production contract was finalized on 2026-08-14.<br>
-> **Status:** Native pipeline released in [pig v1.8.0](/release/pig-1.8.0/); ordered template lookup is implemented in [`ba771a5`](https://github.com/pgsty/pig/commit/ba771a587ec11a55dd43350cce4e9ce36586b308) and the 2026-11-11 region refinement is implemented in [`a95f37f`](https://github.com/pgsty/pig/commit/a95f37f7af430c447953537dd70bdd5b77030a20), without a PIG release claim.<br>
+> **Status:** Native pipeline released in [pig v1.8.0](/release/pig-1.8.0/); ordered template lookup is implemented in [`ba771a5`](https://github.com/pgsty/pig/commit/ba771a587ec11a55dd43350cce4e9ce36586b308) and the 2026-11-11 region refinement is implemented in [`a95f37f`](https://github.com/pgsty/pig/commit/a95f37f7af430c447953537dd70bdd5b77030a20); both refinements shipped in [pig v1.11.0](https://github.com/pgsty/pig/releases/tag/v1.11.0).<br>
 > **Current reference:** [`pig sty conf`](/sty/#sty-conf)<br>
 > **Scope:** Generating one validated static Inventory from a trusted Pigsty template; not arbitrary YAML transformation.
 
@@ -127,6 +127,6 @@ were checked separately. The 2026-11-11 bidirectional `default` region override 
 Use `pig sty conf` to generate a new Inventory from a Pigsty template and
 [`pig inventory`](/inventory/) to inspect or edit an existing declaration. Current flags, modes,
 and preflight behavior live in the [`pig sty` reference](/sty/).
-Ordered template lookup and the `default` region override are implemented in source (`ba771a5`, `a95f37f`); the earlier release evidence applies to the
-native pipeline, and availability in a released binary requires a corresponding
-PIG tag or release artifact.
+Ordered template lookup and the `default` region override are included in the
+[pig v1.11.0 release](https://github.com/pgsty/pig/releases/tag/v1.11.0), with implementation
+evidence in `ba771a5` and `a95f37f`.
