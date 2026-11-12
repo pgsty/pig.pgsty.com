@@ -45,6 +45,19 @@ PIG `v1.11.0` 对齐内嵌 Pigsty `v4.6.0`，新增 `pig sty conf` 有序模板�
 
 内嵌目录包含 **625 条记录**（全部 **625 条** 均为 `available` 状态，保留已移除记录为 **0 条**）。包含 PostgreSQL contrib 模块时，共对应 **518 个不同包名**；非 contrib 包系列共 **457 个**。详见 [目录条目计数口径](/zh/ext/#catalog-count)。
 
-PIG `v1.11.0` 使用 Go `1.27.4` 构建，内嵌 Pigsty `4.6.0`，默认 `cargo-pgrx` 为 `0.19.3`。升级方法请参阅 [安装文档](/zh/install/)；各平台原生软件包、二进制归档与 SHA-256 `checksums.txt` 发布于 GitHub Releases。
+PIG `v1.11.0` 使用 Go `1.27.4` 构建，内嵌 Pigsty `4.6.0`，默认 `cargo-pgrx` 为 `0.19.3`。升级 PIG 请参阅 [安装文档](/zh/install/)。
+
+## 校验和 {#checksums}
+
+```checksums
+c3c24b64dce312a13fe1b3bcb15d38101095dfd2569ed88186838a33291abcac  pig-1.11.0-1.aarch64.rpm
+2c0d05aba718957f4654cb135771610f042b6f71b7902a792b598744632736b9  pig-1.11.0-1.x86_64.rpm
+d9c0b9b3bde4e5e53d64a0df177dcda48575eed0310178adaff11f6d33a76cd9  pig-v1.11.0.darwin-amd64.tar.gz
+474788f79563e99e7443e619bb7e594f598284c9a81f22d53f33bacf03c5da27  pig-v1.11.0.darwin-arm64.tar.gz
+8f21efdd33d5a063eb7e12d2908912682af4dd94e336d82124ab9eb57808974c  pig-v1.11.0.linux-amd64.tar.gz
+4c2699618fb50d6bb5d2c0807e407442c69c9873a4d33dc3193bbab9c039bdcd  pig-v1.11.0.linux-arm64.tar.gz
+4bf90bbd4bc179391b5d88f2d51cb2d08b165212305434f59d12dcab0dc7ea5a  pig_1.11.0-1_amd64.deb
+ba4fb6cd9927712fe6ac7af237a7f96076febd972cb99c121ebf620a08664979  pig_1.11.0-1_arm64.deb
+```
 
 {{< release-card >}}
