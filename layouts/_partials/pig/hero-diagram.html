@@ -5,7 +5,7 @@
 <figure class="pig-home-diagram" aria-labelledby="pig-flow-title" aria-describedby="pig-flow-desc">
   <svg class="pig-home-flow" viewBox="0 0 720 500" role="img" xmlns="http://www.w3.org/2000/svg">
     <title id="pig-flow-title">{{ if $zh }}PIG 软件包交付流程{{ else }}PIG package delivery flow{{ end }}</title>
-    <desc id="pig-flow-desc">{{ if $zh }}PIG 从 Pigsty、PGDG 和操作系统基础源解析软件包，通过一个静态二进制配置仓库、安装扩展，并向 PostgreSQL 14 到 18 交付原生 RPM 与 DEB。{{ else }}PIG resolves packages from Pigsty, PGDG, and operating-system repositories, then uses one static binary to configure repositories, install extensions, and deliver native RPM and DEB packages for PostgreSQL 14 through 18.{{ end }}</desc>
+    <desc id="pig-flow-desc">{{ if $zh }}PIG 从 Pigsty、PGDG 和操作系统基础源解析软件包，通过一个静态二进制配置仓库、安装扩展，并向 PostgreSQL 15 到 19 交付原生 RPM 与 DEB。{{ else }}PIG resolves packages from Pigsty, PGDG, and operating-system repositories, then uses one static binary to configure repositories, install extensions, and deliver native RPM and DEB packages for PostgreSQL 15 through 19.{{ end }}</desc>
 
     <defs>
       <filter id="pig-flow-shadow" x="-25%" y="-30%" width="150%" height="170%">
@@ -87,7 +87,7 @@
       <rect class="ph-icon-bg ph-icon-bg--blue" x="609" y="120" width="42" height="42" rx="12"/>
       <text class="ph-icon-text ph-icon-text--blue" x="630" y="141">PG</text>
       <text class="ph-card-title ph-card-title--center" x="630" y="181">PostgreSQL</text>
-      <text class="ph-card-sub ph-card-sub--center" x="630" y="201">14–18 · RPM / DEB</text>
+      <text class="ph-card-sub ph-card-sub--center" x="630" y="201">15–19 · RPM / DEB</text>
     </g>
 
     <g class="ph-card ph-card--output" filter="url(#pig-flow-shadow)">

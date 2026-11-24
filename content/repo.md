@@ -55,12 +55,12 @@ In pig, APT/YUM repositories are organized as **modules**: groups of repositorie
 | `all` | All core modules required to install PG | `node` + `infra` + `pgsql` |
 | `pgsql` | PGDG + Pigsty PG extensions | `pigsty-pgsql` + `pgdg` |
 | `pigsty` | Pigsty Infra + PGSQL repositories | pigsty-infra, pigsty-pgsql |
-| `pgdg` | PGDG official repositories | EL: pgdg-common, pgdg14-18; APT: pgdg |
+| `pgdg` | PGDG official repositories | EL: pgdg-common, pgdg15-19 (`pgdg19` on EL9/10); APT: pgdg |
 | `node` | Linux system repositories | base, updates, extras, epel, baseos, appstream... |
 | `infra` | Infrastructure component repository | pigsty-infra |
 | `nginx` | Nginx repository | nginx |
 | `docker` | Docker repository | docker-ce |
-| `beta` | PostgreSQL 19 beta repositories | pgdg19-beta, pgdg-beta |
+| `beta` | Compatibility beta placeholder | Empty when no PostgreSQL beta major is active |
 | `extra` | PGDG non-free and third-party extensions | pgdg-extras, timescaledb, citus |
 | `groonga` | PGroonga repository | groonga |
 | `percona` | Percona PG + PG_TDE | percona |
@@ -75,7 +75,7 @@ In pig, APT/YUM repositories are organized as **modules**: groups of repositorie
 | `gitlab` | GitLab repository | gitlab-ce, gitlab-ee |
 {.full-width .wide .expand}
 
-PIG filters each module by the current operating system and architecture. Run `pig repo list` to see the available entries.
+PIG filters each module by the current operating system and architecture (for example, `el8` omits `pgdg19` from `pgdg`, `pgsql`, and `all`). Run `pig repo list` to see the available entries. When `beta` is empty, adding it writes no repository file and does not affect replacement rollback. All EL `pgdg*-nonfree` definitions set `skip_if_unavailable=1`.
 
 If the host already has working OS repositories, add `pgsql` for PGDG and Pigsty extension packages. `infra` supplies infrastructure tools and some PostgreSQL fork packages. `all` combines `node`, `infra`, and `pgsql`. Both `repo add` and `repo set` select `all` when no module is given.
 

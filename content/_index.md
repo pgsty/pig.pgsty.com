@@ -1,6 +1,6 @@
 ---
 title: "PIG: PostgreSQL package manager"
-description: "PIG is a PostgreSQL extension package manager: resolve and install PostgreSQL 14-18 and cataloged extension packages on EL, Debian, and Ubuntu with one self-contained CLI."
+description: "PIG is a PostgreSQL extension package manager: resolve and install PostgreSQL 15-19 and cataloged extension packages on EL, Debian, and Ubuntu with one self-contained CLI."
 weight: 1
 type: home
 cascade:

@@ -51,7 +51,7 @@ PIG is needed only when you run its commands. PostgreSQL and installed extension
 
 ## Linux compatibility {#linux-compatibility}
 
-The package repositories cover PostgreSQL **14–18** on these Linux releases. Each release has packages for **x86_64** and **aarch64**.
+The active support window covers PostgreSQL **15–19** on these Linux releases (PostgreSQL **18** is the default major; PGDG does not publish PostgreSQL 19 packages for `el8`). Each release has packages for **x86_64** and **aarch64**. Retired majors such as PostgreSQL 14 remain explicitly addressable via `-v 14` or `pg14*` aliases when compatible repositories are configured.
 
 | OS code | Distribution | Release |
 |:---|:---|:---|

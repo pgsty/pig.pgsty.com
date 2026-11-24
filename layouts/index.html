@@ -30,7 +30,7 @@
 
           <p class="td-landing-hero__note">
             <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-            <span>{{ if $zh }}PostgreSQL 14–18 · EL / Debian / Ubuntu{{ else }}PostgreSQL 14–18 · EL / Debian / Ubuntu{{ end }}</span>
+            <span>{{ if $zh }}PostgreSQL 15–19 · EL / Debian / Ubuntu{{ else }}PostgreSQL 15–19 · EL / Debian / Ubuntu{{ end }}</span>
           </p>
 
           <div class="td-landing-hero__actions">
@@ -60,7 +60,7 @@
           </a>
           <a href="{{ relLangURL "intro/" }}" class="stat-item">
             <span class="stat-value" data-count="{{ $metrics.pg_majors }}">{{ lang.FormatNumber 0 $metrics.pg_majors }}</span>
-            <span class="stat-label">{{ if $zh }}PostgreSQL 大版本（14-18）{{ else }}PostgreSQL majors (14–18){{ end }}</span>
+            <span class="stat-label">{{ if $zh }}PostgreSQL 大版本（15-19）{{ else }}PostgreSQL majors (15–19){{ end }}</span>
           </a>
           <a href="{{ relLangURL "intro/" }}" class="stat-item">
             <span class="stat-value" data-count="{{ $metrics.linux_distros }}">{{ lang.FormatNumber 0 $metrics.linux_distros }}</span>

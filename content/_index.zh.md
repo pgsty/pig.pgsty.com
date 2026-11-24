@@ -1,6 +1,6 @@
 ---
 title: "PIG：PostgreSQL 包管理器"
-description: "PIG 是 PostgreSQL 扩展包管理器：通过一个自包含 CLI，在 EL、Debian 与 Ubuntu 上解析并安装 PostgreSQL 14-18 及目录中的扩展包。"
+description: "PIG 是 PostgreSQL 扩展包管理器：通过一个自包含 CLI，在 EL、Debian 与 Ubuntu 上解析并安装 PostgreSQL 15-19 及目录中的扩展包。"
 weight: 1
 type: home
 cascade:

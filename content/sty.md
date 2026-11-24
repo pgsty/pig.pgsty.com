@@ -193,7 +193,7 @@ The command applies these changes to the template:
 | small controller | When detected CPU count is below four, rewrites `node_tune: oltp` and `pg_conf: oltp.yml` to their `tiny` profiles. |
 | `--region REGION` | Writes the selected region to `all.vars.region`, including `default`. `china` also activates template-provided Docker and pip mirrors, using values already present in the template. |
 | `--proxy` | Reads `HTTP_PROXY`, `HTTPS_PROXY`, `ALL_PROXY`, and `NO_PROXY`, each falling back to its lowercase spelling. Missing HTTP/HTTPS values fall back to ALL_PROXY. Writes non-empty values to `all.vars.proxy_env` and supplies a default no-proxy list when needed. |
-| `--version MAJOR` | Updates generic templates for PostgreSQL 14-18, or explicit 19 beta, and selects the matching locale. Version-pinned `fork/mssql`, `fork/polar`, legacy root `mssql`/`polar`, and root `pgNN` modes keep their template version and report a warning. |
+| `--version MAJOR` | Updates generic templates for PostgreSQL 15-19 (when omitted, templates keep their default PG 18) and selects the matching locale. Version-pinned `fork/mssql`, `fork/polar`, legacy root `mssql`/`polar`, and root `pgNN` modes keep their template version and report a warning. Selecting PG 19 on a Linux `el8` host emits a non-fatal warning while still allowing EL 8 to configure remote hosts on another OS. |
 | `--generate` | Generates one 24-character value per known credential identifier and consistently replaces its active values and documented placeholders. |
 
 An IP mapping that creates a duplicate key fails. PIG warns if a supplied address has no matching placeholder in the template.
@@ -203,10 +203,12 @@ selected value replaces the template's region in both directions: a template con
 is changed to `default` when that is the detected region. The result reports the value written.
 If the template omits region and the selected value is `default`, the default remains implicit.
 
-For PostgreSQL 19 beta, Pig also enables the `beta` repository after `pgsql` when the template
-contains the expected repository list. Modes below `conf/build/` intentionally bypass IP mapping
-and controller-admin preflight so build templates remain portable. These rules use the resolved
-mode: `oss` behaves like `build/oss`, and `mssql` behaves like `fork/mssql` when it selects that file.
+When an active PostgreSQL beta major is configured in a future cycle, Pig also enables the `beta`
+repository after `pgsql` when the template contains the expected repository list (stable PostgreSQL
+19 uses standard `pgsql` repositories without `beta`). Modes below `conf/build/` intentionally bypass
+IP mapping and controller-admin preflight so build templates remain portable. These rules use the
+resolved mode: `oss` behaves like `build/oss`, and `mssql` behaves like `fork/mssql` when it selects
+that file.
 
 Active password identifiers are `grafana_admin_password`, `pg_admin_password`,
 `pg_monitor_password`, `pg_replication_password`, `patroni_password`,
@@ -220,7 +222,7 @@ same generated value.
 | `-c`, `--conf` | Template mode, equivalent to positional `[mode]`; the two forms are exclusive |
 | `--ip` | Up to ten distinct comma-separated IPv4 addresses |
 | `--domain` | Replace the exact `i.pigsty` placeholder with a valid DNS domain |
-| `-v`, `--version` | PostgreSQL major version (`18`/`17`/`16`/`15`/`14`; `19` beta can be specified explicitly) |
+| `-v`, `--version` | PostgreSQL major version (`19`/`18`/`17`/`16`/`15`; templates default to `18` when omitted) |
 | `-r`, `--region` | Upstream repository region, such as `default`, `china`, or `europe` |
 | `-m`, `--mirror` | Equivalent to `--region china`; mutually exclusive with `--region` |
 | `-O`, `--output-file` | Output config file path (default `pigsty.yml`) |

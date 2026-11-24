@@ -132,7 +132,7 @@ pig ext av pgvector               # show pgvector availability
 pig ext matrix citus              # alias for avail
 ```
 
-The matrix shows availability across operating systems (EL8/9/10, Debian 12/13, Ubuntu 22/24/26), architectures (x86_64/aarch64), and PostgreSQL versions (14-18).
+The matrix shows availability across operating systems (EL8/9/10, Debian 12/13, Ubuntu 22/24/26), architectures (x86_64/aarch64), and active PostgreSQL versions (15-19). In single-extension tables, not-applicable platform/version cells (such as `el8` × PG 19 or unsupported majors) render as `n/a` to distinguish them from blank missing cells; in global `pig ext avail` mode, columns are filtered to the active PostgreSQL majors supported by the current OS (`15–18` on `el8`, `15–19` on EL 9/10 and Debian/Ubuntu).
 
 ## ext status {#ext-status}
 
@@ -210,11 +210,14 @@ pig install pg14-gis --plan
 ```
 
 When `pgsql-<category>` has no explicit version, the existing command version probing and default
-selection apply; the resolver uses the resulting target (latest stable when no target is supplied).
-Stable targets use their exact matrix row for the selected OS and architecture. Missing cells on a
-known OS remain unavailable, and visible leading non-contrib entries that resolve to the same
-package are deduplicated. Beta PostgreSQL targets retain the compatibility behavior of borrowing
-the latest stable matrix and keeping PGDG-origin entries only.
+selection apply; the resolver uses the resulting target (PostgreSQL 18 when no installation or
+explicit target is supplied). Active targets (15–19) use their exact matrix row for the selected OS
+and architecture. Missing cells on a known OS remain unavailable, and visible leading non-contrib
+entries that resolve to the same package are deduplicated. Retired majors (`pg10`–`pg14`) remain
+explicitly addressable: they use existing matrix cells when present, or fall back to non-fork
+catalog `rpm_pg`/`deb_pg` declarations once their matrix cells are pruned. When a Beta PostgreSQL
+major is active, it retains the compatibility behavior of borrowing the latest stable matrix and
+keeping PGDG-origin entries only.
 
 The package name comes from the catalog for the requested major. For example, EL PG14/15 pgaudit
 resolves through `pgaudit_14`/`pgaudit_15`, while the PostGIS 3.7 family resolves through

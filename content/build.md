@@ -105,10 +105,10 @@ Initialize package repositories required for building extensions.
 ```bash
 pig build repo                   # equivalent to: pig repo set
 pig build repo -m                # select the bundled China-region mirrors
-pig build repo --beta            # also enable the PostgreSQL 19 beta repo module
+pig build repo --beta            # compatibility flag for PostgreSQL beta cycles
 ```
 
-**What it does**: initializes build repositories with `pig repo set`: remove old repositories, add required repositories, and refresh package caches. `--beta/-b` appends the `beta` module for explicit PostgreSQL 19 beta builds; the stable default path still uses PG14-18.
+**What it does**: initializes build repositories with `pig repo set`: remove old repositories, add required repositories, and refresh package caches. The stable default path covers PostgreSQL 15–19 (`15–18` on `el8`, where PGDG does not publish PG 19). `--beta/-b` appends the `beta` module during active PostgreSQL beta cycles and is a safe no-op when no beta major is active.
 
 | Option | Description |
 |:---|:---|
@@ -125,14 +125,14 @@ pig build tool                   # install default toolset
 pig build tool mini              # minimal toolset
 pig build tool full              # full toolset
 pig build rust                   # install Rust separately
-pig build tool --beta            # add PG19 beta build dependencies
+pig build tool --beta            # include beta PG packages when a beta cycle is active
 ```
 
 Toolsets:
 
 - **Minimal (`mini`)**: build tools and libraries, with PostgreSQL and PGDG packages removed from the install list.
-- **Default / `full`**: Make, CMake, development libraries, packaging tools, and PostgreSQL build dependencies. EL selects PG14-18 server/devel packages; Debian/Ubuntu uses `postgresql-all` and `postgresql-server-dev-all`.
-- **`--beta`**: adds explicit PG19 beta server/devel packages. `mini` still excludes PostgreSQL packages.
+- **Default / `full`**: Make, CMake, development libraries, packaging tools, and PostgreSQL build dependencies. EL9/10 select PG15-19 server/devel packages (`el8` selects PG15-18); Debian/Ubuntu uses `postgresql-all` and `postgresql-server-dev-all`.
+- **`--beta`**: adds explicit beta PostgreSQL server/devel packages when a beta major is active (no-op otherwise). `mini` still excludes PostgreSQL packages.
 
 ## build rust {#build-rust}
 
@@ -151,14 +151,14 @@ PIG installs Rust through rustup for the current user, without an interactive pr
 Install and initialize PGRX, the PostgreSQL extension framework for Rust.
 
 ```bash
-pig build pgrx                   # install default version (0.19.3)
-pig build pgrx -v 0.19.3         # install a specific pgrx version
-pig build pgrx --pg 18,17,16     # initialize pgrx for selected PG versions
+pig build pgrx                   # install default version (0.20.1)
+pig build pgrx -v 0.20.1         # install a specific pgrx version
+pig build pgrx --pg 19,18,17     # initialize pgrx for selected PG versions
 pig build pgrx --pg init         # run cargo pgrx init without PG arguments
-pig build pgrx -b                # include PostgreSQL 19 beta pg_config during auto-detection
+pig build pgrx -b                # include active beta pg_config during auto-detection
 ```
 
-**Prerequisites**: Rust toolchain and PostgreSQL development headers must be installed first. Default auto-detection only covers stable PG14-18; use `-b|--beta`, or explicitly pass `--pg 19`, when PG19 beta is required.
+**Prerequisites**: Rust toolchain and PostgreSQL development headers must be installed first. Cargo lookup checks `CARGO_HOME/bin/cargo`, `~/.cargo/bin/cargo`, and `PATH`. Default auto-detection covers OS-supported active majors (`15–19` on EL 9/10 and Debian/Ubuntu, `15–18` on `el8`); `-b|--beta` adds an OS-supported active beta major when one is configured. Explicit `--pg` validates OS compatibility and requires matching `pg_config` binaries on Linux.
 
 ## build proxy {#build-proxy}
 
@@ -300,26 +300,31 @@ Install dependencies required to build extensions.
 ```bash
 pig build dep citus              # single extension
 pig build dep citus pgvector     # multiple extensions
-pig build dep citus --pg 17,16   # for selected PG versions
+pig build dep citus --pg 19,18   # for selected PG versions
 ```
 
 | Option | Description |
 |:---|:---|
-| `--pg` | Specify one or more PostgreSQL major versions; if omitted, PIG infers versions from extension metadata or local PostgreSQL installations |
+| `--pg` | Specify one or more OS-supported PostgreSQL major versions; if omitted, PIG infers compatible versions from extension metadata or local PostgreSQL installations |
 {.full-width}
 
-For a list such as `--pg 17,16`, version-specific dependency names are expanded for every
-selected major version and duplicates are removed before installation. The same dependency
-step is used by `build pkg`.
+For a list such as `--pg 19,18`, `--pg` is validated against the installable major versions supported
+on the current OS (`15–18` on `el8`, `15–19` on EL 9/10 and Debian/Ubuntu), version-specific
+dependency names are expanded for every selected major version, and duplicates are removed before
+installation. When `--pg` is omitted on EL, PIG picks the highest OS-compatible declared `rpm_pg`
+major (for example, PG 18 instead of PG 19 on `el8`). The same dependency step is used by `build pkg`.
 
 ## build ext {#build-ext}
 
 Compile extensions and create installation packages.
 
 For `build ext` and `build pkg`, omitting `--pg` retains version selection from extension
-metadata and platform exceptions; Debian/Ubuntu also consider locally installed PG versions.
-Package-matrix gaps do not remove build targets. An explicit `--pg` selects the requested versions.
-Debian/Ubuntu builds preserve the inherited `PATH` order and append the current user's
+metadata and platform exceptions; Debian/Ubuntu also intersect with locally installed installable PG
+versions. Package-matrix gaps do not remove build targets, while extensions that resolve to zero
+OS-compatible targets fail fast instead of succeeding with no builds. An explicit `--pg` validates
+OS compatibility and selects the requested versions; on Debian/Ubuntu, explicit `--pg` also exports
+`PG_VERSIONS` and `PG_SUPPORTED_VERSIONS` (plus `PG_MAJOR` and `PG_CONFIG` for a single major) to
+`make`. Debian/Ubuntu builds preserve the inherited `PATH` order and append the current user's
 `~/.cargo/bin` when that directory exists, so an explicitly selected toolchain keeps precedence.
 
 Debug packages are enabled by default. Compiled RPM builds normally add `debuginfo` and
@@ -330,7 +335,7 @@ recipe can also make a narrower explicit choice; PIG does not rewrite spec files
 ```bash
 pig build ext citus              # build one extension
 pig build ext citus pgvector     # build multiple extensions
-pig build ext citus --pg 17      # build for a selected PG version
+pig build ext citus --pg 18      # build for a selected PG version
 pig build ext citus --nodbg      # explicitly omit automatic debug packages
 ```
 
@@ -347,7 +352,7 @@ Download sources, install dependencies, then build each requested package. A sou
 ```bash
 pig build pkg citus              # build one extension
 pig build pkg citus pgvector     # build multiple extensions
-pig build pkg citus --pg 17,16   # build for multiple PG versions
+pig build pkg citus --pg 19,18   # build for multiple PG versions
 pig build pkg citus --nodbg      # explicitly omit automatic debug packages
 pig build pkg citus -m           # prefer the pigsty.cc China mirror for sources
 ```
@@ -399,16 +404,16 @@ pig build pkg citus --pg 15,16,17
 
 PIG produces packages for each major version. Each version needs matching development packages and recipe support.
 
-### Build for PostgreSQL 19 beta {#build-for-postgresql-19-beta}
+### Build for PostgreSQL 19 {#build-for-postgresql-19}
 
 ```bash
-pig build repo --beta
-pig build tool --beta
-pig build pgrx -b                # only for Rust/pgrx extensions
+pig build repo
+pig build tool
+pig build pgrx --pg 19           # only for Rust/pgrx extensions
 pig build pkg EXTENSION --pg 19
 ```
 
-Replace `EXTENSION` with one that supports the selected version. The beta version comes from PIG's current embedded configuration.
+Replace `EXTENSION` with one whose recipe supports PostgreSQL 19. On EL, use EL9 or EL10 (`el8` does not carry PGDG PostgreSQL 19 packages). During future PostgreSQL beta cycles, append `--beta` (`-b`) to `build repo`, `build tool`, and `build pgrx`.
 
 ## Troubleshooting {#troubleshooting}
 

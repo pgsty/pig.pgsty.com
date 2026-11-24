@@ -583,7 +583,7 @@ pig pg tune -o yaml               # 结构化输出 YAML
 
 说明：
 
-- 生成结果会随当前 PostgreSQL 主版本自动裁剪，例如 `io_workers` 仅会在 PG 18+ 输出。
+- 生成结果会随当前 PostgreSQL 主版本自动裁剪（未探测到本地实例时回退为默认版本 PG 18）。例如 `io_workers` 仅在 PG 18 输出，PG 19 已用动态的 `io_min_workers` / `io_max_workers` 取代静态 `io_workers`。
 - 文本输出包含成功消息，只将参数赋值行复制到配置文件，不要将完整输出直接重定向为 PostgreSQL 配置。
 - 脚本使用 `-o json` 并读取 `data.parameters`。检查参数后，通过现有配置流程应用，按参数要求重载或重启。
 

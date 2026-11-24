@@ -96,13 +96,13 @@ Build PostgreSQL extensions from source. See [`pig build`](/build/) for details.
 # Environment setup
 pig build spec                   # initialize build specs
 pig build repo                   # configure repositories
-pig build repo --beta            # configure repositories and add PostgreSQL 19 beta repo
+pig build repo --beta            # compatibility flag for PostgreSQL beta cycles
 pig build tool                   # install build tools
-pig build tool --beta            # install build tools plus PG19 beta build packages
+pig build tool --beta            # include beta PG build packages when a beta cycle is active
 pig build rust -y                # force reinstall Rust (default does not reinstall)
 pig build rust -m                # use China mirror mode and write Cargo mirror config
 pig build pgrx                   # install PGRX framework
-pig build pgrx -b                # include PostgreSQL 19 beta pg_config during auto-detection
+pig build pgrx -b                # include active beta pg_config during auto-detection
 pig build proxy                  # install or verify Xray
 pig build proxy client --from ./client.uri
 pig build proxy server --host proxy.example.com --target www.sraoss.co.jp:443 --export ./client.uri

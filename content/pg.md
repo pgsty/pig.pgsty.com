@@ -595,7 +595,7 @@ Profiles:
 
 Notes:
 
-- Generated parameters are automatically gated by PostgreSQL major version. For example, `io_workers` is only emitted for PG 18+.
+- Generated parameters are automatically gated by PostgreSQL major version (falling back to PG 18 when no local installation is detected). For example, `io_workers` is emitted only for PG 18, as PG 19 replaced static `io_workers` with dynamic `io_min_workers` / `io_max_workers` defaults.
 - Text output includes a success message. Copy only the parameter assignments into your configuration;
   do not redirect the complete output into a PostgreSQL config file.
 - For scripts, use `-o json` and read `data.parameters`. Review the values, apply them through your

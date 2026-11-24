@@ -51,7 +51,7 @@ PIG 只在执行命令时运行。PostgreSQL 与已安装的扩展可以独立�
 
 ## Linux 兼容性 {#linux-compatibility}
 
-软件仓库覆盖以下 Linux 版本上的 PostgreSQL **14–18**。每个发行版均提供 **x86_64** 和 **aarch64** 两种架构的软件包。
+活跃支持窗口覆盖以下 Linux 版本上的 PostgreSQL **15–19**（默认主版本为 PostgreSQL **18**；PGDG 不为 `el8` 提供 PostgreSQL 19 软件包）。每个发行版均提供 **x86_64** 和 **aarch64** 两种架构的软件包。已退役版本（如 PostgreSQL 14）在配置了可用软件源时，仍可通过 `-v 14` 或 `pg14*` 别名显式操作。
 
 | OS 代码 | 发行版 | 版本 |
 |:---|:---|:---|
