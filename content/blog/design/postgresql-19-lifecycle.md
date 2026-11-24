@@ -88,10 +88,10 @@ EL 8, and emit invalid PostgreSQL 19 configuration lines.
     and protected removal checks cover all known majors (`10–20`), with Beta `pg20-<cate>` borrowing
     the PG 19 PGDG-origin matrix.
 - **Catalog & availability matrices (`cli/ext`):**
-  - Embedded `extension.csv` is refreshed to the `2026-11-23` 627-entry snapshot, adding PostgreSQL 19
+  - Embedded `extension.csv` is refreshed to the `2026-11-24` 627-entry snapshot, adding PostgreSQL 19
     contrib entries `pg_plan_advice` (controlless shared library, `need_ddl=false`) and
     `pg_stash_advice` (`need_ddl=true`), along with live native PostgreSQL 15–19 availability matrices
-    (`31,979` available, `1,034` missing, and `3,547` not-applicable cells).
+    (`32,923` available, `160` missing, and `3,477` not-applicable cells).
   - `pig ext avail` text and structured outputs filter matrix summaries and entries to the active
     `15–19` window (`80` cells across 8 OS releases × 2 architectures × 5 active majors). Single-extension
     tables render `PkgNA` (`N`) cells as dimmed `n/a` (distinct from blank `M` missing cells), while
@@ -156,22 +156,23 @@ Implemented in PIG commits
 [`461339c`](https://github.com/pgsty/pig/commit/461339ceb7a6),
 [`a7061b1`](https://github.com/pgsty/pig/commit/a7061b14ef0e),
 [`52847f4`](https://github.com/pgsty/pig/commit/52847f47155b),
-[`ba77eac`](https://github.com/pgsty/pig/commit/ba77eacc1f3e), and
-[`9d16584`](https://github.com/pgsty/pig/commit/9d16584eda9f)
+[`ba77eac`](https://github.com/pgsty/pig/commit/ba77eacc1f3e),
+[`9d16584`](https://github.com/pgsty/pig/commit/9d16584eda9f), and
+[`9bf3093`](https://github.com/pgsty/pig/commit/9bf3093f8e10)
 and verified locally with:
 
-- `git diff --check` and `go vet ./...`
+- `git diff --check`, `go vet ./...`, `go mod verify`, `make gr-check`, `actionlint`, and `govulncheck ./...`
 - `go test -shuffle=on -count=1 ./...` (26/26 packages)
 - `go test -race -shuffle=on -count=1 ./cli/ext ./cli/repo ./cli/build ./cli/sty ./cli/postgres`
   and CI `./cmd` race regressions (`-count=3` on both CI shuffle seeds)
 - `staticcheck ./...`, `golangci-lint run --enable-only gocognit,gocyclo --tests=false`, and `deadcode ./...`
-- Companion Design Record and Markdown validation (`bin/check_design.py`, `bin/check_markdown.py`)
+- `make docs-check` (Hugo build, `bin/check_markdown.py`, `bin/check_design.py`, and `bin/check_internal_links.py`)
 
 When PostgreSQL 20 reaches GA, advance `PostgresActiveMajorVersions` to `[20, 19, 18, 17, 16]` and
 retarget `PostgresBetaMajorVersion` and `beta` repositories to PostgreSQL 21 testing.
 
 ## Current status {#status}
 
-Implemented in source commits [`b36d683`](https://github.com/pgsty/pig/commit/b36d683585c3)–[`9d16584`](https://github.com/pgsty/pig/commit/9d16584eda9f)
-and companion documentation; not yet pushed, tagged, or deployed to remote catalog endpoints. See
-the [release notes](/release/) for published binary releases.
+Implemented in source commits [`b36d683`](https://github.com/pgsty/pig/commit/b36d683585c3)–[`9bf3093`](https://github.com/pgsty/pig/commit/9bf3093f8e10)
+and companion documentation; not yet published in a tagged binary release or deployed to remote
+catalog endpoints. See the [release notes](/release/) for published binary releases.

@@ -76,9 +76,9 @@ PostgreSQL 14 移出活跃生命周期默认值、可用性矩阵展示、内置
     PostgreSQL 19），同时继续扫描 `10–14` 安装路径。
   - 带版本号的静态别名（`pg10*`–`pg20*`）、动态分类别名（`pg10-<cate>`–`pg20-<cate>`）与受保护包卸载检查覆盖全部已知大版本（`10–20`），其中 Beta 目标 `pg20-<cate>` 借用 PG 19 的 PGDG 来源矩阵。
 - **扩展目录与可用性矩阵（`cli/ext`）：**
-  - 内嵌 `extension.csv` 刷新为 `2026-11-23` 的 627 条目录快照，纳入 PostgreSQL 19 新增 contrib 模块
+  - 内嵌 `extension.csv` 刷新为 `2026-11-24` 的 627 条目录快照，纳入 PostgreSQL 19 新增 contrib 模块
     `pg_plan_advice`（无 control 文件的共享库模块，`need_ddl=false`）与 `pg_stash_advice`（`need_ddl=true`），
-    并刷新 PostgreSQL 15–19 原生可用性矩阵（`31,979` 可用、`1,034` 缺失、`3,547` 不适用单元）。
+    并刷新 PostgreSQL 15–19 原生可用性矩阵（`32,923` 可用、`160` 缺失、`3,477` 不适用单元）。
   - `pig ext avail` 的文本与结构化输出严格限定在活跃的 `15–19` 窗口（8 个发行版版本 × 2 种架构 × 5 个活跃大版本 = `80` 个单元）。单扩展矩阵将 `PkgNA`（`N`）渲染为弱化的 `n/a`（区别于留空的 `M` 缺包单元），全局 `pig ext avail` 仅展示当前 OS 支持的活跃大版本列（`el8` 为 `15–18`，EL 9/10 与 Debian/Ubuntu 为 `15–19`）。
   - 活跃版本（`15–19`）严格按目标平台与架构的原生矩阵单元判定（`el8` 无 PG 19 软件包，绝不借用 PG 18 矩阵）；
     已退役版本（`10–14`）继续支持显式包名安装、静态别名（`pg14*`）与受保护包卸载检查，动态分类别名在目录保留 `rpm_pg`/`deb_pg` 声明时按非 fork 条目回退解析（刷新后的 PG 15–19 目录不再声明 PG 14）。
@@ -124,21 +124,22 @@ PostgreSQL 18。EL 8 主机继续正常构建与安装 PostgreSQL 15–18，不�
 [`461339c`](https://github.com/pgsty/pig/commit/461339ceb7a6)、
 [`a7061b1`](https://github.com/pgsty/pig/commit/a7061b14ef0e)、
 [`52847f4`](https://github.com/pgsty/pig/commit/52847f47155b)、
-[`ba77eac`](https://github.com/pgsty/pig/commit/ba77eacc1f3e) 与
-[`9d16584`](https://github.com/pgsty/pig/commit/9d16584eda9f)，已在本地完成以下验证：
+[`ba77eac`](https://github.com/pgsty/pig/commit/ba77eacc1f3e)、
+[`9d16584`](https://github.com/pgsty/pig/commit/9d16584eda9f) 与
+[`9bf3093`](https://github.com/pgsty/pig/commit/9bf3093f8e10)，已在本地完成以下验证：
 
-- `git diff --check` 与 `go vet ./...`
+- `git diff --check`、`go vet ./...`、`go mod verify`、`make gr-check`、`actionlint` 与 `govulncheck ./...`
 - `go test -shuffle=on -count=1 ./...`（全部 26 个包通过）
 - `go test -race -shuffle=on -count=1 ./cli/ext ./cli/repo ./cli/build ./cli/sty ./cli/postgres`
   以及 CI 同款 `./cmd` 竞态回归（两组 CI shuffle 种子各跑 3 轮）
 - `staticcheck ./...`、`golangci-lint run --enable-only gocognit,gocyclo --tests=false` 与 `deadcode ./...`
-- 配套设计记录与 Markdown 校验（`bin/check_design.py`、`bin/check_markdown.py`）
+- `make docs-check`（完整 Hugo 构建、`bin/check_markdown.py`、`bin/check_design.py` 与 `bin/check_internal_links.py`）
 
 后续当 PostgreSQL 20 正式发布时，将 `PostgresActiveMajorVersions` 推进至 `[20, 19, 18, 17, 16]`，并将
 `PostgresBetaMajorVersion` 与 `beta` 仓库顺移至 PostgreSQL 21 testing。
 
 ## 当前状态 {#status}
 
-已在源码提交 [`b36d683`](https://github.com/pgsty/pig/commit/b36d683585c3)–[`9d16584`](https://github.com/pgsty/pig/commit/9d16584eda9f)
-与配套双语文档中实现；尚未推送、打标签或部署至远程目录端点。正式二进制发布进度以
+已在源码提交 [`b36d683`](https://github.com/pgsty/pig/commit/b36d683585c3)–[`9bf3093`](https://github.com/pgsty/pig/commit/9bf3093f8e10)
+与配套双语文档中实现；尚未发布正式版本标签或部署至远程目录端点。正式二进制发布进度以
 [发布注记](/zh/release/) 为准。
