@@ -105,10 +105,10 @@ Initialize package repositories required for building extensions.
 ```bash
 pig build repo                   # equivalent to: pig repo set
 pig build repo -m                # select the bundled China-region mirrors
-pig build repo --beta            # compatibility flag for PostgreSQL beta cycles
+pig build repo --beta            # also enable the PostgreSQL 20 testing/beta repo module
 ```
 
-**What it does**: initializes build repositories with `pig repo set`: remove old repositories, add required repositories, and refresh package caches. The stable default path covers PostgreSQL 15–19 (`15–18` on `el8`, where PGDG does not publish PG 19). `--beta/-b` appends the `beta` module during active PostgreSQL beta cycles and is a safe no-op when no beta major is active.
+**What it does**: initializes build repositories with `pig repo set`: remove old repositories, add required repositories, and refresh package caches. The stable default path covers PostgreSQL 15–19 (`15–18` on `el8`, where PGDG does not publish PG 19). `--beta/-b` appends the `beta` module for explicit PostgreSQL 20 testing/beta builds on EL 9/10, Debian 12/13, and Ubuntu 22/24/26 (and is a safe no-op on `el8` and `d11`).
 
 | Option | Description |
 |:---|:---|
@@ -125,14 +125,14 @@ pig build tool                   # install default toolset
 pig build tool mini              # minimal toolset
 pig build tool full              # full toolset
 pig build rust                   # install Rust separately
-pig build tool --beta            # include beta PG packages when a beta cycle is active
+pig build tool --beta            # add PG20 testing/beta build dependencies
 ```
 
 Toolsets:
 
 - **Minimal (`mini`)**: build tools and libraries, with PostgreSQL and PGDG packages removed from the install list.
 - **Default / `full`**: Make, CMake, development libraries, packaging tools, and PostgreSQL build dependencies. EL9/10 select PG15-19 server/devel packages (`el8` selects PG15-18); Debian/Ubuntu uses `postgresql-all` and `postgresql-server-dev-all`.
-- **`--beta`**: adds explicit beta PostgreSQL server/devel packages when a beta major is active (no-op otherwise). `mini` still excludes PostgreSQL packages.
+- **`--beta`**: adds explicit PG20 testing/beta server/devel packages on supported platforms (EL 9/10, Debian 12/13, Ubuntu 22/24/26; omitted on `el8`/`d11`). `mini` still excludes PostgreSQL packages.
 
 ## build rust {#build-rust}
 
@@ -155,10 +155,10 @@ pig build pgrx                   # install default version (0.20.1)
 pig build pgrx -v 0.20.1         # install a specific pgrx version
 pig build pgrx --pg 19,18,17     # initialize pgrx for selected PG versions
 pig build pgrx --pg init         # run cargo pgrx init without PG arguments
-pig build pgrx -b                # include active beta pg_config during auto-detection
+pig build pgrx -b                # include PostgreSQL 20 beta pg_config during auto-detection
 ```
 
-**Prerequisites**: Rust toolchain and PostgreSQL development headers must be installed first. Cargo lookup checks `CARGO_HOME/bin/cargo`, `~/.cargo/bin/cargo`, and `PATH`. Default auto-detection covers OS-supported active majors (`15–19` on EL 9/10 and Debian/Ubuntu, `15–18` on `el8`); `-b|--beta` adds an OS-supported active beta major when one is configured. Explicit `--pg` validates OS compatibility and requires matching `pg_config` binaries on Linux.
+**Prerequisites**: Rust toolchain and PostgreSQL development headers must be installed first. Cargo lookup checks `CARGO_HOME/bin/cargo`, `~/.cargo/bin/cargo`, and `PATH`. Default auto-detection covers OS-supported active majors (`15–19` on EL 9/10 and Debian/Ubuntu, `15–18` on `el8`); `-b|--beta` adds PostgreSQL 20 beta on supported platforms (EL 9/10, Debian 12/13, Ubuntu 22/24/26, macOS), or you can pass `--pg 20` explicitly. Explicit `--pg` validates OS compatibility and requires matching `pg_config` binaries on Linux.
 
 ## build proxy {#build-proxy}
 
@@ -413,7 +413,7 @@ pig build pgrx --pg 19           # only for Rust/pgrx extensions
 pig build pkg EXTENSION --pg 19
 ```
 
-Replace `EXTENSION` with one whose recipe supports PostgreSQL 19. On EL, use EL9 or EL10 (`el8` does not carry PGDG PostgreSQL 19 packages). During future PostgreSQL beta cycles, append `--beta` (`-b`) to `build repo`, `build tool`, and `build pgrx`.
+Replace `EXTENSION` with one whose recipe supports PostgreSQL 19. On EL, use EL9 or EL10 (`el8` does not carry PGDG PostgreSQL 19+ packages). For explicit PostgreSQL 20 testing/beta builds, append `--beta` (`-b`) to `build repo`, `build tool`, and `build pgrx`, then pass `--pg 20`.
 
 ## Troubleshooting {#troubleshooting}
 

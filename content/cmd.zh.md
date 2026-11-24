@@ -95,13 +95,13 @@ pig ext reload                   # 刷新扩展目录
 # 环境设置
 pig build spec                   # 初始化构建规格
 pig build repo                   # 设置仓库
-pig build repo --beta            # PostgreSQL Beta 周期兼容选项
+pig build repo --beta            # 设置仓库，并额外启用 PostgreSQL 20 Beta 仓库
 pig build tool                   # 安装构建工具
-pig build tool --beta            # 存在活跃 Beta 版本时额外安装其构建包
+pig build tool --beta            # 安装构建工具，并额外安装 PG20 Beta 构建包
 pig build rust -y                # 强制重装 Rust（默认不重装）
 pig build rust -m                # 使用中国镜像安装 Rust，并写入 Cargo 镜像配置
 pig build pgrx                   # 安装 PGRX 框架
-pig build pgrx -b                # 自动探测时包含活跃 Beta 版本的 pg_config
+pig build pgrx -b                # 自动探测时包含 PostgreSQL 20 Beta 的 pg_config
 pig build proxy                  # 安装或检查 Xray
 pig build proxy client --from ./client.uri
 pig build proxy server --host proxy.example.com --target www.sraoss.co.jp:443 --export ./client.uri

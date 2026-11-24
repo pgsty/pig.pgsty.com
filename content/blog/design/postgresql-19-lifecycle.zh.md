@@ -56,14 +56,16 @@ PostgreSQL 14 移出活跃生命周期默认值、可用性矩阵展示、内置
   继续保留在新主机的默认仓库与构建依赖中会带来无谓的元数据同步和开发包安装开销。
 - **彻底移除别名生成与 `-v` 解析中的 `10–14` 支持。** 否决，因为仍在运维存量 PostgreSQL 14（或更早版本）
   主机的用户在主机已配置兼容软件源或本地已有实例时，仍需要 `pig ext`、`pig pg`、`pg14*` 别名和核心包卸载保护。
-- **直接删除 `beta` 仓库模块与 `--beta` 命令行标志。** 否决，因为在无活跃 Beta 的空窗期内，已有脚本调用
-  `pig build repo --beta` 或 `pig repo set ... beta` 应当平滑退化为空操作，而不是报未知模块错误。
+- **直接删除 `beta` 仓库模块与 `--beta` 命令行标志，或在 PG 20 Beta1 前将其留空。** 否决，因为上游 PGDG 已在
+  EL 9/10 发布 `yum/testing/20` 仓库并在 Debian 12/13 与 Ubuntu 22/24/26 的 `pgdg-testing` 开放 `20` 组件；
+  直接将 opt-in Beta 目标推进至 PostgreSQL 20，既可立即支持 PG 20 测试构建、仓库与配置，又能在不支持的 `el8` 与 `d11`
+  上安全保持为空模块。
 
 ## 契约 {#contract}
 
 - **版本分层与平台边界（`cli/ext`）：**
   - `PostgresActiveMajorVersions` 为 `[19, 18, 17, 16, 15]`。
-  - `PostgresDefaultMajorVersion` 为 `18`；`PostgresBetaMajorVersion` 为 `0`（当前无活跃 Beta）。
+  - `PostgresDefaultMajorVersion` 为 `18`；`PostgresBetaMajorVersion` 推进至 `20`（PG 20 testing/devel）。
   - `PostgresLegacyMajorVersions` 为 `[14, 13, 12, 11, 10]`。
   - 通过 `SupportsOSPG(osCode, ver)` 统一封装 OS × PostgreSQL 兼容边界（`el8` 与 `d11` 上限为 PG 18，
     `el7` 上限为 PG 15），在 `cli/ext`、`cli/build` 与 `cli/sty` 间共享。
@@ -72,7 +74,7 @@ PostgreSQL 14 移出活跃生命周期默认值、可用性矩阵展示、内置
     不带版本号的 `pgsql-<category>` 别名及 `pig pg tune` 统一回退到 `18`。
   - 本地 `DetectPostgres()` 实例发现仍按最高已安装版本兜底（例如多版本并存且均不在 `PATH` 中时优先识别已安装的
     PostgreSQL 19），同时继续扫描 `10–14` 安装路径。
-  - 带版本号的静态别名（`pg10*`–`pg19*`）、动态分类别名（`pg10-<cate>`–`pg19-<cate>`）与受保护包卸载检查覆盖全部已知大版本（`10–19`）。
+  - 带版本号的静态别名（`pg10*`–`pg20*`）、动态分类别名（`pg10-<cate>`–`pg20-<cate>`）与受保护包卸载检查覆盖全部已知大版本（`10–20`），其中 Beta 目标 `pg20-<cate>` 借用 PG 19 的 PGDG 来源矩阵。
 - **扩展目录与可用性矩阵（`cli/ext`）：**
   - 内嵌 `extension.csv` 刷新为 `2026-11-23` 的 627 条目录快照，纳入 PostgreSQL 19 新增 contrib 模块
     `pg_plan_advice`（无 control 文件的共享库模块，`need_ddl=false`）与 `pg_stash_advice`（`need_ddl=true`），
@@ -84,9 +86,11 @@ PostgreSQL 14 移出活跃生命周期默认值、可用性矩阵展示、内置
   - 新增面向 EL 9 与 EL 10（`x86_64`、`aarch64`）的 `pgdg19`（含 `default`、`china`、`europe` 镜像）；
     模块成员按当前 OS/架构过滤，使 EL 9/10 的 `pgdg` 包含 `pgdg-common` 与 `pgdg19`–`pgdg15`，EL 8 的
     `pgdg` 省略 `pgdg19`，EL 7 的 `pgdg` 仅包含 `pgdg-common` 与 `pgdg15`。
-  - 移除 `pgdg14`、`pgdg14-nonfree`、`pgdg19-beta` 与 `pgdg-beta`；统一为 `pgdg15-nonfree` 至
+  - 移除 `pgdg14`、`pgdg14-nonfree` 与 `pgdg19-beta`；统一为 `pgdg15-nonfree` 至
     `pgdg18-nonfree` 配置 `skip_if_unavailable=1`。
-  - 保留 `beta` 为空兼容模块（`[]`），添加时不生成空的仓库配置文件、不记录虚假文件路径、`pig repo info beta`
+  - 将 `beta` 模块推进至 PostgreSQL 20 测试源：`pgdg20-beta`（`yum/testing/20`，EL 9/10、`x86_64`/`aarch64`，启用 `module_hotfixes=1`）
+    与 `pgdg-beta`（`${distro_codename}-pgdg-testing main 20`，Debian 12/13 与 Ubuntu 22/24/26、`x86_64`/`aarch64`）。
+    在不支持 PG 20 测试源的 `el8`、`el7` 与 `d11` 上，`beta` 保持为空兼容模块（`[]`），添加时不生成空的仓库配置文件、不记录虚假文件路径、`pig repo info beta`
     返回干净的空结果，且不影响替换失败后的回滚；若整套替换（`pig repo set`）仅指定了空模块，则在备份移除既有仓库前直接拒绝。
 - **构建与 Pigsty 配置（`cli/build`、`cli/sty`、`cmd`）：**
   - `pig build tool` 在 EL 9/10 上安装 `15–19` 的 server/devel 包，在 EL 8 上安装 `15–18`（并为 EL 8/9/10
@@ -97,9 +101,9 @@ PostgreSQL 14 移出活跃生命周期默认值、可用性矩阵展示、内置
     `rpm_pg` 默认版本（例如在 `el8` 上选 PG 18），当扩展无任何受支持的目标版本时直接失败而非空跑通过，在 Debian/Ubuntu
     显式传入 `--pg` 时向 `make` 传递 `PG_VERSIONS` / `PG_SUPPORTED_VERSIONS`（单版本附加 `PG_MAJOR` / `PG_CONFIG`），
     并将 `libpgfeutils` 源码映射更新至 PG 15–19（`15.20`–`19.0`）。
-  - `PostgresBetaMajorVersion == 0` 期间，`pig build repo --beta`、`pig build tool --beta` 与
-    `pig build pgrx --beta` 均保持为安全的兼容空操作。
-  - `pig sty conf` 的 `-v` 接受 `15–19`，帮助文本不再显示失活的 `(beta: ...)` 后缀，显式选择 `19` 时直接改写通用模板而不再注入 `beta` 模块，并在 Linux `el8` 主机上选择 PG 19 时给出非致命告警。
+  - `pig build repo --beta`、`pig build tool --beta` 与 `pig build pgrx --beta` 在受支持平台（EL 9/10、Debian 12/13、Ubuntu 22/24/26）
+    指向 PostgreSQL 20 测试/Beta 目标，并在 `el8` 与 `d11` 上安全跳过。
+  - `pig sty conf` 的 `-v` 接受 `15–19` 及显式 `20` beta（帮助文本显示 `19|18|17|16|15 (beta: 20)`），显式选择 `19` 时直接改写通用模板而不再注入 `beta` 模块，选择 `20` 时自动注入 `beta` 模块并发出 Beta 提示，并在 Linux `el8` 主机上选择 PG 19 或 20 时给出非致命告警。
 - **参数调优（`cli/postgres`）：**
   - `pig pg tune` 仅在 `pgVersion == 18` 时输出 `io_workers`，PostgreSQL 19+ 不再输出该参数。
 
@@ -119,8 +123,9 @@ PostgreSQL 18。EL 8 主机继续正常构建与安装 PostgreSQL 15–18，不�
 [`b36d683`](https://github.com/pgsty/pig/commit/b36d683585c3)、
 [`461339c`](https://github.com/pgsty/pig/commit/461339ceb7a6)、
 [`a7061b1`](https://github.com/pgsty/pig/commit/a7061b14ef0e)、
-[`52847f4`](https://github.com/pgsty/pig/commit/52847f47155b) 与
-[`ba77eac`](https://github.com/pgsty/pig/commit/ba77eacc1f3e)，已在本地完成以下验证：
+[`52847f4`](https://github.com/pgsty/pig/commit/52847f47155b)、
+[`ba77eac`](https://github.com/pgsty/pig/commit/ba77eacc1f3e) 与
+[`9d16584`](https://github.com/pgsty/pig/commit/9d16584eda9f)，已在本地完成以下验证：
 
 - `git diff --check` 与 `go vet ./...`
 - `go test -shuffle=on -count=1 ./...`（全部 26 个包通过）
@@ -129,11 +134,11 @@ PostgreSQL 18。EL 8 主机继续正常构建与安装 PostgreSQL 15–18，不�
 - `staticcheck ./...`、`golangci-lint run --enable-only gocognit,gocyclo --tests=false` 与 `deadcode ./...`
 - 配套设计记录与 Markdown 校验（`bin/check_design.py`、`bin/check_markdown.py`）
 
-后续当 PostgreSQL 20 进入 Beta 周期时，只需将 `PostgresBetaMajorVersion` 设为 `20` 并在 `repo.yml`
-中填入对应 Beta 仓库定义；`cli/build` 与 `cli/sty` 的 Beta 分支已通过模拟 Beta 大版本的单元测试持续覆盖。
+后续当 PostgreSQL 20 正式发布时，将 `PostgresActiveMajorVersions` 推进至 `[20, 19, 18, 17, 16]`，并将
+`PostgresBetaMajorVersion` 与 `beta` 仓库顺移至 PostgreSQL 21 testing。
 
 ## 当前状态 {#status}
 
-已在源码提交 [`b36d683`](https://github.com/pgsty/pig/commit/b36d683585c3)–[`ba77eac`](https://github.com/pgsty/pig/commit/ba77eacc1f3e)
+已在源码提交 [`b36d683`](https://github.com/pgsty/pig/commit/b36d683585c3)–[`9d16584`](https://github.com/pgsty/pig/commit/9d16584eda9f)
 与配套双语文档中实现；尚未推送、打标签或部署至远程目录端点。正式二进制发布进度以
 [发布注记](/zh/release/) 为准。

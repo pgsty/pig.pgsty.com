@@ -215,9 +215,9 @@ explicit target is supplied). Active targets (15–19) use their exact matrix ro
 and architecture. Missing cells on a known OS remain unavailable, and visible leading non-contrib
 entries that resolve to the same package are deduplicated. Retired majors (`pg10`–`pg14`) remain
 explicitly addressable: they use existing matrix cells when present, or fall back to non-fork
-catalog `rpm_pg`/`deb_pg` declarations once their matrix cells are pruned. When a Beta PostgreSQL
-major is active, it retains the compatibility behavior of borrowing the latest stable matrix and
-keeping PGDG-origin entries only.
+catalog `rpm_pg`/`deb_pg` declarations once their matrix cells are pruned. The current Beta
+PostgreSQL target (`pg20`) retains the compatibility behavior of borrowing the latest stable (`19`)
+matrix and keeping PGDG-origin entries only.
 
 The package name comes from the catalog for the requested major. For example, EL PG14/15 pgaudit
 resolves through `pgaudit_14`/`pgaudit_15`, while the PostGIS 3.7 family resolves through

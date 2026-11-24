@@ -2,7 +2,7 @@
 title: "分类别名按目标 PostgreSQL 大版本解析"
 linkTitle: "分类别名目标版本"
 date: 2026-11-06
-lastmod: 2026-11-21
+lastmod: 2026-11-24
 description: "动态分类别名选择扩展软件包时，使用请求的 PostgreSQL 大版本。"
 tags: [catalog, ext, install]
 weight: 97
@@ -24,7 +24,7 @@ draft: false
 无需在别名解析器中加入扩展专用分支。当前目录将 EL PG14/15 的 pgaudit 描述为 `pgaudit_14`/`pgaudit_15`，
 将 PostGIS 3.7 描述为 `postgis37_N`，并将地址标准化器和 PG16 以上的 Tiger Geocoder 描述为独立条目。
 
-当存在活跃的 Beta PostgreSQL 周期时，Beta 占位版本继续使用兼容策略：借用最新稳定版矩阵，并只保留 PGDG 来源的条目，因为目录还没有
+当前 Beta PostgreSQL 占位版本（`pg20`）继续使用兼容策略：借用最新稳定版矩阵（`19`），并只保留 PGDG 来源的条目，因为目录还没有
 该目标自己的矩阵行。PostgreSQL 19 正式发布后（见 [PostgreSQL 19 生命周期](/zh/design/postgresql-19-lifecycle/)），
 PostgreSQL 19 直接使用自身的原生矩阵行，无显式版本时的默认目标保持为推荐版本（`18`），而已退役的历史大版本（`10–14`）
 在其矩阵单元裁剪后回退为非 fork 条目的 `rpm_pg`/`deb_pg` 目录声明。

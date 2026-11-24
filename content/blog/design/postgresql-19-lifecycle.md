@@ -61,15 +61,19 @@ EL 8, and emit invalid PostgreSQL 19 configuration lines.
 - **Drop `10–14` from alias generation and `-v` resolution completely.** Rejected because operators
   managing existing PostgreSQL 14 (or older) hosts still need `pig ext`, `pig pg`, `pg14*` aliases,
   and kernel removal safeguards to work when compatible repositories or local installations exist.
-- **Remove the `beta` repository module and `--beta` flags outright.** Rejected because existing
-  automation calling `pig build repo --beta` or `pig repo set ... beta` should degrade to a clean
-  no-op between PostgreSQL Beta cycles rather than failing with an unknown-module error.
+- **Remove the `beta` repository module and `--beta` flags outright, or leave `beta` empty until
+  PG 20 Beta1.** Rejected because PGDG already publishes PostgreSQL 20 testing repositories for
+  EL 9/10 (`yum/testing/20`) and exposes component `20` in `pgdg-testing` for Debian 12/13 and
+  Ubuntu 22/24/26; advancing the opt-in Beta target directly to PostgreSQL 20 keeps `beta`,
+  `--beta`, `pg20*` aliases, and `pig sty conf -v 20` immediately usable for PG 20 testing while
+  leaving `beta` safely empty on unsupported `el8` and `d11`.
 
 ## Contract {#contract}
 
 - **Version tiers & platform bounds (`cli/ext`):**
   - `PostgresActiveMajorVersions` is `[19, 18, 17, 16, 15]`.
-  - `PostgresDefaultMajorVersion` is `18`; `PostgresBetaMajorVersion` is `0` (no active Beta).
+  - `PostgresDefaultMajorVersion` is `18`; `PostgresBetaMajorVersion` advances to `20` (PG 20
+    testing/devel).
   - `PostgresLegacyMajorVersions` is `[14, 13, 12, 11, 10]`.
   - `SupportsOSPG(osCode, ver)` centralizes the OS × PostgreSQL compatibility boundary (`el8` and
     `d11` stop at PG 18; `el7` stops at PG 15) across `cli/ext`, `cli/build`, and `cli/sty`.
@@ -80,8 +84,9 @@ EL 8, and emit invalid PostgreSQL 19 configuration lines.
   - Local `DetectPostgres()` installation discovery prefers the highest installed major (for example,
     an installed PostgreSQL 19 instance takes precedence when multiple versions exist and none is on
     `PATH`) while still discovering `10–14` installations.
-  - Numbered static aliases (`pg10*`–`pg19*`), dynamic category aliases (`pg10-<cate>`–`pg19-<cate>`),
-    and protected removal checks cover all known majors (`10–19`).
+  - Numbered static aliases (`pg10*`–`pg20*`), dynamic category aliases (`pg10-<cate>`–`pg20-<cate>`),
+    and protected removal checks cover all known majors (`10–20`), with Beta `pg20-<cate>` borrowing
+    the PG 19 PGDG-origin matrix.
 - **Catalog & availability matrices (`cli/ext`):**
   - Embedded `extension.csv` is refreshed to the `2026-11-23` 627-entry snapshot, adding PostgreSQL 19
     contrib entries `pg_plan_advice` (controlless shared library, `need_ddl=false`) and
@@ -101,12 +106,15 @@ EL 8, and emit invalid PostgreSQL 19 configuration lines.
   - Add `pgdg19` for EL 9 and EL 10 (`x86_64`, `aarch64`) across `default`, `china`, and `europe`
     mirrors; filter module memberships per OS/arch so EL 9/10 `pgdg` contains `pgdg-common` plus
     `pgdg19`–`pgdg15`, EL 8 `pgdg` omits `pgdg19`, and EL 7 `pgdg` contains `pgdg-common` and `pgdg15`.
-  - Remove `pgdg14`, `pgdg14-nonfree`, `pgdg19-beta`, and `pgdg-beta`; align `pgdg15-nonfree` through
+  - Remove `pgdg14`, `pgdg14-nonfree`, and `pgdg19-beta`; align `pgdg15-nonfree` through
     `pgdg18-nonfree` on `skip_if_unavailable=1`.
-  - Keep `beta` as an empty compatibility module (`[]`) that writes no repository file, omits
-    `file_path` in structured results, returns a clean empty result from `pig repo info beta`, and
-    does not interfere with replacement rollback; fail closed before backing up active repositories
-    when a destructive replacement (`pig repo set`) selects only empty modules.
+  - Advance the `beta` module to PostgreSQL 20 testing: `pgdg20-beta` (`yum/testing/20`, EL 9/10,
+    `x86_64`/`aarch64`, `module_hotfixes=1`) and `pgdg-beta` (`${distro_codename}-pgdg-testing main 20`,
+    Debian 12/13 and Ubuntu 22/24/26, `x86_64`/`aarch64`). On `el8`, `el7`, and `d11` where PG 20
+    testing is unavailable, `beta` remains an empty compatibility module (`[]`) that writes no
+    repository file, omits `file_path` in structured results, returns a clean empty result from
+    `pig repo info beta`, does not interfere with replacement rollback, and fails closed before
+    backing up active repositories when `pig repo set` selects only empty modules.
 - **Build & Pigsty configuration (`cli/build`, `cli/sty`, `cmd`):**
   - `pig build tool` installs server/devel packages for `15–19` on EL 9/10 and `15–18` on EL 8
     (plus `openssl-devel` across EL 8/9/10), and gates future Beta packages through `SupportsOSPG`.
@@ -118,11 +126,13 @@ EL 8, and emit invalid PostgreSQL 19 configuration lines.
     fail fast when an extension resolves to zero compatible targets, propagate explicit `--pg`
     environment variables (`PG_VERSIONS`, `PG_SUPPORTED_VERSIONS`, and single-major `PG_MAJOR` /
     `PG_CONFIG`) to Debian `make` builds, and update `libpgfeutils` sources to PG 15–19 (`15.20`–`19.0`).
-  - `pig build repo --beta`, `pig build tool --beta`, and `pig build pgrx --beta` remain accepted
-    no-ops while `PostgresBetaMajorVersion == 0`.
-  - `pig sty conf` accepts `-v` in `15–19`, omits inactive `(beta: ...)` text from help output,
-    rewrites generic templates to PostgreSQL 19 without injecting the `beta` repository module, and
-    emits a non-fatal warning when configuring PG 19 on a Linux `el8` host.
+  - `pig build repo --beta`, `pig build tool --beta`, and `pig build pgrx --beta` target PostgreSQL 20
+    testing/beta on supported platforms (EL 9/10, Debian 12/13, Ubuntu 22/24/26; safely skipped on
+    `el8` and `d11`).
+  - `pig sty conf` accepts `-v` in `15–19` plus explicit `20` beta (reporting `19|18|17|16|15 (beta: 20)`
+    in help output), rewrites generic templates to PostgreSQL 19 without injecting `beta`, injects
+    `beta` and emits a Beta warning for PostgreSQL 20, and emits a non-fatal warning when configuring
+    PG 19 or 20 on a Linux `el8` host.
 - **Parameter tuning (`cli/postgres`):**
   - `pig pg tune` emits `io_workers` only when `pgVersion == 18`, omitting it on PostgreSQL 19+.
 
@@ -145,8 +155,9 @@ Implemented in PIG commits
 [`b36d683`](https://github.com/pgsty/pig/commit/b36d683585c3),
 [`461339c`](https://github.com/pgsty/pig/commit/461339ceb7a6),
 [`a7061b1`](https://github.com/pgsty/pig/commit/a7061b14ef0e),
-[`52847f4`](https://github.com/pgsty/pig/commit/52847f47155b), and
-[`ba77eac`](https://github.com/pgsty/pig/commit/ba77eacc1f3e)
+[`52847f4`](https://github.com/pgsty/pig/commit/52847f47155b),
+[`ba77eac`](https://github.com/pgsty/pig/commit/ba77eacc1f3e), and
+[`9d16584`](https://github.com/pgsty/pig/commit/9d16584eda9f)
 and verified locally with:
 
 - `git diff --check` and `go vet ./...`
@@ -156,12 +167,11 @@ and verified locally with:
 - `staticcheck ./...`, `golangci-lint run --enable-only gocognit,gocyclo --tests=false`, and `deadcode ./...`
 - Companion Design Record and Markdown validation (`bin/check_design.py`, `bin/check_markdown.py`)
 
-When PostgreSQL 20 enters Beta, set `PostgresBetaMajorVersion = 20` and populate the `beta` module
-entries in `repo.yml`; the Beta build and template-mutation paths remain covered by simulated-Beta
-unit tests in `cli/build` and `cli/sty`.
+When PostgreSQL 20 reaches GA, advance `PostgresActiveMajorVersions` to `[20, 19, 18, 17, 16]` and
+retarget `PostgresBetaMajorVersion` and `beta` repositories to PostgreSQL 21 testing.
 
 ## Current status {#status}
 
-Implemented in source commits [`b36d683`](https://github.com/pgsty/pig/commit/b36d683585c3)–[`ba77eac`](https://github.com/pgsty/pig/commit/ba77eacc1f3e)
+Implemented in source commits [`b36d683`](https://github.com/pgsty/pig/commit/b36d683585c3)–[`9d16584`](https://github.com/pgsty/pig/commit/9d16584eda9f)
 and companion documentation; not yet pushed, tagged, or deployed to remote catalog endpoints. See
 the [release notes](/release/) for published binary releases.

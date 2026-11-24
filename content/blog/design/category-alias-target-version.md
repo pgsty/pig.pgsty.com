@@ -2,7 +2,7 @@
 title: "Target PostgreSQL Versions for Category Aliases"
 linkTitle: "Category Alias Target Versions"
 date: 2026-11-06
-lastmod: 2026-11-21
+lastmod: 2026-11-24
 description: "Use the requested PostgreSQL major when dynamic category aliases select extension packages."
 tags: [catalog, ext, install]
 weight: 97
@@ -27,9 +27,9 @@ branches to the alias resolver. The current catalog describes EL PG14/15 pgaudit
 `pgaudit_14`/`pgaudit_15`, PostGIS 3.7 as `postgis37_N`, and the address-standardizer and
 PG16+ Tiger Geocoder packages as separate entries.
 
-The Beta PostgreSQL placeholder keeps its compatibility rule whenever an active beta cycle is
-configured: it borrows the latest stable matrix and retains PGDG-origin entries only, because the
-catalog does not yet have a matrix row for that target. Following PostgreSQL 19 GA (see
+The Beta PostgreSQL placeholder (`pg20`) keeps its compatibility rule: it borrows the latest stable
+matrix (`19`) and retains PGDG-origin entries only, because the catalog does not yet have a matrix
+row for that target. Following PostgreSQL 19 GA (see
 [PostgreSQL 19 Lifecycle](/design/postgresql-19-lifecycle/)), PostgreSQL 19 uses its own native
 matrix rows, unversioned defaults resolve to the recommended major (`18`), and retired legacy majors
 (`10–14`) fall back to non-fork `rpm_pg`/`deb_pg` catalog declarations once their matrix cells are

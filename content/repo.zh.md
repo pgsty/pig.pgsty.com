@@ -60,7 +60,7 @@ pig repo set
 |  `infra`  | 基础设施组件仓库 | pigsty-infra |
 | `nginx` | Nginx 仓库 | nginx |
 | `docker`  | Docker 仓库               | docker-ce                                         |
-|  `beta`   | Beta 仓库兼容占位模块     | 当前无活跃 PostgreSQL Beta 版本时为空模块          |
+|  `beta`   | PostgreSQL 20 Beta/测试仓库 | EL9/10：pgdg20-beta；Debian 12/13 与 Ubuntu 22/24/26：pgdg-beta |
 |  `extra`  | PGDG Non-Free 与三方扩展     | pgdg-extras, timescaledb, citus                   |
 | `groonga` | PGroonga 仓库             | groonga                                           |
 | `percona` | Percona PG + PG_TDE     | percona                                           |
@@ -75,7 +75,7 @@ pig repo set
 | `gitlab`  | GitLab 仓库               | gitlab-ce, gitlab-ee                              |
 {.full-width .wide .expand}
 
-模块中的仓库会按当前操作系统与架构筛选（例如 `el8` 的 `pgdg`、`pgsql` 与 `all` 均不包含 `pgdg19`）。用 `pig repo list` 查看本机可用项。`beta` 模块为空时，单独添加不会写出空文件，也不影响替换失败后的回滚；但若仅使用空模块执行整套替换（如 `pig repo set beta`），命令会在备份移除既有仓库前直接拒绝。EL 上的 `pgdg*-nonfree` 仓库均启用 `skip_if_unavailable=1`。
+模块中的仓库会按当前操作系统与架构筛选（例如 `el8` 的 `pgdg`、`pgsql` 与 `all` 均不包含 `pgdg19`，`el8`/`d11` 上因上游不提供 PG 20 测试源，`beta` 模块为空）。用 `pig repo list` 查看本机可用项。模块在当前系统为空时（例如 `el8` 或 `d11` 上的 `beta`），单独添加不会写出空文件，也不影响替换失败后的回滚；但若仅使用空模块执行整套替换（如在 `el8` 上执行 `pig repo set beta`），命令会在备份移除既有仓库前直接拒绝。EL 上的 `pgdg*-nonfree` 仓库均启用 `skip_if_unavailable=1`。
 
 已有可用的系统软件源时，添加 `pgsql` 即可获取 PGDG 与 Pigsty 扩展包。`infra` 提供基础设施工具和部分 PostgreSQL 分支内核包。`all` 是 `node`、`infra`、`pgsql` 的组合；不带参数的 `repo add` 和 `repo set` 默认选择 `all`。
 

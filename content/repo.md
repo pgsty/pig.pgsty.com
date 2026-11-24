@@ -60,7 +60,7 @@ In pig, APT/YUM repositories are organized as **modules**: groups of repositorie
 | `infra` | Infrastructure component repository | pigsty-infra |
 | `nginx` | Nginx repository | nginx |
 | `docker` | Docker repository | docker-ce |
-| `beta` | Compatibility beta placeholder | Empty when no PostgreSQL beta major is active |
+| `beta` | PostgreSQL 20 beta/testing repositories | EL9/10: pgdg20-beta; Debian 12/13 & Ubuntu 22/24/26: pgdg-beta |
 | `extra` | PGDG non-free and third-party extensions | pgdg-extras, timescaledb, citus |
 | `groonga` | PGroonga repository | groonga |
 | `percona` | Percona PG + PG_TDE | percona |
@@ -75,7 +75,7 @@ In pig, APT/YUM repositories are organized as **modules**: groups of repositorie
 | `gitlab` | GitLab repository | gitlab-ce, gitlab-ee |
 {.full-width .wide .expand}
 
-PIG filters each module by the current operating system and architecture (for example, `el8` omits `pgdg19` from `pgdg`, `pgsql`, and `all`). Run `pig repo list` to see the available entries. When `beta` is empty, adding it writes no repository file and does not affect replacement rollback, while replacing all repositories with only empty modules (such as `pig repo set beta`) fails closed before backing up existing definitions. All EL `pgdg*-nonfree` definitions set `skip_if_unavailable=1`.
+PIG filters each module by the current operating system and architecture (for example, `el8` omits `pgdg19` from `pgdg`, `pgsql`, and `all`, and `el8`/`d11` leave `beta` empty because PGDG does not publish PG 20 testing packages there). Run `pig repo list` to see the available entries. When a module is empty on the current OS (such as `beta` on `el8` or `d11`), adding it writes no repository file and does not affect replacement rollback, while replacing all repositories with only empty modules (such as `pig repo set beta` on `el8`) fails closed before backing up existing definitions. All EL `pgdg*-nonfree` definitions set `skip_if_unavailable=1`.
 
 If the host already has working OS repositories, add `pgsql` for PGDG and Pigsty extension packages. `infra` supplies infrastructure tools and some PostgreSQL fork packages. `all` combines `node`, `infra`, and `pgsql`. Both `repo add` and `repo set` select `all` when no module is given.
 
