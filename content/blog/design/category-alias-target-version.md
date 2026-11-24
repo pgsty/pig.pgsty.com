@@ -2,7 +2,7 @@
 title: "Target PostgreSQL Versions for Category Aliases"
 linkTitle: "Category Alias Target Versions"
 date: 2026-11-06
-lastmod: 2026-11-06
+lastmod: 2026-11-21
 description: "Use the requested PostgreSQL major when dynamic category aliases select extension packages."
 tags: [catalog, ext, install]
 weight: 97
@@ -27,9 +27,13 @@ branches to the alias resolver. The current catalog describes EL PG14/15 pgaudit
 `pgaudit_14`/`pgaudit_15`, PostGIS 3.7 as `postgis37_N`, and the address-standardizer and
 PG16+ Tiger Geocoder packages as separate entries.
 
-The current Beta PostgreSQL placeholder keeps its compatibility rule: it borrows the latest stable
-matrix and retains PGDG-origin entries only, because the catalog does not yet have a matrix row for
-that target.
+The Beta PostgreSQL placeholder keeps its compatibility rule whenever an active beta cycle is
+configured: it borrows the latest stable matrix and retains PGDG-origin entries only, because the
+catalog does not yet have a matrix row for that target. Following PostgreSQL 19 GA (see
+[PostgreSQL 19 Lifecycle](/design/postgresql-19-lifecycle/)), PostgreSQL 19 uses its own native
+matrix rows, unversioned defaults resolve to the recommended major (`18`), and retired legacy majors
+(`10–14`) fall back to non-fork `rpm_pg`/`deb_pg` catalog declarations once their matrix cells are
+pruned.
 
 ## Context {#context}
 
@@ -60,13 +64,15 @@ metadata was corrected.
 - A stable `pgsql-<category>` alias evaluates visibility against the command's target version;
   an explicit `-v N` therefore has the same result as `pgN-<category>`.
 - When no target reaches the resolver, the existing command probing and operation defaults remain
-  in force; a zero target inside the alias parser resolves to the latest stable major.
+  in force; a zero target inside the alias parser resolves to the recommended default major (`18`).
 - Package templates are rendered for the requested target major. Visible leading non-contrib
   entries are deduplicated by rendered package name.
-- On a known operating system, a missing matrix cell remains unavailable. Existing unknown-OS
-  metadata fallback behavior is unchanged.
-- The Beta target borrows the latest stable matrix and keeps only PGDG-origin entries. This is the
-  sole stable-template borrowing exception.
+- On a known operating system, a missing matrix cell for an active major (`15–19`) remains
+  unavailable. Retired legacy majors (`10–14`) use their matrix cells when present and fall back to
+  non-fork `rpm_pg`/`deb_pg` declarations when no matrix rows exist for that major. Existing
+  unknown-OS metadata fallback behavior is unchanged.
+- When a Beta target is active, it borrows the latest stable matrix and keeps only PGDG-origin
+  entries. This is the sole stable-template borrowing exception.
 - The configured OS repository must provide the package named by the catalog; the resolver does
   not migrate an already installed package between historical names.
 

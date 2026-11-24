@@ -2,7 +2,7 @@
 title: "七成正确的调优器：界定 pig pg tune 的边界"
 linkTitle: "七成正确的调优器"
 date: 2026-03-21
-lastmod: 2026-10-13
+lastmod: 2026-11-21
 description: "pig pg tune 如何根据硬件与工作负载计算 PostgreSQL 初始参数。"
 tags: [postgres]
 weight: 20
@@ -42,7 +42,8 @@ draft: false
 - 相同的实际输入与 PostgreSQL 版本产生相同参数。
 - 结构化结果包含实际采用的工作负载类型、硬件与 PostgreSQL 版本。
 - 文本参数按固定顺序输出，标题注明 SSD 假设。
-- 校验输入范围，并省略所选 PostgreSQL 版本不支持的参数。
+- 校验输入范围，并省略所选 PostgreSQL 版本尚未提供或已经移除的参数（例如 `io_workers` 仅对 PostgreSQL 18 输出，PostgreSQL 19+ 因改用动态 `io_min_workers` / `io_max_workers` 而不再输出）。
+- 未显式指定版本且未探测到本地实例时，回退到推荐默认 PostgreSQL 主版本（`18`）。
 - 保持配置文件与运行中的服务器不变。
 
 ## 影响 {#impact}
@@ -58,6 +59,7 @@ draft: false
 [当前实现](https://github.com/pgsty/pig/blob/v1.9.0/cli/postgres/tune_result.go) 返回结果供输出层渲染。
 [`tune_test.go`](https://github.com/pgsty/pig/blob/v1.9.0/cli/postgres/tune_test.go)
 覆盖工作负载公式、资源边界、覆盖值与版本相关参数。
+在 [PostgreSQL 19 生命周期更新](/zh/design/postgresql-19-lifecycle/) 中，`io_workers` 的输出条件已从 `>= 18` 收紧为 `== 18`，无实例探测时的回退版本也统一为 `18`。
 
 ## 当前状态 {#status}
 

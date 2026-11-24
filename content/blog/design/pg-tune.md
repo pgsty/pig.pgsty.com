@@ -2,7 +2,7 @@
 title: "The 70% Tuner: Defining the Boundary of pig pg tune"
 linkTitle: "The 70% Tuner"
 date: 2026-03-21
-lastmod: 2026-10-13
+lastmod: 2026-11-21
 description: "How pig pg tune calculates initial PostgreSQL parameters from hardware and workload inputs."
 tags: [postgres]
 weight: 20
@@ -46,7 +46,8 @@ Hardware-based formulas provide a repeatable baseline that the operator can insp
 - Produce the same parameters for the same resolved inputs and PostgreSQL version.
 - Include the resolved profile, hardware, and PostgreSQL version in structured results.
 - Print text parameters in a stable order and identify the SSD assumption in the header.
-- Validate input ranges and omit parameters unavailable in the selected PostgreSQL version.
+- Validate input ranges and omit parameters unavailable or removed in the selected PostgreSQL version (for example, `io_workers` is emitted only for PostgreSQL 18 and omitted on PostgreSQL 19+, where dynamic `io_min_workers` / `io_max_workers` defaults apply).
+- Fall back to the recommended default PostgreSQL major (`18`) when neither an explicit version nor a local installation is found.
 - Leave configuration files and the running server unchanged.
 
 ## Consequences {#impact}
@@ -64,6 +65,8 @@ The [current implementation](https://github.com/pgsty/pig/blob/v1.9.0/cli/postgr
 returns a result for rendering. Tests in
 [`tune_test.go`](https://github.com/pgsty/pig/blob/v1.9.0/cli/postgres/tune_test.go)
 cover workload formulas, resource limits, overrides, and version-dependent parameters.
+During the [PostgreSQL 19 lifecycle update](/design/postgresql-19-lifecycle/), `io_workers` gating
+was narrowed from `>= 18` to `== 18` and the undetected-version fallback was aligned to `18`.
 
 ## Current status {#status}
 
