@@ -2,7 +2,7 @@
 title: "PostgreSQL 19 Lifecycle Window and Default Major Decoupling"
 linkTitle: "PostgreSQL 19 Lifecycle"
 date: 2026-11-21
-lastmod: 2026-11-23
+lastmod: 2026-11-24
 description: "Advance the active PostgreSQL support window to 15-19 on GA while keeping 18 as the default major and preserving explicit legacy operations."
 tags: [ext, repo, build, sty]
 weight: 98
@@ -104,7 +104,9 @@ EL 8, and emit invalid PostgreSQL 19 configuration lines.
   - Remove `pgdg14`, `pgdg14-nonfree`, `pgdg19-beta`, and `pgdg-beta`; align `pgdg15-nonfree` through
     `pgdg18-nonfree` on `skip_if_unavailable=1`.
   - Keep `beta` as an empty compatibility module (`[]`) that writes no repository file, omits
-    `file_path` in structured results, and does not interfere with replacement rollback.
+    `file_path` in structured results, returns a clean empty result from `pig repo info beta`, and
+    does not interfere with replacement rollback; fail closed before backing up active repositories
+    when a destructive replacement (`pig repo set`) selects only empty modules.
 - **Build & Pigsty configuration (`cli/build`, `cli/sty`, `cmd`):**
   - `pig build tool` installs server/devel packages for `15–19` on EL 9/10 and `15–18` on EL 8
     (plus `openssl-devel` across EL 8/9/10), and gates future Beta packages through `SupportsOSPG`.
@@ -142,8 +144,9 @@ required for existing installations running `pig repo reload` or `pig ext reload
 Implemented in PIG commits
 [`b36d683`](https://github.com/pgsty/pig/commit/b36d683585c3),
 [`461339c`](https://github.com/pgsty/pig/commit/461339ceb7a6),
-[`a7061b1`](https://github.com/pgsty/pig/commit/a7061b14ef0e), and
-[`52847f4`](https://github.com/pgsty/pig/commit/52847f47155b)
+[`a7061b1`](https://github.com/pgsty/pig/commit/a7061b14ef0e),
+[`52847f4`](https://github.com/pgsty/pig/commit/52847f47155b), and
+[`ba77eac`](https://github.com/pgsty/pig/commit/ba77eacc1f3e)
 and verified locally with:
 
 - `git diff --check` and `go vet ./...`
@@ -159,6 +162,6 @@ unit tests in `cli/build` and `cli/sty`.
 
 ## Current status {#status}
 
-Implemented in source commits [`b36d683`](https://github.com/pgsty/pig/commit/b36d683585c3)–[`52847f4`](https://github.com/pgsty/pig/commit/52847f47155b)
+Implemented in source commits [`b36d683`](https://github.com/pgsty/pig/commit/b36d683585c3)–[`ba77eac`](https://github.com/pgsty/pig/commit/ba77eacc1f3e)
 and companion documentation; not yet pushed, tagged, or deployed to remote catalog endpoints. See
 the [release notes](/release/) for published binary releases.

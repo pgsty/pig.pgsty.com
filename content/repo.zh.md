@@ -75,7 +75,7 @@ pig repo set
 | `gitlab`  | GitLab 仓库               | gitlab-ce, gitlab-ee                              |
 {.full-width .wide .expand}
 
-模块中的仓库会按当前操作系统与架构筛选（例如 `el8` 的 `pgdg`、`pgsql` 与 `all` 均不包含 `pgdg19`）。用 `pig repo list` 查看本机可用项。`beta` 模块为空时添加该模块不会写出空文件，也不影响替换失败后的回滚；EL 上的 `pgdg*-nonfree` 仓库均启用 `skip_if_unavailable=1`。
+模块中的仓库会按当前操作系统与架构筛选（例如 `el8` 的 `pgdg`、`pgsql` 与 `all` 均不包含 `pgdg19`）。用 `pig repo list` 查看本机可用项。`beta` 模块为空时，单独添加不会写出空文件，也不影响替换失败后的回滚；但若仅使用空模块执行整套替换（如 `pig repo set beta`），命令会在备份移除既有仓库前直接拒绝。EL 上的 `pgdg*-nonfree` 仓库均启用 `skip_if_unavailable=1`。
 
 已有可用的系统软件源时，添加 `pgsql` 即可获取 PGDG 与 Pigsty 扩展包。`infra` 提供基础设施工具和部分 PostgreSQL 分支内核包。`all` 是 `node`、`infra`、`pgsql` 的组合；不带参数的 `repo add` 和 `repo set` 默认选择 `all`。
 

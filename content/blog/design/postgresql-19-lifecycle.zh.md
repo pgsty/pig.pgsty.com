@@ -2,7 +2,7 @@
 title: "PostgreSQL 19 生命周期窗口与默认大版本解耦"
 linkTitle: "PostgreSQL 19 生命周期"
 date: 2026-11-21
-lastmod: 2026-11-23
+lastmod: 2026-11-24
 description: "在 PostgreSQL 19 正式发布后将活跃支持窗口推进至 15-19，同时保持 18 为默认主版本并保留历史大版本的显式操作能力。"
 tags: [ext, repo, build, sty]
 weight: 98
@@ -86,7 +86,8 @@ PostgreSQL 14 移出活跃生命周期默认值、可用性矩阵展示、内置
     `pgdg` 省略 `pgdg19`，EL 7 的 `pgdg` 仅包含 `pgdg-common` 与 `pgdg15`。
   - 移除 `pgdg14`、`pgdg14-nonfree`、`pgdg19-beta` 与 `pgdg-beta`；统一为 `pgdg15-nonfree` 至
     `pgdg18-nonfree` 配置 `skip_if_unavailable=1`。
-  - 保留 `beta` 为空兼容模块（`[]`），添加时不生成空的仓库配置文件、不记录虚假文件路径，也不影响替换失败后的回滚。
+  - 保留 `beta` 为空兼容模块（`[]`），添加时不生成空的仓库配置文件、不记录虚假文件路径、`pig repo info beta`
+    返回干净的空结果，且不影响替换失败后的回滚；若整套替换（`pig repo set`）仅指定了空模块，则在备份移除既有仓库前直接拒绝。
 - **构建与 Pigsty 配置（`cli/build`、`cli/sty`、`cmd`）：**
   - `pig build tool` 在 EL 9/10 上安装 `15–19` 的 server/devel 包，在 EL 8 上安装 `15–18`（并为 EL 8/9/10
     统一提供 `openssl-devel`），未来 Beta 包同样受 `SupportsOSPG` 约束。
@@ -117,8 +118,9 @@ PostgreSQL 18。EL 8 主机继续正常构建与安装 PostgreSQL 15–18，不�
 实现位于 PIG 提交
 [`b36d683`](https://github.com/pgsty/pig/commit/b36d683585c3)、
 [`461339c`](https://github.com/pgsty/pig/commit/461339ceb7a6)、
-[`a7061b1`](https://github.com/pgsty/pig/commit/a7061b14ef0e) 与
-[`52847f4`](https://github.com/pgsty/pig/commit/52847f47155b)，已在本地完成以下验证：
+[`a7061b1`](https://github.com/pgsty/pig/commit/a7061b14ef0e)、
+[`52847f4`](https://github.com/pgsty/pig/commit/52847f47155b) 与
+[`ba77eac`](https://github.com/pgsty/pig/commit/ba77eacc1f3e)，已在本地完成以下验证：
 
 - `git diff --check` 与 `go vet ./...`
 - `go test -shuffle=on -count=1 ./...`（全部 26 个包通过）
@@ -132,6 +134,6 @@ PostgreSQL 18。EL 8 主机继续正常构建与安装 PostgreSQL 15–18，不�
 
 ## 当前状态 {#status}
 
-已在源码提交 [`b36d683`](https://github.com/pgsty/pig/commit/b36d683585c3)–[`52847f4`](https://github.com/pgsty/pig/commit/52847f47155b)
+已在源码提交 [`b36d683`](https://github.com/pgsty/pig/commit/b36d683585c3)–[`ba77eac`](https://github.com/pgsty/pig/commit/ba77eacc1f3e)
 与配套双语文档中实现；尚未推送、打标签或部署至远程目录端点。正式二进制发布进度以
 [发布注记](/zh/release/) 为准。
